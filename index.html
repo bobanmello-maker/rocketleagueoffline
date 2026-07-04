@@ -386,16 +386,24 @@ const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6
 // ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
 // -> ime koje zelis da se prikazuje svuda u dashboard-u. Nije osetljivo na velika/mala slova.
 // Dodaj/izmeni redove ovde kad god zatreba, ne mora nista drugo da se dira.
-const NAME_MAP = {
-  'exmirage': 'Toške',
-  'exmirage(1)': 'Cane',
-  'exmirage(2)': 'Ivan',
-  'exmirage(3)': 'Pajke',
+// ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
+// -> ime koje zelis da se prikazuje svuda u dashboard-u. Otporno je na razmake,
+// velika/mala slova i zagrade (npr. "ExMirage(1)" i "ExMirage (1)" su isto).
+// Dodaj/izmeni redove ovde kad god zatreba, ne mora nista drugo da se dira.
+const NAME_MAP_RAW = {
+  'ExMirage': 'Toške',
+  'ExMirage(1)': 'Cane',
+  'ExMirage(2)': 'Ivan',
+  'ExMirage(3)': 'Pajke',
 };
+const NAME_MAP = {};
+Object.entries(NAME_MAP_RAW).forEach(([k, v]) => {
+  NAME_MAP[k.toLowerCase().replace(/[^a-z0-9]/g, '')] = v;
+});
 
 function mapName(raw){
   if(!raw) return raw;
-  const key = raw.trim().toLowerCase();
+  const key = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
   return NAME_MAP[key] || raw;
 }
 
