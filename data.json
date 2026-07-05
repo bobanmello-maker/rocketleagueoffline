@@ -106,7 +106,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "03de90ac-a011-4026-b48e-de3cc50a299d",
@@ -215,7 +216,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "03de90ac-a011-4026-b48e-de3cc50a299d",
@@ -304,11 +306,11 @@
       "time_offensive_half": 124.15,
       "time_behind_ball": 276.51,
       "time_infront_ball": 89.5,
-      "time_most_back": 206,
-      "time_most_forward": 144.3,
+      "time_most_back": 206.1,
+      "time_most_forward": 144.4,
       "goals_against_while_last_defender": 3,
-      "time_closest_to_ball": 179.9,
-      "time_farthest_from_ball": 170.2,
+      "time_closest_to_ball": 180,
+      "time_farthest_from_ball": 170.3,
       "percent_defensive_third": 51.954865,
       "percent_offensive_third": 22.649654,
       "percent_neutral_third": 25.395481,
@@ -316,15 +318,16 @@
       "percent_offensive_half": 33.919838,
       "percent_behind_ball": 75.54711,
       "percent_infront_ball": 24.452883,
-      "percent_most_back": 59.34205,
-      "percent_most_forward": 41.56824,
-      "percent_closest_to_ball": 51.82347,
-      "percent_farthest_from_ball": 49.02921
+      "percent_most_back": 59.370857,
+      "percent_most_forward": 41.597046,
+      "percent_closest_to_ball": 51.852276,
+      "percent_farthest_from_ball": 49.058014
     },
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "03de90ac-a011-4026-b48e-de3cc50a299d",
@@ -413,11 +416,11 @@
       "time_offensive_half": 153.26,
       "time_behind_ball": 240.9,
       "time_infront_ball": 127.57,
-      "time_most_back": 146.5,
-      "time_most_forward": 202,
+      "time_most_back": 146.4,
+      "time_most_forward": 201.9,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 168.9,
-      "time_farthest_from_ball": 179.8,
+      "time_closest_to_ball": 168.8,
+      "time_farthest_from_ball": 179.7,
       "percent_defensive_third": 44.28975,
       "percent_offensive_third": 26.846876,
       "percent_neutral_third": 28.863379,
@@ -425,15 +428,16 @@
       "percent_offensive_half": 41.593613,
       "percent_behind_ball": 65.378456,
       "percent_infront_ball": 34.621544,
-      "percent_most_back": 42.201992,
-      "percent_most_forward": 58.189777,
-      "percent_closest_to_ball": 48.65472,
-      "percent_farthest_from_ball": 51.794662
+      "percent_most_back": 42.173183,
+      "percent_most_forward": 58.16097,
+      "percent_closest_to_ball": 48.62591,
+      "percent_farthest_from_ball": 51.765858
     },
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "9a43d37e-9517-4ff4-abdb-a8d966dccb56",
@@ -542,7 +546,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "9a43d37e-9517-4ff4-abdb-a8d966dccb56",
@@ -651,7 +656,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "9a43d37e-9517-4ff4-abdb-a8d966dccb56",
@@ -740,11 +746,11 @@
       "time_offensive_half": 125.45,
       "time_behind_ball": 279.82,
       "time_infront_ball": 98.19,
-      "time_most_back": 194.9,
-      "time_most_forward": 163.6,
+      "time_most_back": 194.7,
+      "time_most_forward": 163.4,
       "goals_against_while_last_defender": 5,
-      "time_closest_to_ball": 189.6,
-      "time_farthest_from_ball": 168.9,
+      "time_closest_to_ball": 189.4,
+      "time_farthest_from_ball": 168.7,
       "percent_defensive_third": 49.206394,
       "percent_offensive_third": 21.461826,
       "percent_neutral_third": 29.331781,
@@ -752,15 +758,16 @@
       "percent_offensive_half": 33.18695,
       "percent_behind_ball": 74.0245,
       "percent_infront_ball": 25.975502,
-      "percent_most_back": 54.37148,
-      "percent_most_forward": 45.639683,
-      "percent_closest_to_ball": 52.892933,
-      "percent_farthest_from_ball": 47.11823
+      "percent_most_back": 54.315685,
+      "percent_most_forward": 45.583885,
+      "percent_closest_to_ball": 52.83714,
+      "percent_farthest_from_ball": 47.062435
     },
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "9a43d37e-9517-4ff4-abdb-a8d966dccb56",
@@ -849,11 +856,11 @@
       "time_offensive_half": 135.71,
       "time_behind_ball": 258.71,
       "time_infront_ball": 123.78,
-      "time_most_back": 166.3,
-      "time_most_forward": 192,
+      "time_most_back": 166.5,
+      "time_most_forward": 192.2,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 167.5,
-      "time_farthest_from_ball": 190.8,
+      "time_closest_to_ball": 167.7,
+      "time_farthest_from_ball": 191,
       "percent_defensive_third": 44.37763,
       "percent_offensive_third": 18.601793,
       "percent_neutral_third": 37.020576,
@@ -861,15 +868,16 @@
       "percent_offensive_half": 35.481594,
       "percent_behind_ball": 67.638374,
       "percent_infront_ball": 32.36163,
-      "percent_most_back": 46.392902,
-      "percent_most_forward": 53.56246,
-      "percent_closest_to_ball": 46.72767,
-      "percent_farthest_from_ball": 53.2277
+      "percent_most_back": 46.4487,
+      "percent_most_forward": 53.618256,
+      "percent_closest_to_ball": 46.783463,
+      "percent_farthest_from_ball": 53.283493
     },
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "offline"
   },
   {
     "replay_id": "29f30fb1-a28b-4c19-8ea2-c5f5cdcac243",
@@ -978,7 +986,8 @@
     "demo": {
       "inflicted": 3,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "29f30fb1-a28b-4c19-8ea2-c5f5cdcac243",
@@ -1087,7 +1096,8 @@
     "demo": {
       "inflicted": 3,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "29f30fb1-a28b-4c19-8ea2-c5f5cdcac243",
@@ -1196,7 +1206,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 4
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "29f30fb1-a28b-4c19-8ea2-c5f5cdcac243",
@@ -1305,7 +1316,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -1414,7 +1426,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -1523,7 +1536,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -1632,7 +1646,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -1741,7 +1756,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -1850,7 +1866,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 3
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -1959,7 +1976,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -2068,7 +2086,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -2177,7 +2196,8 @@
     "demo": {
       "inflicted": 3,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -2286,7 +2306,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -2395,7 +2416,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -2504,7 +2526,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -2613,7 +2636,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -2722,7 +2746,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -2831,7 +2856,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -2940,7 +2966,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -3049,7 +3076,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -3158,7 +3186,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -3267,7 +3296,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -3376,7 +3406,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -3485,7 +3516,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -3594,7 +3626,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -3703,7 +3736,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -3812,7 +3846,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 3
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -3921,7 +3956,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -4030,7 +4066,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -4139,7 +4176,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -4248,7 +4286,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -4357,7 +4396,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -4466,7 +4506,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -4575,7 +4616,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -4684,7 +4726,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -4793,7 +4836,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -4902,7 +4946,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -5011,7 +5056,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -5120,7 +5166,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -5229,7 +5276,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -5338,7 +5386,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -5447,7 +5496,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -5556,7 +5606,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -5665,7 +5716,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -5774,7 +5826,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -5883,7 +5936,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -5992,7 +6046,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -6101,7 +6156,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -6210,7 +6266,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -6319,7 +6376,8 @@
     "demo": {
       "inflicted": 4,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -6428,7 +6486,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -6537,7 +6596,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -6646,7 +6706,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -6755,7 +6816,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -6864,7 +6926,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -6973,7 +7036,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7082,7 +7146,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7191,7 +7256,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 2
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7300,7 +7366,8 @@
     "demo": {
       "inflicted": 2,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7409,7 +7476,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 3
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7518,7 +7586,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7627,7 +7696,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7736,7 +7806,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7845,7 +7916,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -7954,7 +8026,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 1
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -8063,7 +8136,8 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -8172,7 +8246,8 @@
     "demo": {
       "inflicted": 1,
       "taken": 0
-    }
+    },
+    "mode": "online"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -8281,6 +8356,887 @@
     "demo": {
       "inflicted": 0,
       "taken": 0
-    }
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
+    "date": "2026-07-02T23:54:35Z",
+    "map": "Mannfield (Night)",
+    "playlist": "Ranked Doubles",
+    "duration": 437,
+    "team_color": "blue",
+    "team_goals": 4,
+    "opponent_goals": 3,
+    "win": true,
+    "player": "Rarely_Sober",
+    "platform": "epic",
+    "teammates": [
+      "ExMirage"
+    ],
+    "core": {
+      "shots": 4,
+      "shots_against": 9,
+      "goals": 3,
+      "goals_against": 3,
+      "saves": 3,
+      "assists": 1,
+      "score": 790,
+      "mvp": true,
+      "shooting_percentage": 75
+    },
+    "boost": {
+      "bpm": 266,
+      "bcpm": 265.5419,
+      "avg_amount": 47.52,
+      "amount_collected": 1831,
+      "amount_stolen": 124,
+      "amount_collected_big": 1319,
+      "amount_stolen_big": 40,
+      "amount_collected_small": 512,
+      "amount_stolen_small": 84,
+      "count_collected_big": 18,
+      "count_stolen_big": 1,
+      "count_collected_small": 45,
+      "count_stolen_small": 7,
+      "amount_overfill": 406,
+      "amount_overfill_stolen": 59,
+      "amount_used_while_supersonic": 462,
+      "time_zero_boost": 36.97,
+      "percent_zero_boost": 8.935995,
+      "time_full_boost": 73.1,
+      "percent_full_boost": 17.668955,
+      "time_boost_0_25": 132.76,
+      "time_boost_25_50": 85.75,
+      "time_boost_50_75": 83.19,
+      "time_boost_75_100": 99.72,
+      "percent_boost_0_25": 33.07259,
+      "percent_boost_25_50": 21.361666,
+      "percent_boost_50_75": 20.723928,
+      "percent_boost_75_100": 24.84181
+    },
+    "movement": {
+      "avg_speed": 1292,
+      "total_distance": 513566,
+      "time_supersonic_speed": 28.53,
+      "time_boost_speed": 128.17,
+      "time_slow_speed": 271.4,
+      "time_ground": 275.55,
+      "time_low_air": 137.89,
+      "time_high_air": 14.66,
+      "time_powerslide": 4.14,
+      "count_powerslide": 33,
+      "avg_powerslide_duration": 0.13,
+      "percent_slow_speed": 63.3964,
+      "percent_boost_speed": 29.939266,
+      "percent_supersonic_speed": 6.6643305,
+      "percent_ground": 64.3658,
+      "percent_low_air": 32.209763,
+      "percent_high_air": 3.4244335
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2709,
+      "avg_distance_to_ball_possession": 2625,
+      "avg_distance_to_ball_no_possession": 2789,
+      "avg_distance_to_mates": 3499,
+      "time_defensive_third": 266.57,
+      "time_neutral_third": 105.13,
+      "time_offensive_third": 56.4,
+      "time_defensive_half": 323.53,
+      "time_offensive_half": 104.57,
+      "time_behind_ball": 322.36,
+      "time_infront_ball": 105.74,
+      "time_most_back": 216,
+      "time_most_forward": 194.6,
+      "goals_against_while_last_defender": 3,
+      "time_closest_to_ball": 211,
+      "time_farthest_from_ball": 199.6,
+      "percent_defensive_third": 62.26816,
+      "percent_offensive_third": 13.174492,
+      "percent_neutral_third": 24.557346,
+      "percent_defensive_half": 75.57346,
+      "percent_offensive_half": 24.426535,
+      "percent_behind_ball": 75.30016,
+      "percent_infront_ball": 24.699839,
+      "percent_most_back": 52.209225,
+      "percent_most_forward": 47.036644,
+      "percent_closest_to_ball": 51.000675,
+      "percent_farthest_from_ball": 48.24519
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 2
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
+    "date": "2026-07-02T23:54:35Z",
+    "map": "Mannfield (Night)",
+    "playlist": "Ranked Doubles",
+    "duration": 437,
+    "team_color": "blue",
+    "team_goals": 4,
+    "opponent_goals": 3,
+    "win": true,
+    "player": "ExMirage",
+    "platform": "epic",
+    "teammates": [
+      "Rarely_Sober"
+    ],
+    "core": {
+      "shots": 2,
+      "shots_against": 9,
+      "goals": 1,
+      "goals_against": 3,
+      "saves": 1,
+      "assists": 2,
+      "score": 515,
+      "mvp": false,
+      "shooting_percentage": 50
+    },
+    "boost": {
+      "bpm": 230,
+      "bcpm": 223.04941,
+      "avg_amount": 43.95,
+      "amount_collected": 1538,
+      "amount_stolen": 263,
+      "amount_collected_big": 898,
+      "amount_stolen_big": 137,
+      "amount_collected_small": 640,
+      "amount_stolen_small": 126,
+      "count_collected_big": 13,
+      "count_stolen_big": 2,
+      "count_collected_small": 58,
+      "count_stolen_small": 12,
+      "amount_overfill": 374,
+      "amount_overfill_stolen": 72,
+      "amount_used_while_supersonic": 232,
+      "time_zero_boost": 72,
+      "percent_zero_boost": 17.403074,
+      "time_full_boost": 31.51,
+      "percent_full_boost": 7.616262,
+      "time_boost_0_25": 164.1,
+      "time_boost_25_50": 103.22,
+      "time_boost_50_75": 42.92,
+      "time_boost_75_100": 93.91,
+      "percent_boost_0_25": 40.603737,
+      "percent_boost_25_50": 25.540022,
+      "percent_boost_50_75": 10.61982,
+      "percent_boost_75_100": 23.236422
+    },
+    "movement": {
+      "avg_speed": 1244,
+      "total_distance": 498319,
+      "time_supersonic_speed": 18.39,
+      "time_boost_speed": 120.68,
+      "time_slow_speed": 294.13,
+      "time_ground": 292.59,
+      "time_low_air": 124.91,
+      "time_high_air": 15.7,
+      "time_powerslide": 2.12,
+      "count_powerslide": 14,
+      "avg_powerslide_duration": 0.15,
+      "percent_slow_speed": 67.89704,
+      "percent_boost_speed": 27.857801,
+      "percent_supersonic_speed": 4.245152,
+      "percent_ground": 67.54155,
+      "percent_low_air": 28.834255,
+      "percent_high_air": 3.624192
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2704,
+      "avg_distance_to_ball_possession": 2622,
+      "avg_distance_to_ball_no_possession": 2772,
+      "avg_distance_to_mates": 3499,
+      "time_defensive_third": 252.63,
+      "time_neutral_third": 110.59,
+      "time_offensive_third": 69.98,
+      "time_defensive_half": 314.31,
+      "time_offensive_half": 118.88,
+      "time_behind_ball": 307.4,
+      "time_infront_ball": 125.8,
+      "time_most_back": 212.8,
+      "time_most_forward": 213.7,
+      "goals_against_while_last_defender": 0,
+      "time_closest_to_ball": 198.6,
+      "time_farthest_from_ball": 227.9,
+      "percent_defensive_third": 58.317173,
+      "percent_offensive_third": 16.154202,
+      "percent_neutral_third": 25.528624,
+      "percent_defensive_half": 72.557076,
+      "percent_offensive_half": 27.442923,
+      "percent_behind_ball": 70.9603,
+      "percent_infront_ball": 29.039703,
+      "percent_most_back": 51.435753,
+      "percent_most_forward": 51.653294,
+      "percent_closest_to_ball": 48.00348,
+      "percent_farthest_from_ball": 55.085564
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 1
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
+    "date": "2026-07-02T23:54:35Z",
+    "map": "Mannfield (Night)",
+    "playlist": "Ranked Doubles",
+    "duration": 437,
+    "team_color": "orange",
+    "team_goals": 3,
+    "opponent_goals": 4,
+    "win": false,
+    "player": "Xhipert_",
+    "platform": "ps4",
+    "teammates": [
+      "SK_lambert09"
+    ],
+    "core": {
+      "shots": 7,
+      "shots_against": 6,
+      "goals": 2,
+      "goals_against": 4,
+      "saves": 0,
+      "assists": 0,
+      "score": 500,
+      "mvp": false,
+      "shooting_percentage": 28.571428
+    },
+    "boost": {
+      "bpm": 343,
+      "bcpm": 357.92322,
+      "avg_amount": 55.02,
+      "amount_collected": 2468,
+      "amount_stolen": 700,
+      "amount_collected_big": 1992,
+      "amount_stolen_big": 472,
+      "amount_collected_small": 476,
+      "amount_stolen_small": 228,
+      "count_collected_big": 26,
+      "count_stolen_big": 7,
+      "count_collected_small": 42,
+      "count_stolen_small": 20,
+      "amount_overfill": 614,
+      "amount_overfill_stolen": 227,
+      "amount_used_while_supersonic": 580,
+      "time_zero_boost": 43.42,
+      "percent_zero_boost": 10.495021,
+      "time_full_boost": 66.06,
+      "percent_full_boost": 15.96732,
+      "time_boost_0_25": 116.99,
+      "time_boost_25_50": 75.06,
+      "time_boost_50_75": 92.71,
+      "time_boost_75_100": 121.12,
+      "percent_boost_0_25": 28.823792,
+      "percent_boost_25_50": 18.493153,
+      "percent_boost_50_75": 22.841728,
+      "percent_boost_75_100": 29.841333
+    },
+    "movement": {
+      "avg_speed": 1320,
+      "total_distance": 490225,
+      "time_supersonic_speed": 38.48,
+      "time_boost_speed": 146.22,
+      "time_slow_speed": 251.71,
+      "time_ground": 310.37,
+      "time_low_air": 123.54,
+      "time_high_air": 2.5,
+      "time_powerslide": 4.65,
+      "count_powerslide": 10,
+      "avg_powerslide_duration": 0.47,
+      "percent_slow_speed": 57.677414,
+      "percent_boost_speed": 33.505188,
+      "percent_supersonic_speed": 8.817396,
+      "percent_ground": 71.118904,
+      "percent_low_air": 28.308243,
+      "percent_high_air": 0.5728558
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2801,
+      "avg_distance_to_ball_possession": 2751,
+      "avg_distance_to_ball_no_possession": 2823,
+      "avg_distance_to_mates": 3202,
+      "time_defensive_third": 189.12,
+      "time_neutral_third": 130.82,
+      "time_offensive_third": 116.47,
+      "time_defensive_half": 246.16,
+      "time_offensive_half": 190.25,
+      "time_behind_ball": 305.78,
+      "time_infront_ball": 130.63,
+      "time_most_back": 218.8,
+      "time_most_forward": 196.8,
+      "goals_against_while_last_defender": 1,
+      "time_closest_to_ball": 192.4,
+      "time_farthest_from_ball": 223.4,
+      "percent_defensive_third": 43.335396,
+      "percent_offensive_third": 26.688206,
+      "percent_neutral_third": 29.9764,
+      "percent_defensive_half": 56.405674,
+      "percent_offensive_half": 43.594326,
+      "percent_behind_ball": 70.06714,
+      "percent_infront_ball": 29.932861,
+      "percent_most_back": 52.88601,
+      "percent_most_forward": 47.568405,
+      "percent_closest_to_ball": 46.504883,
+      "percent_farthest_from_ball": 53.99787
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 0
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
+    "date": "2026-07-02T23:54:35Z",
+    "map": "Mannfield (Night)",
+    "playlist": "Ranked Doubles",
+    "duration": 437,
+    "team_color": "orange",
+    "team_goals": 3,
+    "opponent_goals": 4,
+    "win": false,
+    "player": "SK_lambert09",
+    "platform": "ps4",
+    "teammates": [
+      "Xhipert_"
+    ],
+    "core": {
+      "shots": 2,
+      "shots_against": 6,
+      "goals": 1,
+      "goals_against": 4,
+      "saves": 1,
+      "assists": 0,
+      "score": 318,
+      "mvp": false,
+      "shooting_percentage": 50
+    },
+    "boost": {
+      "bpm": 391,
+      "bcpm": 404.04138,
+      "avg_amount": 46.03,
+      "amount_collected": 2786,
+      "amount_stolen": 645,
+      "amount_collected_big": 2262,
+      "amount_stolen_big": 416,
+      "amount_collected_small": 524,
+      "amount_stolen_small": 229,
+      "count_collected_big": 26,
+      "count_stolen_big": 5,
+      "count_collected_small": 48,
+      "count_stolen_small": 22,
+      "amount_overfill": 340,
+      "amount_overfill_stolen": 83,
+      "amount_used_while_supersonic": 565,
+      "time_zero_boost": 69.16,
+      "percent_zero_boost": 16.716621,
+      "time_full_boost": 61.59,
+      "percent_full_boost": 14.88688,
+      "time_boost_0_25": 163.13,
+      "time_boost_25_50": 92.06,
+      "time_boost_50_75": 88.5,
+      "time_boost_75_100": 78.81,
+      "percent_boost_0_25": 38.61065,
+      "percent_boost_25_50": 21.789349,
+      "percent_boost_50_75": 20.946745,
+      "percent_boost_75_100": 18.653254
+    },
+    "movement": {
+      "avg_speed": 1429,
+      "total_distance": 583253,
+      "time_supersonic_speed": 32.67,
+      "time_boost_speed": 176.88,
+      "time_slow_speed": 228.23,
+      "time_ground": 303.8,
+      "time_low_air": 121.76,
+      "time_high_air": 12.22,
+      "time_powerslide": 3.96,
+      "count_powerslide": 21,
+      "avg_powerslide_duration": 0.19,
+      "percent_slow_speed": 52.133495,
+      "percent_boost_speed": 40.40386,
+      "percent_supersonic_speed": 7.4626527,
+      "percent_ground": 69.395584,
+      "percent_low_air": 27.813057,
+      "percent_high_air": 2.7913563
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2286,
+      "avg_distance_to_ball_possession": 2217,
+      "avg_distance_to_ball_no_possession": 2354,
+      "avg_distance_to_mates": 3202,
+      "time_defensive_third": 168.83,
+      "time_neutral_third": 120.79,
+      "time_offensive_third": 148.16,
+      "time_defensive_half": 229.84,
+      "time_offensive_half": 207.95,
+      "time_behind_ball": 318.52,
+      "time_infront_ball": 119.27,
+      "time_most_back": 204.3,
+      "time_most_forward": 236.8,
+      "goals_against_while_last_defender": 3,
+      "time_closest_to_ball": 230.4,
+      "time_farthest_from_ball": 210.5,
+      "percent_defensive_third": 38.565033,
+      "percent_offensive_third": 33.843483,
+      "percent_neutral_third": 27.591484,
+      "percent_defensive_half": 52.50006,
+      "percent_offensive_half": 47.499947,
+      "percent_behind_ball": 72.75634,
+      "percent_infront_ball": 27.243656,
+      "percent_most_back": 49.381226,
+      "percent_most_forward": 57.23678,
+      "percent_closest_to_ball": 55.68984,
+      "percent_farthest_from_ball": 50.87982
+    },
+    "demo": {
+      "inflicted": 3,
+      "taken": 0
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
+    "date": "2026-07-02T23:59:35Z",
+    "map": "Champions Field (Day)",
+    "playlist": "Ranked Doubles",
+    "duration": 235,
+    "team_color": "blue",
+    "team_goals": 0,
+    "opponent_goals": 4,
+    "win": false,
+    "player": "ExMirage",
+    "platform": "epic",
+    "teammates": [
+      "Rarely_Sober"
+    ],
+    "core": {
+      "shots": 0,
+      "shots_against": 9,
+      "goals": 0,
+      "goals_against": 4,
+      "saves": 0,
+      "assists": 0,
+      "score": 182,
+      "mvp": false,
+      "shooting_percentage": 0
+    },
+    "boost": {
+      "bpm": 285,
+      "bcpm": 253.21889,
+      "avg_amount": 32.91,
+      "amount_collected": 944,
+      "amount_stolen": 220,
+      "amount_collected_big": 363,
+      "amount_stolen_big": 0,
+      "amount_collected_small": 581,
+      "amount_stolen_small": 220,
+      "count_collected_big": 5,
+      "count_stolen_big": 0,
+      "count_collected_small": 49,
+      "count_stolen_small": 19,
+      "amount_overfill": 136,
+      "amount_overfill_stolen": 0,
+      "amount_used_while_supersonic": 236,
+      "time_zero_boost": 71.25,
+      "percent_zero_boost": 31.853542,
+      "time_full_boost": 9.85,
+      "percent_full_boost": 4.4036126,
+      "time_boost_0_25": 117.36,
+      "time_boost_25_50": 37.34,
+      "time_boost_50_75": 40.5,
+      "time_boost_75_100": 23.1,
+      "percent_boost_0_25": 53.76088,
+      "percent_boost_25_50": 17.1049,
+      "percent_boost_50_75": 18.55245,
+      "percent_boost_75_100": 10.581768
+    },
+    "movement": {
+      "avg_speed": 1389,
+      "total_distance": 303532,
+      "time_supersonic_speed": 17.18,
+      "time_boost_speed": 74.16,
+      "time_slow_speed": 142.48,
+      "time_ground": 154.65,
+      "time_low_air": 75.92,
+      "time_high_air": 3.26,
+      "time_powerslide": 1.13,
+      "count_powerslide": 7,
+      "avg_powerslide_duration": 0.16,
+      "percent_slow_speed": 60.93576,
+      "percent_boost_speed": 31.716705,
+      "percent_supersonic_speed": 7.3475323,
+      "percent_ground": 66.137794,
+      "percent_low_air": 32.468033,
+      "percent_high_air": 1.3941753
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2452,
+      "avg_distance_to_ball_possession": 2280,
+      "avg_distance_to_ball_no_possession": 2665,
+      "avg_distance_to_mates": 3250,
+      "time_defensive_third": 103.59,
+      "time_neutral_third": 79.97,
+      "time_offensive_third": 50.27,
+      "time_defensive_half": 149.11,
+      "time_offensive_half": 84.71,
+      "time_behind_ball": 153.54,
+      "time_infront_ball": 80.28,
+      "time_most_back": 113.8,
+      "time_most_forward": 112.2,
+      "goals_against_while_last_defender": 3,
+      "time_closest_to_ball": 134.3,
+      "time_farthest_from_ball": 91.5,
+      "percent_defensive_third": 44.301414,
+      "percent_offensive_third": 21.498524,
+      "percent_neutral_third": 34.200058,
+      "percent_defensive_half": 63.771275,
+      "percent_offensive_half": 36.22872,
+      "percent_behind_ball": 65.66589,
+      "percent_infront_ball": 34.334103,
+      "percent_most_back": 50.876255,
+      "percent_most_forward": 50.160946,
+      "percent_closest_to_ball": 60.041134,
+      "percent_farthest_from_ball": 40.906654
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 0
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
+    "date": "2026-07-02T23:59:35Z",
+    "map": "Champions Field (Day)",
+    "playlist": "Ranked Doubles",
+    "duration": 235,
+    "team_color": "blue",
+    "team_goals": 0,
+    "opponent_goals": 4,
+    "win": false,
+    "player": "Rarely_Sober",
+    "platform": "epic",
+    "teammates": [
+      "ExMirage"
+    ],
+    "core": {
+      "shots": 1,
+      "shots_against": 9,
+      "goals": 0,
+      "goals_against": 4,
+      "saves": 1,
+      "assists": 0,
+      "score": 152,
+      "mvp": false,
+      "shooting_percentage": 0
+    },
+    "boost": {
+      "bpm": 333,
+      "bcpm": 321.62018,
+      "avg_amount": 45.67,
+      "amount_collected": 1199,
+      "amount_stolen": 184,
+      "amount_collected_big": 945,
+      "amount_stolen_big": 100,
+      "amount_collected_small": 254,
+      "amount_stolen_small": 84,
+      "count_collected_big": 11,
+      "count_stolen_big": 1,
+      "count_collected_small": 22,
+      "count_stolen_small": 7,
+      "amount_overfill": 154,
+      "amount_overfill_stolen": 0,
+      "amount_used_while_supersonic": 258,
+      "time_zero_boost": 21.69,
+      "percent_zero_boost": 9.696889,
+      "time_full_boost": 25.03,
+      "percent_full_boost": 11.190093,
+      "time_boost_0_25": 61.05,
+      "time_boost_25_50": 60,
+      "time_boost_50_75": 37.57,
+      "time_boost_75_100": 59,
+      "percent_boost_0_25": 28.053488,
+      "percent_boost_25_50": 27.570995,
+      "percent_boost_50_75": 17.264038,
+      "percent_boost_75_100": 27.111479
+    },
+    "movement": {
+      "avg_speed": 1433,
+      "total_distance": 309598,
+      "time_supersonic_speed": 19.11,
+      "time_boost_speed": 89.95,
+      "time_slow_speed": 126.65,
+      "time_ground": 150.23,
+      "time_low_air": 84.85,
+      "time_high_air": 0.63,
+      "time_powerslide": 3.16,
+      "count_powerslide": 22,
+      "avg_powerslide_duration": 0.14,
+      "percent_slow_speed": 53.731277,
+      "percent_boost_speed": 38.1613,
+      "percent_supersonic_speed": 8.10742,
+      "percent_ground": 63.7351,
+      "percent_low_air": 35.997627,
+      "percent_high_air": 0.2672776
+    },
+    "positioning": {
+      "avg_distance_to_ball": 3118,
+      "avg_distance_to_ball_possession": 2648,
+      "avg_distance_to_ball_no_possession": 3403,
+      "avg_distance_to_mates": 3250,
+      "time_defensive_third": 100.71,
+      "time_neutral_third": 76.75,
+      "time_offensive_third": 58.25,
+      "time_defensive_half": 140.58,
+      "time_offensive_half": 95.13,
+      "time_behind_ball": 154.65,
+      "time_infront_ball": 81.06,
+      "time_most_back": 116.1,
+      "time_most_forward": 105.5,
+      "goals_against_while_last_defender": 1,
+      "time_closest_to_ball": 83.9,
+      "time_farthest_from_ball": 137.9,
+      "percent_defensive_third": 42.726234,
+      "percent_offensive_third": 24.712572,
+      "percent_neutral_third": 32.5612,
+      "percent_defensive_half": 59.641087,
+      "percent_offensive_half": 40.358917,
+      "percent_behind_ball": 65.61028,
+      "percent_infront_ball": 34.389717,
+      "percent_most_back": 51.904507,
+      "percent_most_forward": 47.165596,
+      "percent_closest_to_ball": 37.50894,
+      "percent_farthest_from_ball": 61.65057
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 0
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
+    "date": "2026-07-02T23:59:35Z",
+    "map": "Champions Field (Day)",
+    "playlist": "Ranked Doubles",
+    "duration": 235,
+    "team_color": "orange",
+    "team_goals": 4,
+    "opponent_goals": 0,
+    "win": true,
+    "player": "Patrik2326546",
+    "platform": "ps4",
+    "teammates": [
+      "B.o.d.d.y"
+    ],
+    "core": {
+      "shots": 3,
+      "shots_against": 1,
+      "goals": 2,
+      "goals_against": 0,
+      "saves": 1,
+      "assists": 0,
+      "score": 487,
+      "mvp": true,
+      "shooting_percentage": 66.666664
+    },
+    "boost": {
+      "bpm": 367,
+      "bcpm": 339.5923,
+      "avg_amount": 50.07,
+      "amount_collected": 1266,
+      "amount_stolen": 288,
+      "amount_collected_big": 1050,
+      "amount_stolen_big": 231,
+      "amount_collected_small": 216,
+      "amount_stolen_small": 57,
+      "count_collected_big": 13,
+      "count_stolen_big": 3,
+      "count_collected_small": 19,
+      "count_stolen_small": 5,
+      "amount_overfill": 249,
+      "amount_overfill_stolen": 68,
+      "amount_used_while_supersonic": 350,
+      "time_zero_boost": 13.05,
+      "percent_zero_boost": 5.8342276,
+      "time_full_boost": 46.39,
+      "percent_full_boost": 20.73945,
+      "time_boost_0_25": 43.87,
+      "time_boost_25_50": 64.66,
+      "time_boost_50_75": 37.45,
+      "time_boost_75_100": 69.11,
+      "percent_boost_0_25": 20.396114,
+      "percent_boost_25_50": 30.061838,
+      "percent_boost_50_75": 17.411316,
+      "percent_boost_75_100": 32.130737
+    },
+    "movement": {
+      "avg_speed": 1412,
+      "total_distance": 310792,
+      "time_supersonic_speed": 23.7,
+      "time_boost_speed": 95.47,
+      "time_slow_speed": 116.28,
+      "time_ground": 145.03,
+      "time_low_air": 87,
+      "time_high_air": 3.41,
+      "time_powerslide": 1.22,
+      "count_powerslide": 2,
+      "avg_powerslide_duration": 0.61,
+      "percent_slow_speed": 49.386284,
+      "percent_boost_speed": 40.547886,
+      "percent_supersonic_speed": 10.065831,
+      "percent_ground": 61.599556,
+      "percent_low_air": 36.95209,
+      "percent_high_air": 1.448352
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2635,
+      "avg_distance_to_ball_possession": 2812,
+      "avg_distance_to_ball_no_possession": 2371,
+      "avg_distance_to_mates": 3689,
+      "time_defensive_third": 133.93,
+      "time_neutral_third": 59.52,
+      "time_offensive_third": 42,
+      "time_defensive_half": 163.32,
+      "time_offensive_half": 72.12,
+      "time_behind_ball": 184.52,
+      "time_infront_ball": 50.92,
+      "time_most_back": 128.4,
+      "time_most_forward": 93.3,
+      "goals_against_while_last_defender": 0,
+      "time_closest_to_ball": 108.1,
+      "time_farthest_from_ball": 113.6,
+      "percent_defensive_third": 56.88256,
+      "percent_offensive_third": 17.838182,
+      "percent_neutral_third": 25.279253,
+      "percent_defensive_half": 69.368,
+      "percent_offensive_half": 30.63201,
+      "percent_behind_ball": 78.372406,
+      "percent_infront_ball": 21.62759,
+      "percent_most_back": 57.40343,
+      "percent_most_forward": 41.711376,
+      "percent_closest_to_ball": 48.32797,
+      "percent_farthest_from_ball": 50.78684
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 0
+    },
+    "mode": "online"
+  },
+  {
+    "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
+    "date": "2026-07-02T23:59:35Z",
+    "map": "Champions Field (Day)",
+    "playlist": "Ranked Doubles",
+    "duration": 235,
+    "team_color": "orange",
+    "team_goals": 4,
+    "opponent_goals": 0,
+    "win": true,
+    "player": "B.o.d.d.y",
+    "platform": "epic",
+    "teammates": [
+      "Patrik2326546"
+    ],
+    "core": {
+      "shots": 6,
+      "shots_against": 1,
+      "goals": 2,
+      "goals_against": 0,
+      "saves": 0,
+      "assists": 1,
+      "score": 440,
+      "mvp": false,
+      "shooting_percentage": 33.333332
+    },
+    "boost": {
+      "bpm": 485,
+      "bcpm": 495.70816,
+      "avg_amount": 49.46,
+      "amount_collected": 1848,
+      "amount_stolen": 209,
+      "amount_collected_big": 1499,
+      "amount_stolen_big": 66,
+      "amount_collected_small": 349,
+      "amount_stolen_small": 143,
+      "count_collected_big": 20,
+      "count_stolen_big": 2,
+      "count_collected_small": 31,
+      "count_stolen_small": 13,
+      "amount_overfill": 500,
+      "amount_overfill_stolen": 133,
+      "amount_used_while_supersonic": 483,
+      "time_zero_boost": 27.57,
+      "percent_zero_boost": 12.3256445,
+      "time_full_boost": 28.67,
+      "percent_full_boost": 12.817418,
+      "time_boost_0_25": 69.15,
+      "time_boost_25_50": 61.9,
+      "time_boost_50_75": 35.59,
+      "time_boost_75_100": 59.76,
+      "percent_boost_0_25": 30.543287,
+      "percent_boost_25_50": 27.34099,
+      "percent_boost_50_75": 15.719965,
+      "percent_boost_75_100": 26.39576
+    },
+    "movement": {
+      "avg_speed": 1667,
+      "total_distance": 368015,
+      "time_supersonic_speed": 51.24,
+      "time_boost_speed": 97.58,
+      "time_slow_speed": 86.89,
+      "time_ground": 146.49,
+      "time_low_air": 89.22,
+      "time_high_air": 0,
+      "time_powerslide": 2.17,
+      "count_powerslide": 13,
+      "avg_powerslide_duration": 0.17,
+      "percent_slow_speed": 36.863094,
+      "percent_boost_speed": 41.398327,
+      "percent_supersonic_speed": 21.738577,
+      "percent_ground": 62.148403,
+      "percent_low_air": 37.851597,
+      "percent_high_air": 0
+    },
+    "positioning": {
+      "avg_distance_to_ball": 2625,
+      "avg_distance_to_ball_possession": 2750,
+      "avg_distance_to_ball_no_possession": 2562,
+      "avg_distance_to_mates": 3689,
+      "time_defensive_third": 118.39,
+      "time_neutral_third": 64.75,
+      "time_offensive_third": 52.58,
+      "time_defensive_half": 151.78,
+      "time_offensive_half": 83.93,
+      "time_behind_ball": 162.65,
+      "time_infront_ball": 73.07,
+      "time_most_back": 93.5,
+      "time_most_forward": 124.3,
+      "goals_against_while_last_defender": 0,
+      "time_closest_to_ball": 109.5,
+      "time_farthest_from_ball": 108.3,
+      "percent_defensive_third": 50.224842,
+      "percent_offensive_third": 22.306126,
+      "percent_neutral_third": 27.46903,
+      "percent_defensive_half": 64.392685,
+      "percent_offensive_half": 35.607315,
+      "percent_behind_ball": 69.00135,
+      "percent_infront_ball": 30.998642,
+      "percent_most_back": 41.80079,
+      "percent_most_forward": 55.57046,
+      "percent_closest_to_ball": 48.953865,
+      "percent_farthest_from_ball": 48.417385
+    },
+    "demo": {
+      "inflicted": 0,
+      "taken": 0
+    },
+    "mode": "online"
   }
 ]
