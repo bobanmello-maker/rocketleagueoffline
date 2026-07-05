@@ -391,9 +391,17 @@
 <script>
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
-// ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
-// -> ime koje zelis da se prikazuje svuda u dashboard-u. Nije osetljivo na velika/mala slova.
-// Dodaj/izmeni redove ovde kad god zatreba, ne mora nista drugo da se dira.
+// ---- Fiksne boje za igrace: ovde mozes rucno da promenis boju kome god hoces.
+// Format je HEX kod boje (npr. '#FF6B35'). Ko god NIJE ovde naveden dobija boju
+// automatski iz opste palete - kod puno igraca (online protivnici i sl.) moze
+// da se poklopi sa nekim drugim, zato je bitno da BAR vas 4 uvek budete ovde.
+const PLAYER_COLOR_OVERRIDES = {
+  'Toške': '#3DA9FC',   // plava
+  'Cane':  '#FF6B35',   // narandžasta
+  'Ivan':  '#4ADE80',   // zelena
+  'Pajke': '#FBBF24',   // žuta / amber
+};
+
 // ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
 // -> ime koje zelis da se prikazuje svuda u dashboard-u. Otporno je na razmake,
 // velika/mala slova i zagrade (npr. "ExMirage(1)" i "ExMirage (1)" su isto).
@@ -477,7 +485,15 @@ async function load(){
   }
 
   allPlayers = [...new Set(RAW.map(r => r.player))].sort();
-  allPlayers.forEach((p, i) => { playerColor[p] = PALETTE[i % PALETTE.length]; });
+  let colorIdx = 0;
+  allPlayers.forEach(p => {
+    if(PLAYER_COLOR_OVERRIDES[p]){
+      playerColor[p] = PLAYER_COLOR_OVERRIDES[p];
+    } else {
+      playerColor[p] = PALETTE[colorIdx % PALETTE.length];
+      colorIdx++;
+    }
+  });
 
   refreshVisiblePlayers();
   buildDateInputs();
