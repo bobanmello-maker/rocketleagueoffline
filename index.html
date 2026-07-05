@@ -438,7 +438,8 @@ const RADAR_METRICS = [
 ];
 
 let RAW = [];
-let players = [];
+let allPlayers = [];   // svi igraci ikad vidjeni - koristi se samo da boje ostanu stabilne
+let players = [];      // igraci vidljivi u trenutno izabranom rezimu (all/online/offline)
 let playerColor = {};
 let activePlayers = new Set();
 let modeFilter = 'all';
@@ -475,10 +476,10 @@ async function load(){
     return;
   }
 
-  players = [...new Set(RAW.map(r => r.player))].sort();
-  players.forEach((p, i) => { playerColor[p] = PALETTE[i % PALETTE.length]; activePlayers.add(p); });
+  allPlayers = [...new Set(RAW.map(r => r.player))].sort();
+  allPlayers.forEach((p, i) => { playerColor[p] = PALETTE[i % PALETTE.length]; });
 
-  buildChips();
+  refreshVisiblePlayers();
   buildDateInputs();
   buildTrendMetricSelect();
   buildTabs();
@@ -491,16 +492,16 @@ async function load(){
       document.querySelectorAll('.mode-chip').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       modeFilter = btn.dataset.mode;
+      refreshVisiblePlayers();
       render();
     });
   });
   $('#resetBtn').addEventListener('click', () => {
     $('#dateFrom').value = ''; $('#dateTo').value = '';
-    activePlayers = new Set(players);
     modeFilter = 'all';
-    document.querySelectorAll('#playerChips .chip').forEach(c => c.classList.add('active'));
     document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
     $('.mode-chip[data-mode="all"]').classList.add('active');
+    refreshVisiblePlayers();
     render();
   });
   document.querySelectorAll('#matchTable th[data-key]').forEach(th => {
@@ -524,6 +525,13 @@ function buildTabs(){
       $('#tab-' + btn.dataset.tab).classList.add('active');
     });
   });
+}
+
+function refreshVisiblePlayers(){
+  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
+  players = [...new Set(modeRows.map(r => r.player))].sort();
+  activePlayers = new Set(players);
+  buildChips();
 }
 
 function buildChips(){
