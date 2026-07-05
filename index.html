@@ -75,6 +75,8 @@
   .chip[data-idx="1"].active{ background:var(--orange); }
   .chip[data-idx="2"].active{ background:var(--green); }
   .chip[data-idx="3"].active{ background:var(--amber); }
+  .chip.mode-chip.active{ background:var(--orange); color:#0B0E14; border-color:transparent; }
+
   .reset-btn{
     margin-left:auto; background:none; border:1px solid var(--border); color:var(--text-muted);
     padding:6px 14px; border-radius:8px; cursor:pointer; font-size:12px;
@@ -210,6 +212,12 @@
       <input type="date" id="dateFrom">
       <label class="field-lbl">Do</label>
       <input type="date" id="dateTo">
+    </div>
+    <div class="group" id="modeFilterGroup">
+      <label class="field-lbl">Režim</label>
+      <button class="chip mode-chip active" data-mode="all">Sve</button>
+      <button class="chip mode-chip" data-mode="online">Online</button>
+      <button class="chip mode-chip" data-mode="offline">Offline</button>
     </div>
     <div class="group" id="playerChips"></div>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
@@ -433,6 +441,7 @@ let RAW = [];
 let players = [];
 let playerColor = {};
 let activePlayers = new Set();
+let modeFilter = 'all';
 let sortKey = 'date';
 let sortDir = -1;
 let charts = {};
@@ -477,10 +486,21 @@ async function load(){
   $('#dateFrom').addEventListener('change', render);
   $('#dateTo').addEventListener('change', render);
   $('#trendMetric').addEventListener('change', render);
+  document.querySelectorAll('.mode-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      modeFilter = btn.dataset.mode;
+      render();
+    });
+  });
   $('#resetBtn').addEventListener('click', () => {
     $('#dateFrom').value = ''; $('#dateTo').value = '';
     activePlayers = new Set(players);
-    document.querySelectorAll('.chip').forEach(c => c.classList.add('active'));
+    modeFilter = 'all';
+    document.querySelectorAll('#playerChips .chip').forEach(c => c.classList.add('active'));
+    document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
+    $('.mode-chip[data-mode="all"]').classList.add('active');
     render();
   });
   document.querySelectorAll('#matchTable th[data-key]').forEach(th => {
@@ -543,6 +563,7 @@ function getFiltered(){
   const to = $('#dateTo').value;
   return RAW.filter(r => {
     if(!activePlayers.has(r.player)) return false;
+    if(modeFilter !== 'all' && r.mode !== modeFilter) return false;
     if(from && r.date && r.date.slice(0,10) < from) return false;
     if(to && r.date && r.date.slice(0,10) > to) return false;
     return true;
