@@ -21,7 +21,17 @@ import requests
 API_BASE = "https://ballchasing.com/api"
 TOKEN = os.environ.get("BALLCHASING_TOKEN")
 GROUPS = [g.strip() for g in os.environ.get("BALLCHASING_GROUPS", "").split(",") if g.strip()]
+ONLINE_GROUP = os.environ.get("BALLCHASING_ONLINE_GROUP", "")
+OFFLINE_GROUP = os.environ.get("BALLCHASING_OFFLINE_GROUP", "")
 OUTPUT_FILE = os.environ.get("OUTPUT_FILE", "data.json")
+
+
+def mode_for_group(group_id):
+    if group_id == ONLINE_GROUP:
+        return "online"
+    if group_id == OFFLINE_GROUP:
+        return "offline"
+    return group_id  # nepoznata grupa - koristi njen ID kao naziv rezima
 
 # Ballchasing rate limit za "regular" (non-patreon) nalog: 2 poziva/sekundi.
 # Stavljamo malo vece kasnjenje da budemo sigurni da ne udarimo u 429.
@@ -188,6 +198,9 @@ def main():
                 print(f"  Preskacem {rid}: status={replay.get('status')}", file=sys.stderr)
                 continue
             rows = flatten_replay(replay)
+            mode = mode_for_group(group_id)
+            for row in rows:
+                row["mode"] = mode
             all_rows.extend(rows)
             print(f"  + {rid} ({len(rows)} redova)")
 
