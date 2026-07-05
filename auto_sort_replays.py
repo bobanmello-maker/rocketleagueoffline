@@ -112,7 +112,7 @@ def main():
 
         if names.issubset(OFFLINE_NAMES) and len(names) >= 2:
             target = OFFLINE_GROUP
-        elif names == ONLINE_NAMES:
+        elif ONLINE_NAMES.issubset(names):
             target = ONLINE_GROUP
         else:
             continue  # ne prepoznajemo ovaj obrazac, ostavljamo na miru
