@@ -96,6 +96,25 @@
   .prec-card .pct{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
   .prec-card .matches{ font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px;}
 
+  .metric-summary{ margin-top:18px; border-top:1px solid var(--border); padding-top:14px; }
+  .metric-summary-row{
+    display:flex; align-items:center; gap:10px; padding:6px 0;
+  }
+  .metric-summary-row .rank{ width:18px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .metric-summary-row .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .metric-summary-row .pname{ flex:0 0 110px; font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .metric-summary-row .bar-track{ flex:1; height:8px; background:var(--boost-track); border-radius:4px; overflow:hidden; }
+  .metric-summary-row .bar-fill{ height:100%; border-radius:4px; transition:width .3s ease; }
+  .metric-summary-row .total{ width:56px; text-align:right; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:13px; }
+  .metric-summary-row .avg{ width:96px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); }
+  .metric-summary-head{ display:flex; gap:10px; padding:0 0 6px; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); }
+  .metric-summary-head .pname{ flex:1 1 auto; white-space:nowrap; }
+  .metric-summary-head .dot{ width:9px; }
+  .metric-summary-head .rank{ width:18px; }
+  .metric-summary-head .bar-track{ flex:0; }
+  .metric-summary-head .total{ width:56px; text-align:right; }
+  .metric-summary-head .avg{ width:96px; text-align:right; }
+
   /* ---- Tabs ---- */
   .tabbar{ display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:0;}
   .tabbtn{
@@ -247,6 +266,7 @@
             <select class="metric-select" id="trendMetric"></select>
           </h2>
           <canvas id="trendChart" height="130"></canvas>
+          <div class="metric-summary" id="metricSummary"></div>
         </div>
         <div class="card">
           <h2>Prosečan boost <small>% od maksimalnog boost-a</small></h2>
@@ -429,10 +449,10 @@ const TREND_METRICS = [
   {key:'core.saves', label:'Odbrane'},
   {key:'core.shots', label:'Šutevi'},
   {key:'core.score', label:'Score'},
-  {key:'boost.avg_amount', label:'Prosečan boost'},
-  {key:'boost.bpm', label:'BPM (potrošnja)'},
-  {key:'positioning.percent_behind_ball', label:'% iza lopte'},
-  {key:'movement.avg_speed', label:'Prosečna brzina'},
+  {key:'boost.avg_amount', label:'Prosečan boost', isRate:true},
+  {key:'boost.bpm', label:'BPM (potrošnja)', isRate:true},
+  {key:'positioning.percent_behind_ball', label:'% iza lopte', isRate:true},
+  {key:'movement.avg_speed', label:'Prosečna brzina', isRate:true},
   {key:'demo.inflicted', label:'Demo-i zadati'},
 ];
 
@@ -705,6 +725,52 @@ function renderTrend(rows){
   const metric = $('#trendMetric').value || 'core.goals';
   const ordered = groupByMatchAndPlayer(rows, metric);
   lineChartFor('#trendChart', 'trend', ordered);
+  renderMetricSummary(rows, metric);
+}
+
+function fmtNum(v){
+  if(v == null || isNaN(v)) return '0';
+  return Math.abs(v) >= 100 ? Math.round(v).toString() : (Math.round(v*10)/10).toString();
+}
+
+function renderMetricSummary(rows, metricKey){
+  const wrap = $('#metricSummary');
+  const info = TREND_METRICS.find(m => m.key === metricKey) || {label: metricKey};
+  const ps = [...activePlayers];
+
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  const stats = ps.map(p => {
+    const prows = rows.filter(r => r.player === p);
+    const matches = new Set(prows.map(r => r.replay_id)).size;
+    const total = sum(prows.map(r => getPath(r, metricKey)));
+    const average = matches ? total / matches : 0;
+    return { p, matches, total, average };
+  });
+
+  const rankVal = s => info.isRate ? s.average : s.total;
+  stats.sort((a,b) => rankVal(b) - rankVal(a));
+  const maxVal = Math.max(1, ...stats.map(rankVal));
+
+  const head = `
+    <div class="metric-summary-head">
+      <div class="rank"></div><div class="dot"></div><div class="pname">Ukupno za period — ${info.label}</div>
+      <div class="bar-track"></div>
+      <div class="total">${info.isRate ? 'Prosek' : 'Ukupno'}</div>
+      <div class="avg">${info.isRate ? '' : 'Prosek/meč'}</div>
+    </div>`;
+
+  const body = stats.map((s,i) => `
+    <div class="metric-summary-row">
+      <div class="rank">${i+1}.</div>
+      <div class="dot" style="background:${playerColor[s.p]}"></div>
+      <div class="pname" style="color:${playerColor[s.p]}">${s.p}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(rankVal(s)/maxVal*100).toFixed(0)}%; background:${playerColor[s.p]}"></div></div>
+      <div class="total">${fmtNum(rankVal(s))}</div>
+      <div class="avg">${info.isRate ? '' : (s.matches ? fmtNum(s.average) + '/meč' : '–')}</div>
+    </div>`).join('');
+
+  wrap.innerHTML = head + body;
 }
 
 function renderBoostMeters(rows){
