@@ -254,9 +254,9 @@
     </div>
     <div class="group" id="modeFilterGroup">
       <label class="field-lbl">Režim</label>
-      <button class="chip mode-chip active" data-mode="all">Sve</button>
+      <button class="chip mode-chip" data-mode="all">Sve</button>
       <button class="chip mode-chip" data-mode="online">Online</button>
-      <button class="chip mode-chip" data-mode="offline">Offline</button>
+      <button class="chip mode-chip active" data-mode="offline">Offline</button>
     </div>
     <div class="group" id="playerChips"></div>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
@@ -496,7 +496,7 @@ let allPlayers = [];   // svi igraci ikad vidjeni - koristi se samo da boje osta
 let players = [];      // igraci vidljivi u trenutno izabranom rezimu (all/online/offline)
 let playerColor = {};
 let activePlayers = new Set();
-let modeFilter = 'all';
+let modeFilter = 'offline';
 let sortKey = 'date';
 let sortDir = -1;
 let charts = {};
@@ -560,9 +560,9 @@ async function load(){
   });
   $('#resetBtn').addEventListener('click', () => {
     $('#dateFrom').value = ''; $('#dateTo').value = '';
-    modeFilter = 'all';
+    modeFilter = 'offline';
     document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
-    $('.mode-chip[data-mode="all"]').classList.add('active');
+    $('.mode-chip[data-mode="offline"]').classList.add('active');
     refreshVisiblePlayers();
     render();
   });
