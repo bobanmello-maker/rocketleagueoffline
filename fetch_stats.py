@@ -24,6 +24,7 @@ GROUPS = [g.strip() for g in os.environ.get("BALLCHASING_GROUPS", "").split(",")
 ONLINE_GROUP = os.environ.get("BALLCHASING_ONLINE_GROUP", "")
 OFFLINE_GROUP = os.environ.get("BALLCHASING_OFFLINE_GROUP", "")
 OUTPUT_FILE = os.environ.get("OUTPUT_FILE", "data.json")
+CACHE_FILE = os.environ.get("CACHE_FILE", "replay_cache.json")
 
 
 def mode_for_group(group_id):
@@ -172,9 +173,32 @@ def flatten_replay(replay):
     return rows
 
 
+def load_cache():
+    """Ucita vec obradjene replay-e sa proslog pokretanja - da ne moramo
+    ponovo da ih fetch-ujemo (ustedjuje vreme i API pozive)."""
+    if not os.path.exists(CACHE_FILE):
+        return {}
+    try:
+        with open(CACHE_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        print(f"  Upozorenje: {CACHE_FILE} je ostecen, pravim novi keš od nule.", file=sys.stderr)
+        return {}
+
+
+def save_cache(cache):
+    with open(CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False)
+
+
 def main():
+    cache = load_cache()
+    print(f"Keš: {len(cache)} vec obradjenih replay-a od ranije")
+
     all_rows = []
     seen_ids = set()
+    new_count = 0
+    cached_count = 0
 
     for group_id in GROUPS:
         print(f"Grupa: {group_id}")
@@ -185,31 +209,43 @@ def main():
             continue
 
         print(f"  Nadjeno {len(replay_ids)} replay-a")
+        mode = mode_for_group(group_id)
+
         for rid in replay_ids:
             if rid in seen_ids:
                 continue
             seen_ids.add(rid)
-            try:
-                replay = api_get(f"/replays/{rid}")
-            except requests.HTTPError as e:
-                print(f"  Preskacem {rid}: {e}", file=sys.stderr)
-                continue
-            if replay.get("status") not in (None, "ok"):
-                print(f"  Preskacem {rid}: status={replay.get('status')}", file=sys.stderr)
-                continue
-            rows = flatten_replay(replay)
-            mode = mode_for_group(group_id)
+
+            if rid in cache:
+                rows = cache[rid]
+                cached_count += 1
+            else:
+                try:
+                    replay = api_get(f"/replays/{rid}")
+                except requests.HTTPError as e:
+                    print(f"  Preskacem {rid}: {e}", file=sys.stderr)
+                    continue
+                if replay.get("status") not in (None, "ok"):
+                    print(f"  Preskacem {rid}: status={replay.get('status')}", file=sys.stderr)
+                    continue
+                rows = flatten_replay(replay)
+                cache[rid] = rows
+                new_count += 1
+                print(f"  + {rid} (novo, {len(rows)} redova)")
+
             for row in rows:
                 row["mode"] = mode
             all_rows.extend(rows)
-            print(f"  + {rid} ({len(rows)} redova)")
 
     all_rows.sort(key=lambda r: r.get("date") or "")
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(all_rows, f, ensure_ascii=False, indent=2)
 
+    save_cache(cache)
+
     print(f"\nSacuvano {len(all_rows)} redova (igrac x mec) u {OUTPUT_FILE}")
+    print(f"({new_count} novih replay-a fetch-ovano, {cached_count} uzeto iz keša)")
 
 
 if __name__ == "__main__":
