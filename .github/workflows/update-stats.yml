@@ -34,6 +34,8 @@ jobs:
         env:
           BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
           BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
+          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
+          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
         run: python fetch_stats.py
 
       - name: Commit updated data.json
