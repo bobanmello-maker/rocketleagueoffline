@@ -115,6 +115,26 @@
   .metric-summary-head .total{ width:56px; text-align:right; }
   .metric-summary-head .avg{ width:96px; text-align:right; }
 
+  .boost-extra{ margin-top:18px; border-top:1px solid var(--border); padding-top:14px; }
+  .boost-extra .subhead{ font-size:11px; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em; margin-bottom:10px; }
+  .beff-row{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .beff-row .pname{ width:70px; font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .beff-row .bar-track{ flex:1; height:8px; background:var(--boost-track); border-radius:4px; overflow:hidden; }
+  .beff-row .bar-fill{ height:100%; border-radius:4px; }
+  .beff-row .val{ width:60px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
+  .boost-facts{ margin-top:14px; border-top:1px solid var(--border); padding-top:12px; display:flex; flex-direction:column; gap:6px; }
+  .boost-fact{ font-size:12px; color:var(--text-muted); }
+  .boost-fact b{ color:var(--text); font-weight:600; }
+
+  .form-row{ display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .form-row:last-child{ margin-bottom:0; }
+  .form-row .pname{ width:90px; font-size:13px; font-weight:600; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .form-squares{ display:flex; gap:5px; flex-wrap:wrap; }
+  .form-sq{ width:20px; height:20px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+  .form-sq.w{ background:rgba(74,222,128,0.18); color:var(--green); border:1px solid rgba(74,222,128,0.4); }
+  .form-sq.l{ background:rgba(248,113,113,0.18); color:var(--loss); border:1px solid rgba(248,113,113,0.4); }
+  .form-winrate{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
+
   /* ---- Tabs ---- */
   .tabbar{ display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:0;}
   .tabbtn{
@@ -271,7 +291,13 @@
         <div class="card">
           <h2>Prosečan boost <small>% od maksimalnog boost-a</small></h2>
           <div id="boostMeters"></div>
+          <div class="boost-extra" id="boostEfficiency"></div>
+          <div class="boost-facts" id="boostFacts"></div>
         </div>
+      </div>
+      <div class="card">
+        <h2>Forma <small>poslednjih do 10 mečeva u izabranom periodu, sleva (najstariji) nadesno (najnoviji)</small></h2>
+        <div id="formaList"></div>
       </div>
       <div class="card">
         <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
@@ -622,6 +648,7 @@ function render(){
   renderPlayerRecords(rows);
   renderTrend(rows);
   renderBoostMeters(rows);
+  renderForma(rows);
   renderRadar(rows);
 
   renderBpmChart(rows);
@@ -789,6 +816,81 @@ function renderBoostMeters(rows){
     wrap.appendChild(row);
   });
   if(!activePlayers.size){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; }
+
+  renderBoostExtras(rows);
+}
+
+function renderBoostExtras(rows){
+  const effWrap = $('#boostEfficiency');
+  const factsWrap = $('#boostFacts');
+  const ps = [...activePlayers];
+
+  if(!ps.length){ effWrap.innerHTML = ''; factsWrap.innerHTML = ''; return; }
+
+  const stats = ps.map(p => {
+    const prows = rows.filter(r => r.player === p);
+    const goals = sum(prows.map(r => getPath(r,'core.goals')));
+    const assists = sum(prows.map(r => getPath(r,'core.assists')));
+    const collected = sum(prows.map(r => getPath(r,'boost.amount_collected')));
+    const stolen = sum(prows.map(r => getPath(r,'boost.amount_stolen')));
+    const zeroPct = avg(prows.map(r => getPath(r,'boost.percent_zero_boost') || 0));
+    const efficiency = collected > 0 ? ((goals + assists) / (collected / 100)) : 0;
+    return { p, goals, assists, collected, stolen, zeroPct, efficiency, matches: prows.length };
+  });
+
+  // ---- Boost efikasnost (G+A na svakih 100 sakupljenog boosta) ----
+  const effSorted = [...stats].sort((a,b) => b.efficiency - a.efficiency);
+  const maxEff = Math.max(0.01, ...effSorted.map(s => s.efficiency));
+  effWrap.innerHTML = `
+    <div class="subhead">Boost efikasnost — gol+asistencija na svakih 100 sakupljenog boosta</div>
+    ${effSorted.map(s => `
+      <div class="beff-row">
+        <div class="pname" style="color:${playerColor[s.p]}">${s.p}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(s.efficiency/maxEff*100).toFixed(0)}%; background:${playerColor[s.p]}"></div></div>
+        <div class="val">${s.efficiency.toFixed(2)}</div>
+      </div>
+    `).join('')}
+  `;
+
+  // ---- Kratke cinjenice ----
+  const withMatches = stats.filter(s => s.matches > 0);
+  const facts = [];
+  if(withMatches.length){
+    const topStealer = [...withMatches].sort((a,b) => b.stolen - a.stolen)[0];
+    const bestMgmt = [...withMatches].sort((a,b) => a.zeroPct - b.zeroPct)[0];
+    if(topStealer.stolen > 0){
+      facts.push(`Najviše ukrao boosta: <b style="color:${playerColor[topStealer.p]}">${topStealer.p}</b> (${Math.round(topStealer.stolen)})`);
+    }
+    facts.push(`Najbolji boost menadžment: <b style="color:${playerColor[bestMgmt.p]}">${bestMgmt.p}</b> (najmanje vremena na 0 — ${bestMgmt.zeroPct.toFixed(0)}%)`);
+  }
+  factsWrap.innerHTML = facts.map(f => `<div class="boost-fact">${f}</div>`).join('');
+}
+
+function renderForma(rows){
+  const wrap = $('#formaList');
+  const ps = [...activePlayers].sort();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  wrap.innerHTML = ps.map(p => {
+    const prows = rows.filter(r => r.player === p).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    const last = prows.slice(-10);
+    const wins = prows.filter(r => r.win).length;
+    const pct = prows.length ? Math.round((wins/prows.length)*100) : 0;
+    const squares = last.map(r => {
+      const cls = r.win ? 'w' : 'l';
+      const letter = r.win ? 'P' : 'I';
+      const title = `${fmtDate(r.date)} · ${r.team_goals}–${r.opponent_goals} · ${r.map||''}`;
+      return `<div class="form-sq ${cls}" title="${title}">${letter}</div>`;
+    }).join('');
+    return `
+      <div class="form-row">
+        <div class="pname" style="color:${playerColor[p]}">${p}</div>
+        <div class="form-squares">${squares || '<span style="color:var(--text-muted); font-size:12px;">nema mečeva</span>'}</div>
+        <div class="form-winrate">${pct}% (${prows.length})</div>
+      </div>
+    `;
+  }).join('');
+}
 }
 
 function renderRadar(rows){
