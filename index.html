@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analiza — Rocket League Analiza</title>
+<title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -140,7 +140,6 @@
   .form-sq.l{ background:rgba(248,113,113,0.18); color:var(--loss); border:1px solid rgba(248,113,113,0.4); }
   .form-winrate{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
 
-  /* ---- Tabs ---- */
   .tabbar{ display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:0;}
   .tabbtn{
     background:none; border:none; color:var(--text-muted); font-family:'Rajdhani',sans-serif;
@@ -216,7 +215,6 @@
   .empty b{ color:var(--text); }
   .subtle-note{ color:var(--text-muted); font-size:12px; margin-top:10px; }
 
-  /* ---- Modal ---- */
   .modal-backdrop{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:50;
     align-items:center; justify-content:center; padding:20px;
@@ -240,7 +238,6 @@
   .stat-block h4{ font-family:'Rajdhani',sans-serif; font-size:14px; text-transform:uppercase; color:var(--orange); margin:0 0 8px; letter-spacing:0.04em;}
   .stat-line{ display:flex; justify-content:space-between; font-size:13px; padding:4px 0; border-bottom:1px dashed var(--border); }
 
-  /* ---- AI Analitičar dugme ---- */
   .ai-btn {
     background: linear-gradient(135deg, #7C3AED, #6D28D9, #4F46E5);
     border: none;
@@ -280,7 +277,6 @@
     to { transform: rotate(360deg); }
   }
 
-  /* ---- Premium Analysis Modal ---- */
   .analysis-section {
     background: var(--surface-2);
     border-radius: 12px;
@@ -296,6 +292,7 @@
   .analysis-section:nth-child(3) { animation-delay: 0.3s; }
   .analysis-section:nth-child(4) { animation-delay: 0.4s; }
   .analysis-section:nth-child(5) { animation-delay: 0.5s; }
+  .analysis-section:nth-child(6) { animation-delay: 0.6s; }
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -353,13 +350,34 @@
   .tag-red { background: rgba(248,113,113,0.15); color: var(--loss); }
   .tag-blue { background: rgba(61,169,252,0.15); color: var(--blue); }
   .tag-amber { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .tag-purple { background: rgba(124,58,237,0.15); color: #7C3AED; }
+
+  .focus-badge {
+    display: inline-block;
+    background: rgba(124,58,237,0.2);
+    color: #7C3AED;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .history-badge {
+    display: inline-block;
+    background: rgba(251,191,36,0.15);
+    color: var(--amber);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 500;
+  }
 
   @media (max-width:900px){
     .grid, .grid3{ grid-template-columns:1fr; }
     .scoreline{ gap:16px; }
   }
 
-  /* Scrollbar styling */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 3px; }
@@ -374,7 +392,7 @@
       <div class="bar"></div>
       <div>
         <h1>Analiza</h1>
-        <span>Rocket League &middot; Brojke ne lažu :)</span>
+        <span>Rocket League &middot; sve sesije, svi igraci, jedno mesto</span>
       </div>
     </div>
     <div class="scoreline" id="scoreline"></div>
@@ -396,7 +414,7 @@
     </div>
     <div class="group" id="playerChips"></div>
     <button class="ai-btn" id="aiAnalyzePremiumBtn">
-      <span style="font-size:18px;">🧠</span> RTS Analiza
+      <span style="font-size:18px;">🧠</span> AI Analitičar Pro
     </button>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
   </div>
@@ -416,7 +434,6 @@
 
   <div id="content">
 
-    <!-- OVERVIEW -->
     <div class="tabpanel active" id="tab-overview">
       <div class="grid">
         <div class="card">
@@ -444,7 +461,6 @@
       </div>
     </div>
 
-    <!-- BOOST -->
     <div class="tabpanel" id="tab-boost">
       <div class="grid">
         <div class="card">
@@ -464,7 +480,6 @@
       </div>
     </div>
 
-    <!-- MOVEMENT -->
     <div class="tabpanel" id="tab-movement">
       <div class="grid">
         <div class="card">
@@ -484,7 +499,6 @@
       </div>
     </div>
 
-    <!-- POSITIONING -->
     <div class="tabpanel" id="tab-positioning">
       <div class="grid">
         <div class="card">
@@ -504,7 +518,6 @@
       </div>
     </div>
 
-    <!-- DEMOS -->
     <div class="tabpanel" id="tab-demos">
       <div class="grid">
         <div class="card">
@@ -518,7 +531,6 @@
       </div>
     </div>
 
-    <!-- CHEMISTRY -->
     <div class="tabpanel" id="tab-chemistry">
       <div class="card">
         <h2>
@@ -538,12 +550,10 @@
       </div>
     </div>
 
-    <!-- RECORDS -->
     <div class="tabpanel" id="tab-records">
       <div class="award-grid" id="awardGrid"></div>
     </div>
 
-    <!-- MATCHES -->
     <div class="tabpanel" id="tab-matches">
       <div class="card">
         <h2>Svi mečevi <small>klik na kolonu = sortiranje, klik na red = detalji</small></h2>
@@ -581,14 +591,11 @@
 
 <script>
 // ================================================================
-//  ⚙️ KONFIGURACIJA - CLOUDFLARE WORKER
-// ================================================================
-// Stavi URL tvog Cloudflare Worker-a ovde:
+//  ⚙️ KONFIGURACIJA
 // ================================================================
 
-const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
+const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev'; // <--- TVOJ WORKER URL
 
-// API ključ je SIGURNO sakriven u Cloudflare Worker-u!
 // ================================================================
 
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
@@ -642,6 +649,31 @@ const RADAR_METRICS = [
   {key:'core.shots', label:'Šutevi'},
   {key:'boost.avg_amount', label:'Boost'},
   {key:'positioning.percent_behind_ball', label:'Iza lopte %'},
+];
+
+// Profesionalni proseci za poređenje
+const PRO_AVERAGES = {
+    goals_pm: 0.8,
+    assists_pm: 0.6,
+    saves_pm: 1.2,
+    avg_boost: 65,
+    zero_boost_pct: 8,
+    full_boost_pct: 12,
+    shooting_pct: 35,
+    supersonic_pct: 25,
+    demos_pm: 1.0,
+};
+
+// Fokus oblasti za raznovrsne savete
+const FOCUS_AREAS = [
+    { name: 'Boost Management', emoji: '⚡', desc: 'kako efikasnije koristiti boost' },
+    { name: 'Timska komunikacija', emoji: '💬', desc: 'bolja koordinacija i pozicioniranje' },
+    { name: 'Napadačke kombinacije', emoji: '🎯', desc: 'kombinacije i asistencije' },
+    { name: 'Odbrambene pozicije', emoji: '🛡️', desc: 'čuvanje gola i rotacije' },
+    { name: 'Demo strategije', emoji: '💥', desc: 'kada i kako koristiti demoe' },
+    { name: 'Mentalna priprema', emoji: '🧠', desc: 'fokus i donošenje odluka' },
+    { name: 'Mehanike', emoji: '🎮', desc: 'preciznost šuteva i kontrole lopte' },
+    { name: 'Pozicioniranje', emoji: '📍', desc: 'pravilne pozicije na terenu' },
 ];
 
 let RAW = [];
@@ -827,8 +859,6 @@ function render(){
   renderRecords(rows);
   renderTable(rows);
 }
-
-/* ---------------- OVERVIEW ---------------- */
 
 function renderScoreline(rows){
   const uniqueMatches = new Set(rows.map(r => r.replay_id));
@@ -1074,8 +1104,6 @@ function renderRadar(rows){
   });
 }
 
-/* ---------------- BOOST TAB ---------------- */
-
 function renderBpmChart(rows){
   const ps = [...activePlayers].sort();
   const bpm = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'boost.bpm')||0)));
@@ -1135,8 +1163,6 @@ function renderBoostTable(rows){
   ]);
 }
 
-/* ---------------- MOVEMENT TAB ---------------- */
-
 function renderAirChart(rows){
   const ps = [...activePlayers].sort();
   const ground = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'movement.percent_ground')||0)));
@@ -1185,8 +1211,6 @@ function renderMovementTable(rows){
   ]);
 }
 
-/* ---------------- POSITIONING TAB ---------------- */
-
 function renderPositioningChart(rows){
   const ps = [...activePlayers].sort();
   const def = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'positioning.percent_defensive_third')||0)));
@@ -1222,8 +1246,6 @@ function renderPosTable(rows){
   ]);
 }
 
-/* ---------------- DEMOS TAB ---------------- */
-
 function renderDemoChart(rows){
   const ps = [...activePlayers].sort();
   const inflicted = ps.map(p => sum(rows.filter(r=>r.player===p).map(r=>getPath(r,'demo.inflicted')||0)));
@@ -1249,8 +1271,6 @@ function renderDemoTrend(rows){
   const ordered = Object.values(byReplay).sort((a,b) => (a.date||'').localeCompare(b.date||''));
   lineChartFor('#demoTrendChart', 'demoTrend', ordered);
 }
-
-/* ---------------- CHEMISTRY TAB ---------------- */
 
 function renderChemistry(rows){
   const seen = new Set();
@@ -1283,8 +1303,6 @@ function renderChemistry(rows){
     <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
   `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
 }
-
-/* ---------------- RECORDS TAB ---------------- */
 
 function renderRecords(rows){
   const ps = [...activePlayers];
@@ -1334,8 +1352,6 @@ function renderRecords(rows){
     </div>
   `).join('');
 }
-
-/* ---------------- MATCHES TAB ---------------- */
 
 function renderTable(rows){
   const sorted = [...rows].sort((a,b) => {
@@ -1401,10 +1417,132 @@ function openModal(r){
 function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // ================================================================
-//  🤖 AI ANALITIČAR PRO - Moderna verzija sa Cloudflare Worker-om
+//  🤖 AI ANALITIČAR PRO - Pametna verzija sa učenjem
 // ================================================================
 
+// Sačuvaj analizu u istoriju
+function saveToHistory(analysis, focus) {
+    try {
+        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+        history.push({
+            date: new Date().toISOString(),
+            focus: focus,
+            tips: analysis.tips || [],
+            strengths: analysis.strengths || [],
+            weaknesses: analysis.weaknesses || []
+        });
+        // Zadrži poslednjih 10 analiza
+        while (history.length > 10) history.shift();
+        localStorage.setItem('analysis_history', JSON.stringify(history));
+    } catch(e) {
+        console.log('Greška pri čuvanju istorije:', e);
+    }
+}
+
+// Učitaj istoriju analiza
+function getHistoryContext() {
+    try {
+        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+        if (history.length === 0) return 'Nema prethodnih analiza.';
+        
+        // Izvuci prethodne savete da ih AI ne ponavlja
+        const previousTips = history.slice(-3).map(h => 
+            h.tips?.slice(0,2).join('; ') || ''
+        ).filter(Boolean);
+        
+        const previousFoci = history.slice(-3).map(h => h.focus || '').filter(Boolean);
+        
+        let context = `PREĐAŠNJE ANALIZE (${history.length} ukupno):\n`;
+        context += `- Prethodni fokusi: ${previousFoci.join(', ') || 'nema'}\n`;
+        context += `- Saveti koje treba izbeći (već dati): ${previousTips.join(' | ') || 'nema'}\n`;
+        
+        return context;
+    } catch(e) {
+        return 'Nema prethodnih analiza.';
+    }
+}
+
+// Odaberi fokus za ovu analizu
+function selectFocus() {
+    try {
+        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+        const usedFoci = history.slice(-5).map(h => h.focus || '').filter(Boolean);
+        
+        // Filtriraj fokuse koji su skoro korišćeni
+        const available = FOCUS_AREAS.filter(f => !usedFoci.includes(f.name));
+        
+        // Ako su svi korišćeni, resetuj
+        if (available.length === 0) {
+            return FOCUS_AREAS[Math.floor(Math.random() * FOCUS_AREAS.length)];
+        }
+        
+        return available[Math.floor(Math.random() * available.length)];
+    } catch(e) {
+        return FOCUS_AREAS[Math.floor(Math.random() * FOCUS_AREAS.length)];
+    }
+}
+
+// Glavna AI analiza
 async function callGroqAPI(data) {
+    // 1. Odaberi fokus
+    const focus = selectFocus();
+    
+    // 2. Učitaj istoriju
+    const history = getHistoryContext();
+    
+    // 3. Izračunaj trendove i uloge
+    let playerContext = '';
+    Object.entries(data.players).forEach(([name, s]) => {
+        let role = 'svestrani';
+        if (s.goals_pm > 1.5) role = 'ofanzivni (strelac)';
+        else if (s.saves_pm > 2) role = 'defanzivni (čuvar)';
+        else if (s.assists_pm > 0.8) role = 'kreativni (asistent)';
+        
+        const comparisons = [];
+        if (s.goals_pm > PRO_AVERAGES.goals_pm) comparisons.push('golovi IZNAD proseka');
+        else comparisons.push('golovi ISPOD proseka');
+        if (s.avg_boost > PRO_AVERAGES.avg_boost) comparisons.push('boost IZNAD proseka');
+        else comparisons.push('boost ISPOD proseka');
+        if (s.zero_boost_pct < PRO_AVERAGES.zero_boost_pct) comparisons.push('odličan boost management');
+        else comparisons.push('potrebno bolje čuvanje boosta');
+        
+        playerContext += `${name}: ${role} - ${comparisons.join(', ')}\n`;
+    });
+
+    const prompt = `Ti si vrhunski Rocket League analitičar sa 10 godina iskustva.
+
+KONTEKST O IGRAČIMA:
+${playerContext}
+
+PODACI:
+${Object.entries(data.players).map(([name, s]) => `
+${name}: ${s.matches} mečeva, ${s.winrate.toFixed(0)}% win, 
+${s.goals_pm.toFixed(2)} golova/meč, ${s.assists_pm.toFixed(2)} asistencije/meč,
+${s.saves_pm.toFixed(2)} odbrana/meč, ${s.shots_pm.toFixed(2)} šuteva/meč,
+${s.avg_boost.toFixed(0)}% boost, ${s.zero_boost_pct.toFixed(1)}% na 0,
+${s.behind_ball_pct.toFixed(0)}% iza lopte, ${s.defensive_pct.toFixed(0)}% u odbrani
+`).join('\n')}
+
+TIMSKA STATISTIKA:
+- Ukupno mečeva: ${data.teamStats.total_matches}
+- Golovi za: ${data.teamStats.total_goals}, Golovi protiv: ${data.teamStats.total_goals_against}
+- Gol razlika: ${data.teamStats.total_goals - data.teamStats.total_goals_against}
+
+${history}
+
+FOKUS OVE ANALIZE: ${focus.emoji} ${focus.name} - ${focus.desc}
+
+ZAHTEV:
+Daj RAZNOVRSNE, KONKRETNE savete koji se fokusiraju na ${focus.name}.
+
+1. SAŽETAK: 2-3 rečenice o ukupnom performansu
+2. SNAGE: 3 konkretne stavke (sa brojkama)
+3. SLABOSTI: 3 konkretne stavke (sa brojkama)
+4. SAVETI: 5 RAZNOVRSNIH saveta (fokus na ${focus.name}, NE ponavljaj prethodne!)
+5. TRENING: 3 vežbe za ${focus.name}
+
+Saveti moraju biti SPECIFIČNI, AKCIONI i RAZNOVRSNI.`;
+
     try {
         const response = await fetch(WORKER_URL, {
             method: 'POST',
@@ -1414,33 +1552,22 @@ async function callGroqAPI(data) {
                 messages: [
                     {
                         role: 'system',
-                        content: `Ti si vrhunski Rocket League analitičar sa 10 godina iskustva. 
-                        Daješ detaljne, konkretne i korisne analize. Uvek koristiš srpski jezik.
-                        Fokusiraj se na konkretne brojke, poređenja sa prosekom i akcione savete.`
+                        content: `Ti si vrhunski Rocket League analitičar. Daješ konkretne, raznovrsne savete.
+                        Uvek se fokusiraš na zadatu temu. Izbegavaš ponavljanje prethodnih saveta.
+                        Koristiš srpski jezik.`
                     },
                     {
                         role: 'user',
-                        content: `Analiziraj sledeće podatke i daj detaljnu analizu:
-
-${JSON.stringify(data, null, 2)}
-
-Zahtevam:
-1. SAŽETAK: 3-4 rečenice o ukupnom performansu
-2. SNAGE: 4-5 konkretnih stavki sa brojkama
-3. SLABOSTI: 4-5 konkretnih stavki sa brojkama
-4. ANALIZA PO IGRAČU: za svakog igrača posebno
-5. SAVETI: 5-6 konkretnih, akcionih saveta
-6. TRENING: 3-4 specifične preporuke`
+                        content: prompt
                     }
                 ],
-                temperature: 0.7,
+                temperature: 0.8,
                 max_tokens: 2500
             })
         });
 
         if (!response.ok) {
-            const error = await response.text();
-            console.error('Worker error:', response.status, error);
+            console.error('Worker error:', response.status);
             return null;
         }
 
@@ -1451,7 +1578,13 @@ Zahtevam:
         }
         
         if (result.choices && result.choices[0] && result.choices[0].message) {
-            return parsePremiumAnalysis(result.choices[0].message.content);
+            const analysis = parsePremiumAnalysis(result.choices[0].message.content);
+            if (analysis) {
+                // Sačuvaj u istoriju
+                saveToHistory(analysis, focus.name);
+                analysis._focus = focus;
+            }
+            return analysis;
         }
         return null;
 
@@ -1678,6 +1811,7 @@ async function analyzeWithAIPremium(rows) {
         }
         if (!analysis) {
             analysis = generateDetailedFallback(data);
+            analysis._focus = { name: 'Ugrađena analiza', emoji: '📊' };
         }
         showPremiumAnalysisModal(analysis, data);
     } catch(e) {
@@ -1697,10 +1831,12 @@ function showPremiumAnalysisModal(analysis, data) {
         document.body.appendChild(modal);
     }
     
+    const focus = analysis._focus || { name: 'Analiza', emoji: '🧠' };
+    const historyCount = JSON.parse(localStorage.getItem('analysis_history') || '[]').length;
+    
     modal.innerHTML = `
     <div class="modal" style="max-width: 950px; max-height: 90vh; overflow-y: auto; padding: 0; background: transparent;">
         
-        <!-- Header -->
         <div style="
             background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             padding: 28px 32px 20px;
@@ -1711,7 +1847,7 @@ function showPremiumAnalysisModal(analysis, data) {
         ">
             <button class="modal-close" id="premiumAnalysisClose" style="color: white; font-size: 24px; opacity: 0.7; float:right; background:none; border:none; cursor:pointer;">&times;</button>
             
-            <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                 <div style="
                     width: 56px; height: 56px;
                     background: linear-gradient(135deg, #7C3AED, #4F46E5);
@@ -1721,15 +1857,17 @@ function showPremiumAnalysisModal(analysis, data) {
                     justify-content: center;
                     font-size: 28px;
                     box-shadow: 0 8px 30px rgba(124,58,237,0.4);
-                ">🧠</div>
-                <div>
+                ">${focus.emoji}</div>
+                <div style="flex:1;">
                     <h3 style="margin: 0; font-family: 'Rajdhani', sans-serif; font-size: 24px; color: white;">
-                        RTS Analiza
+                        AI Analitičar Pro
                     </h3>
-                    <div style="display: flex; gap: 16px; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.6);">
+                    <div style="display: flex; gap: 12px; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.6); flex-wrap: wrap;">
                         <span>📊 ${data?.teamStats?.total_matches || 0} mečeva</span>
-                        <span>🔒 Platinum Oplata</span>
+                        <span>🔒 Cloudflare Worker</span>
                         <span>⚡ ${new Date().toLocaleTimeString()}</span>
+                        <span class="focus-badge" style="background:rgba(124,58,237,0.3); color:#A78BFA;">🎯 ${focus.name}</span>
+                        ${historyCount > 0 ? `<span class="history-badge">📚 ${historyCount} analiza u istoriji</span>` : ''}
                     </div>
                 </div>
             </div>
@@ -1739,7 +1877,6 @@ function showPremiumAnalysisModal(analysis, data) {
             </div>
         </div>
         
-        <!-- Sadržaj -->
         <div style="background: var(--surface); padding: 24px 32px 32px; border-radius: 0 0 16px 16px;">
             
             <div class="analysis-section" style="border-left: 4px solid #7C3AED; background: rgba(124,58,237,0.05); margin-bottom: 20px;">
@@ -1788,7 +1925,9 @@ function showPremiumAnalysisModal(analysis, data) {
             <div class="analysis-section" style="border-left: 4px solid var(--amber); background: rgba(251,191,36,0.05); margin-bottom: 20px;">
                 <h4 style="color: var(--amber); display: flex; align-items: center; gap: 8px;">
                     💡 KONKRETNI SAVETI
-                    <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">${analysis.tips.length}</span>
+                    <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">
+                        ${analysis.tips.length} saveta • fokus: ${focus.name}
+                    </span>
                 </h4>
                 <ul>
                     ${analysis.tips.map(s => `<li>${s}</li>`).join('')}
@@ -1807,7 +1946,7 @@ function showPremiumAnalysisModal(analysis, data) {
             </div>
             ` : ''}
             
-            <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); flex-wrap: wrap;">
                 <button onclick="exportAnalysis()" style="
                     background: linear-gradient(135deg, #7C3AED, #4F46E5);
                     border: none;
@@ -1834,6 +1973,19 @@ function showPremiumAnalysisModal(analysis, data) {
                     transition: all 0.3s;
                 ">
                     📤 Podeli
+                </button>
+                <button onclick="clearHistory()" style="
+                    background: rgba(248,113,113,0.1);
+                    border: 1px solid rgba(248,113,113,0.3);
+                    color: var(--loss);
+                    padding: 10px 24px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    font-family: 'Inter', sans-serif;
+                    transition: all 0.3s;
+                ">
+                    🗑️ Resetuj istoriju
                 </button>
                 <button onclick="document.getElementById('premiumAnalysisModal').classList.remove('open')" style="
                     background: none;
@@ -1873,6 +2025,14 @@ function showPremiumAnalysisModal(analysis, data) {
         }
     };
     
+    window.clearHistory = function() {
+        if (confirm('🧹 Da li želiš da obrišeš svu istoriju analiza?\n\nAI će onda ponovo početi ispočetka sa savetima.')) {
+            localStorage.removeItem('analysis_history');
+            alert('✅ Istorija je obrisana! Sledeća analiza će biti sveža.');
+            document.getElementById('premiumAnalysisModal').classList.remove('open');
+        }
+    };
+    
     window.exportAnalysis = function() {
         const text = `
 🧠 AI ANALIZA - ROCKET LEAGUE
@@ -1897,6 +2057,7 @@ ${analysis.tips.map(s => `• ${s}`).join('\n')}
 ${analysis.training.map(s => `• ${s}`).join('\n')}
 
 ${'='.repeat(50)}
+Fokus: ${focus.name}
 Generisano: ${new Date().toLocaleString()}
         `;
         const blob = new Blob([text], { type: 'text/plain' });
