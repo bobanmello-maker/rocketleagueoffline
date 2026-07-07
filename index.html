@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analiza — Rocket League Mečevi</title>
+<title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -239,7 +239,7 @@
       <div class="bar"></div>
       <div>
         <h1>Analiza</h1>
-        <span>Rocket League &middot; brojke ne lažu :)</span>
+        <span>Rocket League &middot; sve sesije, svi igraci, jedno mesto</span>
       </div>
     </div>
     <div class="scoreline" id="scoreline"></div>
@@ -383,14 +383,14 @@
     <!-- CHEMISTRY -->
     <div class="tabpanel" id="tab-chemistry">
       <div class="card">
-        <h2>Chemistry matrica <small>win% svake dvojke koja je igrala zajedno (2v2)</small></h2>
+        <h2>Chemistry matrica <small>win% svake dvojke koja je igrala u istom timu (radi za 2v2 i 3v3)</small></h2>
         <div class="table-wrap">
           <table id="chemTable">
             <thead><tr><th>Dvojka</th><th class="mono">Mečeva</th><th class="mono">Pobede</th><th class="mono">Win %</th></tr></thead>
             <tbody id="chemBody"></tbody>
           </table>
         </div>
-        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč, više je za online analizu.</div>
+        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč (splitscreen 2v2 među vas 4).</div>
       </div>
     </div>
 
@@ -1114,17 +1114,27 @@ function renderChemistry(rows){
     const key = r.replay_id + '|' + r.team_color;
     if(seen.has(key)) return;
     seen.add(key);
-    if(!r.teammates || r.teammates.length !== 1) return;
-    const pairKey = [r.player, r.teammates[0]].sort().join(' & ');
-    if(!pairs[pairKey]) pairs[pairKey] = { total:0, wins:0 };
-    pairs[pairKey].total++;
-    if(r.win) pairs[pairKey].wins++;
+
+    // Namerno NE ogranicavamo samo na nas 4 - ovde hocemo da vidimo i
+    // nasumicne online saigrace. Ostali tabovi ostaju cisti jer za njih
+    // uopste ne postoje redovi (fetch_stats.py vec filtrira KNOWN_PLAYERS).
+    const teamMembers = [...new Set([r.player, ...(r.teammates || [])])];
+    if(teamMembers.length < 2) return;
+
+    for(let i = 0; i < teamMembers.length; i++){
+      for(let j = i + 1; j < teamMembers.length; j++){
+        const pairKey = [teamMembers[i], teamMembers[j]].sort().join(' & ');
+        if(!pairs[pairKey]) pairs[pairKey] = { total:0, wins:0 };
+        pairs[pairKey].total++;
+        if(r.win) pairs[pairKey].wins++;
+      }
+    }
   });
   const entries = Object.entries(pairs).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
   $('#chemBody').innerHTML = entries.length ? entries.map(([pair, d]) => `
     <tr><td>${pair}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
     <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
-  `).join('') : '<tr><td colspan="4" class="empty">Nema dovoljno podataka (treba 2v2 sa promenljivim sastavom)</td></tr>';
+  `).join('') : '<tr><td colspan="4" class="empty">Nema dovoljno podataka (treba bar 2 igraca u istom timu)</td></tr>';
 }
 
 /* ---------------- RECORDS TAB ---------------- */
