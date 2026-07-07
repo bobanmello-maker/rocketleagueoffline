@@ -254,7 +254,14 @@ def main():
                 print(f"  + {rid} (novo, {len(rows)} redova)")
 
             for row in rows:
-                row["mode"] = mode
+                if mode == "online":
+                    # da li je iko od nase ekipe bio saigrac u ovom mecu (bez obzira
+                    # na protivnike, koji se ne nalaze u KNOWN_PLAYERS pa se ignorisu)
+                    teammate_norms = {normalize(t) for t in row.get("teammates", [])}
+                    has_friend_teammate = bool(teammate_norms & KNOWN_PLAYERS)
+                    row["mode"] = "online_team" if has_friend_teammate else "online_solo"
+                else:
+                    row["mode"] = mode
             all_rows.extend(rows)
 
     all_rows.sort(key=lambda r: r.get("date") or "")
