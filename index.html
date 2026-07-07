@@ -6,6 +6,7 @@
 <title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
@@ -554,8 +555,17 @@
 // 3. Napravi API ključ
 // 4. Stavi ga između navodnika ispod:
 // ================================================================
-
-const GROQ_API_KEY = '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'; // <--- STAVI TVOJ KLJUČ OVDE
+// GROQ_API_KEY dolazi iz config.js (automatski generisan od strane GitHub Actions)
+// Ako config.js ne postoji (lokalno), pitaj korisnika
+if (typeof GROQ_API_KEY === 'undefined') {
+    var GROQ_API_KEY = localStorage.getItem('groq_api_key');
+    if (!GROQ_API_KEY) {
+        GROQ_API_KEY = prompt('🔑 Unesi Groq API ključ:');
+        if (GROQ_API_KEY) {
+            localStorage.setItem('groq_api_key', GROQ_API_KEY);
+        }
+    }
+}
 
 // Ako nemaš ključ, ostavi prazno - koristiće se ugrađena analiza!
 
