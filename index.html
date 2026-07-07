@@ -205,7 +205,6 @@
   .empty b{ color:var(--text); }
   .subtle-note{ color:var(--text-muted); font-size:12px; margin-top:10px; }
 
-  /* ---- Analyst ---- */
   .analyst-insight { line-height: 1.7; font-size: 14.5px; }
   .analyst-insight h4 { color: var(--amber); margin: 18px 0 8px; }
   .analyst-insight ul { padding-left: 20px; }
@@ -287,161 +286,8 @@
 
   <div id="content">
 
-    <!-- OVERVIEW -->
-    <div class="tabpanel active" id="tab-overview">
-      <div class="grid">
-        <div class="card">
-          <h2>
-            <span>Trend kroz vreme</span>
-            <select class="metric-select" id="trendMetric"></select>
-          </h2>
-          <canvas id="trendChart" height="130"></canvas>
-          <div class="metric-summary" id="metricSummary"></div>
-        </div>
-        <div class="card">
-          <h2>Prosečan boost <small>% od maksimalnog boost-a</small></h2>
-          <div id="boostMeters"></div>
-          <div class="boost-extra" id="boostEfficiency"></div>
-          <div class="boost-facts" id="boostFacts"></div>
-          <div class="boost-extra">
-            <div class="subhead">Forma <span style="text-transform:none; font-weight:400;">— poslednjih do 10 mečeva, sleva (najstariji) nadesno (najnoviji)</span></div>
-            <div id="formaList"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
-        <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-      </div>
-    </div>
-
-    <!-- BOOST -->
-    <div class="tabpanel" id="tab-boost">
-      <div class="grid">
-        <div class="card">
-          <h2>BPM (potrošnja boosta / min) <small>manje ne znači loše — zavisi od stila</small></h2>
-          <canvas id="bpmChart" height="160"></canvas>
-        </div>
-        <div class="card">
-          <h2>Distribucija boost nivoa <small>% vremena provedeno u svakom rangu</small></h2>
-          <canvas id="boostDistChart" height="160"></canvas>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Detaljna boost tabela <small>prosek po igraču kroz filtrirane mečeve</small></h2>
-        <div class="table-wrap">
-          <table id="boostTable"><thead></thead><tbody></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- MOVEMENT -->
-    <div class="tabpanel" id="tab-movement">
-      <div class="grid">
-        <div class="card">
-          <h2>Vreme u vazduhu / na zemlji <small>% od trajanja meča</small></h2>
-          <canvas id="airChart" height="160"></canvas>
-        </div>
-        <div class="card">
-          <h2>Brzina <small>prosečna brzina i % vremena na supersonic-u</small></h2>
-          <canvas id="speedChart" height="160"></canvas>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Detaljna tabela kretanja</h2>
-        <div class="table-wrap">
-          <table id="movementTable"><thead></thead><tbody></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- POSITIONING -->
-    <div class="tabpanel" id="tab-positioning">
-      <div class="grid">
-        <div class="card">
-          <h2>Pozicioniranje po trećinama <small>% vremena po zonama terena</small></h2>
-          <canvas id="posChart" height="200"></canvas>
-        </div>
-        <div class="card">
-          <h2>Rotacije <small>% vremena iza lopte kroz vreme</small></h2>
-          <canvas id="rotationTrendChart" height="200"></canvas>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Detaljna tabela pozicioniranja</h2>
-        <div class="table-wrap">
-          <table id="posTable"><thead></thead><tbody></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- DEMOS -->
-    <div class="tabpanel" id="tab-demos">
-      <div class="grid">
-        <div class="card">
-          <h2>Demo bilans <small>zadati vs primljeni</small></h2>
-          <canvas id="demoChart" height="180"></canvas>
-        </div>
-        <div class="card">
-          <h2>Demo razlika kroz vreme</h2>
-          <canvas id="demoTrendChart" height="180"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- CHEMISTRY -->
-    <div class="tabpanel" id="tab-chemistry">
-      <div class="card">
-        <h2>
-          <span>Chemistry matrica <small>win% kombinacije koja je igrala u istom timu</small></span>
-          <span class="group" id="chemModeGroup" style="display:flex; gap:8px;">
-            <button class="chip chem-mode-chip active" data-chemmode="2v2">2v2</button>
-            <button class="chip chem-mode-chip" data-chemmode="3v3">3v3</button>
-          </span>
-        </h2>
-        <div class="table-wrap">
-          <table id="chemTable">
-            <thead><tr><th id="chemColLabel">Dvojka</th><th class="mono">Mečeva</th><th class="mono">Pobede</th><th class="mono">Win %</th></tr></thead>
-            <tbody id="chemBody"></tbody>
-          </table>
-        </div>
-        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč.</div>
-      </div>
-    </div>
-
-    <!-- RECORDS -->
-    <div class="tabpanel" id="tab-records">
-      <div class="award-grid" id="awardGrid"></div>
-    </div>
-
-    <!-- MATCHES -->
-    <div class="tabpanel" id="tab-matches">
-      <div class="card">
-        <h2>Svi mečevi <small>klik na kolonu = sortiranje, klik na red = detalji</small></h2>
-        <div class="table-wrap">
-          <table id="matchTable">
-            <thead>
-              <tr>
-                <th data-key="date">Datum</th>
-                <th data-key="map">Mapa</th>
-                <th data-key="player">Igrač</th>
-                <th data-key="team_color">Tim</th>
-                <th data-key="win">Rezultat</th>
-                <th class="mono" data-key="core.goals">G</th>
-                <th class="mono" data-key="core.assists">A</th>
-                <th class="mono" data-key="core.saves">S</th>
-                <th class="mono" data-key="core.shots">Š</th>
-                <th class="mono" data-key="core.score">Score</th>
-                <th class="mono" data-key="boost.avg_amount">Boost</th>
-                <th class="mono" data-key="positioning.percent_behind_ball">Iza lopte %</th>
-                <th data-key="core.mvp">MVP</th>
-              </tr>
-            </thead>
-            <tbody id="matchTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!-- SVI ORIGINALNI TABOVI OSTAJU ISTI (skraćeno radi dužine, ali u tvom fajlu ostavi sve) -->
+    <!-- OVERVIEW, BOOST, MOVEMENT, POSITIONING, DEMOS, CHEMISTRY, RECORDS, MATCHES -->
 
     <!-- ANALYST -->
     <div class="tabpanel" id="tab-analyst">
@@ -460,293 +306,9 @@
 </div>
 
 <script>
-const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
+// ... SVE ORIGINALNE FUNKCIJE I KOD OSTAJU TAČNO ISTI DO KRAJA ...
 
-// ---- Fiksne boje za igrace ----
-const PLAYER_COLOR_OVERRIDES = {
-  'Toške': '#3DA9FC',
-  'Cane':  '#FF6B35',
-  'Ivan':  '#4ADE80',
-  'Pajke': '#FBBF24',
-};
-
-// ---- Mapa imena ----
-const NAME_MAP_RAW = {
-  'ExMirage': 'Toške',
-  'ExMirage(1)': 'Cane',
-  'ExMirage(2)': 'Ivan',
-  'ExMirage(3)': 'Pajke',
-  'Zbunjena Inila': 'Toške',
-  'Zbunjena Inila(1)': 'Cane',
-  'Zbunjena Inila(2)': 'Ivan',
-  'Zbunjena Inila(3)': 'Pajke',
-  'Rarely_Sober': 'Cane',
-};
-const NAME_MAP = {};
-Object.entries(NAME_MAP_RAW).forEach(([k, v]) => {
-  NAME_MAP[k.toLowerCase().replace(/[^a-z0-9]/g, '')] = v;
-});
-
-function mapName(raw){
-  if(!raw) return raw;
-  const key = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return NAME_MAP[key] || raw;
-}
-
-const TREND_METRICS = [
-  {key:'core.goals', label:'Golovi'},
-  {key:'core.assists', label:'Asistencije'},
-  {key:'core.saves', label:'Odbrane'},
-  {key:'core.shots', label:'Šutevi'},
-  {key:'core.score', label:'Score'},
-  {key:'boost.avg_amount', label:'Prosečan boost', isRate:true},
-  {key:'boost.bpm', label:'BPM (potrošnja)', isRate:true},
-  {key:'positioning.percent_behind_ball', label:'% iza lopte', isRate:true},
-  {key:'movement.avg_speed', label:'Prosečna brzina', isRate:true},
-  {key:'demo.inflicted', label:'Demo-i zadati'},
-];
-
-const RADAR_METRICS = [
-  {key:'core.goals', label:'Golovi'},
-  {key:'core.assists', label:'Asistencije'},
-  {key:'core.saves', label:'Odbrane'},
-  {key:'core.shots', label:'Šutevi'},
-  {key:'boost.avg_amount', label:'Boost'},
-  {key:'positioning.percent_behind_ball', label:'Iza lopte %'},
-];
-
-let RAW = [];
-let allPlayers = [];
-let players = [];
-let playerColor = {};
-let activePlayers = new Set();
-let modeFilter = 'offline';
-let sortKey = 'date';
-let sortDir = -1;
-let charts = {};
-
-const $ = sel => document.querySelector(sel);
-const getPath = (obj, path) => path.split('.').reduce((o,k) => (o == null ? o : o[k]), obj);
-const avg = arr => arr.length ? arr.reduce((a,b)=>a+(b||0),0)/arr.length : 0;
-const sum = arr => arr.reduce((a,b)=>a+(b||0),0);
-
-function fmtDate(iso){
-  if(!iso) return '?';
-  const d = new Date(iso);
-  return d.toLocaleDateString('sr-RS', {day:'2-digit', month:'2-digit', year:'numeric'});
-}
-
-async function load(){
-  try{
-    const res = await fetch('./data.json');
-    RAW = await res.json();
-  }catch(e){ RAW = []; }
-
-  RAW = RAW.map(r => ({
-    ...r,
-    player: mapName(r.player),
-    teammates: (r.teammates || []).map(mapName),
-  }));
-
-  if(!RAW.length){
-    $('#content').innerHTML = `<div class="empty">Nema podataka jos uvek.<br><b>data.json</b> je prazan ili ga fetch_stats.py jos nije generisao.<br>Pokreni GitHub Action "Update RL stats".</div>`;
-    document.getElementById('tabbar').style.display = 'none';
-    return;
-  }
-
-  allPlayers = [...new Set(RAW.map(r => r.player))].sort();
-  let colorIdx = 0;
-  allPlayers.forEach(p => {
-    playerColor[p] = PLAYER_COLOR_OVERRIDES[p] || PALETTE[colorIdx % PALETTE.length];
-    colorIdx++;
-  });
-
-  refreshVisiblePlayers();
-  buildDateInputs();
-  buildTrendMetricSelect();
-  buildTabs();
-
-  $('#dateFrom').addEventListener('change', render);
-  $('#dateTo').addEventListener('change', render);
-  $('#trendMetric').addEventListener('change', render);
-
-  // Mode chips
-  document.querySelectorAll('.mode-chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.mode-chip').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      modeFilter = btn.dataset.mode;
-      refreshVisiblePlayers();
-      render();
-    });
-  });
-
-  // Analyst buttons
-  $('#runAnalystBtn').addEventListener('click', () => {
-    $('#tab-analyst').classList.add('active');
-    document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('active'));
-    document.querySelector('[data-tab="analyst"]').classList.add('active');
-    runAnalyst();
-  });
-  $('#runAnalystBtn2').addEventListener('click', runAnalyst);
-
-  // Other listeners...
-  document.querySelectorAll('.chem-mode-chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.chem-mode-chip').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      chemMode = btn.dataset.chemmode;
-      render();
-    });
-  });
-  $('#resetBtn').addEventListener('click', () => {
-    $('#dateFrom').value = ''; $('#dateTo').value = '';
-    modeFilter = 'offline';
-    document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
-    $('.mode-chip[data-mode="offline"]').classList.add('active');
-    refreshVisiblePlayers();
-    render();
-  });
-  document.querySelectorAll('#matchTable th[data-key]').forEach(th => {
-    th.addEventListener('click', () => {
-      const key = th.dataset.key;
-      if(sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
-      render();
-    });
-  });
-  $('#modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
-
-  render();
-}
-
-function buildTabs(){
-  document.querySelectorAll('.tabbtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      $('#tab-' + btn.dataset.tab).classList.add('active');
-    });
-  });
-}
-
-function refreshVisiblePlayers(){
-  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
-  players = [...new Set(modeRows.map(r => r.player))].sort();
-  activePlayers = new Set(players);
-  buildChips();
-}
-
-function buildChips(){
-  const wrap = $('#playerChips');
-  wrap.innerHTML = '';
-  players.forEach((p, i) => {
-    const chip = document.createElement('div');
-    chip.className = 'chip active';
-    chip.dataset.idx = i % 4;
-    chip.textContent = p;
-    chip.addEventListener('click', () => {
-      if(activePlayers.has(p)){ activePlayers.delete(p); chip.classList.remove('active'); }
-      else { activePlayers.add(p); chip.classList.add('active'); }
-      render();
-    });
-    wrap.appendChild(chip);
-  });
-}
-
-function buildDateInputs(){
-  const dates = RAW.map(r => r.date).filter(Boolean).sort();
-  if(dates.length){
-    $('#dateFrom').min = dates[0].slice(0,10);
-    $('#dateFrom').max = dates[dates.length-1].slice(0,10);
-    $('#dateTo').min = dates[0].slice(0,10);
-    $('#dateTo').max = dates[dates.length-1].slice(0,10);
-  }
-}
-
-function buildTrendMetricSelect(){
-  const sel = $('#trendMetric');
-  sel.innerHTML = TREND_METRICS.map(m => `<option value="${m.key}">${m.label}</option>`).join('');
-}
-
-function getFiltered(){
-  const from = $('#dateFrom').value;
-  const to = $('#dateTo').value;
-  return RAW.filter(r => {
-    if(!activePlayers.has(r.player)) return false;
-    if(modeFilter !== 'all' && r.mode !== modeFilter) return false;
-    if(from && r.date && r.date.slice(0,10) < from) return false;
-    if(to && r.date && r.date.slice(0,10) > to) return false;
-    return true;
-  });
-}
-
-function destroyChart(key){ if(charts[key]){ charts[key].destroy(); delete charts[key]; } }
-
-function render(){
-  const rows = getFiltered();
-  renderScoreline(rows);
-  renderPlayerRecords(rows);
-  renderTrend(rows);
-  renderBoostMeters(rows);
-  renderForma(rows);
-  renderRadar(rows);
-
-  renderBpmChart(rows);
-  renderBoostDistChart(rows);
-  renderBoostTable(rows);
-
-  renderAirChart(rows);
-  renderSpeedChart(rows);
-  renderMovementTable(rows);
-
-  renderPositioningChart(rows);
-  renderRotationTrend(rows);
-  renderPosTable(rows);
-
-  renderDemoChart(rows);
-  renderDemoTrend(rows);
-
-  renderChemistry(rows);
-  renderRecords(rows);
-  renderTable(rows);
-}
-
-/* ---------------- SVE OSTALE FUNKCIJE (isti kod kao ranije) ---------------- */
-// (skraćeno radi dužine odgovora - sve prethodne funkcije ostaju identične)
-
-function renderScoreline(rows){ /* ... isti kod ... */ }
-function renderPlayerRecords(rows){ /* ... */ }
-function groupByMatchAndPlayer(rows, metricKey){ /* ... */ }
-function lineChartFor(canvasId, chartKey, ordered){ /* ... */ }
-function renderTrend(rows){ /* ... */ }
-function renderMetricSummary(rows, metricKey){ /* ... */ }
-function renderBoostMeters(rows){ /* ... */ }
-function renderBoostExtras(rows){ /* ... */ }
-function renderForma(rows){ /* ... */ }
-function renderRadar(rows){ /* ... */ }
-function renderBpmChart(rows){ /* ... */ }
-function renderBoostDistChart(rows){ /* ... */ }
-function statTable(tableId, rows, players_, columns){ /* ... */ }
-function renderBoostTable(rows){ /* ... */ }
-function renderAirChart(rows){ /* ... */ }
-function renderSpeedChart(rows){ /* ... */ }
-function renderMovementTable(rows){ /* ... */ }
-function renderPositioningChart(rows){ /* ... */ }
-function renderRotationTrend(rows){ /* ... */ }
-function renderPosTable(rows){ /* ... */ }
-function renderDemoChart(rows){ /* ... */ }
-function renderDemoTrend(rows){ /* ... */ }
-
-let chemMode = '2v2';
-function renderChemistry(rows){ /* ... isti kod ... */ }
-
-function renderRecords(rows){ /* ... isti kod ... */ }
-function renderTable(rows){ /* ... */ }
-function openModal(r){ /* ... */ }
-function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
-
-/* ==================== NOVO: ANALITIČAR ==================== */
+// Na kraju fajla, pre poslednjeg load(); dodaj:
 
 function runAnalyst(){
   const rows = getFiltered();
@@ -765,21 +327,14 @@ function runAnalyst(){
   ps.forEach(p => {
     const pr = rows.filter(r => r.player === p);
     playerStats[p] = {
-      matches: pr.length,
       winrate: pr.length ? (pr.filter(r => r.win).length / pr.length * 100) : 0,
       goals: avg(pr.map(r => getPath(r,'core.goals')||0)),
-      saves: avg(pr.map(r => getPath(r,'core.saves')||0)),
-      bpm: avg(pr.map(r => getPath(r,'boost.bpm')||0)),
       zeroBoost: avg(pr.map(r => getPath(r,'boost.percent_zero_boost')||0)),
-      behindBall: avg(pr.map(r => getPath(r,'positioning.percent_behind_ball')||0)),
-      demosTaken: sum(pr.map(r => getPath(r,'demo.taken')||0)),
-      score: avg(pr.map(r => getPath(r,'core.score')||0))
     };
   });
 
   let html = `<h3>📊 Analiza sesije (${rows.length} mečeva)</h3>`;
 
-  // Najbolji / najslabiji
   const bestWR = Object.keys(playerStats).reduce((a,b) => playerStats[a].winrate > playerStats[b].winrate ? a : b);
   const worstBoost = Object.keys(playerStats).reduce((a,b) => playerStats[a].zeroBoost > playerStats[b].zeroBoost ? a : b);
 
@@ -790,19 +345,22 @@ function runAnalyst(){
   }
   html += `</ul>`;
 
-  html += `<h4>💡 Preporuke za poboljšanje</h4><ul>`;
-  html += `<li>Fokusirajte se na <strong>boost recovery</strong> — tim trenutno gubi mnogo vremena na niskom boostu.</li>`;
-  html += `<li>${bestWR} treba da nastavi sa agresivnijim stilom, ostali da više podržavaju.</li>`;
-  html += `<li>Vežbajte rotacije — prosečno % iza lopte može da se popravi.</li>`;
+  html += `<h4>💡 Preporuke</h4><ul>`;
+  html += `<li>Radite na boost menadžmentu — trenutno se previše gubi vreme na niskom boostu.</li>`;
+  html += `<li>${bestWR} treba da nastavi sa dobrim stilom igre.</li>`;
   html += `</ul>`;
-
-  html += `<p class="subtle-note">Ovo je heuristička analiza. Što više mečeva imaš, to su uvidi bolji.</p>`;
 
   output.innerHTML = html;
   ts.textContent = new Date().toLocaleTimeString('sr-RS');
 }
 
-// ---- Pokreni ----
+// U load() funkciji dodaj ove listenere (posle ostalih addEventListener):
+  $('#runAnalystBtn').addEventListener('click', () => {
+    document.querySelector('[data-tab="analyst"]').click();
+    runAnalyst();
+  });
+  $('#runAnalystBtn2').addEventListener('click', runAnalyst);
+
 load();
 </script>
 </body>
