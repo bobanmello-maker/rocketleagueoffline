@@ -6,7 +6,6 @@
 <title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
@@ -23,7 +22,6 @@
     --loss:#F87171;
     --boost-track:#232B3A;
   }
-  
   *{box-sizing:border-box;}
   body{
     margin:0;
@@ -549,27 +547,16 @@
 
 <script>
 // ================================================================
-//  ⚙️ KONFIGURACIJA - STAVI SVOJ GROQ API KLJUČ OVDE
+//  ⚙️ KONFIGURACIJA - CLOUDFLARE WORKER
 // ================================================================
-// 1. Idi na https://console.groq.com
-// 2. Registruj se (besplatno)
-// 3. Napravi API ključ
-// 4. Stavi ga između navodnika ispod:
+// 1. Napravi Cloudflare Worker (besplatno)
+// 2. Ubaci kôd za proxy (sa tvojim Groq API ključem)
+// 3. Stavi URL tvog Worker-a ovde:
 // ================================================================
-// GROQ_API_KEY dolazi iz config.js (automatski generisan od strane GitHub Actions)
-// Ako config.js ne postoji (lokalno), pitaj korisnika
-if (typeof GROQ_API_KEY === 'undefined') {
-    var GROQ_API_KEY = localStorage.getItem('groq_api_key');
-    if (!GROQ_API_KEY) {
-        GROQ_API_KEY = prompt('🔑 Unesi Groq API ključ:');
-        if (GROQ_API_KEY) {
-            localStorage.setItem('groq_api_key', GROQ_API_KEY);
-        }
-    }
-}
 
-// Ako nemaš ključ, ostavi prazno - koristiće se ugrađena analiza!
+const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev'; // <--- TVOJ WORKER URL
 
+// API ključ VIŠE NIJE OVDE! Sigurno je u Cloudflare Worker-u.
 // ================================================================
 
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
@@ -1391,46 +1378,209 @@ function openModal(r){
 function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // ================================================================
-//  🤖 AI ANALITIČAR PRO - Kompletna implementacija
+//  🤖 AI ANALITIČAR PRO - Cloudflare Worker verzija
 // ================================================================
 
-async function analyzeWithAIPremium(rows) {
-    const btn = document.getElementById('aiAnalyzePremiumBtn');
-    if (!btn) return;
-    
-    // Loading state
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
-    btn.disabled = true;
-    
+async function callGroqAPI(data) {
     try {
-        const data = prepareDetailedData(rows);
-        let analysis = null;
+        const response = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama3-70b-8192',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'Ti si profesionalni Rocket League analitičar. Daješ detaljne, konkretne i korisne analize.'
+                    },
+                    {
+                        role: 'user',
+                        content: data.prompt || data.content || `Analiziraj sledeće podatke: ${JSON.stringify(data)}`
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 2000
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            console.error('Worker error:', response.status, error);
+            return null;
+        }
+
+        const result = await response.json();
         
-        // Pokušaj sa Groq API-jem ako imamo ključ
-        if (GROQ_API_KEY && GROQ_API_KEY.length > 10) {
-            try {
-                analysis = await callGroqAPI(data);
-            } catch(e) {
-                console.log('Groq API error, koristim fallback:', e);
-            }
+        // Ako Groq vrati grešku
+        if (result.error) {
+            console.error('Groq API error:', result.error);
+            return null;
         }
         
-        // Fallback ako API nije uspeo
-        if (!analysis) {
-            analysis = generateDetailedFallback(data);
+        if (result.choices && result.choices[0] && result.choices[0].message) {
+            return parsePremiumAnalysis(result.choices[0].message.content);
         }
         
-        showPremiumAnalysisModal(analysis, data);
-        
-    } catch(e) {
-        alert('Greška pri analizi: ' + e.message);
-    } finally {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
+        return null;
+
+    } catch (error) {
+        console.error('Greška pri pozivanju Worker-a:', error);
+        return null;
     }
 }
 
+// Parsiranje analize iz AI odgovora
+function parsePremiumAnalysis(text) {
+    const sections = {
+        summary: '',
+        strengths: [],
+        weaknesses: [],
+        players: '',
+        tips: [],
+        training: []
+    };
+    
+    let current = 'summary';
+    const lines = text.split('\n');
+    
+    for (const line of lines) {
+        const clean = line.trim();
+        if (!clean) continue;
+        
+        if (clean.includes('SAŽETAK') || clean.includes('SUMMARY')) {
+            current = 'summary';
+            continue;
+        } else if (clean.includes('SNAGE') || clean.includes('STRENGTHS')) {
+            current = 'strengths';
+            continue;
+        } else if (clean.includes('SLABOSTI') || clean.includes('WEAKNESSES')) {
+            current = 'weaknesses';
+            continue;
+        } else if (clean.includes('ANALIZA PO IGRAČU') || clean.includes('PLAYER ANALYSIS')) {
+            current = 'players';
+            continue;
+        } else if (clean.includes('SAVETI') || clean.includes('TIPS')) {
+            current = 'tips';
+            continue;
+        } else if (clean.includes('TRENING') || clean.includes('TRAINING')) {
+            current = 'training';
+            continue;
+        }
+        
+        const textLine = clean.replace(/^[#*\->\s]+/, '').trim();
+        if (!textLine || textLine.length < 3) continue;
+        
+        if (current === 'summary') {
+            sections.summary += (sections.summary ? ' ' : '') + textLine;
+        } else if (current === 'strengths' && textLine.length > 5) {
+            sections.strengths.push(textLine);
+        } else if (current === 'weaknesses' && textLine.length > 5) {
+            sections.weaknesses.push(textLine);
+        } else if (current === 'players') {
+            sections.players += (sections.players ? '\n' : '') + textLine;
+        } else if (current === 'tips' && textLine.length > 5) {
+            sections.tips.push(textLine);
+        } else if (current === 'training' && textLine.length > 5) {
+            sections.training.push(textLine);
+        }
+    }
+    
+    if (!sections.summary && !sections.strengths.length) {
+        return null;
+    }
+    
+    return sections;
+}
+
+// Detaljni fallback (kada AI nije dostupan)
+function generateDetailedFallback(data) {
+    const players = Object.entries(data.players || {});
+    if (!players.length) {
+        return {
+            summary: '📊 Nema dovoljno podataka za analizu. Potrebno je najmanje 3 meča po igraču.',
+            strengths: ['Odigraj više mečeva za bolju analizu'],
+            weaknesses: ['Nema dovoljno podataka'],
+            players: 'Nema dovoljno podataka za analizu po igraču.',
+            tips: ['Odigraj najmanje 5 mečeva po igraču za smislenu analizu'],
+            training: ['Počni sa osnovnim trening pack-ovima']
+        };
+    }
+    
+    const avgGoals = players.reduce((s, [_,p]) => s + (p.goals_pm || 0), 0) / players.length;
+    const avgAssists = players.reduce((s, [_,p]) => s + (p.assists_pm || 0), 0) / players.length;
+    const avgBoost = players.reduce((s, [_,p]) => s + (p.avg_boost || 0), 0) / players.length;
+    
+    const bestWinrate = players.reduce((a,b) => (a[1].winrate || 0) > (b[1].winrate || 0) ? a : b);
+    const bestGoals = players.reduce((a,b) => (a[1].goals_pm || 0) > (b[1].goals_pm || 0) ? a : b);
+    const bestAssists = players.reduce((a,b) => (a[1].assists_pm || 0) > (b[1].assists_pm || 0) ? a : b);
+    const bestSaves = players.reduce((a,b) => (a[1].saves_pm || 0) > (b[1].saves_pm || 0) ? a : b);
+    const worstBoost = players.reduce((a,b) => (a[1].avg_boost || 0) < (b[1].avg_boost || 0) ? a : b);
+    const worstZeroBoost = players.reduce((a,b) => (a[1].zero_boost_pct || 0) > (b[1].zero_boost_pct || 0) ? a : b);
+    
+    const playerAnalysis = players.map(([name, s]) => {
+        const style = (s.goals_pm || 0) > 1.5 ? 'ofanzivni' : 
+                     (s.saves_pm || 0) > 2 ? 'defanzivni' : 'svestrani';
+        const strengths = [];
+        const weaknesses = [];
+        
+        if ((s.goals_pm || 0) > 1.2) strengths.push('dobar strelac');
+        if ((s.assists_pm || 0) > 0.8) strengths.push('odličan asistent');
+        if ((s.saves_pm || 0) > 1.5) strengths.push('solidan u odbrani');
+        if ((s.avg_boost || 0) > 70) strengths.push('dobar boost management');
+        if ((s.winrate || 0) > 55) strengths.push('pobednički mentalitet');
+        
+        if ((s.goals_pm || 0) < 0.8) weaknesses.push('treba više da šutira');
+        if ((s.assists_pm || 0) < 0.5) weaknesses.push('treba više da asistira');
+        if ((s.avg_boost || 0) < 60) weaknesses.push('loš boost management');
+        if ((s.zero_boost_pct || 0) > 15) weaknesses.push('često ostaje bez boosta');
+        
+        return `${name} (${style}):
+• ${s.matches || 0} mečeva, ${(s.winrate || 0).toFixed(0)}% win rate
+• ${(s.goals_pm || 0).toFixed(2)} golova/meč, ${(s.assists_pm || 0).toFixed(2)} asistencije/meč
+• ${(s.saves_pm || 0).toFixed(2)} odbrana/meč, ${(s.shots_pm || 0).toFixed(2)} šuteva/meč
+• ${(s.avg_boost || 0).toFixed(0)}% prosečan boost, ${(s.zero_boost_pct || 0).toFixed(1)}% na 0
+• Prednosti: ${strengths.join(', ') || 'još uvek se razvija'}
+• Za poboljšanje: ${weaknesses.join(', ') || 'odličan u svemu!'}`;
+    }).join('\n\n');
+    
+    return {
+        summary: `📊 Tim je odigrao ${data.teamStats?.total_matches || 0} mečeva sa gol razlikom ${(data.teamStats?.total_goals || 0) - (data.teamStats?.total_goals_against || 0)}. Prosečno ${avgGoals.toFixed(2)} golova po meču uz ${avgAssists.toFixed(2)} asistencija. Najbolji win rate ima ${bestWinrate[0]} sa ${(bestWinrate[1].winrate || 0).toFixed(0)}%.`,
+        
+        strengths: [
+            `🎯 ${bestGoals[0]} je najbolji strelac (${(bestGoals[1].goals_pm || 0).toFixed(2)} golova/meč)`,
+            `🎯 ${bestAssists[0]} je najbolji asistent (${(bestAssists[1].assists_pm || 0).toFixed(2)} asistencije/meč)`,
+            `🛡️ ${bestSaves[0]} je najbolji u odbrani (${(bestSaves[1].saves_pm || 0).toFixed(2)} odbrana/meč)`,
+            `🏆 ${bestWinrate[0]} ima najbolji win rate (${(bestWinrate[1].winrate || 0).toFixed(0)}%)`
+        ],
+        
+        weaknesses: [
+            `⚡ ${worstBoost[0]} ima najniži prosečan boost (${(worstBoost[1].avg_boost || 0).toFixed(0)}%)`,
+            `🔄 ${worstZeroBoost[0]} je najčešće na 0 boosta (${(worstZeroBoost[1].zero_boost_pct || 0).toFixed(1)}% vremena)`,
+            `📊 Tim prima prosečno ${((data.teamStats?.total_goals_against || 0) / (data.teamStats?.total_matches || 1)).toFixed(2)} golova po meču`,
+            `🤝 Samo ${avgAssists.toFixed(2)} asistencija po meču - potrebno više timske igre`
+        ],
+        
+        players: playerAnalysis,
+        
+        tips: [
+            `💡 Povećajte broj asistencija - trenutno ${avgAssists.toFixed(2)}/meč, ciljajte na 2.0+`,
+            `💡 ${worstBoost[0]} - vežbaj boost management, drži boost iznad 40%`,
+            `💡 Više komunicirajte na terenu - pozicije i rotacije su ključne`,
+            `💡 Vežbajte preciznost šuteva`
+        ],
+        
+        training: [
+            `🎯 Training pack: "Shooting Consistency" - za preciznost`,
+            `🎯 Training pack: "Passing & Awareness" - za asistencije`,
+            `🎯 Vežbajte rotacije u 2v2 sa fokusom na pozicioniranje`,
+            `🎯 Boost management - igraj bez boosta da naučiš da ga čuvaš`
+        ]
+    };
+}
+
+// Priprema podataka za AI analizu
 function prepareDetailedData(rows) {
     const players = {};
     const allPlayers = [...activePlayers];
@@ -1501,238 +1651,42 @@ function prepareDetailedData(rows) {
     return { players, teamStats };
 }
 
-async function callGroqAPI(data) {
-    const prompt = `Ti si vrhunski Rocket League analitičar sa 10 godina iskustva. Analiziraj sledeće podatke i daj detaljnu, korisnu analizu.
-
-PODACI O IGRAČIMA:
-${Object.entries(data.players).map(([name, s]) => `
-━━━ ${name} ━━━
-• Mečeva: ${s.matches}, Win Rate: ${s.winrate.toFixed(1)}%
-• Golovi/meč: ${s.goals_pm.toFixed(2)} | Asistencije/meč: ${s.assists_pm.toFixed(2)} | Odbrane/meč: ${s.saves_pm.toFixed(2)}
-• Šutevi/meč: ${s.shots_pm.toFixed(2)} | Šut preciznost: ${s.shooting_pct.toFixed(1)}%
-• Score/meč: ${s.score_pm.toFixed(0)} | MVP rate: ${s.mvp_rate.toFixed(1)}%
-• Prosečan boost: ${s.avg_boost.toFixed(0)}% | Vreme na 0: ${s.zero_boost_pct.toFixed(1)}% | Vreme na 100: ${s.full_boost_pct.toFixed(1)}%
-• Pozicioniranje: ${s.defensive_pct.toFixed(1)}% odbrana | ${s.offensive_pct.toFixed(1)}% napad | ${s.behind_ball_pct.toFixed(1)}% iza lopte
-• Brzina: ${s.avg_speed.toFixed(0)} jedinica | ${s.supersonic_pct.toFixed(1)}% supersonic
-• Demo-i/meč: ${s.demos_pm.toFixed(1)} zadati | ${s.demos_taken_pm.toFixed(1)} primljeni
-• Najbolji meč: ${s.best_score} score | ${s.best_goals} golova
-`).join('\n')}
-
-TIMSKA STATISTIKA:
-• Ukupno mečeva: ${data.teamStats.total_matches}
-• Golovi za: ${data.teamStats.total_goals} | Golovi protiv: ${data.teamStats.total_goals_against}
-• Gol razlika: ${data.teamStats.total_goals - data.teamStats.total_goals_against}
-• Ukupno pobeda: ${data.teamStats.total_wins}
-• MVP nagrade: ${data.teamStats.total_mvps}
-
-ZAHTEV:
-Daj analizu u sledećem formatu (koristi markdown za lepši izgled):
-
-## 📊 SAŽETAK
-(3-4 rečenice o ukupnom performansu tima)
-
-## ✅ SNAGE TIMA
-(4-5 stavki sa konkretnim brojkama)
-
-## ⚠️ SLABOSTI TIMA
-(4-5 stavki sa konkretnim brojkama)
-
-## 👤 ANALIZA PO IGRAČU
-(Za svakog igrača: 3-4 rečenice o stilu igre)
-
-## 💡 KONKRETNI SAVETI
-(5-6 konkretnih saveta)
-
-## 🎯 TRENING PREPORUKE
-(3-4 specifične vežbe)
-
-Održi analizu profesionalnom i konkretnom.`;
-
+// Glavna funkcija za AI analizu
+async function analyzeWithAIPremium(rows) {
+    const btn = document.getElementById('aiAnalyzePremiumBtn');
+    if (!btn) return;
+    
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
+    btn.disabled = true;
+    
     try {
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GROQ_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: 'llama3-70b-8192',
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'Ti si profesionalni Rocket League analitičar. Daješ detaljne, konkretne i korisne analize.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                temperature: 0.7,
-                max_tokens: 2000
-            })
-        });
+        const data = prepareDetailedData(rows);
+        let analysis = null;
         
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`API error: ${response.status}`);
+        // Pokušaj sa Cloudflare Worker-om
+        try {
+            analysis = await callGroqAPI(data);
+        } catch(e) {
+            console.log('Worker error, koristim fallback:', e);
         }
         
-        const result = await response.json();
-        return parsePremiumAnalysis(result.choices[0].message.content);
+        // Ako API nije uspeo, koristi fallback
+        if (!analysis) {
+            analysis = generateDetailedFallback(data);
+        }
+        
+        showPremiumAnalysisModal(analysis, data);
         
     } catch(e) {
-        console.error('Groq API error:', e);
-        throw e;
+        alert('Greška pri analizi: ' + e.message);
+    } finally {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
     }
 }
 
-function parsePremiumAnalysis(text) {
-    const sections = {
-        summary: '',
-        strengths: [],
-        weaknesses: [],
-        players: '',
-        tips: [],
-        training: []
-    };
-    
-    let current = 'summary';
-    const lines = text.split('\n');
-    
-    for (const line of lines) {
-        const clean = line.trim();
-        if (!clean) continue;
-        
-        if (clean.includes('SAŽETAK') || clean.includes('SUMMARY')) {
-            current = 'summary';
-            continue;
-        } else if (clean.includes('SNAGE') || clean.includes('STRENGTHS')) {
-            current = 'strengths';
-            continue;
-        } else if (clean.includes('SLABOSTI') || clean.includes('WEAKNESSES')) {
-            current = 'weaknesses';
-            continue;
-        } else if (clean.includes('ANALIZA PO IGRAČU') || clean.includes('PLAYER ANALYSIS')) {
-            current = 'players';
-            continue;
-        } else if (clean.includes('SAVETI') || clean.includes('TIPS')) {
-            current = 'tips';
-            continue;
-        } else if (clean.includes('TRENING') || clean.includes('TRAINING')) {
-            current = 'training';
-            continue;
-        }
-        
-        const textLine = clean.replace(/^[#*\->\s]+/, '').trim();
-        if (!textLine || textLine.length < 3) continue;
-        
-        if (current === 'summary') {
-            sections.summary += (sections.summary ? ' ' : '') + textLine;
-        } else if (current === 'strengths' && textLine.length > 5) {
-            sections.strengths.push(textLine);
-        } else if (current === 'weaknesses' && textLine.length > 5) {
-            sections.weaknesses.push(textLine);
-        } else if (current === 'players') {
-            sections.players += (sections.players ? '\n' : '') + textLine;
-        } else if (current === 'tips' && textLine.length > 5) {
-            sections.tips.push(textLine);
-        } else if (current === 'training' && textLine.length > 5) {
-            sections.training.push(textLine);
-        }
-    }
-    
-    if (!sections.summary && !sections.strengths.length) {
-        return null;
-    }
-    
-    return sections;
-}
-
-function generateDetailedFallback(data) {
-    const players = Object.entries(data.players);
-    if (!players.length) {
-        return {
-            summary: '📊 Nema dovoljno podataka za analizu. Potrebno je najmanje 3 meča po igraču.',
-            strengths: ['Odigraj više mečeva za bolju analizu'],
-            weaknesses: ['Nema dovoljno podataka'],
-            players: 'Nema dovoljno podataka za analizu po igraču.',
-            tips: ['Odigraj najmanje 5 mečeva po igraču za smislenu analizu'],
-            training: ['Počni sa osnovnim trening pack-ovima']
-        };
-    }
-    
-    const avgGoals = players.reduce((s, [_,p]) => s + p.goals_pm, 0) / players.length;
-    const avgAssists = players.reduce((s, [_,p]) => s + p.assists_pm, 0) / players.length;
-    const avgBoost = players.reduce((s, [_,p]) => s + p.avg_boost, 0) / players.length;
-    
-    const bestWinrate = players.reduce((a,b) => a[1].winrate > b[1].winrate ? a : b);
-    const bestGoals = players.reduce((a,b) => a[1].goals_pm > b[1].goals_pm ? a : b);
-    const bestAssists = players.reduce((a,b) => a[1].assists_pm > b[1].assists_pm ? a : b);
-    const bestSaves = players.reduce((a,b) => a[1].saves_pm > b[1].saves_pm ? a : b);
-    const worstBoost = players.reduce((a,b) => a[1].avg_boost < b[1].avg_boost ? a : b);
-    const worstZeroBoost = players.reduce((a,b) => a[1].zero_boost_pct > b[1].zero_boost_pct ? a : b);
-    
-    const playerAnalysis = players.map(([name, s]) => {
-        const style = s.goals_pm > 1.5 ? 'ofanzivni' : 
-                     s.saves_pm > 2 ? 'defanzivni' : 'svestrani';
-        const strengths = [];
-        const weaknesses = [];
-        
-        if (s.goals_pm > 1.2) strengths.push('dobar strelac');
-        if (s.assists_pm > 0.8) strengths.push('odličan asistent');
-        if (s.saves_pm > 1.5) strengths.push('solidan u odbrani');
-        if (s.avg_boost > 70) strengths.push('dobar boost management');
-        if (s.winrate > 55) strengths.push('pobednički mentalitet');
-        
-        if (s.goals_pm < 0.8) weaknesses.push('treba više da šutira');
-        if (s.assists_pm < 0.5) weaknesses.push('treba više da asistira');
-        if (s.avg_boost < 60) weaknesses.push('loš boost management');
-        if (s.zero_boost_pct > 15) weaknesses.push('često ostaje bez boosta');
-        
-        return `${name} (${style}):
-• ${s.matches} mečeva, ${s.winrate.toFixed(0)}% win rate
-• ${s.goals_pm.toFixed(2)} golova/meč, ${s.assists_pm.toFixed(2)} asistencije/meč
-• ${s.saves_pm.toFixed(2)} odbrana/meč, ${s.shots_pm.toFixed(2)} šuteva/meč
-• ${s.avg_boost.toFixed(0)}% prosečan boost, ${s.zero_boost_pct.toFixed(1)}% na 0
-• Prednosti: ${strengths.join(', ') || 'još uvek se razvija'}
-• Za poboljšanje: ${weaknesses.join(', ') || 'odličan u svemu!'}`;
-    }).join('\n\n');
-    
-    return {
-        summary: `📊 Tim je odigrao ${data.teamStats.total_matches} mečeva sa gol razlikom ${data.teamStats.total_goals - data.teamStats.total_goals_against}. Prosečno ${avgGoals.toFixed(2)} golova po meču uz ${avgAssists.toFixed(2)} asistencija. Najbolji win rate ima ${bestWinrate[0]} sa ${bestWinrate[1].winrate.toFixed(0)}%.`,
-        
-        strengths: [
-            `🎯 ${bestGoals[0]} je najbolji strelac (${bestGoals[1].goals_pm.toFixed(2)} golova/meč)`,
-            `🎯 ${bestAssists[0]} je najbolji asistent (${bestAssists[1].assists_pm.toFixed(2)} asistencije/meč)`,
-            `🛡️ ${bestSaves[0]} je najbolji u odbrani (${bestSaves[1].saves_pm.toFixed(2)} odbrana/meč)`,
-            `🏆 ${bestWinrate[0]} ima najbolji win rate (${bestWinrate[1].winrate.toFixed(0)}%)`
-        ],
-        
-        weaknesses: [
-            `⚡ ${worstBoost[0]} ima najniži prosečan boost (${worstBoost[1].avg_boost.toFixed(0)}%)`,
-            `🔄 ${worstZeroBoost[0]} je najčešće na 0 boosta (${worstZeroBoost[1].zero_boost_pct.toFixed(1)}% vremena)`,
-            `📊 Tim prima prosečno ${(data.teamStats.total_goals_against / data.teamStats.total_matches).toFixed(2)} golova po meču`,
-            `🤝 Samo ${avgAssists.toFixed(2)} asistencija po meču - potrebno više timske igre`
-        ],
-        
-        players: playerAnalysis,
-        
-        tips: [
-            `💡 Povećajte broj asistencija - trenutno ${avgAssists.toFixed(2)}/meč, ciljajte na 2.0+`,
-            `💡 ${worstBoost[0]} - vežbaj boost management, drži boost iznad 40%`,
-            `💡 Više komunicirajte na terenu - pozicije i rotacije su ključne`,
-            `💡 Vežbajte preciznost šuteva - prosečno ${players.reduce((s, [_,p]) => s + p.shooting_pct, 0) / players.length.toFixed(1)}% preciznost`
-        ],
-        
-        training: [
-            `🎯 Training pack: "Shooting Consistency" - za preciznost`,
-            `🎯 Training pack: "Passing & Awareness" - za asistencije`,
-            `🎯 Vežbajte rotacije u 2v2 sa fokusom na pozicioniranje`,
-            `🎯 Boost management - igraj bez boosta da naučiš da ga čuvaš`
-        ]
-    };
-}
-
+// Prikaz analize u modalu
 function showPremiumAnalysisModal(analysis, data) {
     let modal = document.getElementById('premiumAnalysisModal');
     if (!modal) {
@@ -1753,8 +1707,8 @@ function showPremiumAnalysisModal(analysis, data) {
                         AI Analitičar Pro
                     </h3>
                     <span style="font-size: 12px; color: var(--text-muted);">
-                        ${data ? `${data.teamStats.total_matches} mečeva analizirano` : ''}
-                        ${GROQ_API_KEY && GROQ_API_KEY.length > 10 ? ' • 🤖 Groq Llama 3' : ' • 📊 Ugrađena analiza'}
+                        ${data ? `${data.teamStats?.total_matches || 0} mečeva analizirano` : ''}
+                        ${WORKER_URL ? ' • 🔒 Cloudflare Worker' : ''}
                     </span>
                 </div>
             </div>
