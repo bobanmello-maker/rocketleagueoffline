@@ -5,14 +5,20 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Dodaj permissions za deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # OVO JE KLJUČNO - dodaj environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
@@ -36,4 +42,5 @@ jobs:
           path: ./
       
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
