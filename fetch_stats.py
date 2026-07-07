@@ -38,6 +38,20 @@ def mode_for_group(group_id):
 # Stavljamo malo vece kasnjenje da budemo sigurni da ne udarimo u 429.
 SLEEP_BETWEEN_CALLS = 0.6
 
+
+def normalize(name):
+    """'ExMirage (1)' / 'ExMirage(1)' -> 'exmirage1' - da poredjenje ne zavisi
+    od razmaka/velikih slova/zagrada."""
+    return "".join(ch for ch in (name or "").lower() if ch.isalnum())
+
+
+# ---- Igraci koje zelimo da vidimo u statistici. Svi ostali (online protivnici,
+# nasumicni ranked partneri i sl.) se automatski odbacuju i NIKAD ne zavrsavaju
+# u data.json. Dodaj ovde jos nekog ako npr. redovno igrate sa jos nekim.
+KNOWN_PLAYERS = {normalize(n) for n in [
+    "ExMirage", "ExMirage(1)", "ExMirage(2)", "ExMirage(3)", "Rarely_Sober",
+]}
+
 if not TOKEN:
     print("GRESKA: BALLCHASING_TOKEN nije postavljen.", file=sys.stderr)
     sys.exit(1)
@@ -147,6 +161,10 @@ def flatten_replay(replay):
         teammates = [pl.get("name", "?") for pl in team.get("players", [])]
 
         for p in team.get("players", []):
+            player_name = p.get("name", "?")
+            if normalize(player_name) not in KNOWN_PLAYERS:
+                continue  # protivnik / nasumican saigrac - ne zanima nas
+
             stats = p.get("stats", {}) or {}
             core = extract_category(stats, "core", CORE_FIELDS)
             core["mvp"] = bool(core.get("mvp", False))
@@ -161,9 +179,9 @@ def flatten_replay(replay):
                 "team_goals": team_goals,
                 "opponent_goals": opp_goals,
                 "win": (team_goals or 0) > (opp_goals or 0),
-                "player": p.get("name", "?"),
+                "player": player_name,
                 "platform": safe_get(p, "id", "platform", default="offline"),
-                "teammates": [t for t in teammates if t != p.get("name", "?")],
+                "teammates": [t for t in teammates if t != player_name],
                 "core": core,
                 "boost": extract_category(stats, "boost", BOOST_FIELDS),
                 "movement": extract_category(stats, "movement", MOVEMENT_FIELDS),
