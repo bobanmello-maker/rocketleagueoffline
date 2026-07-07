@@ -383,14 +383,20 @@
     <!-- CHEMISTRY -->
     <div class="tabpanel" id="tab-chemistry">
       <div class="card">
-        <h2>Chemistry matrica <small>win% svake dvojke koja je igrala u istom timu (radi za 2v2 i 3v3)</small></h2>
+        <h2>
+          <span>Chemistry matrica <small>win% kombinacije koja je igrala u istom timu</small></span>
+          <span class="group" id="chemModeGroup" style="display:flex; gap:8px;">
+            <button class="chip chem-mode-chip active" data-chemmode="2v2">2v2</button>
+            <button class="chip chem-mode-chip" data-chemmode="3v3">3v3</button>
+          </span>
+        </h2>
         <div class="table-wrap">
           <table id="chemTable">
-            <thead><tr><th>Dvojka</th><th class="mono">Mečeva</th><th class="mono">Pobede</th><th class="mono">Win %</th></tr></thead>
+            <thead><tr><th id="chemColLabel">Dvojka</th><th class="mono">Mečeva</th><th class="mono">Pobede</th><th class="mono">Win %</th></tr></thead>
             <tbody id="chemBody"></tbody>
           </table>
         </div>
-        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč (splitscreen 2v2 među vas 4).</div>
+        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč.</div>
       </div>
     </div>
 
@@ -561,6 +567,14 @@ async function load(){
       btn.classList.add('active');
       modeFilter = btn.dataset.mode;
       refreshVisiblePlayers();
+      render();
+    });
+  });
+  document.querySelectorAll('.chem-mode-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.chem-mode-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      chemMode = btn.dataset.chemmode;
       render();
     });
   });
@@ -1107,34 +1121,38 @@ function renderDemoTrend(rows){
 
 /* ---------------- CHEMISTRY TAB ---------------- */
 
+let chemMode = '2v2';
+
 function renderChemistry(rows){
   const seen = new Set();
-  const pairs = {};
+  const groups2 = {}; // tacno 2v2 mecevi
+  const groups3 = {}; // tacno 3v3 mecevi
+
   rows.forEach(r => {
     const key = r.replay_id + '|' + r.team_color;
     if(seen.has(key)) return;
     seen.add(key);
 
-    // Namerno NE ogranicavamo samo na nas 4 - ovde hocemo da vidimo i
-    // nasumicne online saigrace. Ostali tabovi ostaju cisti jer za njih
-    // uopste ne postoje redovi (fetch_stats.py vec filtrira KNOWN_PLAYERS).
     const teamMembers = [...new Set([r.player, ...(r.teammates || [])])];
-    if(teamMembers.length < 2) return;
+    let target = null;
+    if(teamMembers.length === 2) target = groups2;
+    else if(teamMembers.length === 3) target = groups3;
+    else return; // 1v1, 4v4 i sl. - trenutno ne prikazujemo
 
-    for(let i = 0; i < teamMembers.length; i++){
-      for(let j = i + 1; j < teamMembers.length; j++){
-        const pairKey = [teamMembers[i], teamMembers[j]].sort().join(' & ');
-        if(!pairs[pairKey]) pairs[pairKey] = { total:0, wins:0 };
-        pairs[pairKey].total++;
-        if(r.win) pairs[pairKey].wins++;
-      }
-    }
+    const combKey = [...teamMembers].sort().join(' & ');
+    if(!target[combKey]) target[combKey] = { total:0, wins:0 };
+    target[combKey].total++;
+    if(r.win) target[combKey].wins++;
   });
-  const entries = Object.entries(pairs).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
-  $('#chemBody').innerHTML = entries.length ? entries.map(([pair, d]) => `
-    <tr><td>${pair}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
+
+  const active = chemMode === '3v3' ? groups3 : groups2;
+  $('#chemColLabel').textContent = chemMode === '3v3' ? 'Trojka' : 'Dvojka';
+
+  const entries = Object.entries(active).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
+  $('#chemBody').innerHTML = entries.length ? entries.map(([comb, d]) => `
+    <tr><td>${comb}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
     <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
-  `).join('') : '<tr><td colspan="4" class="empty">Nema dovoljno podataka (treba bar 2 igraca u istom timu)</td></tr>';
+  `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
 }
 
 /* ---------------- RECORDS TAB ---------------- */
