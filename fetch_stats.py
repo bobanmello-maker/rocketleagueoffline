@@ -49,7 +49,9 @@ def normalize(name):
 # nasumicni ranked partneri i sl.) se automatski odbacuju i NIKAD ne zavrsavaju
 # u data.json. Dodaj ovde jos nekog ako npr. redovno igrate sa jos nekim.
 KNOWN_PLAYERS = {normalize(n) for n in [
-    "ExMirage", "ExMirage(1)", "ExMirage(2)", "ExMirage(3)", "Rarely_Sober",
+    "ExMirage", "ExMirage(1)", "ExMirage(2)", "ExMirage(3)",
+    "Zbunjena Inila", "Zbunjena Inila(1)", "Zbunjena Inila(2)", "Zbunjena Inila(3)",
+    "Rarely_Sober",
 ]}
 
 if not TOKEN:
