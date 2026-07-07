@@ -108,7 +108,7 @@
       "inflicted": 2,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "f5c1679a-099f-48e8-a6d7-1f758b98fead",
@@ -219,7 +219,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "0f2df52f-6543-4c0b-bc09-7787c3bbe4a6",
@@ -330,7 +330,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "19c81f9c-218d-4e19-8351-9004cc3f0070",
@@ -441,7 +441,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "c145ad96-0e3c-41a4-b94c-9de0f361bf74",
@@ -552,7 +552,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "6f23db47-f292-4093-8ec0-eae1b3f5f032",
@@ -665,7 +665,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "0b99de3e-211f-4df1-a338-2f7e8bc7070f",
@@ -778,7 +778,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "a0277154-09da-42ec-a3f5-34c044ff5988",
@@ -889,7 +889,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "6354db7e-2b28-4b49-a194-79f1a48e4937",
@@ -1000,7 +1000,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "0f43fced-9767-4ee7-969c-5fccee64a72e",
@@ -1111,7 +1111,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "072af128-ff98-4f34-9dc0-b7e472995f4a",
@@ -1221,7 +1221,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "072af128-ff98-4f34-9dc0-b7e472995f4a",
@@ -1331,7 +1331,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "85d7773b-8480-4068-a30c-58539b2ce934",
@@ -1442,7 +1442,7 @@
       "inflicted": 3,
       "taken": 3
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "71ff9595-044c-4a04-a7b2-a579befbf077",
@@ -1552,7 +1552,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_solo"
   },
   {
     "replay_id": "d5e8035b-1ac0-42d6-bae5-6c6dee1a87a7",
@@ -1662,7 +1662,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "d5e8035b-1ac0-42d6-bae5-6c6dee1a87a7",
@@ -1772,7 +1772,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "189c8e04-4389-48c3-b579-0698f96c62ef",
@@ -1883,7 +1883,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "189c8e04-4389-48c3-b579-0698f96c62ef",
@@ -1994,7 +1994,7 @@
       "inflicted": 2,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "189c8e04-4389-48c3-b579-0698f96c62ef",
@@ -2105,7 +2105,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "8af0522f-96bd-4665-b18f-3875a5c18696",
@@ -2215,7 +2215,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "8af0522f-96bd-4665-b18f-3875a5c18696",
@@ -2325,7 +2325,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "10c43af2-8ac5-425f-83e6-2637a3a2429c",
@@ -2436,7 +2436,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "10c43af2-8ac5-425f-83e6-2637a3a2429c",
@@ -2547,7 +2547,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "486746fb-bb58-434d-a91f-133cc3b342cb",
@@ -2658,7 +2658,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "486746fb-bb58-434d-a91f-133cc3b342cb",
@@ -2769,7 +2769,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "5c8a5807-6575-4ac2-81c5-0cc949111848",
@@ -3760,7 +3760,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "b8d7e389-b542-4123-81be-79a63f3f0156",
@@ -3871,7 +3871,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "9a43d37e-9517-4ff4-abdb-a8d966dccb56",
@@ -4421,7 +4421,7 @@
       "inflicted": 0,
       "taken": 4
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "29f30fb1-a28b-4c19-8ea2-c5f5cdcac243",
@@ -4531,7 +4531,7 @@
       "inflicted": 1,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -4641,7 +4641,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "2b137cbf-a41e-4e7e-80d0-09571f97cc63",
@@ -4751,7 +4751,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -4861,7 +4861,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "d44022ec-88d2-4a38-99d8-9b062d4ba5e2",
@@ -4971,7 +4971,7 @@
       "inflicted": 3,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -5081,7 +5081,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "984a107e-c183-42c1-b532-ecef1f465919",
@@ -5191,7 +5191,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -5301,7 +5301,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "96028bb5-1a0f-4df7-a7cf-a9465fb927a0",
@@ -5411,7 +5411,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -5521,7 +5521,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "b01404c0-84c7-483c-86f4-74cb7db4e2bb",
@@ -5631,7 +5631,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -5741,7 +5741,7 @@
       "inflicted": 2,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "c20fc8ca-427c-4b5f-b827-2842b9ccdfd3",
@@ -5851,7 +5851,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -5961,7 +5961,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "890f1660-4dcd-44f8-9327-d1269489ce0f",
@@ -6071,7 +6071,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -6181,7 +6181,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "989c7a9f-f601-4115-9a67-dab775ba13a4",
@@ -6291,7 +6291,7 @@
       "inflicted": 2,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -6401,7 +6401,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "865334dc-18cc-4f93-ac7d-fffe364bfdb4",
@@ -6511,7 +6511,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -6621,7 +6621,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "9fe2a305-dffb-4d98-8295-4c8d16da3cce",
@@ -6731,7 +6731,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -6841,7 +6841,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "45078bce-b2a3-4817-8a5c-8e51ae82e91b",
@@ -6951,7 +6951,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -7061,7 +7061,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "ae05470c-3d63-407a-9677-dcd71f4a4a50",
@@ -7171,7 +7171,7 @@
       "inflicted": 4,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -7281,7 +7281,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "8792a99b-cda0-4fa1-ac78-bfbfe197ac0e",
@@ -7391,7 +7391,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7501,7 +7501,7 @@
       "inflicted": 2,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "9f8d9ba6-f78c-4c50-a530-43db6acc1d9b",
@@ -7611,7 +7611,7 @@
       "inflicted": 0,
       "taken": 3
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7721,7 +7721,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "0552574d-6ff7-4d1c-bdc9-92e2812acad8",
@@ -7831,7 +7831,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -7941,7 +7941,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "5e8e9620-f0d7-453a-9a7a-dbdf4e68ba30",
@@ -8051,7 +8051,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
@@ -8161,7 +8161,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "3a115359-0fe9-4a08-9907-75b031f2bfba",
@@ -8271,7 +8271,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
@@ -8381,7 +8381,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "00374662-0447-4188-96b6-92fb5757e6ee",
@@ -8491,7 +8491,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "c5f36bcf-e915-4941-85d5-09286bac3eae",
@@ -8601,7 +8601,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "c5f36bcf-e915-4941-85d5-09286bac3eae",
@@ -8711,7 +8711,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "60bba0e5-42a4-4b52-9f30-3ce8262aefb8",
@@ -8821,7 +8821,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "60bba0e5-42a4-4b52-9f30-3ce8262aefb8",
@@ -8931,7 +8931,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "99bb6604-2662-409d-9c23-826a3f90153f",
@@ -9042,7 +9042,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "99bb6604-2662-409d-9c23-826a3f90153f",
@@ -9153,7 +9153,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "bc3f39f6-887d-48dd-aea7-0ff5fc93635d",
@@ -9264,7 +9264,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "bc3f39f6-887d-48dd-aea7-0ff5fc93635d",
@@ -9375,7 +9375,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "40239dfd-04c1-4474-90ee-2e8f02949984",
@@ -9486,7 +9486,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "40239dfd-04c1-4474-90ee-2e8f02949984",
@@ -9597,7 +9597,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "993ebdd1-e9e2-4adb-9ab5-2c39880559f3",
@@ -9708,7 +9708,7 @@
       "inflicted": 1,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "993ebdd1-e9e2-4adb-9ab5-2c39880559f3",
@@ -9819,7 +9819,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "e708ff93-919f-47f6-bb80-d250789b43e7",
@@ -9930,7 +9930,7 @@
       "inflicted": 0,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "e708ff93-919f-47f6-bb80-d250789b43e7",
@@ -10041,7 +10041,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "7cdd700e-dcfe-481b-9668-a1a78c867131",
@@ -10152,7 +10152,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "7cdd700e-dcfe-481b-9668-a1a78c867131",
@@ -10263,7 +10263,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "4647b57f-c7dd-4303-b992-8256f7459fee",
@@ -10374,7 +10374,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "4647b57f-c7dd-4303-b992-8256f7459fee",
@@ -10485,7 +10485,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "1ccf5001-be7a-4723-8118-5edd37844d93",
@@ -10596,7 +10596,7 @@
       "inflicted": 0,
       "taken": 1
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "1ccf5001-be7a-4723-8118-5edd37844d93",
@@ -10707,7 +10707,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "6173eaa6-ff67-45d4-9aa9-78474ff933b8",
@@ -10818,7 +10818,7 @@
       "inflicted": 1,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "6173eaa6-ff67-45d4-9aa9-78474ff933b8",
@@ -10929,7 +10929,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "a7e6c6ee-dedc-4b54-a4c4-91bb51e1ba79",
@@ -11040,7 +11040,7 @@
       "inflicted": 0,
       "taken": 0
     },
-    "mode": "online"
+    "mode": "online_team"
   },
   {
     "replay_id": "a7e6c6ee-dedc-4b54-a4c4-91bb51e1ba79",
@@ -11151,6 +11151,6 @@
       "inflicted": 1,
       "taken": 2
     },
-    "mode": "online"
+    "mode": "online_team"
   }
 ]
