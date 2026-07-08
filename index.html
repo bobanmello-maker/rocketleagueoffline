@@ -1313,7 +1313,7 @@ function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // VAŽNO: ovde stavi URL svog Cloudflare Worker-a (posrednik koji čuva
 // Groq API ključ bezbedno, van ovog fajla).
-const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev/';
+const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
 
 // U-sesiji keš: da ne zovemo API ponovo za isti skup filtera dvaput zaredom.
 const aiAnalysisCache = new Map();
@@ -1382,7 +1382,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'llama3-70b-8192',
+      model: 'openai/gpt-oss-120b',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
