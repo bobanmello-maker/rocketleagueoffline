@@ -1313,7 +1313,7 @@ function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // VAŽNO: ovde stavi URL svog Cloudflare Worker-a (posrednik koji čuva
 // Groq API ključ bezbedno, van ovog fajla).
-const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
+const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev/';
 
 // U-sesiji keš: da ne zovemo API ponovo za isti skup filtera dvaput zaredom.
 const aiAnalysisCache = new Map();
