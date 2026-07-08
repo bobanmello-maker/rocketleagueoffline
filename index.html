@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analiza — RLS</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a1a2e' rx='20'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='55' font-weight='bold' fill='white'%3E⚽%3C/text%3E%3C/svg%3E">
+<title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -88,9 +87,7 @@
   .prec-card{
     flex:1; min-width:150px; background:var(--surface); border:1px solid var(--border);
     border-radius:12px; padding:12px 16px; border-left:3px solid var(--border);
-    transition:all .3s ease;
   }
-  .prec-card:hover{ transform:translateY(-2px); box-shadow:0 4px 20px rgba(0,0,0,0.3); }
   .prec-card .name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
   .prec-card .row{ display:flex; justify-content:space-between; align-items:baseline; }
   .prec-card .wl{ font-family:'JetBrains Mono',monospace; font-size:14px; }
@@ -102,9 +99,7 @@
   .metric-summary{ margin-top:18px; border-top:1px solid var(--border); padding-top:14px; }
   .metric-summary-row{
     display:flex; align-items:center; gap:10px; padding:6px 0;
-    transition:all .2s ease;
   }
-  .metric-summary-row:hover{ background:var(--surface-2); border-radius:6px; padding-left:6px; }
   .metric-summary-row .rank{ width:18px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:12px; }
   .metric-summary-row .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
   .metric-summary-row .pname{ flex:0 0 110px; font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -135,39 +130,60 @@
   .form-row:last-child{ margin-bottom:0; }
   .form-row .pname{ width:90px; font-size:13px; font-weight:600; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .form-squares{ display:flex; gap:5px; flex-wrap:wrap; }
-  .form-sq{ width:20px; height:20px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; transition:all .2s; }
-  .form-sq:hover{ transform:scale(1.2); }
+  .form-sq{ width:20px; height:20px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'JetBrains Mono',monospace; }
   .form-sq.w{ background:rgba(74,222,128,0.18); color:var(--green); border:1px solid rgba(74,222,128,0.4); }
   .form-sq.l{ background:rgba(248,113,113,0.18); color:var(--loss); border:1px solid rgba(248,113,113,0.4); }
   .form-winrate{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
 
+  /* ---- AI Analitičar dugme ---- */
+  .ai-btn{
+    background: linear-gradient(135deg, #7C3AED, #6D28D9, #4F46E5);
+    border: none; color: white; padding: 10px 24px; border-radius: 999px;
+    font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+    letter-spacing: 0.02em; display: flex; align-items: center; gap: 8px;
+  }
+  .ai-btn:hover{ transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 30px rgba(124, 58, 237, 0.6); }
+  .ai-btn:disabled{ opacity: 0.7; cursor: not-allowed; transform: none; }
+  .ai-btn .spinner{
+    display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to { transform: rotate(360deg); } }
+
+  /* ---- AI Analysis Modal ---- */
+  .analysis-section{
+    background: var(--surface-2); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .analysis-section h4{ margin: 0 0 10px 0; font-family: 'Rajdhani', sans-serif; font-size: 16px; letter-spacing: 0.03em; }
+  .analysis-section ul{ margin: 0; padding-left: 20px; color: var(--text-muted); font-size: 13px; line-height: 1.8; }
+  .analysis-section ul li{ margin-bottom: 4px; }
+  .fallback-badge{
+    display:inline-flex; align-items:center; gap:6px; background:rgba(251,191,36,0.15); color:var(--amber);
+    padding:5px 12px; border-radius:999px; font-size:12px; font-weight:600; margin-top:10px;
+  }
   .tabbar{ display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:0;}
   .tabbtn{
     background:none; border:none; color:var(--text-muted); font-family:'Rajdhani',sans-serif;
     font-weight:600; font-size:15px; text-transform:uppercase; letter-spacing:0.03em;
     padding:10px 16px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px;
-    transition:all .3s;
   }
-  .tabbtn:hover{ color:var(--text); }
   .tabbtn.active{ color:var(--text); border-bottom-color:var(--orange); }
-  .tabpanel{ display:none; animation:fadeIn .4s ease; }
+  .tabpanel{ display:none; }
   .tabpanel.active{ display:block; }
-  @keyframes fadeIn{ from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
 
   .grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:20px; margin-bottom:20px; }
   .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-bottom:20px; }
   .card{
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
     padding:20px;
-    transition:all .3s ease;
   }
-  .card:hover{ border-color:rgba(255,255,255,0.15); }
   .card h2{ font-size:16px; text-transform:uppercase; margin:0 0 16px; color:var(--text); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
   .card h2 small{ display:block; font-family:'Inter',sans-serif; text-transform:none; font-weight:400; color:var(--text-muted); font-size:12px; margin-top:2px;}
   select.metric-select{
     background:var(--surface-2); border:1px solid var(--border); color:var(--text);
     padding:5px 10px; border-radius:8px; font-size:12px; font-family:'Inter',sans-serif;
-    cursor:pointer;
   }
   canvas{ max-width:100%; }
   .radar-wrap{ max-width:460px; height:380px; margin:0 auto; }
@@ -192,7 +208,7 @@
   .table-wrap{ overflow-x:auto; }
   table{ width:100%; border-collapse:collapse; font-size:13px; }
   th, td{ padding:9px 12px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
-  th{ color:var(--text-muted); text-transform:uppercase; font-size:11px; letter-spacing:0.05em; cursor:pointer; user-select:none; transition:color .2s; }
+  th{ color:var(--text-muted); text-transform:uppercase; font-size:11px; letter-spacing:0.05em; cursor:pointer; user-select:none; }
   th:hover{ color:var(--text); }
   tr:hover td{ background:var(--surface-2); cursor:pointer; }
   td.mono, th.mono{ font-family:'JetBrains Mono',monospace; }
@@ -204,9 +220,8 @@
   .award-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; }
   .award-card{
     background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px;
-    transition:all .3s ease;
+    position:relative; overflow:hidden;
   }
-  .award-card:hover{ transform:translateY(-3px); box-shadow:0 8px 30px rgba(0,0,0,0.3); border-color:rgba(255,255,255,0.15); }
   .award-card .emoji{ font-size:22px; }
   .award-card .title{ font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin:8px 0 4px; }
   .award-card .winner{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; }
@@ -216,173 +231,31 @@
   .empty b{ color:var(--text); }
   .subtle-note{ color:var(--text-muted); font-size:12px; margin-top:10px; }
 
+  /* ---- Modal ---- */
   .modal-backdrop{
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:50;
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:50;
     align-items:center; justify-content:center; padding:20px;
-    backdrop-filter:blur(8px);
   }
   .modal-backdrop.open{ display:flex; }
   .modal{
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
     max-width:720px; width:100%; max-height:85vh; overflow-y:auto; padding:24px;
-    animation:modalIn .3s ease;
   }
-  @keyframes modalIn{ from{opacity:0;transform:scale(0.95) translateY(20px);} to{opacity:1;transform:scale(1) translateY(0);} }
   .modal-close{
     float:right; background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;
-    transition:all .2s;
   }
-  .modal-close:hover{ color:var(--text); transform:rotate(90deg); }
   .modal h3{ margin:0 0 4px; font-size:22px; }
   .modal .sub{ color:var(--text-muted); font-size:13px; margin-bottom:18px; }
   .stat-block{ margin-bottom:18px; }
   .stat-block h4{ font-family:'Rajdhani',sans-serif; font-size:14px; text-transform:uppercase; color:var(--orange); margin:0 0 8px; letter-spacing:0.04em;}
   .stat-line{ display:flex; justify-content:space-between; font-size:13px; padding:4px 0; border-bottom:1px dashed var(--border); }
-
-  .ai-btn {
-    background: linear-gradient(135deg, #7C3AED, #6D28D9, #4F46E5);
-    border: none;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-    letter-spacing: 0.02em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .ai-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 30px rgba(124, 58, 237, 0.6);
-  }
-  .ai-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .ai-btn .spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .analysis-section {
-    background: var(--surface-2);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 16px;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.5s ease forwards;
-    opacity: 0;
-  }
-  .analysis-section:nth-child(1) { animation-delay: 0.1s; }
-  .analysis-section:nth-child(2) { animation-delay: 0.2s; }
-  .analysis-section:nth-child(3) { animation-delay: 0.3s; }
-  .analysis-section:nth-child(4) { animation-delay: 0.4s; }
-  .analysis-section:nth-child(5) { animation-delay: 0.5s; }
-  .analysis-section:nth-child(6) { animation-delay: 0.6s; }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .analysis-section:hover {
-    transform: translateX(4px);
-    border-color: rgba(255,255,255,0.2);
-  }
-  .analysis-section h4 {
-    margin: 0 0 10px 0;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 16px;
-    letter-spacing: 0.03em;
-  }
-  .analysis-section ul {
-    margin: 0;
-    padding-left: 20px;
-    color: var(--text-muted);
-    font-size: 13px;
-    line-height: 1.8;
-  }
-  .analysis-section ul li {
-    margin-bottom: 4px;
-    transition: all 0.2s ease;
-    cursor: default;
-  }
-  .analysis-section ul li:hover {
-    color: var(--text);
-    padding-left: 4px;
-  }
-  .player-analysis {
-    background: var(--surface);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    border-left: 3px solid var(--blue);
-    transition: all 0.2s ease;
-  }
-  .player-analysis:hover { transform: translateX(4px); }
-  .player-analysis:last-child { margin-bottom: 0; }
-  .player-analysis .pname { font-weight: 700; font-size: 14px; }
-  .player-analysis .pstats { font-size: 12px; color: var(--text-muted); margin: 4px 0; }
-  .player-analysis .pdetails { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .analysis-tag {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-right: 4px;
-  }
-  .tag-green { background: rgba(74,222,128,0.15); color: var(--green); }
-  .tag-red { background: rgba(248,113,113,0.15); color: var(--loss); }
-  .tag-blue { background: rgba(61,169,252,0.15); color: var(--blue); }
-  .tag-amber { background: rgba(251,191,36,0.15); color: var(--amber); }
-  .tag-purple { background: rgba(124,58,237,0.15); color: #7C3AED; }
-
-  .focus-badge {
-    display: inline-block;
-    background: rgba(124,58,237,0.2);
-    color: #7C3AED;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-  }
-
-  .history-badge {
-    display: inline-block;
-    background: rgba(251,191,36,0.15);
-    color: var(--amber);
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 500;
-  }
+  .stat-line span:first-child{ color:var(--text-muted); }
+  .stat-line span:last-child{ font-family:'JetBrains Mono',monospace; }
 
   @media (max-width:900px){
     .grid, .grid3{ grid-template-columns:1fr; }
     .scoreline{ gap:16px; }
   }
-
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 </style>
 </head>
 <body>
@@ -393,7 +266,7 @@
       <div class="bar"></div>
       <div>
         <h1>Analiza</h1>
-        <span>Rocket League &middot; Brojke ne lažu :)</span>
+        <span>Rocket League &middot; sve sesije, svi igraci, jedno mesto</span>
       </div>
     </div>
     <div class="scoreline" id="scoreline"></div>
@@ -414,8 +287,8 @@
       <button class="chip mode-chip" data-mode="online_team">Online tim</button>
     </div>
     <div class="group" id="playerChips"></div>
-    <button class="ai-btn" id="aiAnalyzePremiumBtn" title="Rade Bogdanović">
-      <span style="font-size:18px;">🧠</span> RTS Analiza
+    <button class="ai-btn" id="aiAnalyzeBtn">
+      <span style="font-size:18px;">🧠</span> AI Analitičar
     </button>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
   </div>
@@ -435,6 +308,7 @@
 
   <div id="content">
 
+    <!-- OVERVIEW -->
     <div class="tabpanel active" id="tab-overview">
       <div class="grid">
         <div class="card">
@@ -462,6 +336,7 @@
       </div>
     </div>
 
+    <!-- BOOST -->
     <div class="tabpanel" id="tab-boost">
       <div class="grid">
         <div class="card">
@@ -481,6 +356,7 @@
       </div>
     </div>
 
+    <!-- MOVEMENT -->
     <div class="tabpanel" id="tab-movement">
       <div class="grid">
         <div class="card">
@@ -500,6 +376,7 @@
       </div>
     </div>
 
+    <!-- POSITIONING -->
     <div class="tabpanel" id="tab-positioning">
       <div class="grid">
         <div class="card">
@@ -519,6 +396,7 @@
       </div>
     </div>
 
+    <!-- DEMOS -->
     <div class="tabpanel" id="tab-demos">
       <div class="grid">
         <div class="card">
@@ -532,6 +410,7 @@
       </div>
     </div>
 
+    <!-- CHEMISTRY -->
     <div class="tabpanel" id="tab-chemistry">
       <div class="card">
         <h2>
@@ -551,10 +430,12 @@
       </div>
     </div>
 
+    <!-- RECORDS -->
     <div class="tabpanel" id="tab-records">
       <div class="award-grid" id="awardGrid"></div>
     </div>
 
+    <!-- MATCHES -->
     <div class="tabpanel" id="tab-matches">
       <div class="card">
         <h2>Svi mečevi <small>klik na kolonu = sortiranje, klik na red = detalji</small></h2>
@@ -590,24 +471,28 @@
   <div class="modal" id="modalContent"></div>
 </div>
 
+<div class="modal-backdrop" id="aiModalBackdrop">
+  <div class="modal" id="aiModalContent" style="max-width:820px; max-height:88vh; overflow-y:auto;"></div>
+</div>
+
 <script>
-// ================================================================
-//  ⚙️ KONFIGURACIJA
-// ================================================================
-
-const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev'; // <--- TVOJ WORKER URL
-
-// ================================================================
-
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
+// ---- Fiksne boje za igrace: ovde mozes rucno da promenis boju kome god hoces.
+// Format je HEX kod boje (npr. '#FF6B35'). Ko god NIJE ovde naveden dobija boju
+// automatski iz opste palete - kod puno igraca (online protivnici i sl.) moze
+// da se poklopi sa nekim drugim, zato je bitno da BAR vas 4 uvek budete ovde.
 const PLAYER_COLOR_OVERRIDES = {
-  'Toške': '#3DA9FC',
-  'Cane':  '#FF6B35',
-  'Ivan':  '#4ADE80',
-  'Pajke': '#FBBF24',
+  'Toške': '#3DA9FC',   // plava
+  'Cane':  '#FF6B35',   // narandžasta
+  'Ivan':  '#4ADE80',   // zelena
+  'Pajke': '#FBBF24',   // žuta / amber
 };
 
+// ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
+// -> ime koje zelis da se prikazuje svuda u dashboard-u. Otporno je na razmake,
+// velika/mala slova i zagrade (npr. "ExMirage(1)" i "ExMirage (1)" su isto).
+// Dodaj/izmeni redove ovde kad god zatreba, ne mora nista drugo da se dira.
 const NAME_MAP_RAW = {
   'ExMirage': 'Toške',
   'ExMirage(1)': 'Cane',
@@ -652,41 +537,15 @@ const RADAR_METRICS = [
   {key:'positioning.percent_behind_ball', label:'Iza lopte %'},
 ];
 
-// Profesionalni proseci za poređenje
-const PRO_AVERAGES = {
-    goals_pm: 0.8,
-    assists_pm: 0.6,
-    saves_pm: 1.2,
-    avg_boost: 65,
-    zero_boost_pct: 8,
-    full_boost_pct: 12,
-    shooting_pct: 35,
-    supersonic_pct: 25,
-    demos_pm: 1.0,
-};
-
-// Fokus oblasti za raznovrsne savete
-const FOCUS_AREAS = [
-    { name: 'Boost Management', emoji: '⚡', desc: 'kako efikasnije koristiti boost' },
-    { name: 'Timska komunikacija', emoji: '💬', desc: 'bolja koordinacija i pozicioniranje' },
-    { name: 'Napadačke kombinacije', emoji: '🎯', desc: 'kombinacije i asistencije' },
-    { name: 'Odbrambene pozicije', emoji: '🛡️', desc: 'čuvanje gola i rotacije' },
-    { name: 'Demo strategije', emoji: '💥', desc: 'kada i kako koristiti demoe' },
-    { name: 'Mentalna priprema', emoji: '🧠', desc: 'fokus i donošenje odluka' },
-    { name: 'Mehanike', emoji: '🎮', desc: 'preciznost šuteva i kontrole lopte' },
-    { name: 'Pozicioniranje', emoji: '📍', desc: 'pravilne pozicije na terenu' },
-];
-
 let RAW = [];
-let allPlayers = [];
-let players = [];
+let allPlayers = [];   // svi igraci ikad vidjeni - koristi se samo da boje ostanu stabilne
+let players = [];      // igraci vidljivi u trenutno izabranom rezimu (all/online/offline)
 let playerColor = {};
 let activePlayers = new Set();
 let modeFilter = 'offline';
 let sortKey = 'date';
 let sortDir = -1;
 let charts = {};
-let chemMode = '2v2';
 
 const $ = sel => document.querySelector(sel);
 const getPath = (obj, path) => path.split('.').reduce((o,k) => (o == null ? o : o[k]), obj);
@@ -845,23 +704,33 @@ function render(){
   renderBoostMeters(rows);
   renderForma(rows);
   renderRadar(rows);
+
   renderBpmChart(rows);
   renderBoostDistChart(rows);
   renderBoostTable(rows);
+
   renderAirChart(rows);
   renderSpeedChart(rows);
   renderMovementTable(rows);
+
   renderPositioningChart(rows);
   renderRotationTrend(rows);
   renderPosTable(rows);
+
   renderDemoChart(rows);
   renderDemoTrend(rows);
+
   renderChemistry(rows);
   renderRecords(rows);
   renderTable(rows);
 }
 
+/* ---------------- OVERVIEW ---------------- */
+
 function renderScoreline(rows){
+  // Namerno NE zbrajamo pobede/poraze ovde preko svih igraca - to bi
+  // dvostruko/visestruko brojalo isti mec (jedan red po igracu po mecu).
+  // Pobeda/poraz ima smisla samo PO IGRACU - to je u renderPlayerRecords().
   const uniqueMatches = new Set(rows.map(r => r.replay_id));
   const goals = sum(rows.map(r => getPath(r,'core.goals')));
   const mvps = rows.filter(r => getPath(r,'core.mvp')).length;
@@ -1001,6 +870,7 @@ function renderBoostMeters(rows){
     wrap.appendChild(row);
   });
   if(!activePlayers.size){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; }
+
   renderBoostExtras(rows);
 }
 
@@ -1022,6 +892,7 @@ function renderBoostExtras(rows){
     return { p, goals, assists, collected, stolen, zeroPct, efficiency, matches: prows.length };
   });
 
+  // ---- Boost efikasnost (G+A na svakih 100 sakupljenog boosta) ----
   const effSorted = [...stats].sort((a,b) => b.efficiency - a.efficiency);
   const maxEff = Math.max(0.01, ...effSorted.map(s => s.efficiency));
   effWrap.innerHTML = `
@@ -1035,6 +906,7 @@ function renderBoostExtras(rows){
     `).join('')}
   `;
 
+  // ---- Kratke cinjenice ----
   const withMatches = stats.filter(s => s.matches > 0);
   const facts = [];
   if(withMatches.length){
@@ -1105,6 +977,8 @@ function renderRadar(rows){
   });
 }
 
+/* ---------------- BOOST TAB ---------------- */
+
 function renderBpmChart(rows){
   const ps = [...activePlayers].sort();
   const bpm = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'boost.bpm')||0)));
@@ -1164,6 +1038,8 @@ function renderBoostTable(rows){
   ]);
 }
 
+/* ---------------- MOVEMENT TAB ---------------- */
+
 function renderAirChart(rows){
   const ps = [...activePlayers].sort();
   const ground = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'movement.percent_ground')||0)));
@@ -1212,6 +1088,8 @@ function renderMovementTable(rows){
   ]);
 }
 
+/* ---------------- POSITIONING TAB ---------------- */
+
 function renderPositioningChart(rows){
   const ps = [...activePlayers].sort();
   const def = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'positioning.percent_defensive_third')||0)));
@@ -1247,6 +1125,8 @@ function renderPosTable(rows){
   ]);
 }
 
+/* ---------------- DEMOS TAB ---------------- */
+
 function renderDemoChart(rows){
   const ps = [...activePlayers].sort();
   const inflicted = ps.map(p => sum(rows.filter(r=>r.player===p).map(r=>getPath(r,'demo.inflicted')||0)));
@@ -1273,10 +1153,14 @@ function renderDemoTrend(rows){
   lineChartFor('#demoTrendChart', 'demoTrend', ordered);
 }
 
+/* ---------------- CHEMISTRY TAB ---------------- */
+
+let chemMode = '2v2';
+
 function renderChemistry(rows){
   const seen = new Set();
-  const groups2 = {};
-  const groups3 = {};
+  const groups2 = {}; // tacno 2v2 mecevi
+  const groups3 = {}; // tacno 3v3 mecevi
 
   rows.forEach(r => {
     const key = r.replay_id + '|' + r.team_color;
@@ -1287,7 +1171,7 @@ function renderChemistry(rows){
     let target = null;
     if(teamMembers.length === 2) target = groups2;
     else if(teamMembers.length === 3) target = groups3;
-    else return;
+    else return; // 1v1, 4v4 i sl. - trenutno ne prikazujemo
 
     const combKey = [...teamMembers].sort().join(' & ');
     if(!target[combKey]) target[combKey] = { total:0, wins:0 };
@@ -1304,6 +1188,8 @@ function renderChemistry(rows){
     <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
   `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
 }
+
+/* ---------------- RECORDS TAB ---------------- */
 
 function renderRecords(rows){
   const ps = [...activePlayers];
@@ -1354,6 +1240,8 @@ function renderRecords(rows){
   `).join('');
 }
 
+/* ---------------- MATCHES TAB ---------------- */
+
 function renderTable(rows){
   const sorted = [...rows].sort((a,b) => {
     let va = getPath(a,sortKey), vb = getPath(b,sortKey);
@@ -1395,6 +1283,7 @@ function openModal(r){
     <h3 style="color:${playerColor[r.player]}">${r.player}</h3>
     <div class="sub">${fmtDate(r.date)} &middot; ${r.map} &middot; ${r.playlist} &middot;
       <span class="pill ${r.win?'win':'loss'}">${r.team_goals}–${r.opponent_goals}</span></div>
+
     <div class="stat-block"><h4>Core</h4>
       ${['goals','assists','saves','shots','score','shooting_percentage'].map(k=>`<div class="stat-line"><span>${k}</span><span>${c[k]}</span></div>`).join('')}
     </div>
@@ -1418,673 +1307,250 @@ function openModal(r){
 function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // ================================================================
-//  🤖 AI ANALITIČAR PRO - Pametna verzija sa učenjem
+//  AI ANALITIČAR — Groq (Llama 3 70B) preko Cloudflare Worker-a,
+//  sa fallback-om na lokalnu analizu po pravilima ako Worker padne.
 // ================================================================
 
-// Sačuvaj analizu u istoriju
-function saveToHistory(analysis, focus) {
-    try {
-        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
-        history.push({
-            date: new Date().toISOString(),
-            focus: focus,
-            tips: analysis.tips || [],
-            strengths: analysis.strengths || [],
-            weaknesses: analysis.weaknesses || []
-        });
-        // Zadrži poslednjih 10 analiza
-        while (history.length > 10) history.shift();
-        localStorage.setItem('analysis_history', JSON.stringify(history));
-    } catch(e) {
-        console.log('Greška pri čuvanju istorije:', e);
-    }
+// VAŽNO: ovde stavi URL svog Cloudflare Worker-a (posrednik koji čuva
+// Groq API ključ bezbedno, van ovog fajla).
+const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
+
+// U-sesiji keš: da ne zovemo API ponovo za isti skup filtera dvaput zaredom.
+const aiAnalysisCache = new Map();
+
+function aiCacheKey(rows){
+  const ids = rows.map(r => r.replay_id + '|' + r.player).sort().join(',');
+  return modeFilter + '|' + [...activePlayers].sort().join(',') + '|' + ids.length + '|' + ids.slice(0,500);
 }
 
-// Učitaj istoriju analiza
-function getHistoryContext() {
-    try {
-        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
-        if (history.length === 0) return 'Nema prethodnih analiza.';
-        
-        // Izvuci prethodne savete da ih AI ne ponavlja
-        const previousTips = history.slice(-3).map(h => 
-            h.tips?.slice(0,2).join('; ') || ''
-        ).filter(Boolean);
-        
-        const previousFoci = history.slice(-3).map(h => h.focus || '').filter(Boolean);
-        
-        let context = `PREĐAŠNJE ANALIZE (${history.length} ukupno):\n`;
-        context += `- Prethodni fokusi: ${previousFoci.join(', ') || 'nema'}\n`;
-        context += `- Saveti koje treba izbeći (već dati): ${previousTips.join(' | ') || 'nema'}\n`;
-        
-        return context;
-    } catch(e) {
-        return 'Nema prethodnih analiza.';
-    }
-}
+function prepareDetailedData(rows){
+  const players = {};
+  const avg = arr => arr.length ? arr.reduce((a,b) => a + b, 0) / arr.length : 0;
 
-// Odaberi fokus za ovu analizu
-function selectFocus() {
-    try {
-        const history = JSON.parse(localStorage.getItem('analysis_history') || '[]');
-        const usedFoci = history.slice(-5).map(h => h.focus || '').filter(Boolean);
-        
-        // Filtriraj fokuse koji su skoro korišćeni
-        const available = FOCUS_AREAS.filter(f => !usedFoci.includes(f.name));
-        
-        // Ako su svi korišćeni, resetuj
-        if (available.length === 0) {
-            return FOCUS_AREAS[Math.floor(Math.random() * FOCUS_AREAS.length)];
-        }
-        
-        return available[Math.floor(Math.random() * available.length)];
-    } catch(e) {
-        return FOCUS_AREAS[Math.floor(Math.random() * FOCUS_AREAS.length)];
-    }
-}
+  [...activePlayers].forEach(p => {
+    const prows = rows.filter(r => r.player === p);
+    if(prows.length < 2) return; // premalo mečeva da bi analiza za tog igraca imala smisla
 
-// Glavna AI analiza
-async function callGroqAPI(data) {
-    // 1. Odaberi fokus
-    const focus = selectFocus();
-    
-    // 2. Učitaj istoriju
-    const history = getHistoryContext();
-    
-    // 3. Izračunaj trendove i uloge
-    let playerContext = '';
-    Object.entries(data.players).forEach(([name, s]) => {
-        let role = 'svestrani';
-        if (s.goals_pm > 1.5) role = 'ofanzivni (strelac)';
-        else if (s.saves_pm > 2) role = 'defanzivni (čuvar)';
-        else if (s.assists_pm > 0.8) role = 'kreativni (asistent)';
-        
-        const comparisons = [];
-        if (s.goals_pm > PRO_AVERAGES.goals_pm) comparisons.push('golovi IZNAD proseka');
-        else comparisons.push('golovi ISPOD proseka');
-        if (s.avg_boost > PRO_AVERAGES.avg_boost) comparisons.push('boost IZNAD proseka');
-        else comparisons.push('boost ISPOD proseka');
-        if (s.zero_boost_pct < PRO_AVERAGES.zero_boost_pct) comparisons.push('odličan boost management');
-        else comparisons.push('potrebno bolje čuvanje boosta');
-        
-        playerContext += `${name}: ${role} - ${comparisons.join(', ')}\n`;
-    });
+    const goals = prows.map(r => getPath(r,'core.goals') || 0);
+    const assists = prows.map(r => getPath(r,'core.assists') || 0);
+    const saves = prows.map(r => getPath(r,'core.saves') || 0);
+    const shots = prows.map(r => getPath(r,'core.shots') || 0);
+    const boostAvg = prows.map(r => getPath(r,'boost.avg_amount') || 0);
+    const zeroBoost = prows.map(r => getPath(r,'boost.percent_zero_boost') || 0);
+    const behindBall = prows.map(r => getPath(r,'positioning.percent_behind_ball') || 0);
+    const demosInflicted = prows.map(r => getPath(r,'demo.inflicted') || 0);
+    const demosTaken = prows.map(r => getPath(r,'demo.taken') || 0);
 
-    const prompt = `Ti si vrhunski Rocket League analitičar sa 10 godina iskustva.
-
-KONTEKST O IGRAČIMA:
-${playerContext}
-
-PODACI:
-${Object.entries(data.players).map(([name, s]) => `
-${name}: ${s.matches} mečeva, ${s.winrate.toFixed(0)}% win, 
-${s.goals_pm.toFixed(2)} golova/meč, ${s.assists_pm.toFixed(2)} asistencije/meč,
-${s.saves_pm.toFixed(2)} odbrana/meč, ${s.shots_pm.toFixed(2)} šuteva/meč,
-${s.avg_boost.toFixed(0)}% boost, ${s.zero_boost_pct.toFixed(1)}% na 0,
-${s.behind_ball_pct.toFixed(0)}% iza lopte, ${s.defensive_pct.toFixed(0)}% u odbrani
-`).join('\n')}
-
-TIMSKA STATISTIKA:
-- Ukupno mečeva: ${data.teamStats.total_matches}
-- Golovi za: ${data.teamStats.total_goals}, Golovi protiv: ${data.teamStats.total_goals_against}
-- Gol razlika: ${data.teamStats.total_goals - data.teamStats.total_goals_against}
-
-${history}
-
-FOKUS OVE ANALIZE: ${focus.emoji} ${focus.name} - ${focus.desc}
-
-ZAHTEV:
-Daj RAZNOVRSNE, KONKRETNE savete koji se fokusiraju na ${focus.name}.
-
-1. SAŽETAK: 2-3 rečenice o ukupnom performansu
-2. SNAGE: 3 konkretne stavke (sa brojkama)
-3. SLABOSTI: 3 konkretne stavke (sa brojkama)
-4. SAVETI: 5 RAZNOVRSNIH saveta (fokus na ${focus.name}, NE ponavljaj prethodne!)
-5. TRENING: 3 vežbe za ${focus.name}
-
-Saveti moraju biti SPECIFIČNI, AKCIONI i RAZNOVRSNI.`;
-
-    try {
-        const response = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'llama3-70b-8192',
-                messages: [
-                    {
-                        role: 'system',
-                        content: `Ti si vrhunski Rocket League analitičar. Daješ konkretne, raznovrsne savete.
-                        Uvek se fokusiraš na zadatu temu. Izbegavaš ponavljanje prethodnih saveta.
-                        Koristiš srpski jezik.`
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                temperature: 0.8,
-                max_tokens: 2500
-            })
-        });
-
-        if (!response.ok) {
-            console.error('Worker error:', response.status);
-            return null;
-        }
-
-        const result = await response.json();
-        if (result.error) {
-            console.error('Groq API error:', result.error);
-            return null;
-        }
-        
-        if (result.choices && result.choices[0] && result.choices[0].message) {
-            const analysis = parsePremiumAnalysis(result.choices[0].message.content);
-            if (analysis) {
-                // Sačuvaj u istoriju
-                saveToHistory(analysis, focus.name);
-                analysis._focus = focus;
-            }
-            return analysis;
-        }
-        return null;
-
-    } catch (error) {
-        console.error('Greška pri pozivanju Worker-a:', error);
-        return null;
-    }
-}
-
-function parsePremiumAnalysis(text) {
-    const sections = {
-        summary: '',
-        strengths: [],
-        weaknesses: [],
-        players: '',
-        tips: [],
-        training: []
+    players[p] = {
+      matches: prows.length,
+      winrate: Math.round((prows.filter(r => r.win).length / prows.length) * 100),
+      goals_pm: +avg(goals).toFixed(2),
+      assists_pm: +avg(assists).toFixed(2),
+      saves_pm: +avg(saves).toFixed(2),
+      shots_pm: +avg(shots).toFixed(2),
+      avg_boost: Math.round(avg(boostAvg)),
+      zero_boost_pct: +avg(zeroBoost).toFixed(1),
+      behind_ball_pct: Math.round(avg(behindBall)),
+      demos_pm: +avg(demosInflicted).toFixed(2),
+      demos_taken_pm: +avg(demosTaken).toFixed(2),
+      mvp_count: prows.filter(r => getPath(r,'core.mvp')).length,
+      best_goals_in_match: Math.max(0, ...goals),
     };
-    
-    let current = 'summary';
-    const lines = text.split('\n');
-    
-    for (const line of lines) {
-        const clean = line.trim();
-        if (!clean) continue;
-        
-        if (clean.includes('SAŽETAK') || clean.includes('SUMMARY')) {
-            current = 'summary';
-            continue;
-        } else if (clean.includes('SNAGE') || clean.includes('STRENGTHS')) {
-            current = 'strengths';
-            continue;
-        } else if (clean.includes('SLABOSTI') || clean.includes('WEAKNESSES')) {
-            current = 'weaknesses';
-            continue;
-        } else if (clean.includes('ANALIZA PO IGRAČU') || clean.includes('PLAYER ANALYSIS')) {
-            current = 'players';
-            continue;
-        } else if (clean.includes('SAVETI') || clean.includes('TIPS')) {
-            current = 'tips';
-            continue;
-        } else if (clean.includes('TRENING') || clean.includes('TRAINING')) {
-            current = 'training';
-            continue;
-        }
-        
-        const textLine = clean.replace(/^[#*\->\s]+/, '').trim();
-        if (!textLine || textLine.length < 3) continue;
-        
-        if (current === 'summary') {
-            sections.summary += (sections.summary ? ' ' : '') + textLine;
-        } else if (current === 'strengths' && textLine.length > 5) {
-            sections.strengths.push(textLine);
-        } else if (current === 'weaknesses' && textLine.length > 5) {
-            sections.weaknesses.push(textLine);
-        } else if (current === 'players') {
-            sections.players += (sections.players ? '\n' : '') + textLine;
-        } else if (current === 'tips' && textLine.length > 5) {
-            sections.tips.push(textLine);
-        } else if (current === 'training' && textLine.length > 5) {
-            sections.training.push(textLine);
-        }
-    }
-    
-    if (!sections.summary && !sections.strengths.length) {
-        return null;
-    }
-    return sections;
+  });
+
+  const teamStats = {
+    total_matches: new Set(rows.map(r => r.replay_id)).size,
+    total_goals: rows.reduce((s,r) => s + (getPath(r,'core.goals') || 0), 0),
+    total_wins: rows.filter(r => r.win).length,
+    mode: modeFilter,
+  };
+
+  return { players, teamStats };
 }
 
-function generateDetailedFallback(data) {
-    const players = Object.entries(data.players || {});
-    if (!players.length) {
-        return {
-            summary: '📊 Nema dovoljno podataka za analizu. Potrebno je najmanje 3 meča po igraču.',
-            strengths: ['Odigraj više mečeva za bolju analizu'],
-            weaknesses: ['Nema dovoljno podataka'],
-            players: 'Nema dovoljno podataka za analizu po igraču.',
-            tips: ['Odigraj najmanje 5 mečeva po igraču za smislenu analizu'],
-            training: ['Počni sa osnovnim trening pack-ovima']
-        };
-    }
-    
-    const avgGoals = players.reduce((s, [_,p]) => s + (p.goals_pm || 0), 0) / players.length;
-    const avgAssists = players.reduce((s, [_,p]) => s + (p.assists_pm || 0), 0) / players.length;
-    const avgBoost = players.reduce((s, [_,p]) => s + (p.avg_boost || 0), 0) / players.length;
-    const bestWinrate = players.reduce((a,b) => (a[1].winrate || 0) > (b[1].winrate || 0) ? a : b);
-    const bestGoals = players.reduce((a,b) => (a[1].goals_pm || 0) > (b[1].goals_pm || 0) ? a : b);
-    const bestAssists = players.reduce((a,b) => (a[1].assists_pm || 0) > (b[1].assists_pm || 0) ? a : b);
-    const bestSaves = players.reduce((a,b) => (a[1].saves_pm || 0) > (b[1].saves_pm || 0) ? a : b);
-    const worstBoost = players.reduce((a,b) => (a[1].avg_boost || 0) < (b[1].avg_boost || 0) ? a : b);
-    const worstZeroBoost = players.reduce((a,b) => (a[1].zero_boost_pct || 0) > (b[1].zero_boost_pct || 0) ? a : b);
-    
-    const playerAnalysis = players.map(([name, s]) => {
-        const style = (s.goals_pm || 0) > 1.5 ? 'ofanzivni' : 
-                     (s.saves_pm || 0) > 2 ? 'defanzivni' : 'svestrani';
-        const strengths = [];
-        const weaknesses = [];
-        if ((s.goals_pm || 0) > 1.2) strengths.push('dobar strelac');
-        if ((s.assists_pm || 0) > 0.8) strengths.push('odličan asistent');
-        if ((s.saves_pm || 0) > 1.5) strengths.push('solidan u odbrani');
-        if ((s.avg_boost || 0) > 70) strengths.push('dobar boost management');
-        if ((s.winrate || 0) > 55) strengths.push('pobednički mentalitet');
-        if ((s.goals_pm || 0) < 0.8) weaknesses.push('treba više da šutira');
-        if ((s.assists_pm || 0) < 0.5) weaknesses.push('treba više da asistira');
-        if ((s.avg_boost || 0) < 60) weaknesses.push('loš boost management');
-        if ((s.zero_boost_pct || 0) > 15) weaknesses.push('često ostaje bez boosta');
-        return `${name} (${style}):
-• ${s.matches || 0} mečeva, ${(s.winrate || 0).toFixed(0)}% win rate
-• ${(s.goals_pm || 0).toFixed(2)} golova/meč, ${(s.assists_pm || 0).toFixed(2)} asistencije/meč
-• ${(s.saves_pm || 0).toFixed(2)} odbrana/meč, ${(s.shots_pm || 0).toFixed(2)} šuteva/meč
-• ${(s.avg_boost || 0).toFixed(0)}% prosečan boost, ${(s.zero_boost_pct || 0).toFixed(1)}% na 0
-• Prednosti: ${strengths.join(', ') || 'još uvek se razvija'}
-• Za poboljšanje: ${weaknesses.join(', ') || 'odličan u svemu!'}`;
-    }).join('\n\n');
-    
+async function callGroqAPI(data){
+  const systemPrompt = `Ti si vrhunski Rocket League analitičar. Analiziraš statistiku i daješ
+konkretne, korisne uvide na srpskom jeziku, uvek potkrepljene brojkama iz podataka koje dobiješ.
+Odgovaraš ISKLJUČIVO validnim JSON objektom, bez markdown code fence-ova (bez \`\`\`), bez ijedne
+reči teksta pre ili posle JSON-a. Struktura mora biti tačno:
+{"summary":"3-4 rečenice sažetka","strengths":["stavka 1","stavka 2","..."],"weaknesses":["stavka 1","..."],"players":"analiza po igraču, više pasusa razdvojenih sa \\n\\n","tips":["savet 1","..."],"training":["preporuka 1","..."]}
+Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i sa brojkom.`;
+
+  const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(data)}`;
+
+  const response = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'llama3-70b-8192',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.6,
+      max_tokens: 2500
+    })
+  });
+
+  if(!response.ok) throw new Error(`Worker HTTP ${response.status}`);
+  const result = await response.json();
+  if(result.error) throw new Error(result.error?.message || 'Groq API greška');
+
+  const raw = result?.choices?.[0]?.message?.content;
+  if(!raw) throw new Error('Prazan odgovor od modela');
+
+  // Model bi trebalo da vrati cist JSON, ali za svaki slucaj skidamo
+  // eventualne ```json ograde ako ih model ipak doda.
+  const cleaned = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/,'').replace(/```\s*$/,'');
+  const parsed = JSON.parse(cleaned); // ako ovo puca, hvata se u pozivaocu -> fallback
+
+  const required = ['summary','strengths','weaknesses','tips'];
+  if(!required.every(k => k in parsed)) throw new Error('Odgovor modela nema sva ocekivana polja');
+
+  parsed.strengths = parsed.strengths || [];
+  parsed.weaknesses = parsed.weaknesses || [];
+  parsed.tips = parsed.tips || [];
+  parsed.training = parsed.training || [];
+  parsed.players = parsed.players || '';
+  return parsed;
+}
+
+function generateDetailedFallback(data){
+  const players = Object.entries(data.players || {});
+  if(!players.length){
     return {
-        summary: `📊 Tim je odigrao ${data.teamStats?.total_matches || 0} mečeva sa gol razlikom ${(data.teamStats?.total_goals || 0) - (data.teamStats?.total_goals_against || 0)}. Prosečno ${avgGoals.toFixed(2)} golova po meču uz ${avgAssists.toFixed(2)} asistencija. Najbolji win rate ima ${bestWinrate[0]} sa ${(bestWinrate[1].winrate || 0).toFixed(0)}%.`,
-        strengths: [
-            `🎯 ${bestGoals[0]} je najbolji strelac (${(bestGoals[1].goals_pm || 0).toFixed(2)} golova/meč)`,
-            `🎯 ${bestAssists[0]} je najbolji asistent (${(bestAssists[1].assists_pm || 0).toFixed(2)} asistencije/meč)`,
-            `🛡️ ${bestSaves[0]} je najbolji u odbrani (${(bestSaves[1].saves_pm || 0).toFixed(2)} odbrana/meč)`,
-            `🏆 ${bestWinrate[0]} ima najbolji win rate (${(bestWinrate[1].winrate || 0).toFixed(0)}%)`
-        ],
-        weaknesses: [
-            `⚡ ${worstBoost[0]} ima najniži prosečan boost (${(worstBoost[1].avg_boost || 0).toFixed(0)}%)`,
-            `🔄 ${worstZeroBoost[0]} je najčešće na 0 boosta (${(worstZeroBoost[1].zero_boost_pct || 0).toFixed(1)}% vremena)`,
-            `📊 Tim prima prosečno ${((data.teamStats?.total_goals_against || 0) / (data.teamStats?.total_matches || 1)).toFixed(2)} golova po meču`,
-            `🤝 Samo ${avgAssists.toFixed(2)} asistencija po meču - potrebno više timske igre`
-        ],
-        players: playerAnalysis,
-        tips: [
-            `💡 Povećajte broj asistencija - trenutno ${avgAssists.toFixed(2)}/meč, ciljajte na 2.0+`,
-            `💡 ${worstBoost[0]} - vežbaj boost management, drži boost iznad 40%`,
-            `💡 Više komunicirajte na terenu - pozicije i rotacije su ključne`,
-            `💡 Vežbajte preciznost šuteva`
-        ],
-        training: [
-            `🎯 Training pack: "Shooting Consistency" - za preciznost`,
-            `🎯 Training pack: "Passing & Awareness" - za asistencije`,
-            `🎯 Vežbajte rotacije u 2v2 sa fokusom na pozicioniranje`,
-            `🎯 Boost management - igraj bez boosta da naučiš da ga čuvaš`
-        ]
+      summary: 'Nema dovoljno podataka za analizu. Potrebno je najmanje 2 meča po igraču u izabranom periodu.',
+      strengths: [], weaknesses: [],
+      players: 'Nema dovoljno podataka.',
+      tips: ['Odigrajte još nekoliko mečeva pa probajte ponovo.'],
+      training: [],
     };
+  }
+
+  const bestWinrate = players.reduce((a,b) => (b[1].winrate||0) > (a[1].winrate||0) ? b : a);
+  const bestGoals = players.reduce((a,b) => (b[1].goals_pm||0) > (a[1].goals_pm||0) ? b : a);
+  const bestAssists = players.reduce((a,b) => (b[1].assists_pm||0) > (a[1].assists_pm||0) ? b : a);
+  const bestSaves = players.reduce((a,b) => (b[1].saves_pm||0) > (a[1].saves_pm||0) ? b : a);
+  const worstBoost = players.reduce((a,b) => (b[1].avg_boost||0) < (a[1].avg_boost||0) ? b : a);
+  const worstZero = players.reduce((a,b) => (b[1].zero_boost_pct||0) > (a[1].zero_boost_pct||0) ? b : a);
+
+  const playerAnalysis = players.map(([name, s]) => {
+    const style = s.goals_pm > 1.2 ? 'ofanzivan' : s.saves_pm > 1.5 ? 'defanzivan' : 'svestran';
+    return `${name} (${style}): ${s.matches} mečeva, ${s.winrate}% win rate, ${s.goals_pm} gol/meč, ${s.assists_pm} asist/meč, ${s.saves_pm} odbrana/meč, ${s.avg_boost}% prosečan boost.`;
+  }).join('\n\n');
+
+  return {
+    summary: `Odigrano ${data.teamStats?.total_matches || 0} mečeva. Najbolji win rate ima ${bestWinrate[0]} (${bestWinrate[1].winrate}%). Ovo je automatska analiza po pravilima (AI trenutno nije dostupan).`,
+    strengths: [
+      `${bestGoals[0]} je najbolji strelac (${bestGoals[1].goals_pm} gol/meč)`,
+      `${bestAssists[0]} je najbolji asistent (${bestAssists[1].assists_pm} asist/meč)`,
+      `${bestSaves[0]} je najbolji u odbrani (${bestSaves[1].saves_pm} odbrana/meč)`,
+      `${bestWinrate[0]} ima najbolji win rate (${bestWinrate[1].winrate}%)`,
+    ],
+    weaknesses: [
+      `${worstBoost[0]} ima najniži prosečan boost (${worstBoost[1].avg_boost}%)`,
+      `${worstZero[0]} najčešće ostaje na 0 boosta (${worstZero[1].zero_boost_pct}% vremena)`,
+    ],
+    players: playerAnalysis,
+    tips: [
+      `${worstBoost[0]} — radi na boost menadžmentu, cilj je da retko padneš na 0.`,
+      'Pratite rotacije kroz "Pozicioniranje" tab za konkretne brojke po meču.',
+    ],
+    training: [],
+  };
 }
 
-function prepareDetailedData(rows) {
-    const players = {};
-    const allPlayers = [...activePlayers];
-    allPlayers.forEach(p => {
-        const prows = rows.filter(r => r.player === p);
-        if (prows.length < 2) return;
-        const stats = {
-            matches: prows.length,
-            wins: prows.filter(r => r.win).length,
-            goals: prows.map(r => getPath(r, 'core.goals') || 0),
-            assists: prows.map(r => getPath(r, 'core.assists') || 0),
-            saves: prows.map(r => getPath(r, 'core.saves') || 0),
-            shots: prows.map(r => getPath(r, 'core.shots') || 0),
-            score: prows.map(r => getPath(r, 'core.score') || 0),
-            shooting_pct: prows.map(r => getPath(r, 'core.shooting_percentage') || 0),
-            bpm: prows.map(r => getPath(r, 'boost.bpm') || 0),
-            avg_boost: prows.map(r => getPath(r, 'boost.avg_amount') || 0),
-            zero_boost_pct: prows.map(r => getPath(r, 'boost.percent_zero_boost') || 0),
-            full_boost_pct: prows.map(r => getPath(r, 'boost.percent_full_boost') || 0),
-            behind_ball: prows.map(r => getPath(r, 'positioning.percent_behind_ball') || 0),
-            defensive: prows.map(r => getPath(r, 'positioning.percent_defensive_third') || 0),
-            offensive: prows.map(r => getPath(r, 'positioning.percent_offensive_third') || 0),
-            avg_speed: prows.map(r => getPath(r, 'movement.avg_speed') || 0),
-            supersonic: prows.map(r => getPath(r, 'movement.percent_supersonic_speed') || 0),
-            demos_inflicted: prows.map(r => getPath(r, 'demo.inflicted') || 0),
-            demos_taken: prows.map(r => getPath(r, 'demo.taken') || 0),
-            mvp: prows.filter(r => getPath(r, 'core.mvp')).length,
-        };
-        const avg = arr => arr.length ? arr.reduce((a,b) => a + b, 0) / arr.length : 0;
-        players[p] = {
-            matches: stats.matches,
-            winrate: (stats.wins / stats.matches * 100),
-            goals_pm: avg(stats.goals),
-            assists_pm: avg(stats.assists),
-            saves_pm: avg(stats.saves),
-            shots_pm: avg(stats.shots),
-            score_pm: avg(stats.score),
-            shooting_pct: avg(stats.shooting_pct),
-            bpm: avg(stats.bpm),
-            avg_boost: avg(stats.avg_boost),
-            zero_boost_pct: avg(stats.zero_boost_pct),
-            full_boost_pct: avg(stats.full_boost_pct),
-            behind_ball_pct: avg(stats.behind_ball),
-            defensive_pct: avg(stats.defensive),
-            offensive_pct: avg(stats.offensive),
-            avg_speed: avg(stats.avg_speed),
-            supersonic_pct: avg(stats.supersonic),
-            demos_pm: avg(stats.demos_inflicted),
-            demos_taken_pm: avg(stats.demos_taken),
-            mvp_rate: (stats.mvp / stats.matches * 100),
-            best_score: Math.max(0, ...stats.score),
-            best_goals: Math.max(0, ...stats.goals),
-        };
-    });
-    const teamStats = {
-        total_matches: new Set(rows.map(r => r.replay_id)).size,
-        total_goals: rows.reduce((s, r) => s + (getPath(r, 'core.goals') || 0), 0),
-        total_goals_against: rows.reduce((s, r) => s + (r.opponent_goals || 0), 0),
-        total_wins: rows.filter(r => r.win).length,
-        total_mvps: rows.filter(r => getPath(r, 'core.mvp')).length,
-    };
-    return { players, teamStats };
-}
+async function analyzeWithAI(rows){
+  const btn = $('#aiAnalyzeBtn');
+  if(!btn) return;
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
+  btn.disabled = true;
 
-async function analyzeWithAIPremium(rows) {
-    const btn = document.getElementById('aiAnalyzePremiumBtn');
-    if (!btn) return;
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
-    btn.disabled = true;
-    try {
-        const data = prepareDetailedData(rows);
-        let analysis = null;
-        try {
-            analysis = await callGroqAPI(data);
-        } catch(e) {
-            console.log('Worker error, koristim fallback:', e);
-        }
-        if (!analysis) {
-            analysis = generateDetailedFallback(data);
-            analysis._focus = { name: 'Ugrađena analiza', emoji: '📊' };
-        }
-        showPremiumAnalysisModal(analysis, data);
-    } catch(e) {
-        alert('Greška pri analizi: ' + e.message);
-    } finally {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
+  try{
+    const data = prepareDetailedData(rows);
+    const cacheKey = aiCacheKey(rows);
+
+    if(aiAnalysisCache.has(cacheKey)){
+      const cached = aiAnalysisCache.get(cacheKey);
+      showAIAnalysisModal(cached.analysis, data, cached.usedFallback);
+      return;
     }
+
+    let analysis = null;
+    let usedFallback = false;
+    try{
+      analysis = await callGroqAPI(data);
+    }catch(e){
+      console.warn('AI Worker nije uspeo, koristim fallback:', e.message);
+    }
+    if(!analysis){
+      analysis = generateDetailedFallback(data);
+      usedFallback = true;
+    }
+
+    aiAnalysisCache.set(cacheKey, { analysis, usedFallback });
+    showAIAnalysisModal(analysis, data, usedFallback);
+  }catch(e){
+    alert('Greška pri analizi: ' + e.message);
+  }finally{
+    btn.innerHTML = originalHTML;
+    btn.disabled = false;
+  }
 }
 
-function showPremiumAnalysisModal(analysis, data) {
-    let modal = document.getElementById('premiumAnalysisModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'premiumAnalysisModal';
-        modal.className = 'modal-backdrop';
-        document.body.appendChild(modal);
-    }
-    
-    const focus = analysis._focus || { name: 'Analiza', emoji: '🧠' };
-    const historyCount = JSON.parse(localStorage.getItem('analysis_history') || '[]').length;
-    
-    modal.innerHTML = `
-    <div class="modal" style="max-width: 950px; max-height: 90vh; overflow-y: auto; padding: 0; background: transparent;">
-        
-        <div style="
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            padding: 28px 32px 20px;
-            border-radius: 16px 16px 0 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        ">
-            <button class="modal-close" id="premiumAnalysisClose" style="color: white; font-size: 24px; opacity: 0.7; float:right; background:none; border:none; cursor:pointer;">&times;</button>
-            
-            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                <div style="
-                    width: 56px; height: 56px;
-                    background: linear-gradient(135deg, #7C3AED, #4F46E5);
-                    border-radius: 14px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 28px;
-                    box-shadow: 0 8px 30px rgba(124,58,237,0.4);
-                ">${focus.emoji}</div>
-                <div style="flex:1;">
-                    <h3 style="margin: 0; font-family: 'Rajdhani', sans-serif; font-size: 24px; color: white;">
-                        RTS Analiza
-                    </h3>
-                    <div style="display: flex; gap: 12px; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.6); flex-wrap: wrap;">
-                        <span>📊 ${data?.teamStats?.total_matches || 0} mečeva</span>
-                        <span>🔒 Platinum Oplata</span>
-                        <span>⚡ ${new Date().toLocaleTimeString()}</span>
-                        <span class="focus-badge" style="background:rgba(124,58,237,0.3); color:#A78BFA;">🎯 ${focus.name}</span>
-                        ${historyCount > 0 ? `<span class="history-badge">📚 ${historyCount} analiza u istoriji</span>` : ''}
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 16px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
-                <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #7C3AED, #4F46E5, #3DA9FC); animation: shimmer 2s infinite;"></div>
-            </div>
-        </div>
-        
-        <div style="background: var(--surface); padding: 24px 32px 32px; border-radius: 0 0 16px 16px;">
-            
-            <div class="analysis-section" style="border-left: 4px solid #7C3AED; background: rgba(124,58,237,0.05); margin-bottom: 20px;">
-                <h4 style="color: #7C3AED; display: flex; justify-content: space-between; align-items: center;">
-                    <span>📊 SAŽETAK</span>
-                    <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">
-                        ${analysis.strengths.length + analysis.weaknesses.length} tačaka
-                    </span>
-                </h4>
-                <p style="margin: 0; color: var(--text); font-size: 14px; line-height: 1.8;">${analysis.summary || 'Nema sažetka'}</p>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                <div class="analysis-section" style="border-left: 4px solid var(--green); background: rgba(74,222,128,0.05);">
-                    <h4 style="color: var(--green); display: flex; align-items: center; gap: 8px;">
-                        ✅ SNAGE
-                        <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">${analysis.strengths.length}</span>
-                    </h4>
-                    <ul>
-                        ${analysis.strengths.map(s => `<li>${s}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="analysis-section" style="border-left: 4px solid var(--loss); background: rgba(248,113,113,0.05);">
-                    <h4 style="color: var(--loss); display: flex; align-items: center; gap: 8px;">
-                        ⚠️ SLABOSTI
-                        <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">${analysis.weaknesses.length}</span>
-                    </h4>
-                    <ul>
-                        ${analysis.weaknesses.map(s => `<li>${s}</li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-            
-            ${analysis.players ? `
-            <div class="analysis-section" style="border-left: 4px solid var(--blue); margin-bottom: 20px;">
-                <h4 style="color: var(--blue); display: flex; align-items: center; gap: 8px;">
-                    👤 ANALIZA PO IGRAČU
-                    <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">${Object.keys(data?.players || {}).length} igrača</span>
-                </h4>
-                <div style="white-space: pre-wrap; font-size: 13px; line-height: 1.8; color: var(--text-muted);">
-                    ${analysis.players}
-                </div>
-            </div>
-            ` : ''}
-            
-            <div class="analysis-section" style="border-left: 4px solid var(--amber); background: rgba(251,191,36,0.05); margin-bottom: 20px;">
-                <h4 style="color: var(--amber); display: flex; align-items: center; gap: 8px;">
-                    💡 KONKRETNI SAVETI
-                    <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">
-                        ${analysis.tips.length} saveta • fokus: ${focus.name}
-                    </span>
-                </h4>
-                <ul>
-                    ${analysis.tips.map(s => `<li>${s}</li>`).join('')}
-                </ul>
-            </div>
-            
-            ${analysis.training && analysis.training.length ? `
-            <div class="analysis-section" style="border-left: 4px solid #3DA9FC; background: rgba(61,169,252,0.05);">
-                <h4 style="color: #3DA9FC; display: flex; align-items: center; gap: 8px;">
-                    🎯 TRENING PREPORUKE
-                    <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">${analysis.training.length}</span>
-                </h4>
-                <ul>
-                    ${analysis.training.map(s => `<li>${s}</li>`).join('')}
-                </ul>
-            </div>
-            ` : ''}
-            
-            <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); flex-wrap: wrap;">
-                <button onclick="exportAnalysis()" style="
-                    background: linear-gradient(135deg, #7C3AED, #4F46E5);
-                    border: none;
-                    color: white;
-                    padding: 10px 24px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-size: 13px;
-                    font-weight: 600;
-                    font-family: 'Inter', sans-serif;
-                    transition: all 0.3s;
-                ">
-                    📥 Preuzmi analizu
-                </button>
-                <button onclick="shareAnalysis()" style="
-                    background: var(--surface-2);
-                    border: 1px solid var(--border);
-                    color: var(--text);
-                    padding: 10px 24px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-size: 13px;
-                    font-family: 'Inter', sans-serif;
-                    transition: all 0.3s;
-                ">
-                    📤 Podeli
-                </button>
-                <button onclick="clearHistory()" style="
-                    background: rgba(248,113,113,0.1);
-                    border: 1px solid rgba(248,113,113,0.3);
-                    color: var(--loss);
-                    padding: 10px 24px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-size: 12px;
-                    font-family: 'Inter', sans-serif;
-                    transition: all 0.3s;
-                ">
-                    🗑️ Resetuj istoriju
-                </button>
-                <button onclick="document.getElementById('premiumAnalysisModal').classList.remove('open')" style="
-                    background: none;
-                    border: 1px solid var(--border);
-                    color: var(--text-muted);
-                    padding: 10px 24px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-size: 13px;
-                    font-family: 'Inter', sans-serif;
-                    margin-left: auto;
-                ">
-                    Zatvori
-                </button>
-            </div>
-        </div>
+function showAIAnalysisModal(analysis, data, usedFallback){
+  const modal = $('#aiModalContent');
+  modal.innerHTML = `
+    <button class="modal-close" id="aiModalClose">&times;</button>
+    <h3 style="color:#7C3AED;">🧠 AI Analitičar</h3>
+    <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
+    ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
+
+    <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
+      <h4 style="color:#7C3AED;">📊 Sažetak</h4>
+      <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${analysis.summary || ''}</p>
     </div>
-    `;
-    
-    modal.querySelector('#premiumAnalysisClose').addEventListener('click', () => {
-        modal.classList.remove('open');
-    });
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('open');
-    });
-    
-    window.shareAnalysis = async function() {
-        const text = document.querySelector('.analysis-section p')?.innerText || '';
-        if (navigator.share) {
-            await navigator.share({
-                title: 'Rocket League Analiza',
-                text: text
-            });
-        } else {
-            await navigator.clipboard.writeText(text);
-            alert('📋 Analiza je kopirana u clipboard!');
-        }
-    };
-    
-    window.clearHistory = function() {
-        if (confirm('🧹 Da li želiš da obrišeš svu istoriju analiza?\n\nAI će onda ponovo početi ispočetka sa savetima.')) {
-            localStorage.removeItem('analysis_history');
-            alert('✅ Istorija je obrisana! Sledeća analiza će biti sveža.');
-            document.getElementById('premiumAnalysisModal').classList.remove('open');
-        }
-    };
-    
-    window.exportAnalysis = function() {
-        const text = `
-🧠 AI ANALIZA - ROCKET LEAGUE
-${'='.repeat(50)}
 
-📊 SAŽETAK
-${analysis.summary}
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <div class="analysis-section" style="border-left:3px solid var(--green);">
+        <h4 style="color:var(--green);">✅ Snage</h4>
+        <ul>${(analysis.strengths||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+      <div class="analysis-section" style="border-left:3px solid var(--loss);">
+        <h4 style="color:var(--loss);">⚠️ Slabosti</h4>
+        <ul>${(analysis.weaknesses||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    </div>
 
-✅ SNAGE
-${analysis.strengths.map(s => `• ${s}`).join('\n')}
+    ${analysis.players ? `
+    <div class="analysis-section" style="border-left:3px solid var(--blue);">
+      <h4 style="color:var(--blue);">👤 Analiza po igraču</h4>
+      <div style="white-space:pre-wrap; font-size:13px; line-height:1.8; color:var(--text-muted);">${analysis.players}</div>
+    </div>` : ''}
 
-⚠️ SLABOSTI
-${analysis.weaknesses.map(s => `• ${s}`).join('\n')}
+    <div class="analysis-section" style="border-left:3px solid var(--amber);">
+      <h4 style="color:var(--amber);">💡 Konkretni saveti</h4>
+      <ul>${(analysis.tips||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>
 
-👤 ANALIZA PO IGRAČU
-${analysis.players}
-
-💡 SAVETI
-${analysis.tips.map(s => `• ${s}`).join('\n')}
-
-🎯 TRENING PREPORUKE
-${analysis.training.map(s => `• ${s}`).join('\n')}
-
-${'='.repeat(50)}
-Fokus: ${focus.name}
-Generisano: ${new Date().toLocaleString()}
-        `;
-        const blob = new Blob([text], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `analiza_${new Date().toISOString().slice(0,10)}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
-    };
-    
-    modal.classList.add('open');
+    ${(analysis.training||[]).length ? `
+    <div class="analysis-section" style="border-left:3px solid var(--blue);">
+      <h4 style="color:var(--blue);">🎯 Trening preporuke</h4>
+      <ul>${analysis.training.map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>` : ''}
+  `;
+  $('#aiModalClose').addEventListener('click', () => $('#aiModalBackdrop').classList.remove('open'));
+  $('#aiModalBackdrop').classList.add('open');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('aiAnalyzePremiumBtn');
-    if (btn) {
-        btn.addEventListener('click', () => {
-            const rows = getFiltered();
-            if (rows.length < 5) {
-                alert('📊 Potrebno je najmanje 5 mečeva za smislenu analizu.');
-                return;
-            }
-            analyzeWithAIPremium(rows);
-        });
-    }
+$('#aiAnalyzeBtn').addEventListener('click', () => {
+  const rows = getFiltered();
+  if(rows.length < 5){
+    alert('Potrebno je najmanje 5 mečeva u izabranom periodu za smislenu analizu.');
+    return;
+  }
+  analyzeWithAI(rows);
 });
 
 load();
