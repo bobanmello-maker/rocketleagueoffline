@@ -2185,7 +2185,7 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.textAlign = 'center';
     
     // Ako ima slike, ime je malo niže (zbog veće slike)
-    const nameY = photoImg ? H*0.52 : H*0.44;
+    const nameY = photoImg ? H*0.56 : H*0.48;
     ctx.font = "700 46px 'Rajdhani', sans-serif";
     ctx.fillStyle = '#fff';
     ctx.fillText(data.player.toUpperCase(), W/2, nameY);
@@ -2194,8 +2194,8 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.strokeStyle = hexToRgba('#ffffff', 0.35);
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(W*0.22, nameY + 38);
-    ctx.lineTo(W*0.78, nameY + 38);
+    ctx.moveTo(W*0.22, nameY + 48);
+    ctx.lineTo(W*0.78, nameY + 48);
     ctx.stroke();
 
     // ---- STATISTIKE ----
