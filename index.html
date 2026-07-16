@@ -2080,141 +2080,245 @@ function drawCarBackground(ctx, W, H, color) {
 }
 
 function drawPlayerCard(canvas, data, color, photoImg) {
-  const W = 600, H = 840, scaleF = 2;
-  canvas.width = W*scaleF; canvas.height = H*scaleF;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(scaleF, scaleF);
+  try {
+    const W = 600, H = 840, scaleF = 2;
+    canvas.width = W*scaleF; canvas.height = H*scaleF;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scaleF, scaleF);
 
-  roundRectPath(ctx, 0, 0, W, H, 28);
-  ctx.clip();
-
-  const bg = ctx.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0, hexToRgba(color, 0.9));
-  bg.addColorStop(0.45, '#141A24');
-  bg.addColorStop(1, '#05070B');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
-
-  ctx.save();
-  ctx.globalAlpha = 0.06;
-  ctx.fillStyle = '#fff';
-  for(let i=-2; i<6; i++){
-    ctx.save();
-    ctx.translate(i*140, 0);
-    ctx.rotate(-0.35);
-    ctx.fillRect(0, -100, 40, H+300);
-    ctx.restore();
-  }
-  ctx.restore();
-
-  if(!photoImg) {
-    drawCarBackground(ctx, W, H, color);
-  }
-
-  roundRectPath(ctx, 6, 6, W-12, H-12, 24);
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = hexToRgba(color, 0.9);
-  ctx.stroke();
-
-  if(photoImg) {
-    const cx = W/2, cy = H*0.32, r = 130;
-    
-    ctx.save();
-    ctx.beginPath(); 
-    ctx.arc(cx, cy, r, 0, Math.PI*2); 
-    ctx.closePath(); 
+    roundRectPath(ctx, 0, 0, W, H, 28);
     ctx.clip();
-    
-    const iw = photoImg.naturalWidth || photoImg.width, 
-          ih = photoImg.naturalHeight || photoImg.height;
-    const s = Math.max((r*2)/iw, (r*2)/ih);
-    const dw = iw*s, dh = ih*s;
-    
-    ctx.fillStyle = '#0B0E14';
-    ctx.fillRect(cx-r, cy-r, r*2, r*2);
-    ctx.drawImage(photoImg, cx-dw/2, cy-dh/2, dw, dh);
+
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, hexToRgba(color, 0.9));
+    bg.addColorStop(0.45, '#141A24');
+    bg.addColorStop(1, '#05070B');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.globalAlpha = 0.06;
+    ctx.fillStyle = '#fff';
+    for(let i=-2; i<6; i++){
+      ctx.save();
+      ctx.translate(i*140, 0);
+      ctx.rotate(-0.35);
+      ctx.fillRect(0, -100, 40, H+300);
+      ctx.restore();
+    }
     ctx.restore();
 
-    ctx.beginPath(); 
-    ctx.arc(cx, cy, r, 0, Math.PI*2);
-    ctx.lineWidth = 5; 
-    ctx.strokeStyle = hexToRgba('#ffffff', 0.9); 
+    // Ako NEMA slike, nacrtaj auto ikonu u pozadini
+    if(!photoImg) {
+      drawCarBackground(ctx, W, H, color);
+    }
+
+    roundRectPath(ctx, 6, 6, W-12, H-12, 24);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = hexToRgba(color, 0.9);
     ctx.stroke();
+
+    // ---- SLIKA (AVATAR) ----
+    if(photoImg) {
+      try {
+        const cx = W/2, cy = H*0.32, r = 130;
+        
+        ctx.save();
+        ctx.beginPath(); 
+        ctx.arc(cx, cy, r, 0, Math.PI*2); 
+        ctx.closePath(); 
+        ctx.clip();
+        
+        const iw = photoImg.naturalWidth || photoImg.width, 
+              ih = photoImg.naturalHeight || photoImg.height;
+        if(iw > 0 && ih > 0) {
+          const s = Math.max((r*2)/iw, (r*2)/ih);
+          const dw = iw*s, dh = ih*s;
+          
+          ctx.fillStyle = '#0B0E14';
+          ctx.fillRect(cx-r, cy-r, r*2, r*2);
+          ctx.drawImage(photoImg, cx-dw/2, cy-dh/2, dw, dh);
+        }
+        ctx.restore();
+
+        ctx.beginPath(); 
+        ctx.arc(cx, cy, r, 0, Math.PI*2);
+        ctx.lineWidth = 5; 
+        ctx.strokeStyle = hexToRgba('#ffffff', 0.9); 
+        ctx.stroke();
+        
+        ctx.beginPath(); 
+        ctx.arc(cx, cy, r+6, 0, Math.PI*2);
+        ctx.lineWidth = 2; 
+        ctx.strokeStyle = hexToRgba(color, 0.9); 
+        ctx.stroke();
+      } catch(e) {
+        // Ako slika ne može da se nacrta, samo preskoči
+        console.warn('Greška pri crtanju slike za', data.player, e);
+      }
+    }
+
+    // ---- OVR (levo gore) ----
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#fff';
+    ctx.font = "700 92px 'Rajdhani', sans-serif";
+    ctx.textAlign = 'left';
+    ctx.fillText(String(data.ovr), 40, 46);
+    ctx.font = "700 22px 'Rajdhani', sans-serif";
+    ctx.fillStyle = hexToRgba('#ffffff', 0.85);
+    ctx.fillText(data.position, 44, 140);
+
+    // ---- Monogram (desno gore) ----
+    const initials = data.player.slice(0,2).toUpperCase();
+    ctx.beginPath();
+    ctx.arc(W-72, 78, 42, 0, Math.PI*2);
+    ctx.fillStyle = hexToRgba(color, 0.35);
+    ctx.fill();
+    ctx.lineWidth = 3; 
+    ctx.strokeStyle = '#fff'; 
+    ctx.stroke();
+    ctx.font = "700 30px 'Rajdhani', sans-serif";
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.fillText(initials, W-72, 60);
+
+    // ---- IME IGRACA ----
+    ctx.textAlign = 'center';
+    const nameY = photoImg ? H*0.56 : H*0.48;
+    ctx.font = "700 46px 'Rajdhani', sans-serif";
+    ctx.fillStyle = '#fff';
+    ctx.fillText(data.player.toUpperCase(), W/2, nameY);
+
+    ctx.strokeStyle = hexToRgba('#ffffff', 0.35);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(W*0.22, nameY + 28); 
+    ctx.lineTo(W*0.78, nameY + 28);
+    ctx.stroke();
+
+    // ---- STATISTIKE ----
+    const statRows = [['GOL','ASI'],['ODB','BUST'],['WIN','UDA']];
+    const labelMap = { 
+      GOL:'GOL/MEČ', ASI:'ASI/MEČ', ODB:'ODB/MEČ', 
+      BUST:'BOOST', WIN:'WIN%', UDA:'UDARNOST' 
+    };
     
-    ctx.beginPath(); 
-    ctx.arc(cx, cy, r+6, 0, Math.PI*2);
-    ctx.lineWidth = 2; 
-    ctx.strokeStyle = hexToRgba(color, 0.9); 
-    ctx.stroke();
+    const startY = photoImg ? H*0.66 : H*0.58;
+    const rowH = 46;
+    const colX = [W*0.30, W*0.70];
+    
+    const statFontSize = photoImg ? 30 : 44;
+    const labelFontSize = photoImg ? 13 : 18;
+    
+    statRows.forEach((pair, ri) => {
+      pair.forEach((key, ci) => {
+        const x = colX[ci], y = startY + ri*rowH;
+        ctx.textAlign = 'center';
+        ctx.font = `700 ${statFontSize}px 'JetBrains Mono', monospace`;
+        ctx.fillStyle = '#fff';
+        ctx.fillText(String(data.attrs[key]), x - 24, y);
+        
+        ctx.font = `600 ${labelFontSize}px 'Inter', sans-serif`;
+        ctx.fillStyle = 'rgba(255,255,255,0.65)';
+        ctx.textAlign = 'left';
+        ctx.fillText(labelMap[key], x + 6, y + 7);
+      });
+    });
+
+    // ---- FOOTER ----
+    ctx.textAlign = 'center';
+    ctx.font = "600 14px 'Inter', sans-serif";
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.fillText(`${data.wins}P – ${data.losses}I  ·  ${data.matches} mečeva  ·  RL STATS`, W/2, H-40);
+    
+  } catch(e) {
+    console.error('Greška pri crtanju karte za', data?.player, e);
+    // Ako crtanje padne, nacrtaj praznu kartu sa porukom
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#141A24';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    ctx.font = "24px 'Inter', sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText('Greška pri učitavanju karte', canvas.width/2, canvas.height/2);
+  }
+}
+
+function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
+
+const playerImageCache = {};
+
+function loadPlayerImage(url) {
+  return new Promise((resolve) => {
+    if(!url) {
+      resolve(null);
+      return;
+    }
+    if(playerImageCache[url]) {
+      resolve(playerImageCache[url]);
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      playerImageCache[url] = img;
+      resolve(img);
+    };
+    img.onerror = () => {
+      console.warn('Ne mogu da učitam sliku:', url);
+      playerImageCache[url] = null;
+      resolve(null);
+    };
+    img.src = url;
+  });
+}
+
+async function renderCardsTab(rows){
+  const grid = $('#cardGrid');
+  if(!grid) return;
+  const ps = [...activePlayers].filter(p => rows.some(r=>r.player===p)).sort();
+  if(!ps.length){ 
+    grid.innerHTML = '<div class="empty">Nema izabranih igrača za ovaj filter</div>'; 
+    return; 
   }
 
-  ctx.textBaseline = 'top';
-  ctx.fillStyle = '#fff';
-  ctx.font = "700 92px 'Rajdhani', sans-serif";
-  ctx.textAlign = 'left';
-  ctx.fillText(String(data.ovr), 40, 46);
-  ctx.font = "700 22px 'Rajdhani', sans-serif";
-  ctx.fillStyle = hexToRgba('#ffffff', 0.85);
-  ctx.fillText(data.position, 44, 140);
+  grid.innerHTML = ps.map(p => `
+    <div class="rlcard-wrap">
+      <canvas id="rlcard-${cssSafe(p)}"></canvas>
+      <button class="rlcard-save" data-player="${p}">💾 Sačuvaj sliku</button>
+    </div>
+  `).join('');
 
-  const initials = data.player.slice(0,2).toUpperCase();
-  ctx.beginPath();
-  ctx.arc(W-72, 78, 42, 0, Math.PI*2);
-  ctx.fillStyle = hexToRgba(color, 0.35);
-  ctx.fill();
-  ctx.lineWidth = 3; 
-  ctx.strokeStyle = '#fff'; 
-  ctx.stroke();
-  ctx.font = "700 30px 'Rajdhani', sans-serif";
-  ctx.fillStyle = '#fff';
-  ctx.textAlign = 'center';
-  ctx.fillText(initials, W-72, 60);
+  // Renderuj svaku karticu
+  for(const p of ps){
+    const stats = computeCardStats(rows, p);
+    if(!stats) continue;
+    const canvas = document.getElementById('rlcard-' + cssSafe(p));
+    if(!canvas) continue;
+    
+    const imgUrl = PLAYER_IMAGE_OVERRIDES[p];
+    let photoImg = null;
+    if(imgUrl) {
+      photoImg = await loadPlayerImage(imgUrl);
+    }
+    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg);
+  }
 
-  ctx.textAlign = 'center';
-  const nameY = photoImg ? H*0.56 : H*0.48;
-  ctx.font = "700 46px 'Rajdhani', sans-serif";
-  ctx.fillStyle = '#fff';
-  ctx.fillText(data.player.toUpperCase(), W/2, nameY);
-
-  ctx.strokeStyle = hexToRgba('#ffffff', 0.35);
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(W*0.22, nameY + 28); 
-  ctx.lineTo(W*0.78, nameY + 28);
-  ctx.stroke();
-
-  const statRows = [['GOL','ASI'],['ODB','BUST'],['WIN','UDA']];
-  const labelMap = { 
-    GOL:'GOL/MEČ', ASI:'ASI/MEČ', ODB:'ODB/MEČ', 
-    BUST:'BOOST', WIN:'WIN%', UDA:'UDARNOST' 
-  };
-  
-  const startY = photoImg ? H*0.66 : H*0.58;
-  const rowH = 46;
-  const colX = [W*0.30, W*0.70];
-  
-  const statFontSize = photoImg ? 30 : 44;
-  const labelFontSize = photoImg ? 13 : 18;
-  
-  statRows.forEach((pair, ri) => {
-    pair.forEach((key, ci) => {
-      const x = colX[ci], y = startY + ri*rowH;
-      ctx.textAlign = 'center';
-      ctx.font = `700 ${statFontSize}px 'JetBrains Mono', monospace`;
-      ctx.fillStyle = '#fff';
-      ctx.fillText(String(data.attrs[key]), x - 24, y);
-      
-      ctx.font = `600 ${labelFontSize}px 'Inter', sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.65)';
-      ctx.textAlign = 'left';
-      ctx.fillText(labelMap[key], x + 6, y + 7);
+  grid.querySelectorAll('.rlcard-save').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.player;
+      const canvas = document.getElementById('rlcard-' + cssSafe(p));
+      if(!canvas) return;
+      try{
+        const link = document.createElement('a');
+        link.download = `rl-karta-${cssSafe(p)}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }catch(e){
+        alert('Ne mogu da snimim sliku - greška pri konverziji.');
+      }
     });
   });
-
-  ctx.textAlign = 'center';
-  ctx.font = "600 14px 'Inter', sans-serif";
-  ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.fillText(`${data.wins}P – ${data.losses}I  ·  ${data.matches} mečeva  ·  RL STATS`, W/2, H-40);
 }
 
 function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
