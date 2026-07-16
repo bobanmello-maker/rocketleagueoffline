@@ -2230,7 +2230,7 @@ function drawPlayerCard(canvas, data, color, photoImg) {
 
     // ---- FOOTER ----
     ctx.textAlign = 'center';
-    ctx.font = "600 14px 'Inter', sans-serif";
+    ctx.font = "800 16px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.fillText(`${data.wins}P – ${data.losses}I  ·  ${data.matches} mečeva  ·  RL STATS`, W/2, H-40);
     
@@ -2240,7 +2240,7 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.fillStyle = '#141A24';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#fff';
-    ctx.font = "24px 'Inter', sans-serif";
+    ctx.font = "26px 'Inter', sans-serif";
     ctx.textAlign = 'center';
     ctx.fillText('Greška pri učitavanju karte', canvas.width/2, canvas.height/2);
   }
