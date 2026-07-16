@@ -2069,7 +2069,33 @@ function drawCarSilhouette(ctx, cx, cy, scale, color){
   ctx.beginPath(); ctx.arc(52, 32, 16, 0, Math.PI*2); ctx.fill();
   ctx.restore();
 }
-
+function drawCarBackground(ctx, W, H, color) {
+  // Nacrtaj pozadinu sa automobilom (samo ako nema slike)
+  ctx.save();
+  
+  // Automobil kao watermark pozadina
+  ctx.globalAlpha = 0.07;
+  const cx = W/2, cy = H/2;
+  ctx.translate(cx, cy);
+  ctx.scale(3.5, 3.5);
+  
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.moveTo(-90, 20);
+  ctx.quadraticCurveTo(-95, -10, -55, -18);
+  ctx.quadraticCurveTo(-30, -42, 20, -40);
+  ctx.quadraticCurveTo(55, -38, 70, -14);
+  ctx.quadraticCurveTo(95, -8, 92, 18);
+  ctx.quadraticCurveTo(94, 30, 78, 30);
+  ctx.lineTo(-78, 30);
+  ctx.quadraticCurveTo(-92, 30, -90, 20);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath(); ctx.arc(-48, 32, 16, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(52, 32, 16, 0, Math.PI*2); ctx.fill();
+  
+  ctx.restore();
+}
 function drawPlayerCard(canvas, data, color, photoImg) {
   const W = 600, H = 840, scaleF = 2;
   canvas.width = W*scaleF; canvas.height = H*scaleF;
