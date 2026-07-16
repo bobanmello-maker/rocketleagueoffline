@@ -143,6 +143,85 @@ def extract_category(stats_dict, category, fields):
     return {f: src.get(f, 0) for f in fields}
 
 
+def build_goal_timeline(replay):
+    """Vrati listu golova u hronoloskom redosledu: [{'frame':int,'color':'blue'/'orange','player':str}, ...]
+    Ako replay nema 'goals' podatke (stariji format, ili API promena), vraca prazan niz -
+    sve sto zavisi od ovoga onda samo ne dobija te dodatne uvide, ne pada ceo skript."""
+    try:
+        player_to_color = {}
+        for color in ("blue", "orange"):
+            team = replay.get(color) or {}
+            for p in team.get("players", []):
+                name = p.get("name")
+                if name:
+                    player_to_color[name] = color
+
+        events = []
+        for g in (replay.get("goals") or []):
+            name = g.get("player_name")
+            color = player_to_color.get(name)
+            frame = g.get("frame")
+            if color is None or frame is None:
+                continue
+            events.append({"frame": frame, "color": color, "player": name})
+        events.sort(key=lambda e: e["frame"])
+        return events
+    except Exception:
+        return []
+
+
+def compute_match_narrative(goal_events, team_goals, opponent_goals, team_color, overtime):
+    """Racuna dodatne uvide za JEDAN tim (perspektiva 'team_color') u jednom mecu:
+    - scored_first: da li je NJIHOV tim dao prvi gol meca (None ako nema golova/podataka)
+    - max_deficit_overcome: najveci zaostatak koji su bili u minusu PRE nego sto su na kraju
+      pobedili (0 ako nisu pobedili, ili ako nikad nisu bili u minusu)
+    - max_lead_lost: najveca prednost koju su imali PRE nego sto su na kraju izgubili
+      (0 ako nisu izgubili, ili ako nikad nisu vodili)
+    - ot_goal_scorer: ime igraca koji je dao pobednicki gol u produzetku (samo ako je overtime=True)
+    Sve vraca 0/None ako nema goal_events podataka (npr. stariji replay format) - nikad ne pada.
+    """
+    result = {
+        "scored_first": None,
+        "max_deficit_overcome": 0,
+        "max_lead_lost": 0,
+        "ot_goal_scorer": None,
+    }
+    if not goal_events:
+        return result
+
+    other_color = "orange" if team_color == "blue" else "blue"
+    won = (team_goals or 0) > (opponent_goals or 0)
+
+    result["scored_first"] = (goal_events[0]["color"] == team_color)
+
+    my_score = 0
+    opp_score = 0
+    max_deficit = 0  # koliko su najvise bili U MINUSU (pozitivan broj = koliko golova nazad)
+    max_lead = 0      # koliko su najvise bili U PLUSU
+
+    for ev in goal_events:
+        if ev["color"] == team_color:
+            my_score += 1
+        elif ev["color"] == other_color:
+            opp_score += 1
+        deficit = opp_score - my_score
+        if deficit > max_deficit:
+            max_deficit = deficit
+        lead = my_score - opp_score
+        if lead > max_lead:
+            max_lead = lead
+
+    if won and max_deficit >= 1:
+        result["max_deficit_overcome"] = max_deficit
+    if (not won) and max_lead >= 1:
+        result["max_lead_lost"] = max_lead
+
+    if overtime and goal_events:
+        result["ot_goal_scorer"] = goal_events[-1]["player"]  # poslednji gol meca = pobednicki gol u OT
+
+    return result
+
+
 def flatten_replay(replay):
     """Pretvori jedan detaljan replay JSON u listu redova (jedan red = jedan igrac)."""
     rows = []
@@ -150,7 +229,9 @@ def flatten_replay(replay):
     map_name = replay.get("map_name", replay.get("map_code", "?"))
     playlist = replay.get("playlist_name", replay.get("playlist_id", "?"))
     duration = replay.get("duration")
+    overtime = bool(replay.get("overtime", False))
     replay_id = replay.get("id")
+    goal_events = build_goal_timeline(replay)
 
     for color in ("blue", "orange"):
         team = replay.get(color)
@@ -161,6 +242,7 @@ def flatten_replay(replay):
         other_team = replay.get(other_color, {})
         opp_goals = safe_get(replay, other_color, "stats", "core", "goals", default=other_team.get("goals", 0))
         teammates = [pl.get("name", "?") for pl in team.get("players", [])]
+        narrative = compute_match_narrative(goal_events, team_goals, opp_goals, color, overtime)
 
         for p in team.get("players", []):
             player_name = p.get("name", "?")
@@ -177,6 +259,7 @@ def flatten_replay(replay):
                 "map": map_name,
                 "playlist": playlist,
                 "duration": duration,
+                "overtime": overtime,
                 "team_color": color,
                 "team_goals": team_goals,
                 "opponent_goals": opp_goals,
@@ -184,6 +267,10 @@ def flatten_replay(replay):
                 "player": player_name,
                 "platform": safe_get(p, "id", "platform", default="offline"),
                 "teammates": [t for t in teammates if t != player_name],
+                "scored_first": narrative["scored_first"],
+                "max_deficit_overcome": narrative["max_deficit_overcome"],
+                "max_lead_lost": narrative["max_lead_lost"],
+                "ot_goal_scorer": narrative["ot_goal_scorer"],
                 "core": core,
                 "boost": extract_category(stats, "boost", BOOST_FIELDS),
                 "movement": extract_category(stats, "movement", MOVEMENT_FIELDS),
