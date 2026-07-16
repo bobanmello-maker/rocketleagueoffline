@@ -2078,7 +2078,6 @@ function drawCarBackground(ctx, W, H, color) {
   
   ctx.restore();
 }
-
 function drawPlayerCard(canvas, data, color, photoImg) {
   try {
     const W = 600, H = 840, scaleF = 2;
@@ -2153,7 +2152,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
         ctx.strokeStyle = hexToRgba(color, 0.9); 
         ctx.stroke();
       } catch(e) {
-        // Ako slika ne može da se nacrta, samo preskoči
         console.warn('Greška pri crtanju slike za', data.player, e);
       }
     }
@@ -2184,16 +2182,19 @@ function drawPlayerCard(canvas, data, color, photoImg) {
 
     // ---- IME IGRACA ----
     ctx.textAlign = 'center';
+    
+    // Ako ima slike, ime je malo niže (zbog veće slike)
     const nameY = photoImg ? H*0.56 : H*0.48;
     ctx.font = "700 46px 'Rajdhani', sans-serif";
     ctx.fillStyle = '#fff';
     ctx.fillText(data.player.toUpperCase(), W/2, nameY);
 
+    // Linija ispod imena - sa više prostora
     ctx.strokeStyle = hexToRgba('#ffffff', 0.35);
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(W*0.22, nameY + 28); 
-    ctx.lineTo(W*0.78, nameY + 28);
+    ctx.moveTo(W*0.22, nameY + 38); // povećano sa 28 na 38
+    ctx.lineTo(W*0.78, nameY + 38);
     ctx.stroke();
 
     // ---- STATISTIKE ----
@@ -2203,12 +2204,14 @@ function drawPlayerCard(canvas, data, color, photoImg) {
       BUST:'BOOST', WIN:'WIN%', UDA:'UDARNOST' 
     };
     
-    const startY = photoImg ? H*0.66 : H*0.58;
-    const rowH = 46;
+    // Povećaj razmak između imena i statistika
+    const startY = photoImg ? H*0.68 : H*0.58; // povećano sa 0.66 na 0.68
+    const rowH = 50; // povećano sa 46 na 50
     const colX = [W*0.30, W*0.70];
     
-    const statFontSize = photoImg ? 30 : 44;
-    const labelFontSize = photoImg ? 13 : 18;
+    // VEĆE STATISTIKE ZA SVE SLUČAJEVE
+    const statFontSize = 38; // povećano sa 30 na 38 (sa slikom)
+    const labelFontSize = 16; // povećano sa 13 na 16 (sa slikom)
     
     statRows.forEach((pair, ri) => {
       pair.forEach((key, ci) => {
@@ -2233,7 +2236,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     
   } catch(e) {
     console.error('Greška pri crtanju karte za', data?.player, e);
-    // Ako crtanje padne, nacrtaj praznu kartu sa porukom
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#141A24';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2242,83 +2244,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.textAlign = 'center';
     ctx.fillText('Greška pri učitavanju karte', canvas.width/2, canvas.height/2);
   }
-}
-
-function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
-
-const playerImageCache = {};
-
-function loadPlayerImage(url) {
-  return new Promise((resolve) => {
-    if(!url) {
-      resolve(null);
-      return;
-    }
-    if(playerImageCache[url]) {
-      resolve(playerImageCache[url]);
-      return;
-    }
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      playerImageCache[url] = img;
-      resolve(img);
-    };
-    img.onerror = () => {
-      console.warn('Ne mogu da učitam sliku:', url);
-      playerImageCache[url] = null;
-      resolve(null);
-    };
-    img.src = url;
-  });
-}
-
-async function renderCardsTab(rows){
-  const grid = $('#cardGrid');
-  if(!grid) return;
-  const ps = [...activePlayers].filter(p => rows.some(r=>r.player===p)).sort();
-  if(!ps.length){ 
-    grid.innerHTML = '<div class="empty">Nema izabranih igrača za ovaj filter</div>'; 
-    return; 
-  }
-
-  grid.innerHTML = ps.map(p => `
-    <div class="rlcard-wrap">
-      <canvas id="rlcard-${cssSafe(p)}"></canvas>
-      <button class="rlcard-save" data-player="${p}">💾 Sačuvaj sliku</button>
-    </div>
-  `).join('');
-
-  // Renderuj svaku karticu
-  for(const p of ps){
-    const stats = computeCardStats(rows, p);
-    if(!stats) continue;
-    const canvas = document.getElementById('rlcard-' + cssSafe(p));
-    if(!canvas) continue;
-    
-    const imgUrl = PLAYER_IMAGE_OVERRIDES[p];
-    let photoImg = null;
-    if(imgUrl) {
-      photoImg = await loadPlayerImage(imgUrl);
-    }
-    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg);
-  }
-
-  grid.querySelectorAll('.rlcard-save').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const p = btn.dataset.player;
-      const canvas = document.getElementById('rlcard-' + cssSafe(p));
-      if(!canvas) return;
-      try{
-        const link = document.createElement('a');
-        link.download = `rl-karta-${cssSafe(p)}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      }catch(e){
-        alert('Ne mogu da snimim sliku - greška pri konverziji.');
-      }
-    });
-  });
 }
 
 function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
