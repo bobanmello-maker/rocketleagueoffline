@@ -5,6 +5,7 @@
     "map": "Beckwith Park",
     "playlist": "?",
     "duration": 391,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -15,6 +16,10 @@
       "XxMikey_SkullxX",
       "Gam3rgh8st"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 6,
@@ -116,6 +121,7 @@
     "map": "Forbidden Temple",
     "playlist": "Ranked Standard",
     "duration": 319,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -126,6 +132,10 @@
       "coco_bws",
       "Fooboosh"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 4,
@@ -227,6 +237,7 @@
     "map": "Neo Tokyo (Arcade)",
     "playlist": "Ranked Standard",
     "duration": 273,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -237,6 +248,10 @@
       "Voldemort",
       "Linoge"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -338,6 +353,7 @@
     "map": "Drift Woods (Night",
     "playlist": "Ranked Standard",
     "duration": 442,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 6,
     "opponent_goals": 5,
@@ -348,6 +364,10 @@
       "kinu_9",
       "Kiggi"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 7,
@@ -449,6 +469,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Unranked Standard",
     "duration": 321,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -459,6 +480,10 @@
       "martt_9",
       "edhum16"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 0,
@@ -560,6 +585,7 @@
     "map": "Champions Field",
     "playlist": "Unranked Standard",
     "duration": 577,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -572,6 +598,10 @@
       "Raja",
       "Crystal Mad NL"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 11,
@@ -673,6 +703,7 @@
     "map": "Champions Field",
     "playlist": "Unranked Standard",
     "duration": 352,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -685,6 +716,10 @@
       "AJX205",
       "Tex"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 6,
@@ -786,6 +821,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 498,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -796,6 +832,10 @@
       "karpaque",
       "Loconline"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 14,
@@ -897,6 +937,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "?",
     "duration": 329,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -907,6 +948,10 @@
       "tchutchu_gamer9",
       "bryan_tchutchu77"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 5,
@@ -1008,6 +1053,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Standard",
     "duration": 575,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -1018,6 +1064,10 @@
       "Pnyx510",
       "Beriggoo"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 8,
@@ -1119,6 +1169,7 @@
     "map": "mall_day_p",
     "playlist": "Unranked Doubles",
     "duration": 343,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -1128,6 +1179,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 9,
@@ -1229,6 +1284,7 @@
     "map": "mall_day_p",
     "playlist": "Unranked Doubles",
     "duration": 343,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -1238,6 +1294,10 @@
     "teammates": [
       "Zbunjena inila"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 9,
@@ -1339,6 +1399,7 @@
     "map": "Sovereign Heights (Dusk)",
     "playlist": "Unranked Standard",
     "duration": 687,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -1349,6 +1410,10 @@
       "Undertaker",
       "Motodude323"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 7,
       "shots_against": 10,
@@ -1450,6 +1515,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 350,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -1459,6 +1525,10 @@
     "teammates": [
       "egoistoohigh378"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 12,
@@ -1560,6 +1630,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Doubles",
     "duration": 172,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -1569,6 +1640,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 2,
@@ -1670,6 +1745,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Doubles",
     "duration": 172,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -1679,6 +1755,10 @@
     "teammates": [
       "Zbunjena inila"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 2,
@@ -1780,6 +1860,7 @@
     "map": "Wasteland (Pitched)",
     "playlist": "Unranked Standard",
     "duration": 376,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 6,
     "opponent_goals": 3,
@@ -1790,6 +1871,10 @@
       "Zbunjena inila",
       "Zbunjena inila(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -1891,6 +1976,7 @@
     "map": "Wasteland (Pitched)",
     "playlist": "Unranked Standard",
     "duration": 376,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 6,
     "opponent_goals": 3,
@@ -1901,6 +1987,10 @@
       "Zbunjena inila(1)",
       "Zbunjena inila(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -2002,6 +2092,7 @@
     "map": "Wasteland (Pitched)",
     "playlist": "Unranked Standard",
     "duration": 376,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 6,
     "opponent_goals": 3,
@@ -2012,6 +2103,10 @@
       "Zbunjena inila(1)",
       "Zbunjena inila"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 3,
@@ -2113,6 +2208,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 347,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 1,
@@ -2122,6 +2218,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 6,
@@ -2223,6 +2323,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 347,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 1,
@@ -2232,6 +2333,10 @@
     "teammates": [
       "Zbunjena inila"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -2333,6 +2438,7 @@
     "map": "Mannfield (Dusk)",
     "playlist": "Ranked Standard",
     "duration": 403,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -2343,6 +2449,10 @@
       "Mozart",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 6,
       "shots_against": 4,
@@ -2444,6 +2554,7 @@
     "map": "Mannfield (Dusk)",
     "playlist": "Ranked Standard",
     "duration": 403,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -2454,6 +2565,10 @@
       "ExMirage",
       "Mozart"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 4,
@@ -2555,6 +2670,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 390,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -2565,6 +2681,10 @@
       "MP2006x",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 7,
@@ -2666,6 +2786,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 390,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -2676,6 +2797,10 @@
       "ExMirage",
       "MP2006x"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 7,
@@ -2777,6 +2902,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -2786,6 +2912,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 8,
       "shots_against": 8,
@@ -2887,6 +3017,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -2896,6 +3027,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -2997,6 +3132,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -3006,6 +3142,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 8,
@@ -3107,6 +3247,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -3116,6 +3257,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 8,
@@ -3217,6 +3362,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -3226,6 +3372,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 8,
       "shots_against": 8,
@@ -3327,6 +3477,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -3336,6 +3487,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -3437,6 +3592,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -3446,6 +3602,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 8,
@@ -3547,6 +3707,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 371,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -3556,6 +3717,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 8,
@@ -3657,6 +3822,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Standard",
     "duration": 353,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -3667,6 +3833,10 @@
       "Muro__5",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -3768,6 +3938,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Standard",
     "duration": 353,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -3778,6 +3949,10 @@
       "Muro__5",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -3879,6 +4054,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 7,
     "opponent_goals": 2,
@@ -3888,6 +4064,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 7,
       "shots_against": 4,
@@ -3989,6 +4169,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 7,
     "opponent_goals": 2,
@@ -3998,6 +4179,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -4099,6 +4284,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 7,
@@ -4108,6 +4294,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 9,
@@ -4209,6 +4399,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 7,
@@ -4218,6 +4409,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 9,
@@ -4319,6 +4514,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Doubles",
     "duration": 333,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -4328,6 +4524,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -4429,6 +4629,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Doubles",
     "duration": 333,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -4438,6 +4639,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -4539,6 +4744,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 279,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -4548,6 +4754,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 2,
@@ -4649,6 +4859,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 279,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -4658,6 +4869,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 2,
@@ -4759,6 +4974,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Doubles",
     "duration": 474,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -4768,6 +4984,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -4869,6 +5089,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Doubles",
     "duration": 474,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -4878,6 +5099,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -4979,6 +5204,7 @@
     "map": "Utopia Coliseum",
     "playlist": "Ranked Doubles",
     "duration": 340,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -4988,6 +5214,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 6,
       "shots_against": 3,
@@ -5089,6 +5319,7 @@
     "map": "Utopia Coliseum",
     "playlist": "Ranked Doubles",
     "duration": 340,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -5098,6 +5329,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -5199,6 +5434,7 @@
     "map": "Neo Tokyo (Standard)",
     "playlist": "Ranked Doubles",
     "duration": 449,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -5208,6 +5444,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 5,
@@ -5309,6 +5549,7 @@
     "map": "Neo Tokyo (Standard)",
     "playlist": "Ranked Doubles",
     "duration": 449,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -5318,6 +5559,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 5,
@@ -5419,6 +5664,7 @@
     "map": "Estadio Vida (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 335,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 5,
@@ -5428,6 +5674,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 12,
@@ -5529,6 +5779,7 @@
     "map": "Estadio Vida (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 335,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 5,
@@ -5538,6 +5789,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 12,
@@ -5639,6 +5894,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 485,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -5648,6 +5904,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 9,
@@ -5749,6 +6009,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 485,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -5758,6 +6019,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 9,
@@ -5859,6 +6124,7 @@
     "map": "Utopia Coliseum",
     "playlist": "Ranked Doubles",
     "duration": 258,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -5868,6 +6134,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 3,
@@ -5969,6 +6239,7 @@
     "map": "Utopia Coliseum",
     "playlist": "Ranked Doubles",
     "duration": 258,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -5978,6 +6249,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -6079,6 +6354,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 452,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -6088,6 +6364,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 10,
@@ -6189,6 +6469,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 452,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -6198,6 +6479,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 10,
@@ -6299,6 +6584,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 331,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -6308,6 +6594,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -6409,6 +6699,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 331,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -6418,6 +6709,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 5,
@@ -6519,6 +6814,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Doubles",
     "duration": 344,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -6528,6 +6824,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 5,
@@ -6629,6 +6929,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Doubles",
     "duration": 344,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -6638,6 +6939,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -6739,6 +7044,7 @@
     "map": "Mannfield (Stormy)",
     "playlist": "Ranked Doubles",
     "duration": 362,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 6,
@@ -6748,6 +7054,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 11,
@@ -6849,6 +7159,7 @@
     "map": "Mannfield (Stormy)",
     "playlist": "Ranked Doubles",
     "duration": 362,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 6,
@@ -6858,6 +7169,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 11,
@@ -6959,6 +7274,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Doubles",
     "duration": 325,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 0,
@@ -6968,6 +7284,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 7,
       "shots_against": 5,
@@ -7069,6 +7389,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Doubles",
     "duration": 325,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 0,
@@ -7078,6 +7399,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 5,
@@ -7179,6 +7504,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Doubles",
     "duration": 308,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -7188,6 +7514,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 6,
@@ -7289,6 +7619,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Doubles",
     "duration": 308,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -7298,6 +7629,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 6,
@@ -7399,6 +7734,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Doubles",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -7408,6 +7744,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 8,
@@ -7509,6 +7849,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Doubles",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -7518,6 +7859,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 8,
@@ -7619,6 +7964,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 372,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 3,
@@ -7628,6 +7974,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -7729,6 +8079,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Doubles",
     "duration": 372,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 3,
@@ -7738,6 +8089,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -7839,6 +8194,7 @@
     "map": "Urban Central",
     "playlist": "Ranked Doubles",
     "duration": 408,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -7848,6 +8204,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 9,
@@ -7949,6 +8309,7 @@
     "map": "Urban Central",
     "playlist": "Ranked Doubles",
     "duration": 408,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -7958,6 +8319,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 9,
@@ -8059,6 +8424,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 437,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -8068,6 +8434,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 9,
@@ -8169,6 +8539,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 437,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -8178,6 +8549,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 9,
@@ -8279,6 +8654,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Doubles",
     "duration": 235,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 4,
@@ -8288,6 +8664,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 9,
@@ -8389,6 +8769,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Doubles",
     "duration": 235,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 4,
@@ -8398,6 +8779,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 9,
@@ -8499,6 +8884,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 330,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -8508,6 +8894,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -8609,6 +8999,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Doubles",
     "duration": 330,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -8618,6 +9009,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 5,
@@ -8719,6 +9114,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 437,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -8728,6 +9124,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 9,
@@ -8829,6 +9229,7 @@
     "map": "Mannfield (Night)",
     "playlist": "Ranked Doubles",
     "duration": 437,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -8838,6 +9239,10 @@
     "teammates": [
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 9,
@@ -8939,6 +9344,7 @@
     "map": "paname_dusk_p",
     "playlist": "Ranked Standard",
     "duration": 351,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -8949,6 +9355,10 @@
       "Macrom_999",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -9050,6 +9460,7 @@
     "map": "paname_dusk_p",
     "playlist": "Ranked Standard",
     "duration": 351,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -9060,6 +9471,10 @@
       "Rarely_Sober",
       "Macrom_999"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 3,
@@ -9161,6 +9576,7 @@
     "map": "Deadeye Canyon (Oasis)",
     "playlist": "Ranked Standard",
     "duration": 460,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -9171,6 +9587,10 @@
       "The Shepherd",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -9246,7 +9666,7 @@
       "time_most_back": 200.6,
       "time_most_forward": 112.8,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 123.9,
+      "time_closest_to_ball": 123.7,
       "time_farthest_from_ball": 161.3,
       "percent_defensive_third": 55.075443,
       "percent_offensive_third": 12.989285,
@@ -9257,7 +9677,7 @@
       "percent_infront_ball": 15.809846,
       "percent_most_back": 45.36101,
       "percent_most_forward": 25.507088,
-      "percent_closest_to_ball": 28.017094,
+      "percent_closest_to_ball": 27.971869,
       "percent_farthest_from_ball": 36.47423
     },
     "demo": {
@@ -9272,6 +9692,7 @@
     "map": "Deadeye Canyon (Oasis)",
     "playlist": "Ranked Standard",
     "duration": 460,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -9282,6 +9703,10 @@
       "Rarely_Sober",
       "The Shepherd"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -9354,11 +9779,11 @@
       "time_offensive_half": 156.78,
       "time_behind_ball": 354.87,
       "time_infront_ball": 100.8,
-      "time_most_back": 137.5,
-      "time_most_forward": 137.2,
+      "time_most_back": 137.6,
+      "time_most_forward": 137.1,
       "goals_against_while_last_defender": 2,
       "time_closest_to_ball": 171.7,
-      "time_farthest_from_ball": 126.4,
+      "time_farthest_from_ball": 126.5,
       "percent_defensive_third": 51.704082,
       "percent_offensive_third": 19.62385,
       "percent_neutral_third": 28.672062,
@@ -9366,10 +9791,10 @@
       "percent_offensive_half": 34.40648,
       "percent_behind_ball": 77.87873,
       "percent_infront_ball": 22.121273,
-      "percent_most_back": 31.092417,
-      "percent_most_forward": 31.02458,
+      "percent_most_back": 31.115032,
+      "percent_most_forward": 31.001968,
       "percent_closest_to_ball": 38.82595,
-      "percent_farthest_from_ball": 28.58241
+      "percent_farthest_from_ball": 28.605024
     },
     "demo": {
       "inflicted": 0,
@@ -9383,6 +9808,7 @@
     "map": "Neo Tokyo (Standard)",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -9393,6 +9819,10 @@
       "The Shepherd",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 0,
@@ -9494,6 +9924,7 @@
     "map": "Neo Tokyo (Standard)",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -9504,6 +9935,10 @@
       "ExMirage",
       "The Shepherd"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 0,
@@ -9605,6 +10040,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 357,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -9615,6 +10051,10 @@
       "The Shepherd",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 7,
@@ -9688,9 +10128,9 @@
       "time_behind_ball": 263.41,
       "time_infront_ball": 86.42,
       "time_most_back": 160.4,
-      "time_most_forward": 87,
+      "time_most_forward": 87.1,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 70,
+      "time_closest_to_ball": 70.1,
       "time_farthest_from_ball": 166.8,
       "percent_defensive_third": 60.144634,
       "percent_offensive_third": 13.937799,
@@ -9700,8 +10140,8 @@
       "percent_behind_ball": 75.29657,
       "percent_infront_ball": 24.703426,
       "percent_most_back": 47.208405,
-      "percent_most_forward": 25.605558,
-      "percent_closest_to_ball": 20.602173,
+      "percent_most_forward": 25.634989,
+      "percent_closest_to_ball": 20.631605,
       "percent_farthest_from_ball": 49.092033
     },
     "demo": {
@@ -9716,6 +10156,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 357,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -9726,6 +10167,10 @@
       "The Shepherd",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 7,
@@ -9827,6 +10272,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 352,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -9837,6 +10283,10 @@
       "The Shepherd",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -9909,11 +10359,11 @@
       "time_offensive_half": 93.86,
       "time_behind_ball": 252.64,
       "time_infront_ball": 94.07,
-      "time_most_back": 140.5,
-      "time_most_forward": 101.3,
+      "time_most_back": 140.6,
+      "time_most_forward": 101.4,
       "goals_against_while_last_defender": 2,
       "time_closest_to_ball": 112.5,
-      "time_farthest_from_ball": 108.4,
+      "time_farthest_from_ball": 108.5,
       "percent_defensive_third": 60.842224,
       "percent_offensive_third": 14.698586,
       "percent_neutral_third": 24.459187,
@@ -9921,10 +10371,10 @@
       "percent_offensive_half": 27.071615,
       "percent_behind_ball": 72.86781,
       "percent_infront_ball": 27.132187,
-      "percent_most_back": 41.970367,
-      "percent_most_forward": 30.260485,
+      "percent_most_back": 42.00024,
+      "percent_most_forward": 30.290356,
       "percent_closest_to_ball": 33.606163,
-      "percent_farthest_from_ball": 32.381405
+      "percent_farthest_from_ball": 32.411278
     },
     "demo": {
       "inflicted": 0,
@@ -9938,6 +10388,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 352,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -9948,6 +10399,10 @@
       "ExMirage",
       "The Shepherd"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -9991,7 +10446,7 @@
     },
     "movement": {
       "avg_speed": 1224,
-      "total_distance": 393650,
+      "total_distance": 393651,
       "time_supersonic_speed": 11.62,
       "time_boost_speed": 103.06,
       "time_slow_speed": 233.25,
@@ -10020,11 +10475,11 @@
       "time_offensive_half": 87.16,
       "time_behind_ball": 251.2,
       "time_infront_ball": 96.73,
-      "time_most_back": 133,
-      "time_most_forward": 97.5,
+      "time_most_back": 132.9,
+      "time_most_forward": 97.2,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 101.2,
-      "time_farthest_from_ball": 136.9,
+      "time_closest_to_ball": 101,
+      "time_farthest_from_ball": 136.8,
       "percent_defensive_third": 58.21286,
       "percent_offensive_third": 10.318169,
       "percent_neutral_third": 31.468975,
@@ -10032,10 +10487,10 @@
       "percent_offensive_half": 25.051016,
       "percent_behind_ball": 72.19843,
       "percent_infront_ball": 27.801569,
-      "percent_most_back": 39.729954,
-      "percent_most_forward": 29.125343,
-      "percent_closest_to_ball": 30.230612,
-      "percent_farthest_from_ball": 40.894966
+      "percent_most_back": 39.70008,
+      "percent_most_forward": 29.035727,
+      "percent_closest_to_ball": 30.170868,
+      "percent_farthest_from_ball": 40.865097
     },
     "demo": {
       "inflicted": 0,
@@ -10049,6 +10504,7 @@
     "map": "DFH Stadium (Day)",
     "playlist": "Ranked Standard",
     "duration": 331,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -10059,6 +10515,10 @@
       "The Shepherd",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -10131,8 +10591,8 @@
       "time_offensive_half": 109.49,
       "time_behind_ball": 251.76,
       "time_infront_ball": 79.66,
-      "time_most_back": 104.6,
-      "time_most_forward": 94.6,
+      "time_most_back": 104.5,
+      "time_most_forward": 94.5,
       "goals_against_while_last_defender": 1,
       "time_closest_to_ball": 109.7,
       "time_farthest_from_ball": 94.7,
@@ -10143,8 +10603,8 @@
       "percent_offensive_half": 33.03763,
       "percent_behind_ball": 75.964035,
       "percent_infront_ball": 24.035969,
-      "percent_most_back": 33.028103,
-      "percent_most_forward": 29.870539,
+      "percent_most_back": 32.996525,
+      "percent_most_forward": 29.838963,
       "percent_closest_to_ball": 34.63846,
       "percent_farthest_from_ball": 29.902115
     },
@@ -10160,6 +10620,7 @@
     "map": "DFH Stadium (Day)",
     "playlist": "Ranked Standard",
     "duration": 331,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -10170,6 +10631,10 @@
       "The Shepherd",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -10243,7 +10708,7 @@
       "time_behind_ball": 247.72,
       "time_infront_ball": 84.02,
       "time_most_back": 114.5,
-      "time_most_forward": 97.9,
+      "time_most_forward": 98,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 90.3,
       "time_farthest_from_ball": 109.1,
@@ -10255,7 +10720,7 @@
       "percent_behind_ball": 74.672935,
       "percent_infront_ball": 25.327065,
       "percent_most_back": 36.154087,
-      "percent_most_forward": 30.912535,
+      "percent_most_forward": 30.94411,
       "percent_closest_to_ball": 28.512787,
       "percent_farthest_from_ball": 34.449005
     },
@@ -10271,6 +10736,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 194,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -10281,6 +10747,10 @@
       "v iBlasTaa x",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -10382,6 +10852,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 194,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 3,
@@ -10392,6 +10863,10 @@
       "v iBlasTaa x",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -10464,11 +10939,11 @@
       "time_offensive_half": 73.87,
       "time_behind_ball": 145.03,
       "time_infront_ball": 49.75,
-      "time_most_back": 64.7,
+      "time_most_back": 64.6,
       "time_most_forward": 51.7,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 48,
-      "time_farthest_from_ball": 73.2,
+      "time_farthest_from_ball": 73.3,
       "percent_defensive_third": 44.203716,
       "percent_offensive_third": 12.886333,
       "percent_neutral_third": 42.90995,
@@ -10476,10 +10951,10 @@
       "percent_offensive_half": 37.922894,
       "percent_behind_ball": 74.45837,
       "percent_infront_ball": 25.541637,
-      "percent_most_back": 34.818638,
+      "percent_most_back": 34.764824,
       "percent_most_forward": 27.822622,
       "percent_closest_to_ball": 25.83145,
-      "percent_farthest_from_ball": 39.392956
+      "percent_farthest_from_ball": 39.446777
     },
     "demo": {
       "inflicted": 0,
@@ -10493,6 +10968,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 591,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 5,
@@ -10503,6 +10979,10 @@
       "ExMirage",
       "sipwater420"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 11,
@@ -10575,11 +11055,11 @@
       "time_offensive_half": 159.89,
       "time_behind_ball": 452.8,
       "time_infront_ball": 129.91,
-      "time_most_back": 183.7,
-      "time_most_forward": 164,
+      "time_most_back": 184.2,
+      "time_most_forward": 164.8,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 185.5,
-      "time_farthest_from_ball": 180.3,
+      "time_closest_to_ball": 186.3,
+      "time_farthest_from_ball": 180.6,
       "percent_defensive_third": 56.547108,
       "percent_offensive_third": 16.16784,
       "percent_neutral_third": 27.285053,
@@ -10587,10 +11067,10 @@
       "percent_offensive_half": 27.439034,
       "percent_behind_ball": 77.705894,
       "percent_infront_ball": 22.29411,
-      "percent_most_back": 32.709534,
-      "percent_most_forward": 29.20176,
-      "percent_closest_to_ball": 33.03004,
-      "percent_farthest_from_ball": 32.10413
+      "percent_most_back": 32.79856,
+      "percent_most_forward": 29.344208,
+      "percent_closest_to_ball": 33.172485,
+      "percent_farthest_from_ball": 32.157547
     },
     "demo": {
       "inflicted": 0,
@@ -10604,6 +11084,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 591,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 5,
@@ -10614,6 +11095,10 @@
       "Rarely_Sober",
       "sipwater420"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 11,
@@ -10686,11 +11171,11 @@
       "time_offensive_half": 186.06,
       "time_behind_ball": 451.19,
       "time_infront_ball": 139.46,
-      "time_most_back": 197.4,
-      "time_most_forward": 173,
+      "time_most_back": 196.9,
+      "time_most_forward": 172.2,
       "goals_against_while_last_defender": 3,
-      "time_closest_to_ball": 180.2,
-      "time_farthest_from_ball": 174.5,
+      "time_closest_to_ball": 179.4,
+      "time_farthest_from_ball": 174.2,
       "percent_defensive_third": 55.537117,
       "percent_offensive_third": 18.743755,
       "percent_neutral_third": 25.719122,
@@ -10698,10 +11183,10 @@
       "percent_offensive_half": 31.500887,
       "percent_behind_ball": 76.38872,
       "percent_infront_ball": 23.611277,
-      "percent_most_back": 35.14895,
-      "percent_most_forward": 30.804296,
-      "percent_closest_to_ball": 32.086323,
-      "percent_farthest_from_ball": 31.071384
+      "percent_most_back": 35.059917,
+      "percent_most_forward": 30.661848,
+      "percent_closest_to_ball": 31.943876,
+      "percent_farthest_from_ball": 31.017967
     },
     "demo": {
       "inflicted": 0,
@@ -10715,6 +11200,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 351,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -10725,6 +11211,10 @@
       "ExMirage",
       "cafe-hibernal5"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -10797,11 +11287,11 @@
       "time_offensive_half": 58.92,
       "time_behind_ball": 277.56,
       "time_infront_ball": 74.03,
-      "time_most_back": 153.9,
-      "time_most_forward": 98.2,
+      "time_most_back": 154.4,
+      "time_most_forward": 98.4,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 100.1,
-      "time_farthest_from_ball": 133.2,
+      "time_closest_to_ball": 100,
+      "time_farthest_from_ball": 133.5,
       "percent_defensive_third": 70.94912,
       "percent_offensive_third": 8.606616,
       "percent_neutral_third": 20.444265,
@@ -10809,10 +11299,10 @@
       "percent_offensive_half": 16.758154,
       "percent_behind_ball": 78.94423,
       "percent_infront_ball": 21.055775,
-      "percent_most_back": 46.142773,
-      "percent_most_forward": 29.442629,
-      "percent_closest_to_ball": 30.012293,
-      "percent_farthest_from_ball": 39.93644
+      "percent_most_back": 46.292686,
+      "percent_most_forward": 29.502594,
+      "percent_closest_to_ball": 29.982311,
+      "percent_farthest_from_ball": 40.026386
     },
     "demo": {
       "inflicted": 1,
@@ -10826,6 +11316,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 351,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -10836,6 +11327,10 @@
       "Rarely_Sober",
       "cafe-hibernal5"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -10911,7 +11406,7 @@
       "time_most_back": 91.7,
       "time_most_forward": 105.6,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 124.9,
+      "time_closest_to_ball": 125.1,
       "time_farthest_from_ball": 94,
       "percent_defensive_third": 58.553043,
       "percent_offensive_third": 11.23797,
@@ -10922,7 +11417,7 @@
       "percent_infront_ball": 28.793919,
       "percent_most_back": 27.493778,
       "percent_most_forward": 31.66132,
-      "percent_closest_to_ball": 37.447906,
+      "percent_closest_to_ball": 37.50787,
       "percent_farthest_from_ball": 28.183372
     },
     "demo": {
@@ -10937,6 +11432,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 338,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -10947,6 +11443,10 @@
       "ExMirage",
       "JustDeSTi"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 4,
@@ -11048,6 +11548,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 338,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -11058,6 +11559,10 @@
       "Rarely_Sober",
       "JustDeSTi"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 4,
@@ -11159,6 +11664,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 342,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -11168,6 +11674,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -11269,6 +11779,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 342,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -11278,6 +11789,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 3,
@@ -11379,6 +11894,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 342,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -11388,6 +11904,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 4,
@@ -11489,6 +12009,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 342,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -11498,6 +12019,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -11599,6 +12124,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -11608,6 +12134,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 6,
       "shots_against": 3,
@@ -11709,6 +12239,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 4,
@@ -11718,6 +12249,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -11819,6 +12354,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 5,
@@ -11828,6 +12364,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 8,
@@ -11929,6 +12469,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 388,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 5,
@@ -11938,6 +12479,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -12039,6 +12584,7 @@
     "map": "stadium_10a_p",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 1,
@@ -12049,6 +12595,10 @@
       "Rarely_Sober",
       "Vovanuza"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -12121,7 +12671,7 @@
       "time_offensive_half": 100.19,
       "time_behind_ball": 210.83,
       "time_infront_ball": 103.86,
-      "time_most_back": 66.7,
+      "time_most_back": 67,
       "time_most_forward": 131.5,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 98.5,
@@ -12133,7 +12683,7 @@
       "percent_offensive_half": 31.83768,
       "percent_behind_ball": 66.99609,
       "percent_infront_ball": 33.00391,
-      "percent_most_back": 21.397406,
+      "percent_most_back": 21.493649,
       "percent_most_forward": 42.185295,
       "percent_closest_to_ball": 31.598871,
       "percent_farthest_from_ball": 24.509174
@@ -12150,6 +12700,7 @@
     "map": "stadium_10a_p",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 0,
     "opponent_goals": 1,
@@ -12160,6 +12711,10 @@
       "ExMirage",
       "Vovanuza"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -12232,7 +12787,7 @@
       "time_offensive_half": 72.66,
       "time_behind_ball": 238.09,
       "time_infront_ball": 72.98,
-      "time_most_back": 113.7,
+      "time_most_back": 113.4,
       "time_most_forward": 82.8,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 133.3,
@@ -12244,7 +12799,7 @@
       "percent_offensive_half": 23.357336,
       "percent_behind_ball": 76.53904,
       "percent_infront_ball": 23.460958,
-      "percent_most_back": 36.47504,
+      "percent_most_back": 36.378803,
       "percent_most_forward": 26.5623,
       "percent_closest_to_ball": 42.762737,
       "percent_farthest_from_ball": 27.332222
@@ -12261,6 +12816,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 385,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 3,
@@ -12270,6 +12826,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 6,
       "shots_against": 3,
@@ -12371,6 +12931,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 385,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 5,
     "opponent_goals": 3,
@@ -12380,6 +12941,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 3,
@@ -12481,6 +13046,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 385,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 5,
@@ -12490,6 +13056,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -12591,6 +13161,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 385,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 5,
@@ -12600,6 +13171,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -12701,6 +13276,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 226,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -12711,6 +13287,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 0,
@@ -12783,7 +13363,7 @@
       "time_offensive_half": 62.74,
       "time_behind_ball": 195.06,
       "time_infront_ball": 30.62,
-      "time_most_back": 103.2,
+      "time_most_back": 102.6,
       "time_most_forward": 46.5,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 44.9,
@@ -12795,7 +13375,7 @@
       "percent_offensive_half": 27.801657,
       "percent_behind_ball": 86.43212,
       "percent_infront_ball": 13.567884,
-      "percent_most_back": 48.17927,
+      "percent_most_back": 47.89916,
       "percent_most_forward": 21.708683,
       "percent_closest_to_ball": 20.961718,
       "percent_farthest_from_ball": 49.066296
@@ -12812,6 +13392,7 @@
     "map": "Champions Field",
     "playlist": "Ranked Standard",
     "duration": 226,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -12822,6 +13403,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 0,
@@ -12894,7 +13479,7 @@
       "time_offensive_half": 77.81,
       "time_behind_ball": 178.84,
       "time_infront_ball": 46.61,
-      "time_most_back": 65,
+      "time_most_back": 65.5,
       "time_most_forward": 82.1,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 66.6,
@@ -12906,7 +13491,7 @@
       "percent_offensive_half": 34.513195,
       "percent_behind_ball": 79.32579,
       "percent_infront_ball": 20.674208,
-      "percent_most_back": 30.345472,
+      "percent_most_back": 30.5789,
       "percent_most_forward": 38.328667,
       "percent_closest_to_ball": 31.092438,
       "percent_farthest_from_ball": 36.601307
@@ -12923,6 +13508,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 373,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -12932,6 +13518,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 6,
       "shots_against": 6,
@@ -13033,6 +13623,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 373,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 3,
@@ -13042,6 +13633,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -13143,6 +13738,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 373,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -13152,6 +13748,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 6,
@@ -13224,11 +13824,11 @@
       "time_offensive_half": 136.22,
       "time_behind_ball": 284.04,
       "time_infront_ball": 88.9,
-      "time_most_back": 201.2,
-      "time_most_forward": 147.1,
+      "time_most_back": 201.1,
+      "time_most_forward": 147,
       "goals_against_while_last_defender": 3,
-      "time_closest_to_ball": 154.1,
-      "time_farthest_from_ball": 194.2,
+      "time_closest_to_ball": 154,
+      "time_farthest_from_ball": 194.1,
       "percent_defensive_third": 46.860085,
       "percent_offensive_third": 18.649113,
       "percent_neutral_third": 34.490803,
@@ -13236,10 +13836,10 @@
       "percent_offensive_half": 36.526962,
       "percent_behind_ball": 76.162384,
       "percent_infront_ball": 23.837614,
-      "percent_most_back": 57.62731,
-      "percent_most_forward": 42.132095,
-      "percent_closest_to_ball": 44.137024,
-      "percent_farthest_from_ball": 55.622383
+      "percent_most_back": 57.598667,
+      "percent_most_forward": 42.10345,
+      "percent_closest_to_ball": 44.10838,
+      "percent_farthest_from_ball": 55.593742
     },
     "demo": {
       "inflicted": 0,
@@ -13253,6 +13853,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 373,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -13262,6 +13863,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -13334,11 +13939,11 @@
       "time_offensive_half": 149.72,
       "time_behind_ball": 248.65,
       "time_infront_ball": 124.51,
-      "time_most_back": 151.6,
-      "time_most_forward": 197.1,
+      "time_most_back": 151.7,
+      "time_most_forward": 197.2,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 189.8,
-      "time_farthest_from_ball": 158.9,
+      "time_closest_to_ball": 189.9,
+      "time_farthest_from_ball": 159,
       "percent_defensive_third": 44.24912,
       "percent_offensive_third": 25.380535,
       "percent_neutral_third": 30.370352,
@@ -13346,10 +13951,10 @@
       "percent_offensive_half": 40.121128,
       "percent_behind_ball": 66.63361,
       "percent_infront_ball": 33.366383,
-      "percent_most_back": 43.42098,
-      "percent_most_forward": 56.452995,
-      "percent_closest_to_ball": 54.362144,
-      "percent_farthest_from_ball": 45.511826
+      "percent_most_back": 43.449615,
+      "percent_most_forward": 56.48164,
+      "percent_closest_to_ball": 54.390785,
+      "percent_farthest_from_ball": 45.54047
     },
     "demo": {
       "inflicted": 0,
@@ -13363,6 +13968,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Standard",
     "duration": 365,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 7,
     "opponent_goals": 3,
@@ -13373,6 +13979,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 8,
@@ -13474,6 +14084,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Standard",
     "duration": 365,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 7,
     "opponent_goals": 3,
@@ -13484,6 +14095,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 8,
@@ -13556,11 +14171,11 @@
       "time_offensive_half": 115.7,
       "time_behind_ball": 287.07,
       "time_infront_ball": 76.51,
-      "time_most_back": 128.7,
-      "time_most_forward": 97,
+      "time_most_back": 129,
+      "time_most_forward": 97.1,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 84.5,
-      "time_farthest_from_ball": 130.7,
+      "time_farthest_from_ball": 131,
       "percent_defensive_third": 54.388184,
       "percent_offensive_third": 17.291454,
       "percent_neutral_third": 28.32036,
@@ -13568,10 +14183,10 @@
       "percent_offensive_half": 31.821558,
       "percent_behind_ball": 78.95648,
       "percent_infront_ball": 21.04351,
-      "percent_most_back": 38.4053,
-      "percent_most_forward": 28.94572,
+      "percent_most_back": 38.494823,
+      "percent_most_forward": 28.975561,
       "percent_closest_to_ball": 25.215603,
-      "percent_farthest_from_ball": 39.00212
+      "percent_farthest_from_ball": 39.091644
     },
     "demo": {
       "inflicted": 2,
@@ -13585,6 +14200,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 338,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -13595,6 +14211,10 @@
       "ExMirage",
       "blanquii24"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 4,
@@ -13668,9 +14288,9 @@
       "time_behind_ball": 239.33,
       "time_infront_ball": 99.58,
       "time_most_back": 124.1,
-      "time_most_forward": 103.1,
+      "time_most_forward": 103.3,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 83.6,
+      "time_closest_to_ball": 83.8,
       "time_farthest_from_ball": 128,
       "percent_defensive_third": 52.468204,
       "percent_offensive_third": 13.711605,
@@ -13680,8 +14300,8 @@
       "percent_behind_ball": 70.61757,
       "percent_infront_ball": 29.382431,
       "percent_most_back": 37.961517,
-      "percent_most_forward": 31.537731,
-      "percent_closest_to_ball": 25.572788,
+      "percent_most_forward": 31.598911,
+      "percent_closest_to_ball": 25.633966,
       "percent_farthest_from_ball": 39.154507
     },
     "demo": {
@@ -13696,6 +14316,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 338,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -13706,6 +14327,10 @@
       "Rarely_Sober",
       "blanquii24"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -13807,6 +14432,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 426,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -13816,6 +14442,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 2,
@@ -13917,6 +14547,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 426,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -13926,6 +14557,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 2,
@@ -14027,6 +14662,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 426,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -14036,6 +14672,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -14137,6 +14777,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 426,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -14146,6 +14787,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -14247,6 +14892,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Standard",
     "duration": 319,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -14257,6 +14903,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -14358,6 +15008,7 @@
     "map": "Champions Field (Day)",
     "playlist": "Ranked Standard",
     "duration": 319,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -14368,6 +15019,10 @@
       "Rarely_Sober",
       "blanquii24"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 4,
@@ -14469,6 +15124,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 362,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -14478,6 +15134,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 5,
@@ -14579,6 +15239,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 362,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -14588,6 +15249,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -14689,6 +15354,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 362,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -14698,6 +15364,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 1,
@@ -14799,6 +15469,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 362,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -14808,6 +15479,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 1,
@@ -14909,6 +15584,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 318,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -14919,6 +15595,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 5,
@@ -15020,6 +15700,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 318,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -15030,6 +15711,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 5,
@@ -15131,6 +15816,7 @@
     "map": "paname_dusk_p",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -15141,6 +15827,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -15242,6 +15932,7 @@
     "map": "paname_dusk_p",
     "playlist": "Ranked Standard",
     "duration": 317,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 0,
@@ -15252,6 +15943,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -15353,6 +16048,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 355,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -15362,6 +16058,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 5,
@@ -15463,6 +16163,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 355,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -15472,6 +16173,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -15573,6 +16278,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 355,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -15582,6 +16288,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -15657,8 +16367,8 @@
       "time_most_back": 178.7,
       "time_most_forward": 163,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 169.1,
-      "time_farthest_from_ball": 172.6,
+      "time_closest_to_ball": 169.2,
+      "time_farthest_from_ball": 172.7,
       "percent_defensive_third": 55.26702,
       "percent_offensive_third": 19.864096,
       "percent_neutral_third": 24.86889,
@@ -15668,8 +16378,8 @@
       "percent_infront_ball": 25.427887,
       "percent_most_back": 52.962273,
       "percent_most_forward": 48.309177,
-      "percent_closest_to_ball": 50.11707,
-      "percent_farthest_from_ball": 51.15438
+      "percent_closest_to_ball": 50.146706,
+      "percent_farthest_from_ball": 51.184017
     },
     "demo": {
       "inflicted": 1,
@@ -15683,6 +16393,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 355,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -15692,6 +16403,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -15767,8 +16482,8 @@
       "time_most_back": 168.7,
       "time_most_forward": 171.2,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 166.3,
-      "time_farthest_from_ball": 173.6,
+      "time_closest_to_ball": 166.2,
+      "time_farthest_from_ball": 173.5,
       "percent_defensive_third": 54.70405,
       "percent_offensive_third": 21.006195,
       "percent_neutral_third": 24.289751,
@@ -15778,8 +16493,8 @@
       "percent_infront_ball": 30.31921,
       "percent_most_back": 49.998516,
       "percent_most_forward": 50.739456,
-      "percent_closest_to_ball": 49.287216,
-      "percent_farthest_from_ball": 51.450756
+      "percent_closest_to_ball": 49.25758,
+      "percent_farthest_from_ball": 51.42112
     },
     "demo": {
       "inflicted": 0,
@@ -15793,6 +16508,7 @@
     "map": "AquaDome (Salty Shallows)",
     "playlist": "Ranked Standard",
     "duration": 304,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -15803,6 +16519,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 3,
@@ -15876,9 +16596,9 @@
       "time_behind_ball": 237.7,
       "time_infront_ball": 58.96,
       "time_most_back": 126.6,
-      "time_most_forward": 70.3,
+      "time_most_forward": 69.9,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 77.8,
+      "time_closest_to_ball": 77.5,
       "time_farthest_from_ball": 120.2,
       "percent_defensive_third": 58.356373,
       "percent_offensive_third": 17.595903,
@@ -15888,8 +16608,8 @@
       "percent_behind_ball": 80.1254,
       "percent_infront_ball": 19.874603,
       "percent_most_back": 44.13149,
-      "percent_most_forward": 24.505877,
-      "percent_closest_to_ball": 27.1203,
+      "percent_most_forward": 24.366438,
+      "percent_closest_to_ball": 27.015722,
       "percent_farthest_from_ball": 41.900513
     },
     "demo": {
@@ -15904,6 +16624,7 @@
     "map": "AquaDome (Salty Shallows)",
     "playlist": "Ranked Standard",
     "duration": 304,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 5,
     "opponent_goals": 1,
@@ -15914,6 +16635,10 @@
       "Rarely_Sober",
       "blanquii24"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 3,
@@ -15987,10 +16712,10 @@
       "time_behind_ball": 253.15,
       "time_infront_ball": 51.4,
       "time_most_back": 110.8,
-      "time_most_forward": 72.7,
+      "time_most_forward": 73.1,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 90.1,
-      "time_farthest_from_ball": 96.6,
+      "time_closest_to_ball": 90.5,
+      "time_farthest_from_ball": 96.7,
       "percent_defensive_third": 55.440636,
       "percent_offensive_third": 18.324797,
       "percent_neutral_third": 26.234568,
@@ -15999,9 +16724,9 @@
       "percent_behind_ball": 83.12264,
       "percent_infront_ball": 16.877361,
       "percent_most_back": 38.623768,
-      "percent_most_forward": 25.34249,
-      "percent_closest_to_ball": 31.407955,
-      "percent_farthest_from_ball": 33.67379
+      "percent_most_forward": 25.481926,
+      "percent_closest_to_ball": 31.547392,
+      "percent_farthest_from_ball": 33.70865
     },
     "demo": {
       "inflicted": 0,
@@ -16015,6 +16740,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 352,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -16024,6 +16750,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 4,
@@ -16125,6 +16855,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 352,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -16134,6 +16865,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -16235,6 +16970,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 352,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 1,
@@ -16244,6 +16980,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 4,
@@ -16345,6 +17085,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 352,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 1,
@@ -16354,6 +17095,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -16455,6 +17200,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Standard",
     "duration": 318,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 1,
@@ -16465,6 +17211,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 5,
@@ -16566,6 +17316,7 @@
     "map": "Utopia Coliseum (Dusk)",
     "playlist": "Ranked Standard",
     "duration": 318,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 1,
@@ -16576,6 +17327,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -16648,11 +17403,11 @@
       "time_offensive_half": 89.79,
       "time_behind_ball": 229.86,
       "time_infront_ball": 88.26,
-      "time_most_back": 126.6,
+      "time_most_back": 126.4,
       "time_most_forward": 92.1,
       "goals_against_while_last_defender": 1,
       "time_closest_to_ball": 82.5,
-      "time_farthest_from_ball": 128,
+      "time_farthest_from_ball": 127.8,
       "percent_defensive_third": 55.314198,
       "percent_offensive_third": 13.8191185,
       "percent_neutral_third": 30.86668,
@@ -16660,10 +17415,10 @@
       "percent_offensive_half": 28.225199,
       "percent_behind_ball": 72.25575,
       "percent_infront_ball": 27.744247,
-      "percent_most_back": 40.49386,
+      "percent_most_back": 40.429886,
       "percent_most_forward": 29.458801,
       "percent_closest_to_ball": 26.388176,
-      "percent_farthest_from_ball": 40.941658
+      "percent_farthest_from_ball": 40.877686
     },
     "demo": {
       "inflicted": 1,
@@ -16677,6 +17432,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 341,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -16686,6 +17442,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -16787,6 +17547,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 341,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 3,
@@ -16796,6 +17557,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 5,
@@ -16897,6 +17662,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 341,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 1,
@@ -16906,6 +17672,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 0,
@@ -16981,8 +17751,8 @@
       "time_most_back": 146.1,
       "time_most_forward": 180.6,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 179,
-      "time_farthest_from_ball": 147.7,
+      "time_closest_to_ball": 179.1,
+      "time_farthest_from_ball": 147.8,
       "percent_defensive_third": 44.01352,
       "percent_offensive_third": 22.051237,
       "percent_neutral_third": 33.93524,
@@ -16992,8 +17762,8 @@
       "percent_infront_ball": 31.17865,
       "percent_most_back": 44.725407,
       "percent_most_forward": 55.286842,
-      "percent_closest_to_ball": 54.797035,
-      "percent_farthest_from_ball": 45.215206
+      "percent_closest_to_ball": 54.82765,
+      "percent_farthest_from_ball": 45.24582
     },
     "demo": {
       "inflicted": 0,
@@ -17007,6 +17777,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 341,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 1,
@@ -17016,6 +17787,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 0,
@@ -17091,8 +17866,8 @@
       "time_most_back": 183.1,
       "time_most_forward": 143.2,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 144.8,
-      "time_farthest_from_ball": 181.5,
+      "time_closest_to_ball": 144.7,
+      "time_farthest_from_ball": 181.4,
       "percent_defensive_third": 50.548798,
       "percent_offensive_third": 21.502722,
       "percent_neutral_third": 27.94848,
@@ -17102,8 +17877,8 @@
       "percent_infront_ball": 25.65216,
       "percent_most_back": 56.052162,
       "percent_most_forward": 43.837627,
-      "percent_closest_to_ball": 44.327435,
-      "percent_farthest_from_ball": 55.56236
+      "percent_closest_to_ball": 44.29682,
+      "percent_farthest_from_ball": 55.531746
     },
     "demo": {
       "inflicted": 0,
@@ -17117,6 +17892,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 363,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -17127,6 +17903,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 9,
@@ -17199,11 +17979,11 @@
       "time_offensive_half": 131.16,
       "time_behind_ball": 264,
       "time_infront_ball": 99.91,
-      "time_most_back": 100.1,
-      "time_most_forward": 125.9,
+      "time_most_back": 99.8,
+      "time_most_forward": 125.6,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 74.2,
-      "time_farthest_from_ball": 137.9,
+      "time_closest_to_ball": 73.9,
+      "time_farthest_from_ball": 137.7,
       "percent_defensive_third": 49.774666,
       "percent_offensive_third": 19.079418,
       "percent_neutral_third": 31.14592,
@@ -17211,10 +17991,10 @@
       "percent_offensive_half": 36.041878,
       "percent_behind_ball": 72.54541,
       "percent_infront_ball": 27.45459,
-      "percent_most_back": 29.194738,
-      "percent_most_forward": 36.719456,
-      "percent_closest_to_ball": 21.640854,
-      "percent_farthest_from_ball": 40.219322
+      "percent_most_back": 29.107243,
+      "percent_most_forward": 36.63196,
+      "percent_closest_to_ball": 21.553358,
+      "percent_farthest_from_ball": 40.160995
     },
     "demo": {
       "inflicted": 2,
@@ -17228,6 +18008,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 363,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -17238,6 +18019,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 9,
@@ -17310,11 +18095,11 @@
       "time_offensive_half": 103.57,
       "time_behind_ball": 289.66,
       "time_infront_ball": 74.29,
-      "time_most_back": 142.9,
-      "time_most_forward": 89.1,
+      "time_most_back": 143.2,
+      "time_most_forward": 89.3,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 103.6,
-      "time_farthest_from_ball": 128.1,
+      "time_closest_to_ball": 103.8,
+      "time_farthest_from_ball": 128.3,
       "percent_defensive_third": 58.00522,
       "percent_offensive_third": 18.104136,
       "percent_neutral_third": 23.890644,
@@ -17322,10 +18107,10 @@
       "percent_offensive_half": 28.457205,
       "percent_behind_ball": 79.58785,
       "percent_infront_ball": 20.412144,
-      "percent_most_back": 41.6776,
-      "percent_most_forward": 25.986526,
-      "percent_closest_to_ball": 30.215534,
-      "percent_farthest_from_ball": 37.361103
+      "percent_most_back": 41.765102,
+      "percent_most_forward": 26.044857,
+      "percent_closest_to_ball": 30.273865,
+      "percent_farthest_from_ball": 37.41943
     },
     "demo": {
       "inflicted": 0,
@@ -17339,6 +18124,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 361,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -17348,6 +18134,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 3,
@@ -17420,8 +18210,8 @@
       "time_offensive_half": 133.95,
       "time_behind_ball": 259.73,
       "time_infront_ball": 98.76,
-      "time_most_back": 179.4,
-      "time_most_forward": 158.9,
+      "time_most_back": 179.3,
+      "time_most_forward": 158.8,
       "goals_against_while_last_defender": 2,
       "time_closest_to_ball": 181.4,
       "time_farthest_from_ball": 156.8,
@@ -17432,8 +18222,8 @@
       "percent_offensive_half": 37.366104,
       "percent_behind_ball": 72.45112,
       "percent_infront_ball": 27.548883,
-      "percent_most_back": 52.699604,
-      "percent_most_forward": 46.677628,
+      "percent_most_back": 52.670227,
+      "percent_most_forward": 46.648254,
       "percent_closest_to_ball": 53.287113,
       "percent_farthest_from_ball": 46.060745
     },
@@ -17449,6 +18239,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 361,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 2,
@@ -17458,6 +18249,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 3,
@@ -17530,8 +18325,8 @@
       "time_offensive_half": 124.18,
       "time_behind_ball": 246.13,
       "time_infront_ball": 115.36,
-      "time_most_back": 159.7,
-      "time_most_forward": 178.2,
+      "time_most_back": 159.8,
+      "time_most_forward": 178.3,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 156.3,
       "time_farthest_from_ball": 181.7,
@@ -17542,8 +18337,8 @@
       "percent_offensive_half": 34.353214,
       "percent_behind_ball": 68.08764,
       "percent_infront_ball": 31.912363,
-      "percent_most_back": 46.912636,
-      "percent_most_forward": 52.3471,
+      "percent_most_back": 46.942013,
+      "percent_most_forward": 52.376472,
       "percent_closest_to_ball": 45.913868,
       "percent_farthest_from_ball": 53.37524
     },
@@ -17559,6 +18354,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 361,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -17568,6 +18364,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -17640,11 +18440,11 @@
       "time_offensive_half": 121.62,
       "time_behind_ball": 258.3,
       "time_infront_ball": 99.38,
-      "time_most_back": 184.6,
-      "time_most_forward": 153.1,
+      "time_most_back": 184.5,
+      "time_most_forward": 153,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 135.6,
-      "time_farthest_from_ball": 202.1,
+      "time_closest_to_ball": 135.4,
+      "time_farthest_from_ball": 201.9,
       "percent_defensive_third": 50.61925,
       "percent_offensive_third": 21.026587,
       "percent_neutral_third": 28.35416,
@@ -17652,10 +18452,10 @@
       "percent_offensive_half": 34.00151,
       "percent_behind_ball": 72.215385,
       "percent_infront_ball": 27.784613,
-      "percent_most_back": 54.22713,
-      "percent_most_forward": 44.973858,
-      "percent_closest_to_ball": 39.83315,
-      "percent_farthest_from_ball": 59.367836
+      "percent_most_back": 54.197754,
+      "percent_most_forward": 44.944477,
+      "percent_closest_to_ball": 39.77439,
+      "percent_farthest_from_ball": 59.309086
     },
     "demo": {
       "inflicted": 1,
@@ -17669,6 +18469,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 361,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -17678,6 +18479,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 6,
@@ -17750,11 +18555,11 @@
       "time_offensive_half": 130.22,
       "time_behind_ball": 262.12,
       "time_infront_ball": 98.29,
-      "time_most_back": 159.6,
-      "time_most_forward": 183.7,
+      "time_most_back": 159.7,
+      "time_most_forward": 183.8,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 202,
-      "time_farthest_from_ball": 141.3,
+      "time_closest_to_ball": 202.2,
+      "time_farthest_from_ball": 141.5,
       "percent_defensive_third": 49.909824,
       "percent_offensive_third": 21.769651,
       "percent_neutral_third": 28.320524,
@@ -17762,10 +18567,10 @@
       "percent_offensive_half": 36.131073,
       "percent_behind_ball": 72.72828,
       "percent_infront_ball": 27.271719,
-      "percent_most_back": 46.883263,
-      "percent_most_forward": 53.96275,
-      "percent_closest_to_ball": 59.338463,
-      "percent_farthest_from_ball": 41.50755
+      "percent_most_back": 46.912636,
+      "percent_most_forward": 53.992126,
+      "percent_closest_to_ball": 59.397213,
+      "percent_farthest_from_ball": 41.5663
     },
     "demo": {
       "inflicted": 0,
@@ -17779,6 +18584,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 312,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 1,
@@ -17789,6 +18595,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 3,
@@ -17862,9 +18672,9 @@
       "time_behind_ball": 240.78,
       "time_infront_ball": 67.49,
       "time_most_back": 99.8,
-      "time_most_forward": 99.6,
+      "time_most_forward": 99.7,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 95.8,
+      "time_closest_to_ball": 95.9,
       "time_farthest_from_ball": 94.2,
       "percent_defensive_third": 53.329876,
       "percent_offensive_third": 21.293022,
@@ -17874,8 +18684,8 @@
       "percent_behind_ball": 78.10686,
       "percent_infront_ball": 21.893147,
       "percent_most_back": 33.604954,
-      "percent_most_forward": 33.53761,
-      "percent_closest_to_ball": 32.258064,
+      "percent_most_forward": 33.57128,
+      "percent_closest_to_ball": 32.291737,
       "percent_farthest_from_ball": 31.719307
     },
     "demo": {
@@ -17890,6 +18700,7 @@
     "map": "uf_day_p",
     "playlist": "Ranked Standard",
     "duration": 312,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 4,
     "opponent_goals": 1,
@@ -17900,6 +18711,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -17973,9 +18788,9 @@
       "time_behind_ball": 253.47,
       "time_infront_ball": 56.75,
       "time_most_back": 122.8,
-      "time_most_forward": 66,
+      "time_most_forward": 66.1,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 62.6,
+      "time_closest_to_ball": 62.7,
       "time_farthest_from_ball": 119,
       "percent_defensive_third": 60.710484,
       "percent_offensive_third": 12.398052,
@@ -17985,8 +18800,8 @@
       "percent_behind_ball": 81.70653,
       "percent_infront_ball": 18.293468,
       "percent_most_back": 41.349583,
-      "percent_most_forward": 22.223719,
-      "percent_closest_to_ball": 21.07886,
+      "percent_most_forward": 22.257391,
+      "percent_closest_to_ball": 21.112532,
       "percent_farthest_from_ball": 40.070038
     },
     "demo": {
@@ -18001,6 +18816,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 320,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 5,
@@ -18011,6 +18827,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 8,
@@ -18083,11 +18903,11 @@
       "time_offensive_half": 105.83,
       "time_behind_ball": 212.38,
       "time_infront_ball": 107.32,
-      "time_most_back": 112.9,
+      "time_most_back": 112.8,
       "time_most_forward": 97.5,
       "goals_against_while_last_defender": 1,
       "time_closest_to_ball": 82.2,
-      "time_farthest_from_ball": 133.4,
+      "time_farthest_from_ball": 133.3,
       "percent_defensive_third": 49.964027,
       "percent_offensive_third": 17.2636,
       "percent_neutral_third": 32.772373,
@@ -18095,10 +18915,10 @@
       "percent_offensive_half": 33.103943,
       "percent_behind_ball": 66.43103,
       "percent_infront_ball": 33.56897,
-      "percent_most_back": 36.98729,
+      "percent_most_back": 36.95453,
       "percent_most_forward": 31.94208,
       "percent_closest_to_ball": 26.92963,
-      "percent_farthest_from_ball": 43.703312
+      "percent_farthest_from_ball": 43.670555
     },
     "demo": {
       "inflicted": 0,
@@ -18112,6 +18932,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 320,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 0,
     "opponent_goals": 5,
@@ -18122,6 +18943,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 8,
@@ -18198,7 +19023,7 @@
       "time_most_forward": 77.5,
       "goals_against_while_last_defender": 1,
       "time_closest_to_ball": 96.1,
-      "time_farthest_from_ball": 88.7,
+      "time_farthest_from_ball": 88.8,
       "percent_defensive_third": 54.116764,
       "percent_offensive_third": 18.837362,
       "percent_neutral_third": 27.045874,
@@ -18209,7 +19034,7 @@
       "percent_most_back": 38.920197,
       "percent_most_forward": 25.389858,
       "percent_closest_to_ball": 31.483423,
-      "percent_farthest_from_ball": 29.059101
+      "percent_farthest_from_ball": 29.091864
     },
     "demo": {
       "inflicted": 0,
@@ -18223,6 +19048,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 418,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -18232,6 +19058,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 6,
@@ -18333,6 +19163,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 418,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -18342,6 +19173,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 6,
@@ -18443,6 +19278,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 418,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -18452,6 +19288,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 4,
@@ -18553,6 +19393,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 418,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -18562,6 +19403,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 4,
@@ -18663,6 +19508,7 @@
     "map": "mall_day_p",
     "playlist": "Ranked Standard",
     "duration": 376,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 8,
     "opponent_goals": 0,
@@ -18673,6 +19519,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 4,
@@ -18745,11 +19595,11 @@
       "time_offensive_half": 116.36,
       "time_behind_ball": 300.1,
       "time_infront_ball": 64.86,
-      "time_most_back": 122.3,
+      "time_most_back": 122.4,
       "time_most_forward": 95,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 95,
-      "time_farthest_from_ball": 122.1,
+      "time_farthest_from_ball": 122.2,
       "percent_defensive_third": 55.81433,
       "percent_offensive_third": 18.73356,
       "percent_neutral_third": 25.452103,
@@ -18757,10 +19607,10 @@
       "percent_offensive_half": 31.882944,
       "percent_behind_ball": 82.22819,
       "percent_infront_ball": 17.771809,
-      "percent_most_back": 34.697987,
+      "percent_most_back": 34.72636,
       "percent_most_forward": 26.952648,
       "percent_closest_to_ball": 26.952648,
-      "percent_farthest_from_ball": 34.641247
+      "percent_farthest_from_ball": 34.669617
     },
     "demo": {
       "inflicted": 0,
@@ -18774,6 +19624,7 @@
     "map": "mall_day_p",
     "playlist": "Ranked Standard",
     "duration": 376,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 8,
     "opponent_goals": 0,
@@ -18784,6 +19635,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 4,
       "shots_against": 4,
@@ -18885,6 +19740,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 333,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -18894,6 +19750,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 4,
@@ -18995,6 +19855,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 333,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -19004,6 +19865,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 4,
@@ -19105,6 +19970,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 333,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -19114,6 +19980,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -19215,6 +20085,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 333,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 2,
     "opponent_goals": 1,
@@ -19224,6 +20095,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -19325,6 +20200,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 336,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -19335,6 +20211,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 9,
@@ -19436,6 +20316,7 @@
     "map": "Mannfield",
     "playlist": "Ranked Standard",
     "duration": 336,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 2,
@@ -19446,6 +20327,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 9,
@@ -19519,7 +20404,7 @@
       "time_behind_ball": 255.55,
       "time_infront_ball": 80.17,
       "time_most_back": 126.5,
-      "time_most_forward": 79.6,
+      "time_most_forward": 79.5,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 77.6,
       "time_farthest_from_ball": 122.8,
@@ -19531,7 +20416,7 @@
       "percent_behind_ball": 76.11998,
       "percent_infront_ball": 23.880018,
       "percent_most_back": 39.013107,
-      "percent_most_forward": 24.54896,
+      "percent_most_forward": 24.518118,
       "percent_closest_to_ball": 23.932152,
       "percent_farthest_from_ball": 37.872013
     },
@@ -19547,6 +20432,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Standard",
     "duration": 252,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 0,
@@ -19557,6 +20443,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -19630,7 +20520,7 @@
       "time_behind_ball": 204.35,
       "time_infront_ball": 47.77,
       "time_most_back": 85.3,
-      "time_most_forward": 68,
+      "time_most_forward": 68.1,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 77.8,
       "time_farthest_from_ball": 75.7,
@@ -19642,7 +20532,7 @@
       "percent_behind_ball": 81.05267,
       "percent_infront_ball": 18.947327,
       "percent_most_back": 35.532784,
-      "percent_most_forward": 28.326252,
+      "percent_most_forward": 28.367908,
       "percent_closest_to_ball": 32.408566,
       "percent_farthest_from_ball": 31.533781
     },
@@ -19658,6 +20548,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Standard",
     "duration": 252,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 3,
     "opponent_goals": 0,
@@ -19668,6 +20559,10 @@
       "Rarely_Sober",
       "blanquii24"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 3,
@@ -19713,16 +20608,16 @@
       "avg_speed": 1274,
       "total_distance": 302281,
       "time_supersonic_speed": 11.52,
-      "time_boost_speed": 62.57,
-      "time_slow_speed": 178.03,
+      "time_boost_speed": 62.52,
+      "time_slow_speed": 178.08,
       "time_ground": 209.29,
       "time_low_air": 40.14,
       "time_high_air": 2.68,
       "time_powerslide": 1.43,
       "count_powerslide": 10,
       "avg_powerslide_duration": 0.14,
-      "percent_slow_speed": 70.6132,
-      "percent_boost_speed": 24.817547,
+      "percent_slow_speed": 70.633026,
+      "percent_boost_speed": 24.797714,
       "percent_supersonic_speed": 4.5692525,
       "percent_ground": 83.01536,
       "percent_low_air": 15.921622,
@@ -19740,11 +20635,11 @@
       "time_offensive_half": 70.93,
       "time_behind_ball": 202.54,
       "time_infront_ball": 49.57,
-      "time_most_back": 112.7,
-      "time_most_forward": 47.5,
+      "time_most_back": 112.9,
+      "time_most_forward": 47.4,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 58.5,
-      "time_farthest_from_ball": 103,
+      "time_farthest_from_ball": 103.2,
       "percent_defensive_third": 52.03871,
       "percent_offensive_third": 14.707284,
       "percent_neutral_third": 33.254005,
@@ -19752,10 +20647,10 @@
       "percent_offensive_half": 28.134546,
       "percent_behind_ball": 80.33795,
       "percent_infront_ball": 19.662054,
-      "percent_most_back": 46.946598,
-      "percent_most_forward": 19.78672,
+      "percent_most_back": 47.02991,
+      "percent_most_forward": 19.745064,
       "percent_closest_to_ball": 24.368908,
-      "percent_farthest_from_ball": 42.90594
+      "percent_farthest_from_ball": 42.989254
     },
     "demo": {
       "inflicted": 1,
@@ -19769,6 +20664,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 481,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -19778,6 +20674,10 @@
     "teammates": [
       "ExMirage(3)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 7,
@@ -19879,6 +20779,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 481,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -19888,6 +20789,10 @@
     "teammates": [
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 7,
@@ -19989,6 +20894,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 481,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -19998,6 +20904,10 @@
     "teammates": [
       "ExMirage(2)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 5,
       "shots_against": 3,
@@ -20099,6 +21009,7 @@
     "map": "Mannfield",
     "playlist": "Offline",
     "duration": 481,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 2,
@@ -20108,6 +21019,10 @@
     "teammates": [
       "ExMirage(1)"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -20209,6 +21124,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 393,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -20219,6 +21135,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -20291,11 +21211,11 @@
       "time_offensive_half": 114.99,
       "time_behind_ball": 303.96,
       "time_infront_ball": 87.62,
-      "time_most_back": 137.1,
+      "time_most_back": 137.2,
       "time_most_forward": 103.2,
       "goals_against_while_last_defender": 2,
       "time_closest_to_ball": 119.4,
-      "time_farthest_from_ball": 129.9,
+      "time_farthest_from_ball": 130,
       "percent_defensive_third": 51.72378,
       "percent_offensive_third": 14.512998,
       "percent_neutral_third": 33.763218,
@@ -20303,10 +21223,10 @@
       "percent_offensive_half": 29.365648,
       "percent_behind_ball": 77.623985,
       "percent_infront_ball": 22.376017,
-      "percent_most_back": 37.12932,
+      "percent_most_back": 37.1564,
       "percent_most_forward": 27.948544,
       "percent_closest_to_ball": 32.335815,
-      "percent_farthest_from_ball": 35.179417
+      "percent_farthest_from_ball": 35.2065
     },
     "demo": {
       "inflicted": 0,
@@ -20320,6 +21240,7 @@
     "map": "uf_night_p",
     "playlist": "Ranked Standard",
     "duration": 393,
+    "overtime": true,
     "team_color": "orange",
     "team_goals": 3,
     "opponent_goals": 4,
@@ -20330,6 +21251,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 3,
       "shots_against": 8,
@@ -20402,11 +21327,11 @@
       "time_offensive_half": 103.41,
       "time_behind_ball": 302.67,
       "time_infront_ball": 87.16,
-      "time_most_back": 144.1,
-      "time_most_forward": 89.3,
+      "time_most_back": 144,
+      "time_most_forward": 89.4,
       "goals_against_while_last_defender": 1,
-      "time_closest_to_ball": 93.4,
-      "time_farthest_from_ball": 136.1,
+      "time_closest_to_ball": 93.5,
+      "time_farthest_from_ball": 135.9,
       "percent_defensive_third": 59.33973,
       "percent_offensive_third": 13.510672,
       "percent_neutral_third": 27.149601,
@@ -20414,10 +21339,10 @@
       "percent_offensive_half": 26.526268,
       "percent_behind_ball": 77.64154,
       "percent_infront_ball": 22.358463,
-      "percent_most_back": 39.025055,
-      "percent_most_forward": 24.184156,
-      "percent_closest_to_ball": 25.294516,
-      "percent_farthest_from_ball": 36.8585
+      "percent_most_back": 38.99797,
+      "percent_most_forward": 24.211239,
+      "percent_closest_to_ball": 25.321598,
+      "percent_farthest_from_ball": 36.80433
     },
     "demo": {
       "inflicted": 0,
@@ -20431,6 +21356,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 220,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -20441,6 +21367,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -20542,6 +21472,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 220,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 4,
     "opponent_goals": 0,
@@ -20552,6 +21483,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 3,
@@ -20653,6 +21588,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Standard",
     "duration": 403,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -20663,6 +21599,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -20736,10 +21676,10 @@
       "time_behind_ball": 326.37,
       "time_infront_ball": 72.83,
       "time_most_back": 156.8,
-      "time_most_forward": 100.8,
+      "time_most_forward": 100.6,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 117.4,
-      "time_farthest_from_ball": 127.2,
+      "time_closest_to_ball": 117.3,
+      "time_farthest_from_ball": 127.1,
       "percent_defensive_third": 66.02204,
       "percent_offensive_third": 9.91483,
       "percent_neutral_third": 24.063126,
@@ -20748,9 +21688,9 @@
       "percent_behind_ball": 81.75601,
       "percent_infront_ball": 18.243988,
       "percent_most_back": 40.653355,
-      "percent_most_forward": 26.1343,
-      "percent_closest_to_ball": 30.438164,
-      "percent_farthest_from_ball": 32.978996
+      "percent_most_forward": 26.082447,
+      "percent_closest_to_ball": 30.412237,
+      "percent_farthest_from_ball": 32.95307
     },
     "demo": {
       "inflicted": 0,
@@ -20764,6 +21704,7 @@
     "map": "Beckwith Park (Midnight)",
     "playlist": "Ranked Standard",
     "duration": 403,
+    "overtime": true,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 3,
@@ -20774,6 +21715,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 2,
       "shots_against": 8,
@@ -20849,7 +21794,7 @@
       "time_most_back": 135.5,
       "time_most_forward": 109.1,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 115.1,
+      "time_closest_to_ball": 115.3,
       "time_farthest_from_ball": 148.1,
       "percent_defensive_third": 62.537464,
       "percent_offensive_third": 12.415085,
@@ -20860,7 +21805,7 @@
       "percent_infront_ball": 26.378622,
       "percent_most_back": 35.130928,
       "percent_most_forward": 28.286232,
-      "percent_closest_to_ball": 29.841845,
+      "percent_closest_to_ball": 29.8937,
       "percent_farthest_from_ball": 38.39772
     },
     "demo": {
@@ -20875,6 +21820,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 322,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -20885,6 +21831,10 @@
       "blanquii24",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 1,
       "shots_against": 8,
@@ -20960,7 +21910,7 @@
       "time_most_back": 104.8,
       "time_most_forward": 103.9,
       "goals_against_while_last_defender": 0,
-      "time_closest_to_ball": 98.2,
+      "time_closest_to_ball": 98.3,
       "time_farthest_from_ball": 95.5,
       "percent_defensive_third": 55.920826,
       "percent_offensive_third": 16.5025,
@@ -20971,7 +21921,7 @@
       "percent_infront_ball": 27.39645,
       "percent_most_back": 34.387714,
       "percent_most_forward": 34.0924,
-      "percent_closest_to_ball": 32.222076,
+      "percent_closest_to_ball": 32.254887,
       "percent_farthest_from_ball": 31.336132
     },
     "demo": {
@@ -20986,6 +21936,7 @@
     "map": "DFH Stadium",
     "playlist": "Ranked Standard",
     "duration": 322,
+    "overtime": false,
     "team_color": "blue",
     "team_goals": 2,
     "opponent_goals": 4,
@@ -20996,6 +21947,10 @@
       "blanquii24",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 8,
@@ -21071,7 +22026,7 @@
       "time_most_back": 124.3,
       "time_most_forward": 77.5,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 68.2,
+      "time_closest_to_ball": 68,
       "time_farthest_from_ball": 122.8,
       "percent_defensive_third": 54.727848,
       "percent_offensive_third": 13.396351,
@@ -21082,7 +22037,7 @@
       "percent_infront_ball": 24.89906,
       "percent_most_back": 40.78619,
       "percent_most_forward": 25.429846,
-      "percent_closest_to_ball": 22.378263,
+      "percent_closest_to_ball": 22.31264,
       "percent_farthest_from_ball": 40.294
     },
     "demo": {
@@ -21097,6 +22052,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Standard",
     "duration": 217,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -21107,6 +22063,10 @@
       "C4rlill0s_",
       "Rarely_Sober"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -21180,9 +22140,9 @@
       "time_behind_ball": 177.99,
       "time_infront_ball": 39.71,
       "time_most_back": 107.8,
-      "time_most_forward": 44.5,
+      "time_most_forward": 44.7,
       "goals_against_while_last_defender": 2,
-      "time_closest_to_ball": 52.1,
+      "time_closest_to_ball": 52.3,
       "time_farthest_from_ball": 90.5,
       "percent_defensive_third": 70.31559,
       "percent_offensive_third": 4.864716,
@@ -21192,8 +22152,8 @@
       "percent_behind_ball": 81.7593,
       "percent_infront_ball": 18.240698,
       "percent_most_back": 53.127003,
-      "percent_most_forward": 21.930904,
-      "percent_closest_to_ball": 25.676407,
+      "percent_most_forward": 22.02947,
+      "percent_closest_to_ball": 25.774973,
       "percent_farthest_from_ball": 44.601055
     },
     "demo": {
@@ -21208,6 +22168,7 @@
     "map": "Beckwith Park (Stormy)",
     "playlist": "Ranked Standard",
     "duration": 217,
+    "overtime": false,
     "team_color": "orange",
     "team_goals": 1,
     "opponent_goals": 4,
@@ -21218,6 +22179,10 @@
       "C4rlill0s_",
       "ExMirage"
     ],
+    "scored_first": null,
+    "max_deficit_overcome": 0,
+    "max_lead_lost": 0,
+    "ot_goal_scorer": null,
     "core": {
       "shots": 0,
       "shots_against": 6,
@@ -21291,7 +22256,7 @@
       "time_behind_ball": 152.29,
       "time_infront_ball": 62.42,
       "time_most_back": 53.9,
-      "time_most_forward": 78.5,
+      "time_most_forward": 78.4,
       "goals_against_while_last_defender": 0,
       "time_closest_to_ball": 65.3,
       "time_farthest_from_ball": 65.9,
@@ -21303,7 +22268,7 @@
       "percent_behind_ball": 70.92823,
       "percent_infront_ball": 29.071772,
       "percent_most_back": 26.563501,
-      "percent_most_forward": 38.687103,
+      "percent_most_forward": 38.637817,
       "percent_closest_to_ball": 32.18176,
       "percent_farthest_from_ball": 32.47745
     },
