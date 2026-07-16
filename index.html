@@ -402,7 +402,7 @@
     <button class="tabbtn" data-tab="movement">Kretanje</button>
     <button class="tabbtn" data-tab="positioning">Pozicioniranje</button>
     <button class="tabbtn" data-tab="demos">Demo</button>
-    <!-- <button class="tabbtn" data-tab="wrapped">🎬 Wrapped</button>-->
+    <button class="tabbtn" data-tab="wrapped">🎬 Wrapped</button>
     <button class="tabbtn" data-tab="cards">🃏 Karte</button>
     <button class="tabbtn" data-tab="chemistry">Chemistry</button>
     <button class="tabbtn" data-tab="records">Rekordi</button>
@@ -649,6 +649,24 @@ const PLAYER_COLOR_OVERRIDES = {
   'Cane':  '#FF6B35',   // narandžasta
   'Ivan':  '#4ADE80',   // zelena
   'Pajke': '#FBBF24',   // žuta / amber
+};
+
+// ---- Slike za trading karte (tab "Karte"): ovde dodaješ sliku za svakog
+// igrača - ne mora biti lice, može i auto, avatar, šta god. Format je putanja
+// ili URL do slike:
+//  - ako ubaciš fajlove u repo (npr. napravi folder "images/" pored index.html
+//    i stavi toske.png, cane.png...), ovde samo napišeš 'images/toske.png'
+//    - OVO JE PREPORUČENO, jer garantovano radi i za "Sačuvaj sliku" dugme.
+//  - može i pun URL sa neta (npr. imgur direktan link), ALI ako taj server
+//    ne šalje CORS header, "Sačuvaj sliku" dugme neće raditi (slika će se
+//    videti na kartici, samo download neće proći) - zato je lokalni fajl
+//    najsigurniji izbor.
+// Ko god NIJE ovde naveden dobija karticu bez slike (kao do sada).
+const PLAYER_IMAGE_OVERRIDES = {
+ 'Toške': 'images/toske.png',
+  // 'Cane':  'images/cane.png',
+  // 'Ivan':  'images/ivan.png',
+  // 'Pajke': 'images/pajke.png',
 };
 
 // ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
@@ -2052,7 +2070,7 @@ function drawCarSilhouette(ctx, cx, cy, scale, color){
   ctx.restore();
 }
 
-function drawPlayerCard(canvas, data, color){
+function drawPlayerCard(canvas, data, color, photoImg){
   const W = 600, H = 840, scaleF = 2;
   canvas.width = W*scaleF; canvas.height = H*scaleF;
   const ctx = canvas.getContext('2d');
@@ -2088,6 +2106,27 @@ function drawPlayerCard(canvas, data, color){
   ctx.lineWidth = 4;
   ctx.strokeStyle = hexToRgba(color, 0.9);
   ctx.stroke();
+
+  // slika igrača (ili auto, šta god je navedeno u PLAYER_IMAGE_OVERRIDES) -
+  // okrugla, "cover" fit, sa obojenim prstenom oko nje. Ako slika nije
+  // podešena za ovog igrača, ovaj deo se preskače (izgled ostaje kao pre).
+  if(photoImg){
+    const cx = W/2, cy = H*0.32, r = 100;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.closePath(); ctx.clip();
+    const iw = photoImg.naturalWidth || photoImg.width, ih = photoImg.naturalHeight || photoImg.height;
+    const s = Math.max((r*2)/iw, (r*2)/ih);
+    const dw = iw*s, dh = ih*s;
+    ctx.fillStyle = '#0B0E14';
+    ctx.fillRect(cx-r, cy-r, r*2, r*2);
+    ctx.drawImage(photoImg, cx-dw/2, cy-dh/2, dw, dh);
+    ctx.restore();
+
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.lineWidth = 5; ctx.strokeStyle = hexToRgba('#ffffff', 0.9); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, r+6, 0, Math.PI*2);
+    ctx.lineWidth = 2; ctx.strokeStyle = hexToRgba(color, 0.9); ctx.stroke();
+  }
 
   // OVR top-left
   ctx.textBaseline = 'top';
@@ -2150,7 +2189,21 @@ function drawPlayerCard(canvas, data, color){
   ctx.fillText(`${data.wins}P – ${data.losses}I  ·  ${data.matches} mečeva  ·  RL STATS`, W/2, H-40);
 }
 
-function renderCardsTab(rows){
+const playerImageCache = {};
+function loadPlayerImage(url){
+  if(!playerImageCache[url]){
+    playerImageCache[url] = new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // potrebno da bi canvas.toDataURL() radio i sa spoljnim slikama
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null); // slika ne postoji/ne moze da se ucita - karta se crta bez nje
+      img.src = url;
+    });
+  }
+  return playerImageCache[url];
+}
+
+async function renderCardsTab(rows){
   const grid = $('#cardGrid');
   if(!grid) return;
   const ps = [...activePlayers].filter(p => rows.some(r=>r.player===p)).sort();
@@ -2163,21 +2216,27 @@ function renderCardsTab(rows){
     </div>
   `).join('');
 
-  ps.forEach(p => {
+  for(const p of ps){
     const stats = computeCardStats(rows, p);
-    if(!stats) return;
+    if(!stats) continue;
     const canvas = document.getElementById('rlcard-' + cssSafe(p));
-    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC');
-  });
+    const imgUrl = PLAYER_IMAGE_OVERRIDES[p];
+    const photoImg = imgUrl ? await loadPlayerImage(imgUrl) : null;
+    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg);
+  }
 
   grid.querySelectorAll('.rlcard-save').forEach(btn => {
     btn.addEventListener('click', () => {
       const p = btn.dataset.player;
       const canvas = document.getElementById('rlcard-' + cssSafe(p));
-      const link = document.createElement('a');
-      link.download = `rl-karta-${cssSafe(p)}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      try{
+        const link = document.createElement('a');
+        link.download = `rl-karta-${cssSafe(p)}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }catch(e){
+        alert('Ne mogu da snimim sliku - slika igrača verovatno dolazi sa servera koji ne dozvoljava preuzimanje (CORS). Ubaci sliku kao fajl u repo (npr. images/ folder) i koristi lokalnu putanju u PLAYER_IMAGE_OVERRIDES.');
+      }
     });
   });
 }
