@@ -3,12 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analiza — Rocket RLS</title>
-<!-- Favicon - Rocket League ball na tamnoj pozadini -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a1a2e' rx='20'/%3E%3Ccircle cx='50' cy='50' r='32' fill='white'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23e8e8e8'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%23d4d4d4'/%3E%3Ccircle cx='50' cy='50' r='8' fill='%23c0c0c0'/%3E%3Cpath d='M50 18 L50 82' stroke='%23909090' stroke-width='1.5'/%3E%3Cpath d='M18 50 L82 50' stroke='%23909090' stroke-width='1.5'/%3E%3C/svg%3E">
-
-<!-- Za Apple uređaje -->
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a1a2e' rx='20'/%3E%3Ccircle cx='50' cy='50' r='32' fill='white'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23e8e8e8'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%23d4d4d4'/%3E%3Ccircle cx='50' cy='50' r='8' fill='%23c0c0c0'/%3E%3Cpath d='M50 18 L50 82' stroke='%23909090' stroke-width='1.5'/%3E%3Cpath d='M18 50 L82 50' stroke='%23909090' stroke-width='1.5'/%3E%3C/svg%3E">
+<title>Analiza — Rocket League Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -271,7 +266,7 @@
       <div class="bar"></div>
       <div>
         <h1>Analiza</h1>
-        <span>Rocket League &middot; Brojke ne lažu :)</span>
+        <span>Rocket League &middot; sve sesije, svi igraci, jedno mesto</span>
       </div>
     </div>
     <div class="scoreline" id="scoreline"></div>
@@ -293,7 +288,7 @@
     </div>
     <div class="group" id="playerChips"></div>
     <button class="ai-btn" id="aiAnalyzeBtn">
-      <span style="font-size:18px;">🧠</span> RTS Analiza
+      <span style="font-size:18px;">🧠</span> AI Analitičar
     </button>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
   </div>
@@ -308,6 +303,8 @@
     <button class="tabbtn" data-tab="demos">Demo</button>
     <button class="tabbtn" data-tab="chemistry">Chemistry</button>
     <button class="tabbtn" data-tab="records">Rekordi</button>
+    <button class="tabbtn" data-tab="highlights">Highlights</button>
+    <button class="tabbtn" data-tab="h2h">Head-to-head</button>
     <button class="tabbtn" data-tab="matches">Svi mečevi</button>
   </div>
 
@@ -438,6 +435,51 @@
     <!-- RECORDS -->
     <div class="tabpanel" id="tab-records">
       <div class="award-grid" id="awardGrid"></div>
+    </div>
+
+    <!-- HIGHLIGHTS -->
+    <div class="tabpanel" id="tab-highlights">
+      <div class="grid">
+        <div class="card">
+          <h2>Prvi gol meča <small>win% kad tvoj tim prvi da gol vs kad ne</small></h2>
+          <div id="firstGoalStats"></div>
+        </div>
+        <div class="card">
+          <h2>Overtime <small>samo mečevi koji su išli u produžetak</small></h2>
+          <div id="otStats"></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>🔥 Comeback mečevi <small>bili ste na -2 ili više, pa ipak pobedili</small></h2>
+          <div class="table-wrap"><table id="comebackTable"><thead><tr><th>Datum</th><th>Igrač</th><th>Mapa</th><th class="mono">Zaostatak</th><th class="mono">Rezultat</th></tr></thead><tbody id="comebackBody"></tbody></table></div>
+        </div>
+        <div class="card">
+          <h2>💀 Choke mečevi <small>vodili ste +2 ili više, pa ipak izgubili</small></h2>
+          <div class="table-wrap"><table id="chokeTable"><thead><tr><th>Datum</th><th>Igrač</th><th>Mapa</th><th class="mono">Prednost</th><th class="mono">Rezultat</th></tr></thead><tbody id="chokeBody"></tbody></table></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>🏆 Dostignuća <small>pragovi koje ste dosad prešli (računato preko celog istorijata, bez obzira na filtere)</small></h2>
+        <div class="award-grid" id="milestoneGrid"></div>
+      </div>
+      <div class="card">
+        <h2>📈 Ovaj mesec vs prošli mesec <small>poređenje po igraču</small></h2>
+        <div class="table-wrap"><table id="monthCompareTable"><thead><tr><th>Igrač</th><th class="mono">Golova (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Win% (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Boost (ovaj/prošli)</th><th class="mono">Δ</th></tr></thead><tbody id="monthCompareBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- HEAD TO HEAD -->
+    <div class="tabpanel" id="tab-h2h">
+      <div class="card" style="margin-bottom:16px;">
+        <h2>Head-to-head <small>uporedi tačno dva igrača, jedan naspram drugog</small></h2>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+          <select class="metric-select" id="h2hPlayerA"></select>
+          <span style="color:var(--text-muted); font-weight:700;">VS</span>
+          <select class="metric-select" id="h2hPlayerB"></select>
+        </div>
+      </div>
+      <div id="h2hContent"></div>
     </div>
 
     <!-- MATCHES -->
@@ -728,6 +770,9 @@ function render(){
   renderChemistry(rows);
   renderRecords(rows);
   renderTable(rows);
+
+  renderHighlights(rows);
+  renderH2H();
 }
 
 /* ---------------- OVERVIEW ---------------- */
@@ -1250,6 +1295,284 @@ function renderRecords(rows){
   `).join('');
 }
 
+/* ---------------- HIGHLIGHTS TAB ---------------- */
+
+function dedupeByMatchTeam(rows){
+  const seen = new Set();
+  const out = [];
+  rows.forEach(r => {
+    const key = r.replay_id + '|' + r.team_color;
+    if(seen.has(key)) return;
+    seen.add(key);
+    out.push(r);
+  });
+  return out;
+}
+
+function renderHighlights(rows){
+  renderFirstGoalStats(rows);
+  renderOtStats(rows);
+  renderComebackChoke(rows);
+  renderMilestones();
+  renderMonthCompare();
+}
+
+function renderFirstGoalStats(rows){
+  const wrap = $('#firstGoalStats');
+  const teamRows = dedupeByMatchTeam(rows).filter(r => r.scored_first !== null && r.scored_first !== undefined);
+  if(!teamRows.length){ wrap.innerHTML = '<div class="empty">Nema podataka o prvom golu za ovaj izbor</div>'; return; }
+
+  const scoredFirst = teamRows.filter(r => r.scored_first === true);
+  const scoredSecond = teamRows.filter(r => r.scored_first === false);
+  const wrPct = arr => arr.length ? Math.round((arr.filter(r=>r.win).length/arr.length)*100) : 0;
+
+  wrap.innerHTML = `
+    <div class="meter-row">
+      <div class="meter-name">Prvi gol</div>
+      <div class="meter-track"><div class="meter-fill" style="width:${wrPct(scoredFirst)}%; background:var(--green);"></div></div>
+      <div class="meter-val">${wrPct(scoredFirst)}%</div>
+    </div>
+    <div class="meter-row">
+      <div class="meter-name">Nisu prvi</div>
+      <div class="meter-track"><div class="meter-fill" style="width:${wrPct(scoredSecond)}%; background:var(--loss);"></div></div>
+      <div class="meter-val">${wrPct(scoredSecond)}%</div>
+    </div>
+    <div class="subtle-note">Kad prvi date gol: ${scoredFirst.length} mečeva, win% ${wrPct(scoredFirst)}%. Kad protivnik prvi da gol: ${scoredSecond.length} mečeva, win% ${wrPct(scoredSecond)}%.</div>
+  `;
+}
+
+function renderOtStats(rows){
+  const wrap = $('#otStats');
+  const otTeamRows = dedupeByMatchTeam(rows).filter(r => r.overtime);
+  if(!otTeamRows.length){ wrap.innerHTML = '<div class="empty">Nema mečeva u produžetku za ovaj izbor</div>'; return; }
+
+  const wins = otTeamRows.filter(r => r.win).length;
+  const winPct = Math.round((wins/otTeamRows.length)*100);
+
+  // ko je najcesce dao pobednicki gol u OT (racunamo po mecu, ne po redu, da ne dupliramo)
+  const seenMatch = new Set();
+  const scorerCounts = {};
+  rows.forEach(r => {
+    if(!r.overtime || !r.ot_goal_scorer) return;
+    if(seenMatch.has(r.replay_id)) return;
+    seenMatch.add(r.replay_id);
+    scorerCounts[r.ot_goal_scorer] = (scorerCounts[r.ot_goal_scorer] || 0) + 1;
+  });
+  const topScorer = Object.entries(scorerCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  wrap.innerHTML = `
+    <div class="score-item" style="border:none; padding:0; margin-bottom:14px;">
+      <div class="num mono" style="font-size:22px;">${otTeamRows.length}</div>
+      <div class="lbl">Mečeva u OT</div>
+    </div>
+    <div class="meter-row">
+      <div class="meter-name">Win % u OT</div>
+      <div class="meter-track"><div class="meter-fill" style="width:${winPct}%; background:var(--blue);"></div></div>
+      <div class="meter-val">${winPct}%</div>
+    </div>
+    ${topScorer ? `<div class="subtle-note">Najčešće daje pobednički gol u OT: <b style="color:${playerColor[topScorer[0]]||'var(--text)'}">${topScorer[0]}</b> (${topScorer[1]}x)</div>` : ''}
+  `;
+}
+
+function renderComebackChoke(rows){
+  const comebacks = rows.filter(r => r.win && (r.max_deficit_overcome||0) >= 2)
+    .sort((a,b) => (b.max_deficit_overcome||0) - (a.max_deficit_overcome||0));
+  const chokes = rows.filter(r => !r.win && (r.max_lead_lost||0) >= 2)
+    .sort((a,b) => (b.max_lead_lost||0) - (a.max_lead_lost||0));
+
+  $('#comebackBody').innerHTML = comebacks.length ? comebacks.map(r => `
+    <tr><td class="mono">${fmtDate(r.date)}</td><td style="color:${playerColor[r.player]}">${r.player}</td><td>${r.map||''}</td>
+    <td class="mono">-${r.max_deficit_overcome}</td><td class="mono">${r.team_goals}–${r.opponent_goals}</td></tr>
+  `).join('') : '<tr><td colspan="5" class="empty">Nema comeback mečeva u ovom periodu</td></tr>';
+
+  $('#chokeBody').innerHTML = chokes.length ? chokes.map(r => `
+    <tr><td class="mono">${fmtDate(r.date)}</td><td style="color:${playerColor[r.player]}">${r.player}</td><td>${r.map||''}</td>
+    <td class="mono">+${r.max_lead_lost}</td><td class="mono">${r.team_goals}–${r.opponent_goals}</td></tr>
+  `).join('') : '<tr><td colspan="5" class="empty">Nema choke mečeva u ovom periodu (dobro!)</td></tr>';
+}
+
+const MILESTONE_GOAL_STEPS = [50, 100, 200, 300, 500, 1000];
+const MILESTONE_STREAK_STEPS = [5, 10, 15, 20, 30];
+
+function renderMilestones(){
+  const wrap = $('#milestoneGrid');
+  const ps = [...activePlayers];
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  const cards = [];
+  ps.forEach(p => {
+    // NAMERNO koristimo ceo RAW (ne filtrirane redove) - dostignuca su karijerna,
+    // ne zavise od trenutnog filtera po datumu/rezimu.
+    const prows = RAW.filter(r => r.player === p);
+    if(!prows.length) return;
+
+    const totalGoals = sum(prows.map(r => getPath(r,'core.goals')));
+    const goalStep = [...MILESTONE_GOAL_STEPS].reverse().find(s => totalGoals >= s);
+
+    const sorted = prows.slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    let best = 0, cur = 0;
+    sorted.forEach(r => { if(r.win){ cur++; best = Math.max(best, cur); } else cur = 0; });
+    const streakStep = [...MILESTONE_STREAK_STEPS].reverse().find(s => best >= s);
+
+    if(goalStep){
+      cards.push({ emoji:'🎯', title:`${p} — golova karijerno`, winner:p, detail:`${totalGoals} golova (prešao prag od ${goalStep})` });
+    }
+    if(streakStep){
+      cards.push({ emoji:'🔥', title:`${p} — najduži niz pobeda`, winner:p, detail:`${best} pobeda zaredom (prešao prag od ${streakStep})` });
+    }
+    cards.push({ emoji:'📅', title:`${p} — ukupno mečeva`, winner:p, detail:`${prows.length} odigranih mečeva karijerno` });
+  });
+
+  wrap.innerHTML = cards.length ? cards.map(c => `
+    <div class="award-card">
+      <div class="emoji">${c.emoji}</div>
+      <div class="title">${c.title}</div>
+      <div class="winner" style="color:${playerColor[c.winner]||'#fff'}">${c.winner}</div>
+      <div class="detail">${c.detail}</div>
+    </div>
+  `).join('') : '<div class="empty">Još uvek nema dostignuća (nedovoljno mečeva)</div>';
+}
+
+function renderMonthCompare(){
+  const now = new Date();
+  const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const prevDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const prevMonthKey = `${prevDate.getFullYear()}-${String(prevDate.getMonth()+1).padStart(2,'0')}`;
+
+  // Namerno ignorisemo datumski filter (Od/Do) ovde - poredimo kalendarske mesece.
+  // Postujemo rezim (online/offline) i izabrane igrace.
+  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
+
+  const ps = [...activePlayers];
+  const rowsFor = (p, monthKey) => modeRows.filter(r => r.player === p && (r.date||'').slice(0,7) === monthKey);
+
+  const body = ps.map(p => {
+    const curr = rowsFor(p, thisMonthKey);
+    const prev = rowsFor(p, prevMonthKey);
+    if(!curr.length && !prev.length) return '';
+
+    const goalsC = sum(curr.map(r=>getPath(r,'core.goals')));
+    const goalsP = sum(prev.map(r=>getPath(r,'core.goals')));
+    const wrC = curr.length ? Math.round((curr.filter(r=>r.win).length/curr.length)*100) : 0;
+    const wrP = prev.length ? Math.round((prev.filter(r=>r.win).length/prev.length)*100) : 0;
+    const boostC = avg(curr.map(r=>getPath(r,'boost.avg_amount')||0));
+    const boostP = avg(prev.map(r=>getPath(r,'boost.avg_amount')||0));
+
+    const arrow = (c,p_) => {
+      if(!p_ && !c) return '';
+      const diff = c - p_;
+      if(Math.abs(diff) < 0.05) return `<span style="color:var(--text-muted);">→</span>`;
+      return diff > 0 ? `<span style="color:var(--green);">▲ +${fmtNum(diff)}</span>` : `<span style="color:var(--loss);">▼ ${fmtNum(diff)}</span>`;
+    };
+
+    return `<tr>
+      <td style="color:${playerColor[p]}">${p}</td>
+      <td class="mono">${goalsC} / ${goalsP}</td><td>${arrow(goalsC,goalsP)}</td>
+      <td class="mono">${wrC}% / ${wrP}%</td><td>${arrow(wrC,wrP)}</td>
+      <td class="mono">${boostC.toFixed(0)} / ${boostP.toFixed(0)}</td><td>${arrow(boostC,boostP)}</td>
+    </tr>`;
+  }).filter(Boolean).join('');
+
+  $('#monthCompareBody').innerHTML = body || '<tr><td colspan="7" class="empty">Nema mečeva ovog ili prošlog meseca za izabrane igrače</td></tr>';
+}
+
+/* ---------------- HEAD TO HEAD TAB ---------------- */
+
+let h2hInitialized = false;
+
+function initH2HSelectors(){
+  const ps = [...activePlayers].sort();
+  const selA = $('#h2hPlayerA'), selB = $('#h2hPlayerB');
+  const prevA = selA.value, prevB = selB.value;
+  const opts = ps.map(p => `<option value="${p}">${p}</option>`).join('');
+  selA.innerHTML = opts;
+  selB.innerHTML = opts;
+  if(ps.includes(prevA)) selA.value = prevA; 
+  if(ps.includes(prevB) && prevB !== selA.value) selB.value = prevB;
+  else if(ps.length > 1) selB.value = ps.find(p => p !== selA.value) || ps[0];
+
+  if(!h2hInitialized){
+    selA.addEventListener('change', renderH2H);
+    selB.addEventListener('change', renderH2H);
+    h2hInitialized = true;
+  }
+}
+
+function renderH2H(){
+  initH2HSelectors();
+  const a = $('#h2hPlayerA').value, b = $('#h2hPlayerB').value;
+  const wrap = $('#h2hContent');
+  if(!a || !b || a === b){
+    wrap.innerHTML = '<div class="card"><div class="empty">Izaberi dva različita igrača</div></div>';
+    return;
+  }
+
+  const rows = getFiltered();
+  const rowsA = rows.filter(r => r.player === a);
+  const rowsB = rows.filter(r => r.player === b);
+
+  const metric = (arr, path) => avg(arr.map(r => getPath(r, path) || 0));
+  const totalMetric = (arr, path) => sum(arr.map(r => getPath(r, path) || 0));
+  const winPct = arr => arr.length ? Math.round((arr.filter(r=>r.win).length/arr.length)*100) : 0;
+
+  const rowsDef = [
+    { label:'Mečeva', a: rowsA.length, b: rowsB.length },
+    { label:'Win %', a: winPct(rowsA)+'%', b: winPct(rowsB)+'%' },
+    { label:'Golova ukupno', a: totalMetric(rowsA,'core.goals'), b: totalMetric(rowsB,'core.goals') },
+    { label:'Golova/meč', a: fmtNum(metric(rowsA,'core.goals')), b: fmtNum(metric(rowsB,'core.goals')) },
+    { label:'Asistencija/meč', a: fmtNum(metric(rowsA,'core.assists')), b: fmtNum(metric(rowsB,'core.assists')) },
+    { label:'Odbrana/meč', a: fmtNum(metric(rowsA,'core.saves')), b: fmtNum(metric(rowsB,'core.saves')) },
+    { label:'Prosečan boost', a: Math.round(metric(rowsA,'boost.avg_amount')), b: Math.round(metric(rowsB,'boost.avg_amount')) },
+    { label:'% iza lopte', a: Math.round(metric(rowsA,'positioning.percent_behind_ball'))+'%', b: Math.round(metric(rowsB,'positioning.percent_behind_ball'))+'%' },
+    { label:'Demo/meč', a: fmtNum(metric(rowsA,'demo.inflicted')), b: fmtNum(metric(rowsB,'demo.inflicted')) },
+    { label:'MVP nagrada', a: rowsA.filter(r=>getPath(r,'core.mvp')).length, b: rowsB.filter(r=>getPath(r,'core.mvp')).length },
+  ];
+
+  // Zajedno (isti tim) vs jedan protiv drugog (suprotni timovi)
+  const seen = new Set();
+  let together = { total:0, wins:0 };
+  let against = { total:0, aWins:0, bWins:0 };
+  rows.forEach(r => {
+    if(r.player !== a) return;
+    if(seen.has(r.replay_id + '|check')) return;
+    const bRowSame = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color === r.team_color);
+    const bRowOpp = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color !== r.team_color);
+    if(bRowSame){
+      together.total++;
+      if(r.win) together.wins++;
+    } else if(bRowOpp){
+      against.total++;
+      if(r.win) against.aWins++; else against.bWins++;
+    }
+  });
+
+  wrap.innerHTML = `
+    <div class="card">
+      <h2>
+        <span style="color:${playerColor[a]}">${a}</span>
+        <span style="color:var(--text-muted); font-weight:400;">vs</span>
+        <span style="color:${playerColor[b]}">${b}</span>
+      </h2>
+      <table style="width:100%; border-collapse:collapse;">
+        ${rowsDef.map(r => `
+          <tr>
+            <td class="mono" style="padding:8px 12px; text-align:right; width:35%; color:${playerColor[a]}; border-bottom:1px solid var(--border);">${r.a}</td>
+            <td style="padding:8px 12px; text-align:center; width:30%; color:var(--text-muted); font-size:12px; text-transform:uppercase; border-bottom:1px solid var(--border);">${r.label}</td>
+            <td class="mono" style="padding:8px 12px; text-align:left; width:35%; color:${playerColor[b]}; border-bottom:1px solid var(--border);">${r.b}</td>
+          </tr>
+        `).join('')}
+      </table>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h2>Zajedno vs jedan protiv drugog</h2>
+      <div class="subtle-note" style="margin-top:0;">
+        Isti tim: ${together.total} mečeva, ${together.total ? Math.round((together.wins/together.total)*100) : 0}% win.<br>
+        Suprotni timovi: ${against.total} mečeva — ${a}: ${against.aWins} pobeda, ${b}: ${against.bWins} pobeda.
+      </div>
+    </div>
+  `;
+}
+
 /* ---------------- MATCHES TAB ---------------- */
 
 function renderTable(rows){
@@ -1336,6 +1659,34 @@ function aiCacheKey(rows){
   return modeFilter + '|' + [...activePlayers].sort().join(',') + '|' + ids.length + '|' + ids.slice(0,500);
 }
 
+function getPreviousPeriodRows(currentRows){
+  const fromStr = $('#dateFrom').value;
+  const toStr = $('#dateTo').value;
+  let startDate, endDate;
+
+  if(fromStr && toStr){
+    startDate = new Date(fromStr);
+    endDate = new Date(toStr);
+  } else {
+    const dates = currentRows.map(r => r.date).filter(Boolean).sort();
+    if(!dates.length) return [];
+    startDate = new Date(dates[0].slice(0,10));
+    endDate = new Date(dates[dates.length-1].slice(0,10));
+  }
+
+  const dayMs = 24 * 3600 * 1000;
+  const lengthMs = Math.max(endDate - startDate, dayMs);
+  const prevEnd = new Date(startDate.getTime() - dayMs);
+  const prevStart = new Date(prevEnd.getTime() - lengthMs);
+
+  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
+  return modeRows.filter(r => {
+    if(!activePlayers.has(r.player) || !r.date) return false;
+    const d = new Date(r.date.slice(0,10));
+    return d >= prevStart && d <= prevEnd;
+  });
+}
+
 function prepareDetailedData(rows){
   const players = {};
   const avg = arr => arr.length ? arr.reduce((a,b) => a + b, 0) / arr.length : 0;
@@ -1381,15 +1732,24 @@ function prepareDetailedData(rows){
   return { players, teamStats };
 }
 
-async function callGroqAPI(data){
-  const systemPrompt = `Ti si vrhunski Rocket League analitičar. Analiziraš statistiku i daješ
-konkretne, korisne uvide na srpskom jeziku, uvek potkrepljene brojkama iz podataka koje dobiješ.
+async function callGroqAPI(data, prevData){
+  const hasComparison = prevData && Object.keys(prevData.players || {}).length > 0;
+
+  const systemPrompt = `Ti si iskusan, direktan Rocket League trener - analitičar sa stavom, ne suvoparan
+izveštaj. Pišeš na srpskom jeziku, konkretno i sa ličnošću: pohvališ ono što zaslužuje pohvalu bez
+ustručavanja, ali isto tako otvoreno kažeš kad nešto ne valja, sa malo duha i direktnosti (kao pravi
+trener u svlačionici), NIKAD uvredljivo ili omalovažavajuće prema igračima. Svaka tvrdnja MORA biti
+potkrepljena konkretnom brojkom iz podataka koje dobiješ.
+${hasComparison ? 'Dobićeš podatke za TRENUTNI period i za PRETHODNI period iste dužine - obavezno prokomentariši trend (da li je ekipa/igrač napredovala ili nazadovala, sa konkretnim brojkama razlike).' : ''}
 Odgovaraš ISKLJUČIVO validnim JSON objektom, bez markdown code fence-ova (bez \`\`\`), bez ijedne
 reči teksta pre ili posle JSON-a. Struktura mora biti tačno:
-{"summary":"3-4 rečenice sažetka","strengths":["stavka 1","stavka 2","..."],"weaknesses":["stavka 1","..."],"players":"analiza po igraču, više pasusa razdvojenih sa \\n\\n","tips":["savet 1","..."],"training":["preporuka 1","..."]}
+{"summary":"3-4 rečenice sažetka${hasComparison ? ', sa osvrtom na trend u odnosu na prethodni period' : ''}","strengths":["stavka 1","stavka 2","..."],"weaknesses":["stavka 1","..."],"players":"analiza po igraču, više pasusa razdvojenih sa \\n\\n","tips":["savet 1","..."],"training":["preporuka 1","..."]}
 Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i sa brojkom.`;
 
-  const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(data)}`;
+  const payload = hasComparison
+    ? { trenutni_period: data, prethodni_period: prevData }
+    : data;
+  const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(payload)}`;
 
   const response = await fetch(WORKER_URL, {
     method: 'POST',
@@ -1428,7 +1788,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   return parsed;
 }
 
-function generateDetailedFallback(data){
+function generateDetailedFallback(data, prevData){
   const players = Object.entries(data.players || {});
   if(!players.length){
     return {
@@ -1447,13 +1807,23 @@ function generateDetailedFallback(data){
   const worstBoost = players.reduce((a,b) => (b[1].avg_boost||0) < (a[1].avg_boost||0) ? b : a);
   const worstZero = players.reduce((a,b) => (b[1].zero_boost_pct||0) > (a[1].zero_boost_pct||0) ? b : a);
 
+  let trendNote = '';
+  if(prevData && Object.keys(prevData.players || {}).length){
+    const currTotalGoals = Object.values(data.players).reduce((s,p) => s + (p.goals_pm * p.matches), 0);
+    const prevTotalGoals = Object.values(prevData.players).reduce((s,p) => s + (p.goals_pm * p.matches), 0);
+    const currWr = data.teamStats?.total_matches ? Math.round((data.teamStats.total_wins/data.teamStats.total_matches)*100) : 0;
+    const prevWr = prevData.teamStats?.total_matches ? Math.round((prevData.teamStats.total_wins/prevData.teamStats.total_matches)*100) : 0;
+    const diff = currWr - prevWr;
+    trendNote = ` U odnosu na prethodni period, win rate je ${diff > 0 ? `porastao za ${diff}%` : diff < 0 ? `pao za ${Math.abs(diff)}%` : 'ostao isti'}.`;
+  }
+
   const playerAnalysis = players.map(([name, s]) => {
     const style = s.goals_pm > 1.2 ? 'ofanzivan' : s.saves_pm > 1.5 ? 'defanzivan' : 'svestran';
     return `${name} (${style}): ${s.matches} mečeva, ${s.winrate}% win rate, ${s.goals_pm} gol/meč, ${s.assists_pm} asist/meč, ${s.saves_pm} odbrana/meč, ${s.avg_boost}% prosečan boost.`;
   }).join('\n\n');
 
   return {
-    summary: `Odigrano ${data.teamStats?.total_matches || 0} mečeva. Najbolji win rate ima ${bestWinrate[0]} (${bestWinrate[1].winrate}%). Ovo je automatska analiza po pravilima (AI trenutno nije dostupan).`,
+    summary: `Odigrano ${data.teamStats?.total_matches || 0} mečeva. Najbolji win rate ima ${bestWinrate[0]} (${bestWinrate[1].winrate}%).${trendNote} Ovo je automatska analiza po pravilima (AI trenutno nije dostupan).`,
     strengths: [
       `${bestGoals[0]} je najbolji strelac (${bestGoals[1].goals_pm} gol/meč)`,
       `${bestAssists[0]} je najbolji asistent (${bestAssists[1].assists_pm} asist/meč)`,
@@ -1482,6 +1852,8 @@ async function analyzeWithAI(rows){
 
   try{
     const data = prepareDetailedData(rows);
+    const prevRows = getPreviousPeriodRows(rows);
+    const prevData = prepareDetailedData(prevRows);
     const cacheKey = aiCacheKey(rows);
 
     if(aiAnalysisCache.has(cacheKey)){
@@ -1493,12 +1865,12 @@ async function analyzeWithAI(rows){
     let analysis = null;
     let usedFallback = false;
     try{
-      analysis = await callGroqAPI(data);
+      analysis = await callGroqAPI(data, prevData);
     }catch(e){
       console.warn('AI Worker nije uspeo, koristim fallback:', e.message);
     }
     if(!analysis){
-      analysis = generateDetailedFallback(data);
+      analysis = generateDetailedFallback(data, prevData);
       usedFallback = true;
     }
 
@@ -1516,7 +1888,7 @@ function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
   modal.innerHTML = `
     <button class="modal-close" id="aiModalClose">&times;</button>
-    <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
+    <h3 style="color:#7C3AED;">🧠 AI Analitičar</h3>
     <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
     ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
 
