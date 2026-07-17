@@ -413,50 +413,6 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-  /* ===== ZLATNI OKVIR I GLOW EFEKAT ===== */
-
-/* Zlatni okvir za najboljeg igrača */
-.card-gold {
-  border: 2px solid #FFD700 !important;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 30px rgba(255, 215, 0, 0.05) !important;
-  position: relative;
-  overflow: hidden;
-  animation: glowPulse 2s ease-in-out infinite;
-  transition: all 0.3s ease;
-}
-
-.card-gold:hover {
-  box-shadow: 0 0 50px rgba(255, 215, 0, 0.5), inset 0 0 50px rgba(255, 215, 0, 0.08) !important;
-  transform: scale(1.02);
-}
-
-/* Pulsirajući glow efekat */
-@keyframes glowPulse {
-  0%, 100% { 
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.02); 
-  }
-  50% { 
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), inset 0 0 40px rgba(255, 215, 0, 0.05); 
-  }
-}
-
-/* Opcional: Zlatna kruna ikonica u gornjem desnom uglu */
-.card-gold::after {
-  content: '👑';
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  font-size: 28px;
-  transform: rotate(15deg);
-  filter: drop-shadow(0 2px 10px rgba(255, 215, 0, 0.5));
-  z-index: 5;
-  animation: crownFloat 3s ease-in-out infinite;
-}
-
-@keyframes crownFloat {
-  0%, 100% { transform: rotate(15deg) translateY(0); }
-  50% { transform: rotate(15deg) translateY(-5px); }
-}
 </style>
 </head>
 <body>
@@ -1432,48 +1388,11 @@ function getFiltered(){
 }
 
 function destroyChart(key){ if(charts[key]){ charts[key].destroy(); delete charts[key]; } }
-// ================================================================
-//  ZLATNI OKVIR ZA NAJBOLJEG IGRAČA
-// ================================================================
 
-function addGoldBorder(rows) {
-  const ps = [...activePlayers].sort();
-  const cards = document.querySelectorAll('.prec-card');
-  
-  // Pronađi najboljeg igrača (po win rate-u)
-  let bestPlayer = null;
-  let bestWinRate = -1;
-  
-  ps.forEach(p => {
-    const prows = rows.filter(r => r.player === p);
-    if (prows.length >= 3) { // Minimum 3 meča da bi bio razmatran
-      const winRate = prows.filter(r => r.win).length / prows.length;
-      if (winRate > bestWinRate) {
-        bestWinRate = winRate;
-        bestPlayer = p;
-      }
-    }
-  });
-
-  // Ukloni stare gold okvire i dodaj nove
-  cards.forEach((card, index) => {
-    const player = ps[index];
-    if (!player) return;
-    
-    card.classList.remove('card-gold');
-    
-    if (player === bestPlayer) {
-      card.classList.add('card-gold');
-    }
-  });
-}
 function render(){
   const rows = getFiltered();
   renderScoreline(rows);
   renderPlayerRecords(rows);
-  
-  // DODAJ OVO - zlatni okvir za najboljeg igrača
-  addGoldBorder(rows);
   
   renderGamification(rows);
   renderClutchAnalysis(rows);
