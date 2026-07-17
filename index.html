@@ -353,9 +353,31 @@
     .scoreline{ gap:16px; }
     .wrapped-slide .megahero{ font-size:min(26vw,120px); }
   }
+  /* === BACKGROUND ANIMACIJA - ČESTICE === */
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.wrap, .filters, .tabbar, #content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Čestice sa glow efektom */
+.particle-glow {
+  filter: blur(1px);
+}
 </style>
 </head>
 <body>
+  <canvas id="particles-canvas"></canvas>
 <div class="wrap">
 
   <header class="hero">
@@ -621,6 +643,191 @@
 </div>
 
 <script>
+  // ================================================================
+//  BACKGROUND ANIMACIJA - ROCKET LEAGUE STYLE ČESTICE
+// ================================================================
+
+class ParticleSystem {
+  constructor() {
+    this.canvas = document.getElementById('particles-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.particles = [];
+    this.mouse = { x: null, y: null };
+    this.count = 80;
+    this.connectionDistance = 150;
+    this.animationId = null;
+    
+    this.resize();
+    this.initParticles();
+    this.bindEvents();
+    this.animate();
+  }
+  
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+  
+  initParticles() {
+    this.particles = [];
+    const colors = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6', '#ffffff'];
+    
+    for (let i = 0; i < this.count; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        size: Math.random() * 3 + 1.5,
+        speedX: (Math.random() - 0.5) * 0.6,
+        speedY: (Math.random() - 0.5) * 0.6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        opacity: Math.random() * 0.6 + 0.2,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.01 + Math.random() * 0.02,
+      });
+    }
+  }
+  
+  bindEvents() {
+    window.addEventListener('resize', () => this.resize());
+    
+    this.canvas.addEventListener('mousemove', (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+    });
+    
+    this.canvas.addEventListener('mouseleave', () => {
+      this.mouse.x = null;
+      this.mouse.y = null;
+    });
+    
+    // Touch support
+    this.canvas.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      this.mouse.x = touch.clientX;
+      this.mouse.y = touch.clientY;
+    }, { passive: true });
+    
+    this.canvas.addEventListener('touchend', () => {
+      this.mouse.x = null;
+      this.mouse.y = null;
+    });
+  }
+  
+  animate() {
+    const ctx = this.ctx;
+    const W = this.canvas.width;
+    const H = this.canvas.height;
+    
+    ctx.clearRect(0, 0, W, H);
+    
+    // Ažuriraj i nacrtaj čestice
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      
+      // Pomeranje
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.pulse += p.pulseSpeed;
+      
+      // Odbijanje od zidova
+      if (p.x < 0 || p.x > W) p.speedX *= -1;
+      if (p.y < 0 || p.y > H) p.speedY *= -1;
+      
+      // Privlačenje ka mišu
+      if (this.mouse.x !== null) {
+        const dx = this.mouse.x - p.x;
+        const dy = this.mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) {
+          const force = (200 - dist) / 200 * 0.02;
+          p.speedX += dx * force * 0.01;
+          p.speedY += dy * force * 0.01;
+          // Ograniči brzinu
+          const speed = Math.sqrt(p.speedX * p.speedX + p.speedY * p.speedY);
+          if (speed > 1.5) {
+            p.speedX = (p.speedX / speed) * 1.5;
+            p.speedY = (p.speedY / speed) * 1.5;
+          }
+        }
+      }
+      
+      // Crtanje čestice sa pulsiranjem
+      const pulseSize = 1 + Math.sin(p.pulse) * 0.3;
+      const size = p.size * pulseSize;
+      const opacity = p.opacity * (0.7 + Math.sin(p.pulse) * 0.3);
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = opacity;
+      ctx.fill();
+      
+      // Glow efekat
+      if (size > 2) {
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 4);
+        gradient.addColorStop(0, p.color + '33');
+        gradient.addColorStop(1, 'transparent');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size * 4, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+    }
+    
+    // Povezivanje čestica linijama
+    ctx.globalAlpha = 0.15;
+    for (let i = 0; i < this.particles.length; i++) {
+      for (let j = i + 1; j < this.particles.length; j++) {
+        const a = this.particles[i];
+        const b = this.particles[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < this.connectionDistance) {
+          const alpha = (1 - dist / this.connectionDistance) * 0.3;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = '#ffffff';
+          ctx.globalAlpha = alpha;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    
+    ctx.globalAlpha = 1;
+    this.animationId = requestAnimationFrame(() => this.animate());
+  }
+  
+  destroy() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+  }
+}
+
+// Pokreni čestice nakon što se stranica učita
+let particleSystem = null;
+
+function initParticles() {
+  if (particleSystem) {
+    particleSystem.destroy();
+  }
+  particleSystem = new ParticleSystem();
+}
+
+// Pokreni kada se DOM učita
+document.addEventListener('DOMContentLoaded', initParticles);
+
+// Zaustavi čestice kada se stranica zatvori
+window.addEventListener('beforeunload', () => {
+  if (particleSystem) {
+    particleSystem.destroy();
+  }
+});
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
 const PLAYER_COLOR_OVERRIDES = {
