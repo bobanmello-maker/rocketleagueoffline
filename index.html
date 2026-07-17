@@ -699,69 +699,7 @@
 
 
 <script>
-  let currentPage = 1;
-let pageSize = 25;
-
-function renderTable(rows){
-  const sorted = [...rows].sort((a,b) => {
-    let va = getPath(a,sortKey), vb = getPath(b,sortKey);
-    if(typeof va === 'string') va = va.toLowerCase();
-    if(typeof vb === 'string') vb = vb.toLowerCase();
-    if(va < vb) return -1 * sortDir;
-    if(va > vb) return 1 * sortDir;
-    return 0;
-  });
-
-  const totalPages = Math.ceil(sorted.length / pageSize) || 1;
-  if (currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage - 1) * pageSize;
-  const end = Math.min(start + pageSize, sorted.length);
-  const pageData = sorted.slice(start, end);
-
-  const body = $('#matchTableBody');
-  body.innerHTML = pageData.map((r, idx) => `
-    <tr data-idx="${start + idx}">
-      <td class="mono">${fmtDate(r.date)}</td>
-      <td>${r.map || ''}</td>
-      <td style="color:${playerColor[r.player] || '#fff'}; font-weight:600;">${r.player}</td>
-      <td style="text-transform:capitalize;">${r.team_color}</td>
-      <td><span class="pill ${r.win ? 'win':'loss'}">${r.team_goals}–${r.opponent_goals}</span></td>
-      <td class="mono">${getPath(r,'core.goals')}</td>
-      <td class="mono">${getPath(r,'core.assists')}</td>
-      <td class="mono">${getPath(r,'core.saves')}</td>
-      <td class="mono">${getPath(r,'core.shots')}</td>
-      <td class="mono">${getPath(r,'core.score')}</td>
-      <td class="mono">${(getPath(r,'boost.avg_amount')||0).toFixed(0)}</td>
-      <td class="mono">${(getPath(r,'positioning.percent_behind_ball')||0).toFixed(0)}%</td>
-      <td>${getPath(r,'core.mvp') ? '<span class="mvp-star">★</span>' : ''}</td>
-    </tr>
-  `).join('');
-
-  body.querySelectorAll('tr').forEach(tr => {
-    tr.addEventListener('click', () => openModal(sorted[+tr.dataset.idx]));
-  });
-
-  // Update pagination info
-  $('#pageInfo').textContent = `Strana ${currentPage} od ${totalPages}`;
-  $('#prevPageBtn').disabled = currentPage <= 1;
-  $('#nextPageBtn').disabled = currentPage >= totalPages;
-  
-  // Event listeneri za paginaciju
-  if (!window._paginationInitialized) {
-    window._paginationInitialized = true;
-    $('#prevPageBtn').addEventListener('click', () => {
-      if (currentPage > 1) { currentPage--; render(); }
-    });
-    $('#nextPageBtn').addEventListener('click', () => {
-      if (currentPage < totalPages) { currentPage++; render(); }
-    });
-    $('#pageSizeSelect').addEventListener('change', (e) => {
-      pageSize = parseInt(e.target.value);
-      currentPage = 1;
-      render();
-    });
-  }
-}
+ 
   // ================================================================
 //  BACKGROUND ANIMACIJA - ROCKET LEAGUE STYLE ČESTICE
 // ================================================================
@@ -1019,6 +957,10 @@ let wrappedIndex = 0;
 let wrappedTimer = null;
 let wrappedRows = [];
 const WRAPPED_SLIDE_MS = 6000;
+  // ===== DODAJ OVO - PAGINACIJA VARIJABLE =====
+let currentPage = 1;
+let pageSize = 25;
+// ===== KRAJ =====
 
 const $ = sel => document.querySelector(sel);
 const getPath = (obj, path) => path.split('.').reduce((o,k) => (o == null ? o : o[k]), obj);
@@ -2265,9 +2207,15 @@ function renderTable(rows){
     return 0;
   });
 
+  const totalPages = Math.ceil(sorted.length / pageSize) || 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * pageSize;
+  const end = Math.min(start + pageSize, sorted.length);
+  const pageData = sorted.slice(start, end);
+
   const body = $('#matchTableBody');
-  body.innerHTML = sorted.map((r, idx) => `
-    <tr data-idx="${idx}">
+  body.innerHTML = pageData.map((r, idx) => `
+    <tr data-idx="${start + idx}">
       <td class="mono">${fmtDate(r.date)}</td>
       <td>${r.map || ''}</td>
       <td style="color:${playerColor[r.player] || '#fff'}; font-weight:600;">${r.player}</td>
@@ -2287,8 +2235,28 @@ function renderTable(rows){
   body.querySelectorAll('tr').forEach(tr => {
     tr.addEventListener('click', () => openModal(sorted[+tr.dataset.idx]));
   });
-}
 
+  // Update pagination info
+  $('#pageInfo').textContent = `Strana ${currentPage} od ${totalPages}`;
+  $('#prevPageBtn').disabled = currentPage <= 1;
+  $('#nextPageBtn').disabled = currentPage >= totalPages;
+  
+  // Event listeneri za paginaciju (samo jednom)
+  if (!window._paginationInitialized) {
+    window._paginationInitialized = true;
+    $('#prevPageBtn').addEventListener('click', () => {
+      if (currentPage > 1) { currentPage--; render(); }
+    });
+    $('#nextPageBtn').addEventListener('click', () => {
+      if (currentPage < totalPages) { currentPage++; render(); }
+    });
+    $('#pageSizeSelect').addEventListener('change', (e) => {
+      pageSize = parseInt(e.target.value);
+      currentPage = 1;
+      render();
+    });
+  }
+}
 function openModal(r){
   const c = r.core, b = r.boost, m = r.movement, p = r.positioning, d = r.demo;
   $('#modalContent').innerHTML = `
