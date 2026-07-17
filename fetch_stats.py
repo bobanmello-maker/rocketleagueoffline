@@ -265,6 +265,7 @@ def flatten_replay(replay):
                 "opponent_goals": opp_goals,
                 "win": (team_goals or 0) > (opp_goals or 0),
                 "player": player_name,
+                "car_name": p.get("car_name"),
                 "platform": safe_get(p, "id", "platform", default="offline"),
                 "teammates": [t for t in teammates if t != player_name],
                 "scored_first": narrative["scored_first"],
