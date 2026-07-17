@@ -710,10 +710,6 @@
     </div>
 
     <div class="tabpanel" id="tab-highlights">
-     <div class="card">
-        <h2>Overtime <small>samo mečevi koji su išli u produžetak</small></h2>
-        <div id="otStats"></div>
-      </div> 
       <div class="card">
         <h2>🏆 Dostignuća <small>pragovi koje ste dosad prešli (računato preko celog istorijata, bez obzira na filtere)</small></h2>
         <div class="award-grid" id="milestoneGrid"></div>
@@ -2093,30 +2089,8 @@ function dedupeByMatchTeam(rows){
 }
 
 function renderHighlights(rows){
-  renderOtStats(rows);
   renderMilestones();
   renderMonthCompare();
-}
-
-function renderOtStats(rows){
-  const wrap = $('#otStats');
-  const otTeamRows = dedupeByMatchTeam(rows).filter(r => r.overtime);
-  if(!otTeamRows.length){ wrap.innerHTML = '<div class="empty">Nema mečeva u produžetku za ovaj izbor</div>'; return; }
-
-  const wins = otTeamRows.filter(r => r.win).length;
-  const winPct = Math.round((wins/otTeamRows.length)*100);
-
-  wrap.innerHTML = `
-    <div class="score-item" style="border:none; padding:0; margin-bottom:14px;">
-      <div class="num mono" style="font-size:22px;">${otTeamRows.length}</div>
-      <div class="lbl">Mečeva u OT</div>
-    </div>
-    <div class="meter-row">
-      <div class="meter-name">Win % u OT</div>
-      <div class="meter-track"><div class="meter-fill" style="width:${winPct}%; background:var(--blue);"></div></div>
-      <div class="meter-val">${winPct}%</div>
-    </div>
-  `;
 }
 
 const MILESTONE_GOAL_STEPS = [50, 100, 200, 300, 500, 1000];
