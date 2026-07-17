@@ -227,6 +227,24 @@
   .award-card .winner{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; }
   .award-card .detail{ font-size:12px; color:var(--text-muted); margin-top:2px; }
 
+  .achievement-block{
+    margin-bottom:20px; padding-bottom:18px; border-bottom:1px solid var(--border);
+  }
+  .achievement-block:last-child{ margin-bottom:0; border-bottom:none; padding-bottom:0; }
+  .achievement-block-head{
+    display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  }
+  .achievement-block-head .name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:17px; }
+  .achievement-block-head .count{ font-size:12px; color:var(--text-muted); }
+  .badge-shelf{ display:flex; flex-wrap:wrap; gap:8px; }
+  .badge-chip{
+    width:64px; text-align:center; background:var(--surface-2); border:1px solid var(--border);
+    border-radius:10px; padding:8px 4px 6px; cursor:default; transition:transform .15s ease;
+  }
+  .badge-chip:hover{ transform:translateY(-3px); border-color:var(--amber); }
+  .badge-chip .b-emoji{ font-size:22px; line-height:1; }
+  .badge-chip .b-name{ font-size:9px; color:var(--text-muted); margin-top:4px; line-height:1.2; display:block; }
+
   .empty{ text-align:center; color:var(--text-muted); padding:60px 20px; font-size:14px; }
   .empty b{ color:var(--text); }
   .subtle-note{ color:var(--text-muted); font-size:12px; margin-top:10px; }
@@ -712,7 +730,7 @@
     <div class="tabpanel" id="tab-highlights">
       <div class="card">
         <h2>🏆 Dostignuća <small>pragovi koje ste dosad prešli (računato preko celog istorijata, bez obzira na filtere)</small></h2>
-        <div class="award-grid" id="milestoneGrid"></div>
+        <div id="milestoneGrid"></div>
       </div>
       <div class="card">
         <h2>📈 Ovaj mesec vs prošli mesec <small>poređenje po igraču</small></h2>
@@ -2162,20 +2180,27 @@ function renderMilestones(){
   const ps = [...activePlayers];
   if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
 
-  const cards = [];
-  ps.forEach(p => {
+  const blocks = ps.map(p => {
     const achievements = getPlayerAchievements(RAW, p);
-    achievements.forEach(a => cards.push({ emoji:a.emoji, title:a.name, winner:p, detail:a.desc }));
-  });
+    if(!achievements.length) return '';
+    const chips = achievements.map(a => `
+      <div class="badge-chip" title="${a.name} — ${a.desc}">
+        <div class="b-emoji">${a.emoji}</div>
+        <span class="b-name">${a.name}</span>
+      </div>
+    `).join('');
+    return `
+      <div class="achievement-block">
+        <div class="achievement-block-head">
+          <span class="name" style="color:${playerColor[p]||'#fff'}">${p}</span>
+          <span class="count">${achievements.length} otključano</span>
+        </div>
+        <div class="badge-shelf">${chips}</div>
+      </div>
+    `;
+  }).filter(Boolean).join('');
 
-  wrap.innerHTML = cards.length ? cards.map(c => `
-    <div class="award-card">
-      <div class="emoji">${c.emoji}</div>
-      <div class="title">${c.title}</div>
-      <div class="winner" style="color:${playerColor[c.winner]||'#fff'}">${c.winner}</div>
-      <div class="detail">${c.detail}</div>
-    </div>
-  `).join('') : '<div class="empty">Još uvek nema dostignuća (nedovoljno mečeva)</div>';
+  wrap.innerHTML = blocks || '<div class="empty">Još uvek nema dostignuća (nedovoljno mečeva)</div>';
 }
 
 function renderMonthCompare(){
