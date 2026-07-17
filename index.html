@@ -662,7 +662,23 @@
 
   </div>
 </div>
-
+<!-- Dodaj posle tabele -->
+<div id="paginationControls" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
+  <div style="display:flex; gap:8px; align-items:center;">
+    <button id="prevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
+    <span id="pageInfo" style="color:var(--text-muted); font-size:13px;">Strana 1 od 1</span>
+    <button id="nextPageBtn" class="chip" style="background:var(--surface-2);">Sledeća ▶</button>
+  </div>
+  <div style="display:flex; gap:6px; align-items:center;">
+    <span style="color:var(--text-muted); font-size:12px;">Prikaži:</span>
+    <select id="pageSizeSelect" style="background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:6px; font-size:12px;">
+      <option value="10">10</option>
+      <option value="25" selected>25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+</div>
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal" id="modalContent"></div>
 </div>
