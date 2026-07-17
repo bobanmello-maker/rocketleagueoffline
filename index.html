@@ -413,6 +413,94 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+  /* === MOBILNI RESPONSIVE === */
+@media (max-width: 768px) {
+  .wrap { padding: 12px 10px 40px; }
+  
+  header.hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .hero-title h1 { font-size: 22px; }
+  .hero-title span { font-size: 12px; }
+  
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px;
+  }
+  .filters .group { flex-wrap: wrap; }
+  .filters input[type=date] { width: 100%; }
+  
+  .chip { font-size: 11px; padding: 4px 10px; }
+  
+  .player-records {
+    flex-direction: column;
+  }
+  .prec-card {
+    min-width: unset;
+    padding: 10px 12px;
+  }
+  
+  .tabbar {
+    gap: 4px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabbtn {
+    font-size: 12px;
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+  
+  .grid, .grid3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .card { padding: 14px; }
+  .card h2 { font-size: 14px; }
+  .card h2 small { font-size: 10px; }
+  
+  .scoreline { gap: 12px; }
+  .score-item .num { font-size: 20px; }
+  .score-item .lbl { font-size: 9px; }
+  
+  .meter-row { flex-wrap: wrap; gap: 6px; }
+  .meter-name { width: 60px; font-size: 12px; }
+  
+  table { font-size: 11px; }
+  th, td { padding: 6px 8px; white-space: nowrap; }
+  
+  .radar-wrap { height: 280px; }
+  
+  .rlcard-wrap canvas { max-width: 200px; }
+  
+  .modal { padding: 16px; margin: 10px; max-height: 90vh; }
+  
+  .wrapped-launch { padding: 24px 16px; }
+  .wrapped-launch h2 { font-size: 22px; }
+  .wrapped-launch .wstats .num { font-size: 20px; }
+  .wrapped-go-btn { padding: 12px 24px; font-size: 14px; }
+  
+  .wrapped-slide .megahero { font-size: min(30vw, 80px); }
+  .wrapped-slide .winner-name { font-size: 28px; }
+  .wrapped-slide .headline { font-size: 22px; }
+  
+  .analysis-section { padding: 12px 14px; }
+  .analysis-section ul { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title h1 { font-size: 18px; }
+  .score-item .num { font-size: 16px; }
+  .card h2 { font-size: 12px; }
+  .tabbtn { font-size: 10px; padding: 6px 8px; }
+  .rlcard-wrap canvas { max-width: 150px; }
+}
 </style>
 </head>
 <body>
