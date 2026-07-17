@@ -2718,7 +2718,10 @@ function computeCardStats(rows, player){
   const top = Object.entries(attrs).sort((a,b)=>b[1]-a[1])[0][0];
   const position = top === 'GOL' ? 'NAPADAČ' : top === 'ODB' ? 'GOLMAN' : top === 'ASI' ? 'PLEJMEJKER' : 'ALL-ROUND';
 
-  return { player, matches, wins, losses: matches-wins, winPct, goalsPm, attrs, ovr, position };
+  const withCar = v.filter(r => r.car_name).slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const lastCar = withCar.length ? withCar[0].car_name : null;
+
+  return { player, matches, wins, losses: matches-wins, winPct, goalsPm, attrs, ovr, position, lastCar };
 }
 
 function roundRectPath(ctx, x, y, w, h, r){
@@ -2852,18 +2855,41 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
 
-    const initials = data.player.slice(0,2).toUpperCase();
-    ctx.beginPath();
-    ctx.arc(W-72, 78, 42, 0, Math.PI*2);
-    ctx.fillStyle = hexToRgba(color, 0.35);
-    ctx.fill();
-    ctx.lineWidth = 3; 
-    ctx.strokeStyle = '#fff'; 
-    ctx.stroke();
-    ctx.font = "700 30px 'Rajdhani', sans-serif";
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.fillText(initials, W-72, 60);
+    if(data.lastCar){
+      ctx.font = "700 20px 'Rajdhani', sans-serif";
+      const label = data.lastCar.toUpperCase();
+      const padX = 16;
+      const textW = ctx.measureText(label).width;
+      const badgeW = textW + padX*2, badgeH = 34;
+      const bx = W - 24 - badgeW, by = 40;
+
+      ctx.beginPath();
+      roundRectPath(ctx, bx, by, badgeW, badgeH, badgeH/2);
+      ctx.fillStyle = hexToRgba(color, 0.35);
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#fff';
+      ctx.fillText(label, bx + badgeW/2, by + badgeH/2 + 1);
+      ctx.textBaseline = 'top';
+    } else {
+      const initials = data.player.slice(0,2).toUpperCase();
+      ctx.beginPath();
+      ctx.arc(W-72, 78, 42, 0, Math.PI*2);
+      ctx.fillStyle = hexToRgba(color, 0.35);
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+      ctx.font = "700 30px 'Rajdhani', sans-serif";
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.fillText(initials, W-72, 60);
+    }
 
     ctx.textAlign = 'center';
     const nameY = photoImg ? H*0.56 : H*0.48;
