@@ -501,6 +501,22 @@
   .tabbtn { font-size: 10px; padding: 6px 8px; }
   .rlcard-wrap canvas { max-width: 150px; }
 }
+  /* 3D rotacija na hover */
+.prec-card {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.prec-card:hover {
+  transform: rotateX(3deg) rotateY(5deg) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.prec-card:active {
+  transform: rotateX(0) rotateY(0) scale(0.98);
+}
 </style>
 </head>
 <body>
