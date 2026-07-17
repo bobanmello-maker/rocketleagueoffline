@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analiza — RLS</title>
-<!-- Opcija 2: Lopta ⚽ -->
 <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
 <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -138,7 +137,6 @@
   .form-sq.l{ background:rgba(248,113,113,0.18); color:var(--loss); border:1px solid rgba(248,113,113,0.4); }
   .form-winrate{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
 
-  /* ---- AI Analitičar dugme ---- */
   .ai-btn{
     background: linear-gradient(135deg, #7C3AED, #6D28D9, #4F46E5);
     border: none; color: white; padding: 10px 24px; border-radius: 999px;
@@ -154,7 +152,6 @@
   }
   @keyframes spin{ to { transform: rotate(360deg); } }
 
-  /* ---- AI Analysis Modal ---- */
   .analysis-section{
     background: var(--surface-2); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;
     border: 1px solid var(--border);
@@ -234,7 +231,6 @@
   .empty b{ color:var(--text); }
   .subtle-note{ color:var(--text-muted); font-size:12px; margin-top:10px; }
 
-  /* ---- Modal ---- */
   .modal-backdrop{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:50;
     align-items:center; justify-content:center; padding:20px;
@@ -255,7 +251,6 @@
   .stat-line span:first-child{ color:var(--text-muted); }
   .stat-line span:last-child{ font-family:'JetBrains Mono',monospace; }
 
-  /* ---- Season Wrapped: launcher card ---- */
   .wrapped-launch{
     position:relative; overflow:hidden; border-radius:18px; padding:38px 30px;
     background:
@@ -280,7 +275,6 @@
   .wrapped-go-btn:disabled{ opacity:0.4; cursor:not-allowed; transform:none; }
   @keyframes wrappedGradientShift{ 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
-  /* ---- Season Wrapped: fullscreen story overlay ---- */
   .wrapped-overlay{
     display:none; position:fixed; inset:0; z-index:200; background:#05070B;
     flex-direction:column; overscroll-behavior:contain;
@@ -342,7 +336,6 @@
     border-radius:999px; font-weight:700; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif;
   }
 
-  /* ---- Trading cards ---- */
   .cards-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
   .cards-toolbar .sub{ color:var(--text-muted); font-size:13px; }
   .card-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:22px; }
@@ -405,7 +398,6 @@
     <button class="tabbtn" data-tab="movement">Kretanje</button>
     <button class="tabbtn" data-tab="positioning">Pozicioniranje</button>
     <button class="tabbtn" data-tab="demos">Demo</button>
-   <!-- <button class="tabbtn" data-tab="wrapped">🎬 Wrapped</button>-->
     <button class="tabbtn" data-tab="cards">🃏 Karte</button>
     <button class="tabbtn" data-tab="chemistry">Chemistry</button>
     <button class="tabbtn" data-tab="records">Rekordi</button>
@@ -416,7 +408,6 @@
 
   <div id="content">
 
-    <!-- OVERVIEW -->
     <div class="tabpanel active" id="tab-overview">
       <div class="grid">
         <div class="card">
@@ -444,7 +435,6 @@
       </div>
     </div>
 
-    <!-- BOOST -->
     <div class="tabpanel" id="tab-boost">
       <div class="grid">
         <div class="card">
@@ -464,7 +454,6 @@
       </div>
     </div>
 
-    <!-- MOVEMENT -->
     <div class="tabpanel" id="tab-movement">
       <div class="grid">
         <div class="card">
@@ -484,7 +473,6 @@
       </div>
     </div>
 
-    <!-- POSITIONING -->
     <div class="tabpanel" id="tab-positioning">
       <div class="grid">
         <div class="card">
@@ -504,7 +492,6 @@
       </div>
     </div>
 
-    <!-- DEMOS -->
     <div class="tabpanel" id="tab-demos">
       <div class="grid">
         <div class="card">
@@ -518,7 +505,6 @@
       </div>
     </div>
 
-    <!-- SEASON WRAPPED -->
     <div class="tabpanel" id="tab-wrapped">
       <div class="wrapped-launch">
         <h2>🎬 Season Wrapped</h2>
@@ -528,7 +514,6 @@
       </div>
     </div>
 
-    <!-- TRADING CARDS -->
     <div class="tabpanel" id="tab-cards">
       <div class="cards-toolbar">
         <div class="sub">Overall rating izračunat iz golova, asistencija, odbrana, boost menadžmenta, win rate-a i score-a. Klik na dugme ispod karte = snimi kao sliku.</div>
@@ -536,7 +521,6 @@
       <div class="card-grid" id="cardGrid"></div>
     </div>
 
-    <!-- CHEMISTRY -->
     <div class="tabpanel" id="tab-chemistry">
       <div class="card">
         <h2>
@@ -556,12 +540,10 @@
       </div>
     </div>
 
-    <!-- RECORDS -->
     <div class="tabpanel" id="tab-records">
       <div class="award-grid" id="awardGrid"></div>
     </div>
 
-    <!-- HIGHLIGHTS -->
     <div class="tabpanel" id="tab-highlights">
       <div class="card">
         <h2>Overtime <small>samo mečevi koji su išli u produžetak</small></h2>
@@ -577,7 +559,6 @@
       </div>
     </div>
 
-    <!-- HEAD TO HEAD -->
     <div class="tabpanel" id="tab-h2h">
       <div class="card" style="margin-bottom:16px;">
         <h2>Head-to-head <small>uporedi tačno dva igrača, jedan naspram drugog</small></h2>
@@ -590,7 +571,6 @@
       <div id="h2hContent"></div>
     </div>
 
-    <!-- MATCHES -->
     <div class="tabpanel" id="tab-matches">
       <div class="card">
         <h2>Svi mečevi <small>klik na kolonu = sortiranje, klik na red = detalji</small></h2>
@@ -643,39 +623,18 @@
 <script>
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
-// ---- Fiksne boje za igrace: ovde mozes rucno da promenis boju kome god hoces.
-// Format je HEX kod boje (npr. '#FF6B35'). Ko god NIJE ovde naveden dobija boju
-// automatski iz opste palete - kod puno igraca (online protivnici i sl.) moze
-// da se poklopi sa nekim drugim, zato je bitno da BAR vas 4 uvek budete ovde.
 const PLAYER_COLOR_OVERRIDES = {
-  'Toške': '#3DA9FC',   // plava
-  'Cane':  '#FF6B35',   // narandžasta
-  'Ivan':  '#4ADE80',   // zelena
-  'Pajke': '#FBBF24',   // žuta / amber
+  'Toške': '#3DA9FC',
+  'Cane':  '#FF6B35',
+  'Ivan':  '#4ADE80',
+  'Pajke': '#FBBF24',
 };
 
-// ---- Slike za trading karte (tab "Karte"): ovde dodaješ sliku za svakog
-// igrača - ne mora biti lice, može i auto, avatar, šta god. Format je putanja
-// ili URL do slike:
-//  - ako ubaciš fajlove u repo (npr. napravi folder "images/" pored index.html
-//    i stavi toske.png, cane.png...), ovde samo napišeš 'images/toske.png'
-//    - OVO JE PREPORUČENO, jer garantovano radi i za "Sačuvaj sliku" dugme.
-//  - može i pun URL sa neta (npr. imgur direktan link), ALI ako taj server
-//    ne šalje CORS header, "Sačuvaj sliku" dugme neće raditi (slika će se
-//    videti na kartici, samo download neće proći) - zato je lokalni fajl
-//    najsigurniji izbor.
-// Ko god NIJE ovde naveden dobija karticu bez slike (kao do sada).
 const PLAYER_IMAGE_OVERRIDES = {
   'Toške': 'images/toske.png',
-  // 'Cane':  'images/cane.png',
-  // 'Ivan':  'images/ivan.png',
-  // 'Pajke': 'images/pajke.png',
+  'Cane': 'images/cane.png',
 };
 
-// ---- Mapa imena: sirovo ime sa ballchasing-a (kako se zove Epic nalog/gost profil)
-// -> ime koje zelis da se prikazuje svuda u dashboard-u. Otporno je na razmake,
-// velika/mala slova i zagrade (npr. "ExMirage(1)" i "ExMirage (1)" su isto).
-// Dodaj/izmeni redove ovde kad god zatreba, ne mora nista drugo da se dira.
 const NAME_MAP_RAW = {
   'ExMirage': 'Toške',
   'ExMirage(1)': 'Cane',
@@ -721,8 +680,8 @@ const RADAR_METRICS = [
 ];
 
 let RAW = [];
-let allPlayers = [];   // svi igraci ikad vidjeni - koristi se samo da boje ostanu stabilne
-let players = [];      // igraci vidljivi u trenutno izabranom rezimu (all/online/offline)
+let allPlayers = [];
+let players = [];
 let playerColor = {};
 let activePlayers = new Set();
 let modeFilter = 'offline';
@@ -779,23 +738,14 @@ function computePlayerXP(rows, player) {
 
   let xp = 0;
   prows.forEach(r => {
-    // Osnovni XP za meč
     xp += 10;
-    // Bonus za pobedu
     if (r.win) xp += 15;
-    // Bonus za golove
     xp += (getPath(r, 'core.goals') || 0) * 8;
-    // Bonus za asistencije
     xp += (getPath(r, 'core.assists') || 0) * 5;
-    // Bonus za odbrane
     xp += (getPath(r, 'core.saves') || 0) * 4;
-    // Bonus za MVP
     if (getPath(r, 'core.mvp')) xp += 20;
-    // Bonus za šuteve
     xp += (getPath(r, 'core.shots') || 0) * 2;
-    // Bonus za demo-e
     xp += (getPath(r, 'demo.inflicted') || 0) * 3;
-    // Bonus za produžetak (ako je pobeda)
     if (r.overtime && r.win) xp += 10;
   });
 
@@ -817,63 +767,76 @@ function getPlayerLevel(xp) {
   return { current, next, xp };
 }
 
-function getPlayerAchievements(rows, player) {
-  const prows = rows.filter(r => r.player === player);
-  if (!prows.length) return [];
+function renderGamification(rows) {
+  const ps = [...activePlayers].sort();
+  if (!ps.length) return;
 
-  const achievements = [];
-  const matches = prows.length;
-  const wins = prows.filter(r => r.win).length;
-  const totalGoals = sum(prows.map(r => getPath(r, 'core.goals')));
-  const totalAssists = sum(prows.map(r => getPath(r, 'core.assists')));
-  const totalSaves = sum(prows.map(r => getPath(r, 'core.saves')));
-  const totalDemos = sum(prows.map(r => getPath(r, 'demo.inflicted')));
-  const mvps = prows.filter(r => getPath(r, 'core.mvp')).length;
+  const recordsWrap = $('#playerRecords');
+  if (!recordsWrap) return;
 
-  // Hat-trickovi (3+ golova u meču)
-  const hatTricks = prows.filter(r => getPath(r, 'core.goals') >= 3).length;
+  const cards = recordsWrap.querySelectorAll('.prec-card');
+  cards.forEach((card, index) => {
+    const player = ps[index];
+    if (!player) return;
 
-  // Clean sheets (0 primljenih golova)
-  const cleanSheets = prows.filter(r => getPath(r, 'goals_against') === 0).length;
+    const oldBadges = card.querySelectorAll('.level-badge, .progress-wrapper');
+    oldBadges.forEach(el => el.remove());
 
-  // Najduži niz pobeda
-  let bestStreak = 0, curStreak = 0;
-  const sorted = prows.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  sorted.forEach(r => {
-    if (r.win) { curStreak++; bestStreak = Math.max(bestStreak, curStreak); }
-    else curStreak = 0;
+    const xp = computePlayerXP(rows, player);
+    const { current, next, xp: currentXp } = getPlayerLevel(xp);
+    const progress = Math.min(100, ((xp - current.xp) / (next.xp - current.xp)) * 100 || 0);
+
+    const nameEl = card.querySelector('.name');
+    if (nameEl) {
+      const badge = document.createElement('span');
+      badge.className = 'level-badge';
+      badge.style.cssText = `
+        font-size: 14px;
+        margin-left: 8px;
+        background: rgba(255,255,255,0.1);
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+      `;
+      badge.textContent = `${current.badge} Lv.${current.level} ${current.name}`;
+      nameEl.appendChild(badge);
+    }
+
+    const row = card.querySelector('.row');
+    if (row) {
+      const progressDiv = document.createElement('div');
+      progressDiv.className = 'progress-wrapper';
+      progressDiv.style.cssText = `
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      `;
+      progressDiv.innerHTML = `
+        <div style="flex:1; height:4px; background:var(--boost-track); border-radius:2px; overflow:hidden;">
+          <div style="height:100%; width:${progress}%; background:linear-gradient(90deg, ${playerColor[player]}, #fff); border-radius:2px; transition:width 0.5s ease;"></div>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">${Math.round(progress)}%</span>
+      `;
+      row.parentNode.insertBefore(progressDiv, row.nextSibling);
+    }
   });
-
-  if (matches >= 10) achievements.push({ emoji: '🎯', name: 'Veteran', desc: `${matches} odigranih mečeva` });
-  if (wins >= 10) achievements.push({ emoji: '🏆', name: 'Pobednik', desc: `${wins} pobeda` });
-  if (totalGoals >= 50) achievements.push({ emoji: '⚽', name: 'Strelac', desc: `${totalGoals} golova` });
-  if (totalAssists >= 25) achievements.push({ emoji: '🎯', name: 'Asistent', desc: `${totalAssists} asistencija` });
-  if (totalSaves >= 50) achievements.push({ emoji: '🧤', name: 'Zid', desc: `${totalSaves} odbrana` });
-  if (totalDemos >= 20) achievements.push({ emoji: '💥', name: 'Demo majstor', desc: `${totalDemos} demolicija` });
-  if (mvps >= 5) achievements.push({ emoji: '⭐', name: 'MVP', desc: `${mvps} MVP nagrada` });
-  if (hatTricks >= 3) achievements.push({ emoji: '🎩', name: 'Hat-trick heroj', desc: `${hatTricks} hat-trickova` });
-  if (cleanSheets >= 3) achievements.push({ emoji: '🧹', name: 'Čista mreža', desc: `${cleanSheets} mečeva bez primljenog gola` });
-  if (bestStreak >= 5) achievements.push({ emoji: '🔥', name: 'Niz pobeda', desc: `${bestStreak} pobeda zaredom` });
-  if (matches >= 50) achievements.push({ emoji: '🏅', name: 'Iskusni veteran', desc: `50+ mečeva` });
-  if (wins >= 25) achievements.push({ emoji: '👑', name: 'Kralj pobeda', desc: `25+ pobeda` });
-
-  return achievements;
 }
 
 // ================================================================
-//  CLUTCH ANALIZA - Produžeci i preokreti
+//  CLUTCH ANALIZA
 // ================================================================
 
 function renderClutchAnalysis(rows) {
   const ps = [...activePlayers].sort();
   if (!ps.length) return;
 
-  // Dodaj novi card u overview tab (posle radara)
   const overviewTab = $('#tab-overview');
   if (!overviewTab) return;
 
-  // Proveri da li već postoji
-  if (document.getElementById('clutchCard')) return;
+  const oldCard = document.getElementById('clutchCard');
+  if (oldCard) oldCard.remove();
 
   const clutchCard = document.createElement('div');
   clutchCard.id = 'clutchCard';
@@ -885,22 +848,25 @@ function renderClutchAnalysis(rows) {
     const otMatches = prows.filter(r => r.overtime);
     const otWins = otMatches.filter(r => r.win).length;
     const otWinPct = otMatches.length ? Math.round((otWins / otMatches.length) * 100) : 0;
-
     const comebacks = prows.filter(r => r.win && r.max_deficit_overcome >= 2).length;
     const chokes = prows.filter(r => !r.win && r.max_lead_lost >= 2).length;
-
-    // Clutch faktor: kombinacija OT uspeha + preokreta
     const clutchScore = (otWinPct / 100 * 50) + (comebacks * 5) - (chokes * 3);
     return { p, otMatches: otMatches.length, otWins, otWinPct, comebacks, chokes, clutchScore };
   });
 
-  // Sortiraj po clutch score-u
   stats.sort((a, b) => b.clutchScore - a.clutchScore);
 
+  if (stats.every(s => s.otMatches === 0 && s.comebacks === 0 && s.chokes === 0)) {
+    clutchCard.innerHTML = `
+      <h2><span>🔥 Clutch analiza <small>produžeci &amp; preokreti</small></span></h2>
+      <div class="empty">Nema dovoljno podataka za clutch analizu (potrebni produžeci ili preokreti)</div>
+    `;
+    overviewTab.appendChild(clutchCard);
+    return;
+  }
+
   clutchCard.innerHTML = `
-    <h2>
-      <span>🔥 Clutch analiza <small>produžeci &amp; preokreti</small></span>
-    </h2>
+    <h2><span>🔥 Clutch analiza <small>produžeci &amp; preokreti</small></span></h2>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
       ${stats.map(s => `
         <div style="background:var(--surface-2); border-radius:10px; padding:14px 16px; border-left:3px solid ${playerColor[s.p]};">
@@ -945,7 +911,6 @@ function computePIS(rows, player) {
   const demoDiff = sum(prows.map(r => (getPath(r, 'demo.inflicted') || 0) - (getPath(r, 'demo.taken') || 0))) / matches;
   const mvpRate = prows.filter(r => getPath(r, 'core.mvp')).length / matches * 100;
 
-  // PIS formula - težinski faktori
   const pis =
     (goalsPerMatch * 2.5) +
     (assistsPerMatch * 1.8) +
@@ -964,6 +929,12 @@ function renderPlayerImpact(rows) {
   const ps = [...activePlayers].sort();
   if (!ps.length) return;
 
+  const overviewTab = $('#tab-overview');
+  if (!overviewTab) return;
+
+  const oldCard = document.getElementById('pisCard');
+  if (oldCard) oldCard.remove();
+
   const stats = ps.map(p => ({
     p,
     pis: computePIS(rows, p),
@@ -972,24 +943,24 @@ function renderPlayerImpact(rows) {
 
   stats.sort((a, b) => b.pis - a.pis);
 
-  // Dodaj novi card u overview tab (posle radara)
-  const overviewTab = $('#tab-overview');
-  if (!overviewTab) return;
-
-  // Proveri da li već postoji
-  if (document.getElementById('pisCard')) return;
-
   const pisCard = document.createElement('div');
   pisCard.id = 'pisCard';
   pisCard.className = 'card';
   pisCard.style.marginTop = '20px';
 
+  if (!stats.length || stats.every(s => s.matches === 0)) {
+    pisCard.innerHTML = `
+      <h2><span>📊 Player Impact Score <small>ukupan uticaj na igru</small></h2>
+      <div class="empty">Nema dovoljno podataka za PIS izračun</div>
+    `;
+    overviewTab.appendChild(pisCard);
+    return;
+  }
+
   const maxPIS = Math.max(1, ...stats.map(s => s.pis));
 
   pisCard.innerHTML = `
-    <h2>
-      <span>📊 Player Impact Score <small>ukupan uticaj na igru</small></span>
-    </h2>
+    <h2><span>📊 Player Impact Score <small>ukupan uticaj na igru</small></span></h2>
     <div style="display:flex; flex-direction:column; gap:8px;">
       ${stats.map((s, i) => `
         <div style="display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--border);">
@@ -1012,63 +983,8 @@ function renderPlayerImpact(rows) {
 }
 
 // ================================================================
-//  GAMIFIKACIJA RENDER
+//  LOAD I RENDER FUNKCIJE
 // ================================================================
-
-function renderGamification(rows) {
-  const ps = [...activePlayers].sort();
-  if (!ps.length) return;
-
-  // Dodaj level badge pored imena igrača u player-records
-  const recordsWrap = $('#playerRecords');
-  if (!recordsWrap) return;
-
-  // Nadji sve .prec-card i dodaj badge
-  const cards = recordsWrap.querySelectorAll('.prec-card');
-  cards.forEach((card, index) => {
-    const player = ps[index];
-    if (!player) return;
-    const xp = computePlayerXP(rows, player);
-    const { current, next, xp: currentXp } = getPlayerLevel(xp);
-    const progress = Math.min(100, ((xp - current.xp) / (next.xp - current.xp)) * 100 || 0);
-
-    // Dodaj level badge pored imena
-    const nameEl = card.querySelector('.name');
-    if (nameEl) {
-      const badge = document.createElement('span');
-      badge.style.cssText = `
-        font-size: 14px;
-        margin-left: 8px;
-        background: rgba(255,255,255,0.1);
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 700;
-      `;
-      badge.textContent = `${current.badge} Lv.${current.level} ${current.name}`;
-      nameEl.appendChild(badge);
-    }
-
-    // Dodaj progress bar ispod
-    const row = card.querySelector('.row');
-    if (row) {
-      const progressDiv = document.createElement('div');
-      progressDiv.style.cssText = `
-        margin-top: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      `;
-      progressDiv.innerHTML = `
-        <div style="flex:1; height:4px; background:var(--boost-track); border-radius:2px; overflow:hidden;">
-          <div style="height:100%; width:${progress}%; background:linear-gradient(90deg, ${playerColor[player]}, #fff); border-radius:2px; transition:width 0.5s ease;"></div>
-        </div>
-        <span style="font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">${Math.round(progress)}%</span>
-      `;
-      row.parentNode.insertBefore(progressDiv, row.nextSibling);
-    }
-  });
-}
 
 async function load(){
   try{
@@ -1232,11 +1148,9 @@ function render(){
   renderScoreline(rows);
   renderPlayerRecords(rows);
   
-  // ===== NOVI DODACI =====
-  renderGamification(rows);        // Level i badge-ovi
-  renderClutchAnalysis(rows);      // Clutch analiza
-  renderPlayerImpact(rows);        // Player Impact Score
-  // ========================
+  renderGamification(rows);
+  renderClutchAnalysis(rows);
+  renderPlayerImpact(rows);
   
   renderTrend(rows);
   renderBoostMeters(rows);
@@ -1269,12 +1183,11 @@ function render(){
   renderCardsTab(rows);
 }
 
-/* ---------------- OVERVIEW ---------------- */
+// ================================================================
+//  OVERVIEW FUNKCIJE
+// ================================================================
 
 function renderScoreline(rows){
-  // Namerno NE zbrajamo pobede/poraze ovde preko svih igraca - to bi
-  // dvostruko/visestruko brojalo isti mec (jedan red po igracu po mecu).
-  // Pobeda/poraz ima smisla samo PO IGRACU - to je u renderPlayerRecords().
   const uniqueMatches = new Set(rows.map(r => r.replay_id));
   const goals = sum(rows.map(r => getPath(r,'core.goals')));
   const mvps = rows.filter(r => getPath(r,'core.mvp')).length;
@@ -1441,7 +1354,6 @@ function renderBoostExtras(rows){
     return { p, goals, assists, collected, stolen, zeroPct, efficiency, matches: prows.length };
   });
 
-  // ---- Boost efikasnost (G+A na svakih 100 sakupljenog boosta) ----
   const effSorted = [...stats].sort((a,b) => b.efficiency - a.efficiency);
   const maxEff = Math.max(0.01, ...effSorted.map(s => s.efficiency));
   effWrap.innerHTML = `
@@ -1455,7 +1367,6 @@ function renderBoostExtras(rows){
     `).join('')}
   `;
 
-  // ---- Kratke cinjenice ----
   const withMatches = stats.filter(s => s.matches > 0);
   const facts = [];
   if(withMatches.length){
@@ -1526,7 +1437,9 @@ function renderRadar(rows){
   });
 }
 
-/* ---------------- BOOST TAB ---------------- */
+// ================================================================
+//  BOOST TAB FUNKCIJE (skraćeno)
+// ================================================================
 
 function renderBpmChart(rows){
   const ps = [...activePlayers].sort();
@@ -1587,7 +1500,9 @@ function renderBoostTable(rows){
   ]);
 }
 
-/* ---------------- MOVEMENT TAB ---------------- */
+// ================================================================
+//  OSTALE TAB FUNKCIJE (skraćeno - postoje u originalu)
+// ================================================================
 
 function renderAirChart(rows){
   const ps = [...activePlayers].sort();
@@ -1637,8 +1552,6 @@ function renderMovementTable(rows){
   ]);
 }
 
-/* ---------------- POSITIONING TAB ---------------- */
-
 function renderPositioningChart(rows){
   const ps = [...activePlayers].sort();
   const def = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'positioning.percent_defensive_third')||0)));
@@ -1674,8 +1587,6 @@ function renderPosTable(rows){
   ]);
 }
 
-/* ---------------- DEMOS TAB ---------------- */
-
 function renderDemoChart(rows){
   const ps = [...activePlayers].sort();
   const inflicted = ps.map(p => sum(rows.filter(r=>r.player===p).map(r=>getPath(r,'demo.inflicted')||0)));
@@ -1702,14 +1613,16 @@ function renderDemoTrend(rows){
   lineChartFor('#demoTrendChart', 'demoTrend', ordered);
 }
 
-/* ---------------- CHEMISTRY TAB ---------------- */
+// ================================================================
+//  CHEMISTRY TAB
+// ================================================================
 
 let chemMode = '2v2';
 
 function renderChemistry(rows){
   const seen = new Set();
-  const groups2 = {}; // tacno 2v2 mecevi
-  const groups3 = {}; // tacno 3v3 mecevi
+  const groups2 = {};
+  const groups3 = {};
 
   rows.forEach(r => {
     const key = r.replay_id + '|' + r.team_color;
@@ -1720,7 +1633,7 @@ function renderChemistry(rows){
     let target = null;
     if(teamMembers.length === 2) target = groups2;
     else if(teamMembers.length === 3) target = groups3;
-    else return; // 1v1, 4v4 i sl. - trenutno ne prikazujemo
+    else return;
 
     const combKey = [...teamMembers].sort().join(' & ');
     if(!target[combKey]) target[combKey] = { total:0, wins:0 };
@@ -1738,7 +1651,9 @@ function renderChemistry(rows){
   `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
 }
 
-/* ---------------- RECORDS TAB ---------------- */
+// ================================================================
+//  RECORDS TAB
+// ================================================================
 
 function renderRecords(rows){
   const ps = [...activePlayers];
@@ -1789,7 +1704,9 @@ function renderRecords(rows){
   `).join('');
 }
 
-/* ---------------- HIGHLIGHTS TAB ---------------- */
+// ================================================================
+//  HIGHLIGHTS TAB
+// ================================================================
 
 function dedupeByMatchTeam(rows){
   const seen = new Set();
@@ -1840,8 +1757,6 @@ function renderMilestones(){
 
   const cards = [];
   ps.forEach(p => {
-    // NAMERNO koristimo ceo RAW (ne filtrirane redove) - dostignuca su karijerna,
-    // ne zavise od trenutnog filtera po datumu/rezimu.
     const prows = RAW.filter(r => r.player === p);
     if(!prows.length) return;
 
@@ -1878,10 +1793,7 @@ function renderMonthCompare(){
   const prevDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
   const prevMonthKey = `${prevDate.getFullYear()}-${String(prevDate.getMonth()+1).padStart(2,'0')}`;
 
-  // Namerno ignorisemo datumski filter (Od/Do) ovde - poredimo kalendarske mesece.
-  // Postujemo rezim (online/offline) i izabrane igrace.
   const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
-
   const ps = [...activePlayers];
   const rowsFor = (p, monthKey) => modeRows.filter(r => r.player === p && (r.date||'').slice(0,7) === monthKey);
 
@@ -1915,7 +1827,9 @@ function renderMonthCompare(){
   $('#monthCompareBody').innerHTML = body || '<tr><td colspan="7" class="empty">Nema mečeva ovog ili prošlog meseca za izabrane igrače</td></tr>';
 }
 
-/* ---------------- HEAD TO HEAD TAB ---------------- */
+// ================================================================
+//  HEAD TO HEAD TAB
+// ================================================================
 
 let h2hInitialized = false;
 
@@ -1967,7 +1881,6 @@ function renderH2H(){
     { label:'MVP nagrada', a: rowsA.filter(r=>getPath(r,'core.mvp')).length, b: rowsB.filter(r=>getPath(r,'core.mvp')).length },
   ];
 
-  // Zajedno (isti tim) vs jedan protiv drugog (suprotni timovi)
   const seen = new Set();
   let together = { total:0, wins:0 };
   let against = { total:0, aWins:0, bWins:0 };
@@ -2012,7 +1925,9 @@ function renderH2H(){
   `;
 }
 
-/* ---------------- MATCHES TAB ---------------- */
+// ================================================================
+//  MATCHES TAB
+// ================================================================
 
 function renderTable(rows){
   const sorted = [...rows].sort((a,b) => {
@@ -2079,8 +1994,7 @@ function openModal(r){
 function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
 
 // ================================================================
-//  SEASON WRAPPED — Spotify Wrapped stil, generisano iz istih
-//  filtriranih redova koje koristi ostatak dashboard-a.
+//  SEASON WRAPPED
 // ================================================================
 
 function longestWinStreakFor(rows, player){
@@ -2123,7 +2037,6 @@ function computeWrappedData(rows){
     }
   });
 
-  // najbolja dvojka (tacno 2v2 mecevi, min. 3 zajednicka meca)
   const seen = new Set();
   const duoStats = {};
   rows.forEach(r => {
@@ -2324,13 +2237,12 @@ function showWrappedSlide(i){
 function wrappedGo(dir){
   const next = wrappedIndex + dir;
   if(next < 0) return;
-  if(next >= wrappedSlides.length) return; // ostani na poslednjem slajdu, korisnik zatvara rucno
+  if(next >= wrappedSlides.length) return;
   showWrappedSlide(next);
 }
 
 // ================================================================
-//  TRADING KARTE — FIFA/NBA stil kartice po igraču, renderovano
-//  direktno na <canvas> tako da se moze snimiti kao PNG jednim klikom.
+//  TRADING KARTE
 // ================================================================
 
 function clampScale(v, lo, hi, outLo=40, outHi=99){
@@ -2442,7 +2354,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     }
     ctx.restore();
 
-    // Ako NEMA slike, nacrtaj auto ikonu u pozadini
     if(!photoImg) {
       drawCarBackground(ctx, W, H, color);
     }
@@ -2452,7 +2363,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.strokeStyle = hexToRgba(color, 0.9);
     ctx.stroke();
 
-    // ---- SLIKA (AVATAR) ----
     if(photoImg) {
       try {
         const cx = W/2, cy = H*0.32, r = 150;
@@ -2491,7 +2401,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
       }
     }
 
-    // ---- OVR (levo gore) ----
     ctx.textBaseline = 'top';
     ctx.fillStyle = '#fff';
     ctx.font = "700 92px 'Rajdhani', sans-serif";
@@ -2501,7 +2410,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
 
-    // ---- Monogram (desno gore) ----
     const initials = data.player.slice(0,2).toUpperCase();
     ctx.beginPath();
     ctx.arc(W-72, 78, 42, 0, Math.PI*2);
@@ -2515,16 +2423,12 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.textAlign = 'center';
     ctx.fillText(initials, W-72, 60);
 
-    // ---- IME IGRACA ----
     ctx.textAlign = 'center';
-    
-    // Ako ima slike, ime je malo niže (zbog veće slike)
     const nameY = photoImg ? H*0.56 : H*0.48;
     ctx.font = "700 46px 'Rajdhani', sans-serif";
     ctx.fillStyle = '#fff';
     ctx.fillText(data.player.toUpperCase(), W/2, nameY);
 
-    // Linija ispod imena - sa više prostora
     ctx.strokeStyle = hexToRgba('#ffffff', 0.35);
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -2532,7 +2436,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.lineTo(W*0.78, nameY + 48);
     ctx.stroke();
 
-    // ---- STATISTIKE ----
     const statRows = [['GOL','ASI'],['ODB','BUST'],['WIN','UDA']];
     const labelMap = { 
       GOL:'GOL/MEČ', ASI:'ASI/MEČ', ODB:'ODB/MEČ', 
@@ -2543,7 +2446,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     const rowH = 50;
     const colX = [W*0.30, W*0.70];
     
-    // VEĆE STATISTIKE ZA SVE SLUČAJEVE
     const statFontSize = 40;
     const labelFontSize = 18;
     
@@ -2562,7 +2464,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
       });
     });
 
-    // ---- FOOTER ----
     ctx.textAlign = 'center';
     ctx.font = "800 16px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
@@ -2582,7 +2483,6 @@ function drawPlayerCard(canvas, data, color, photoImg) {
 
 function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
 
-// Keš za slike
 const playerImageCache = {};
 
 function loadPlayerImage(url) {
@@ -2626,7 +2526,6 @@ async function renderCardsTab(rows){
     </div>
   `).join('');
 
-  // Renderuj svaku karticu
   for(const p of ps){
     const stats = computeCardStats(rows, p);
     if(!stats) continue;
@@ -2657,11 +2556,9 @@ async function renderCardsTab(rows){
     });
   });
 }
-function cssSafe(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
 
 // ================================================================
-//  AI ANALITIČAR — Groq (Llama 3 70B) preko Cloudflare Worker-a,
-//  sa fallback-om na lokalnu analizu po pravilima ako Worker padne.
+//  AI ANALITIČAR
 // ================================================================
 
 const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
@@ -2704,7 +2601,7 @@ function getPreviousPeriodRows(currentRows){
 
 function prepareDetailedData(rows){
   const players = {};
-  const avg = arr => arr.length ? arr.reduce((a,b) => a + b, 0) / arr.length : 0;
+  const avgFn = arr => arr.length ? arr.reduce((a,b) => a + b, 0) / arr.length : 0;
 
   [...activePlayers].forEach(p => {
     const prows = rows.filter(r => r.player === p);
@@ -2723,15 +2620,15 @@ function prepareDetailedData(rows){
     players[p] = {
       matches: prows.length,
       winrate: Math.round((prows.filter(r => r.win).length / prows.length) * 100),
-      goals_pm: +avg(goals).toFixed(2),
-      assists_pm: +avg(assists).toFixed(2),
-      saves_pm: +avg(saves).toFixed(2),
-      shots_pm: +avg(shots).toFixed(2),
-      avg_boost: Math.round(avg(boostAvg)),
-      zero_boost_pct: +avg(zeroBoost).toFixed(1),
-      behind_ball_pct: Math.round(avg(behindBall)),
-      demos_pm: +avg(demosInflicted).toFixed(2),
-      demos_taken_pm: +avg(demosTaken).toFixed(2),
+      goals_pm: +avgFn(goals).toFixed(2),
+      assists_pm: +avgFn(assists).toFixed(2),
+      saves_pm: +avgFn(saves).toFixed(2),
+      shots_pm: +avgFn(shots).toFixed(2),
+      avg_boost: Math.round(avgFn(boostAvg)),
+      zero_boost_pct: +avgFn(zeroBoost).toFixed(1),
+      behind_ball_pct: Math.round(avgFn(behindBall)),
+      demos_pm: +avgFn(demosInflicted).toFixed(2),
+      demos_taken_pm: +avgFn(demosTaken).toFixed(2),
       mvp_count: prows.filter(r => getPath(r,'core.mvp')).length,
       best_goals_in_match: Math.max(0, ...goals),
     };
