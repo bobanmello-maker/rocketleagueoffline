@@ -11,6 +11,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Zbunjena inila",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "XxMikey_SkullxX",
@@ -127,6 +128,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "coco_bws",
@@ -243,6 +245,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Zbunjena inila",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "Voldemort",
@@ -359,6 +362,7 @@
     "opponent_goals": 5,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "kinu_9",
@@ -475,6 +479,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "martt_9",
@@ -591,6 +596,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "Hotsauce_222",
@@ -709,6 +715,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "DikkeKlodders",
@@ -827,6 +834,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "karpaque",
@@ -943,6 +951,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "tchutchu_gamer9",
@@ -1059,6 +1068,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "Pnyx510",
@@ -1175,6 +1185,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Zbunjena inila",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -1290,6 +1301,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Endo",
     "platform": "epic",
     "teammates": [
       "Zbunjena inila"
@@ -1405,6 +1417,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Undertaker",
@@ -1521,6 +1534,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "egoistoohigh378"
@@ -1636,6 +1650,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -1751,6 +1766,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Octane",
     "platform": "epic",
     "teammates": [
       "Zbunjena inila"
@@ -1866,6 +1882,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Zbunjena inila(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Zbunjena inila",
@@ -1982,6 +1999,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Zbunjena inila(1)",
@@ -2098,6 +2116,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Zbunjena inila(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "Zbunjena inila(1)",
@@ -2214,6 +2233,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Zbunjena inila",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -2329,6 +2349,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": null,
     "platform": "epic",
     "teammates": [
       "Zbunjena inila"
@@ -2444,6 +2465,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Mozart",
@@ -2560,6 +2582,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": null,
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -2676,6 +2699,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "MP2006x",
@@ -2792,6 +2816,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Masamune",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -2908,6 +2933,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -3023,6 +3049,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -3138,6 +3165,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -3253,6 +3281,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -3368,6 +3397,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -3483,6 +3513,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -3598,6 +3629,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -3713,6 +3745,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -3828,6 +3861,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Muro__5",
@@ -3944,6 +3978,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Muro__5",
@@ -4060,6 +4095,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -4175,6 +4211,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -4290,6 +4327,7 @@
     "opponent_goals": 7,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -4405,6 +4443,7 @@
     "opponent_goals": 7,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -4520,6 +4559,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -4635,6 +4675,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -4750,6 +4791,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -4865,6 +4907,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -4980,6 +5023,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -5095,6 +5139,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -5210,6 +5255,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -5325,6 +5371,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -5440,6 +5487,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -5555,6 +5603,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -5670,6 +5719,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -5785,6 +5835,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -5900,6 +5951,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -6015,6 +6067,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -6130,6 +6183,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -6245,6 +6299,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -6360,6 +6415,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -6475,6 +6531,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -6590,6 +6647,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -6705,6 +6763,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -6820,6 +6879,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -6935,6 +6995,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -7050,6 +7111,7 @@
     "opponent_goals": 6,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -7165,6 +7227,7 @@
     "opponent_goals": 6,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -7280,6 +7343,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -7395,6 +7459,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -7510,6 +7575,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -7625,6 +7691,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -7740,6 +7807,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -7855,6 +7923,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -7970,6 +8039,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -8085,6 +8155,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -8200,6 +8271,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -8315,6 +8387,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -8430,6 +8503,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -8545,6 +8619,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -8660,6 +8735,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -8775,6 +8851,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -8890,6 +8967,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -9005,6 +9083,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -9120,6 +9199,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -9235,6 +9315,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober"
@@ -9350,6 +9431,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Macrom_999",
@@ -9466,6 +9548,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -9582,6 +9665,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -9698,6 +9782,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -9814,6 +9899,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -9930,6 +10016,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -10046,6 +10133,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -10162,6 +10250,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -10278,6 +10367,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -10394,6 +10484,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -10510,6 +10601,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -10626,6 +10718,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "The Shepherd",
@@ -10742,6 +10835,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "v iBlasTaa x",
@@ -10858,6 +10952,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "v iBlasTaa x",
@@ -10974,6 +11069,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -11090,6 +11186,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -11206,6 +11303,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -11322,6 +11420,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -11438,6 +11537,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -11554,6 +11654,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -11670,6 +11771,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -11785,6 +11887,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -11900,6 +12003,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -12015,6 +12119,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -12130,6 +12235,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -12245,6 +12351,7 @@
     "opponent_goals": 4,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -12360,6 +12467,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -12475,6 +12583,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -12590,6 +12699,7 @@
     "opponent_goals": 1,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -12706,6 +12816,7 @@
     "opponent_goals": 1,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -12822,6 +12933,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -12937,6 +13049,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -13052,6 +13165,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -13167,6 +13281,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -13282,6 +13397,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -13398,6 +13514,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -13514,6 +13631,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -13629,6 +13747,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -13744,6 +13863,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -13859,6 +13979,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -13974,6 +14095,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -14090,6 +14212,7 @@
     "opponent_goals": 3,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -14206,6 +14329,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage",
@@ -14322,6 +14446,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -14438,6 +14563,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -14553,6 +14679,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -14668,6 +14795,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -14783,6 +14911,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -14898,6 +15027,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -15014,6 +15144,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -15130,6 +15261,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -15245,6 +15377,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -15360,6 +15493,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -15475,6 +15609,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -15590,6 +15725,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -15706,6 +15842,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -15822,6 +15959,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -15938,6 +16076,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -16054,6 +16193,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -16169,6 +16309,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -16284,6 +16425,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -16399,6 +16541,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -16514,6 +16657,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -16630,6 +16774,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -16746,6 +16891,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -16861,6 +17007,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -16976,6 +17123,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -17091,6 +17239,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -17206,6 +17355,7 @@
     "opponent_goals": 1,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -17322,6 +17472,7 @@
     "opponent_goals": 1,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -17438,6 +17589,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -17553,6 +17705,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -17668,6 +17821,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -17783,6 +17937,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -17898,6 +18053,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -18014,6 +18170,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -18130,6 +18287,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -18245,6 +18403,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -18360,6 +18519,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -18475,6 +18635,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -18590,6 +18751,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -18706,6 +18868,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -18822,6 +18985,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -18938,6 +19102,7 @@
     "opponent_goals": 5,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -19054,6 +19219,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -19169,6 +19335,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -19284,6 +19451,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -19399,6 +19567,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -19514,6 +19683,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -19630,6 +19800,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -19746,6 +19917,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -19861,6 +20033,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -19976,6 +20149,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -20091,6 +20265,7 @@
     "opponent_goals": 1,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -20206,6 +20381,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -20322,6 +20498,7 @@
     "opponent_goals": 2,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -20438,6 +20615,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -20554,6 +20732,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "Rarely_Sober",
@@ -20670,6 +20849,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(3)"
@@ -20785,6 +20965,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage(3)",
+    "car_name": "Takumi RX-T",
     "platform": "epic",
     "teammates": [
       "ExMirage"
@@ -20900,6 +21081,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(1)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(2)"
@@ -21015,6 +21197,7 @@
     "opponent_goals": 2,
     "win": true,
     "player": "ExMirage(2)",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "ExMirage(1)"
@@ -21130,6 +21313,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21246,6 +21430,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21362,6 +21547,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21478,6 +21664,7 @@
     "opponent_goals": 0,
     "win": true,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21594,6 +21781,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21710,6 +21898,7 @@
     "opponent_goals": 3,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21826,6 +22015,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -21942,6 +22132,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "blanquii24",
@@ -22058,6 +22249,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "ExMirage",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "C4rlill0s_",
@@ -22174,6 +22366,7 @@
     "opponent_goals": 4,
     "win": false,
     "player": "Rarely_Sober",
+    "car_name": "Fennec",
     "platform": "epic",
     "teammates": [
       "C4rlill0s_",
