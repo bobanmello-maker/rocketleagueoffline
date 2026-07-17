@@ -2096,6 +2096,67 @@ function renderHighlights(rows){
 const MILESTONE_GOAL_STEPS = [50, 100, 200, 300, 500, 1000];
 const MILESTONE_STREAK_STEPS = [5, 10, 15, 20, 30];
 
+function getPlayerAchievements(rows, player){
+  const prows = rows.filter(r => r.player === player);
+  if(!prows.length) return [];
+  const achievements = [];
+  const matches = prows.length;
+  const wins = prows.filter(r => r.win).length;
+  const totalGoals = sum(prows.map(r => getPath(r,'core.goals')));
+  const totalAssists = sum(prows.map(r => getPath(r,'core.assists')));
+  const totalSaves = sum(prows.map(r => getPath(r,'core.saves')));
+  const totalDemos = sum(prows.map(r => getPath(r,'demo.inflicted')));
+  const totalShots = sum(prows.map(r => getPath(r,'core.shots')));
+  const mvps = prows.filter(r => getPath(r,'core.mvp')).length;
+  const hatTricks = prows.filter(r => (getPath(r,'core.goals')||0) >= 3).length;
+  const cleanSheets = prows.filter(r => (getPath(r,'core.goals_against')||0) === 0).length;
+
+  const accuracy = totalShots > 0 ? (totalGoals / totalShots) * 100 : 0;
+  let bestStreak = 0, curStreak = 0;
+  const sorted = prows.slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+  sorted.forEach(r => {
+    if(r.win){ curStreak++; bestStreak = Math.max(bestStreak, curStreak); }
+    else curStreak = 0;
+  });
+
+  if(matches >= 10) achievements.push({ emoji:'🎯', name:'Veteran', desc:`${matches} odigranih mečeva` });
+  if(matches >= 50) achievements.push({ emoji:'🏅', name:'Iskusni veteran', desc:'50+ mečeva' });
+  if(matches >= 100) achievements.push({ emoji:'💎', name:'Legenda', desc:'100+ mečeva' });
+
+  if(wins >= 10) achievements.push({ emoji:'🏆', name:'Pobednik', desc:`${wins} pobeda` });
+  if(wins >= 25) achievements.push({ emoji:'👑', name:'Kralj pobeda', desc:'25+ pobeda' });
+  if(wins >= 50) achievements.push({ emoji:'⚜️', name:'Imperator', desc:'50+ pobeda' });
+
+  if(totalGoals >= 50) achievements.push({ emoji:'⚽', name:'Strelac', desc:`${totalGoals} golova` });
+  if(totalGoals >= 100) achievements.push({ emoji:'🔥', name:'Mašina za golove', desc:'100+ golova' });
+
+  if(totalAssists >= 25) achievements.push({ emoji:'🎯', name:'Asistent', desc:`${totalAssists} asistencija` });
+  if(totalAssists >= 50) achievements.push({ emoji:'🎪', name:'Playmaker', desc:'50+ asistencija' });
+
+  if(totalSaves >= 50) achievements.push({ emoji:'🧤', name:'Zid', desc:`${totalSaves} odbrana` });
+  if(totalSaves >= 100) achievements.push({ emoji:'🛡️', name:'Tvrđava', desc:'100+ odbrana' });
+
+  if(totalDemos >= 20) achievements.push({ emoji:'💥', name:'Demo majstor', desc:`${totalDemos} demolicija` });
+  if(totalDemos >= 50) achievements.push({ emoji:'💀', name:'Demo kralj', desc:'50+ demolicija' });
+
+  if(mvps >= 5) achievements.push({ emoji:'⭐', name:'MVP', desc:`${mvps} MVP nagrada` });
+  if(mvps >= 10) achievements.push({ emoji:'🌟', name:'Super MVP', desc:'10+ MVP nagrada' });
+
+  if(hatTricks >= 3) achievements.push({ emoji:'🎩', name:'Hat-trick heroj', desc:`${hatTricks} hat-trickova` });
+  if(hatTricks >= 5) achievements.push({ emoji:'🎩', name:'Hat-trick mašina', desc:'5+ hat-trickova' });
+
+  if(cleanSheets >= 3) achievements.push({ emoji:'🧹', name:'Čista mreža', desc:`${cleanSheets} mečeva bez primljenog gola` });
+  if(cleanSheets >= 10) achievements.push({ emoji:'🔒', name:'Neprobojni', desc:'10+ čistih mreža' });
+
+  if(bestStreak >= 5) achievements.push({ emoji:'🔥', name:'Niz pobeda', desc:`${bestStreak} pobeda zaredom` });
+  if(bestStreak >= 10) achievements.push({ emoji:'⚡', name:'Nezaustavljivi', desc:'10+ pobeda zaredom' });
+
+  if(accuracy >= 70) achievements.push({ emoji:'🎯', name:'Sniper', desc:`${Math.round(accuracy)}% šut preciznost` });
+  if(accuracy >= 80) achievements.push({ emoji:'🎯', name:'Oštri strelac', desc:`${Math.round(accuracy)}% šut preciznost` });
+
+  return achievements;
+}
+
 function renderMilestones(){
   const wrap = $('#milestoneGrid');
   const ps = [...activePlayers];
@@ -2103,24 +2164,8 @@ function renderMilestones(){
 
   const cards = [];
   ps.forEach(p => {
-    const prows = RAW.filter(r => r.player === p);
-    if(!prows.length) return;
-
-    const totalGoals = sum(prows.map(r => getPath(r,'core.goals')));
-    const goalStep = [...MILESTONE_GOAL_STEPS].reverse().find(s => totalGoals >= s);
-
-    const sorted = prows.slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
-    let best = 0, cur = 0;
-    sorted.forEach(r => { if(r.win){ cur++; best = Math.max(best, cur); } else cur = 0; });
-    const streakStep = [...MILESTONE_STREAK_STEPS].reverse().find(s => best >= s);
-
-    if(goalStep){
-      cards.push({ emoji:'🎯', title:`${p} — golova karijerno`, winner:p, detail:`${totalGoals} golova (prešao prag od ${goalStep})` });
-    }
-    if(streakStep){
-      cards.push({ emoji:'🔥', title:`${p} — najduži niz pobeda`, winner:p, detail:`${best} pobeda zaredom (prešao prag od ${streakStep})` });
-    }
-    cards.push({ emoji:'📅', title:`${p} — ukupno mečeva`, winner:p, detail:`${prows.length} odigranih mečeva karijerno` });
+    const achievements = getPlayerAchievements(RAW, p);
+    achievements.forEach(a => cards.push({ emoji:a.emoji, title:a.name, winner:p, detail:a.desc }));
   });
 
   wrap.innerHTML = cards.length ? cards.map(c => `
