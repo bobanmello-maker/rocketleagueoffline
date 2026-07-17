@@ -729,7 +729,7 @@
 
     <div class="tabpanel" id="tab-highlights">
       <div class="card">
-        <h2>🏆 Dostignuća <small>pragovi koje ste dosad prešli (računato preko celog istorijata, bez obzira na filtere)</small></h2>
+        <h2>🏆 Dostignuća <small>pragovi otključani u trenutno izabranom periodu i režimu (Sve/Offline/Online)</small></h2>
         <div id="milestoneGrid"></div>
       </div>
       <div class="card">
@@ -2107,7 +2107,7 @@ function dedupeByMatchTeam(rows){
 }
 
 function renderHighlights(rows){
-  renderMilestones();
+  renderMilestones(rows);
   renderMonthCompare();
 }
 
@@ -2175,13 +2175,13 @@ function getPlayerAchievements(rows, player){
   return achievements;
 }
 
-function renderMilestones(){
+function renderMilestones(rows){
   const wrap = $('#milestoneGrid');
   const ps = [...activePlayers];
   if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
 
   const blocks = ps.map(p => {
-    const achievements = getPlayerAchievements(RAW, p);
+    const achievements = getPlayerAchievements(rows, p);
     if(!achievements.length) return '';
     const chips = achievements.map(a => `
       <div class="badge-chip" title="${a.name} — ${a.desc}">
