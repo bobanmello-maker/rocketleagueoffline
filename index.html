@@ -776,25 +776,28 @@
           </table>
         </div>
         <!-- Dodaj posle tabele -->
-<div id="paginationControls" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
-  <div style="display:flex; gap:8px; align-items:center;">
-    <button id="prevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
-    <span id="pageInfo" style="color:var(--text-muted); font-size:13px;">Strana 1 od 1</span>
-    <button id="nextPageBtn" class="chip" style="background:var(--surface-2);">Sledeća ▶</button>
-  </div>
-  <div style="display:flex; gap:6px; align-items:center;">
-    <span style="color:var(--text-muted); font-size:12px;">Prikaži:</span>
-    <select id="pageSizeSelect" style="background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:6px; font-size:12px;">
-      <option value="10">10</option>
-      <option value="25" selected>25</option>
-      <option value="50">50</option>
-      <option value="100">100</option>
-    </select>
-  </div>
-</div>
+        <div id="paginationControls" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="prevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
+            <span id="pageInfo" style="color:var(--text-muted); font-size:13px;">Strana 1 od 1</span>
+            <button id="nextPageBtn" class="chip" style="background:var(--surface-2);">Sledeća ▶</button>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="color:var(--text-muted); font-size:12px;">Prikaži:</span>
+            <select id="pageSizeSelect" style="background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:4px 8px; border-radius:6px; font-size:12px;">
+              <option value="10">10</option>
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+</div>
 
+<!-- MODALI - SAD SU VAN WRAP-A I VAN TABOVA -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal" id="modalContent"></div>
 </div>
@@ -812,10 +815,6 @@
   </div>
   <div class="wrapped-hint">Klikni levo/desno ili strelice · Esc za izlaz</div>
 </div>
-
-  </div>
-</div>
-
 
 <script>
  
@@ -1016,17 +1015,8 @@ const PLAYER_COLOR_OVERRIDES = {
 const PLAYER_IMAGE_OVERRIDES = {
   'Toške': 'images/toske.png',
   'Cane': 'images/cane.png',
-};
-
-// Ime auta (tacno kao sto dolazi iz ballchasing "car_name" polja) -> slicica.
-// Nazivi moraju da se poklapaju TACNO (veliko/malo slovo bitno), npr. "Octane", "Fennec", "Dominus".
-// Slike stavi u images/cars/ folder.
-const CAR_IMAGE_OVERRIDES = {
-  'Octane': 'images/cars/octane.png',
-  'Fennec': 'images/cars/fennec.png',
-  'Dominus': 'images/cars/dominus.png',
-  'Batmobile': 'images/cars/batmobile.png',
-  'Breakout': 'images/cars/breakout.png',
+  'Pajke': 'images/pajke.png',
+  'Ivan': 'images/ivan.png',
 };
 
 const NAME_MAP_RAW = {
@@ -2782,7 +2772,7 @@ function drawCarBackground(ctx, W, H, color) {
   ctx.restore();
 }
 
-function drawPlayerCard(canvas, data, color, photoImg, carImg) {
+function drawPlayerCard(canvas, data, color, photoImg) {
   try {
     const W = 600, H = 840, scaleF = 2;
     canvas.width = W*scaleF; canvas.height = H*scaleF;
@@ -2867,29 +2857,7 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
 
-    if(carImg){
-      const bs = 76; // velicina zaobljenog kvadratica
-      const bx = W - 24 - bs, by = 34;
-
-      ctx.save();
-      roundRectPath(ctx, bx, by, bs, bs, 16);
-      ctx.clip();
-
-      const iw = carImg.naturalWidth || carImg.width, ih = carImg.naturalHeight || carImg.height;
-      if(iw > 0 && ih > 0){
-        const s = Math.max(bs/iw, bs/ih);
-        const dw = iw*s, dh = ih*s;
-        ctx.fillStyle = hexToRgba(color, 0.5);
-        ctx.fillRect(bx, by, bs, bs);
-        ctx.drawImage(carImg, bx + bs/2 - dw/2, by + bs/2 - dh/2, dw, dh);
-      }
-      ctx.restore();
-
-      roundRectPath(ctx, bx, by, bs, bs, 16);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#fff';
-      ctx.stroke();
-    } else if(data.lastCar){
+    if(data.lastCar){
       ctx.font = "700 20px 'Rajdhani', sans-serif";
       const label = data.lastCar.toUpperCase();
       const padX = 16;
@@ -3039,9 +3007,7 @@ async function renderCardsTab(rows){
     if(imgUrl) {
       photoImg = await loadPlayerImage(imgUrl);
     }
-    const carImgUrl = stats.lastCar ? CAR_IMAGE_OVERRIDES[stats.lastCar] : null;
-    const carImg = carImgUrl ? await loadPlayerImage(carImgUrl) : null;
-    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg, carImg);
+    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg);
   }
 
   grid.querySelectorAll('.rlcard-save').forEach(btn => {
@@ -3167,30 +3133,20 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
     : data;
   const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(payload)}`;
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s - da dugme nikad ne ostane zaglavljeno ako Worker/Groq ne odgovori
+  const response = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-App-Secret': APP_SECRET },
+    body: JSON.stringify({
+      model: 'openai/gpt-oss-120b',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.6,
+      max_tokens: 2500
+    })
+  });
 
-  let response;
-  try{
-    response = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-App-Secret': APP_SECRET },
-      body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.6,
-        max_tokens: 2500
-      }),
-      signal: controller.signal
-    });
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  console.log('[AI] Worker response status:', response.status);
   if(!response.ok) throw new Error(`Worker HTTP ${response.status}`);
   const result = await response.json();
   if(result.error) throw new Error(result.error?.message || 'Groq API greška');
@@ -3199,13 +3155,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   if(!raw) throw new Error('Prazan odgovor od modela');
 
   const cleaned = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/,'').replace(/```\s*$/,'');
-  let parsed;
-  try{
-    parsed = JSON.parse(cleaned);
-  }catch(parseErr){
-    console.error('[AI] JSON.parse nije uspeo. Sirovi odgovor modela:', raw);
-    throw new Error('Odgovor modela nije validan JSON: ' + parseErr.message);
-  }
+  const parsed = JSON.parse(cleaned);
 
   const required = ['summary','strengths','weaknesses','tips'];
   if(!required.every(k => k in parsed)) throw new Error('Odgovor modela nema sva ocekivana polja');
@@ -3215,7 +3165,6 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   parsed.tips = parsed.tips || [];
   parsed.training = parsed.training || [];
   parsed.players = parsed.players || '';
-  console.log('[AI] Uspešno parsiran odgovor od Groq-a.');
   return parsed;
 }
 
@@ -3280,7 +3229,6 @@ async function analyzeWithAI(rows){
   const originalHTML = btn.innerHTML;
   btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
   btn.disabled = true;
-  console.log('[AI] Analiza pokrenuta, broj redova:', rows.length);
 
   try{
     const data = prepareDetailedData(rows);
@@ -3289,7 +3237,6 @@ async function analyzeWithAI(rows){
     const cacheKey = aiCacheKey(rows);
 
     if(aiAnalysisCache.has(cacheKey)){
-      console.log('[AI] Koristim keširan rezultat.');
       const cached = aiAnalysisCache.get(cacheKey);
       showAIAnalysisModal(cached.analysis, data, cached.usedFallback);
       return;
@@ -3298,10 +3245,9 @@ async function analyzeWithAI(rows){
     let analysis = null;
     let usedFallback = false;
     try{
-      console.log('[AI] Pozivam Groq Worker...');
       analysis = await callGroqAPI(data, prevData);
     }catch(e){
-      console.error('[AI] Worker/Groq nije uspeo, koristim fallback po pravilima. Razlog:', e);
+      console.warn('AI Worker nije uspeo, koristim fallback:', e.message);
     }
     if(!analysis){
       analysis = generateDetailedFallback(data, prevData);
@@ -3309,11 +3255,9 @@ async function analyzeWithAI(rows){
     }
 
     aiAnalysisCache.set(cacheKey, { analysis, usedFallback });
-    console.log('[AI] Otvaram modal sa rezultatom. usedFallback =', usedFallback);
     showAIAnalysisModal(analysis, data, usedFallback);
   }catch(e){
-    console.error('[AI] Neočekivana greška u analyzeWithAI:', e);
-    alert('Greška pri analizi: ' + e.message + '\n\n(Detalji su ispisani u konzoli - F12 → Console)');
+    alert('Greška pri analizi: ' + e.message);
   }finally{
     btn.innerHTML = originalHTML;
     btn.disabled = false;
@@ -3322,68 +3266,47 @@ async function analyzeWithAI(rows){
 
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
-  // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
-  // bez ovoga bi .map pukao i ceo modal tiho ne bi prikazao ništa
-  const asArray = v => Array.isArray(v) ? v : (v ? [String(v)] : []);
-  const strengths = asArray(analysis?.strengths);
-  const weaknesses = asArray(analysis?.weaknesses);
-  const tips = asArray(analysis?.tips);
-  const training = asArray(analysis?.training);
-  const summary = analysis?.summary ? String(analysis.summary) : '';
-  const playersText = analysis?.players ? String(analysis.players) : '';
+  modal.innerHTML = `
+    <button class="modal-close" id="aiModalClose">&times;</button>
+    <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
+    <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
+    ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
 
-  try{
-    modal.innerHTML = `
-      <button class="modal-close" id="aiModalClose">&times;</button>
-      <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
-      <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
-      ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
+    <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
+      <h4 style="color:#7C3AED;">📊 Sažetak</h4>
+      <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${analysis.summary || ''}</p>
+    </div>
 
-      <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
-        <h4 style="color:#7C3AED;">📊 Sažetak</h4>
-        <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${summary}</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <div class="analysis-section" style="border-left:3px solid var(--green);">
+        <h4 style="color:var(--green);">✅ Snage</h4>
+        <ul>${(analysis.strengths||[]).map(s => `<li>${s}</li>`).join('')}</ul>
       </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-        <div class="analysis-section" style="border-left:3px solid var(--green);">
-          <h4 style="color:var(--green);">✅ Snage</h4>
-          <ul>${strengths.map(s => `<li>${s}</li>`).join('')}</ul>
-        </div>
-        <div class="analysis-section" style="border-left:3px solid var(--loss);">
-          <h4 style="color:var(--loss);">⚠️ Slabosti</h4>
-          <ul>${weaknesses.map(s => `<li>${s}</li>`).join('')}</ul>
-        </div>
+      <div class="analysis-section" style="border-left:3px solid var(--loss);">
+        <h4 style="color:var(--loss);">⚠️ Slabosti</h4>
+        <ul>${(analysis.weaknesses||[]).map(s => `<li>${s}</li>`).join('')}</ul>
       </div>
+    </div>
 
-      ${playersText ? `
-      <div class="analysis-section" style="border-left:3px solid var(--blue);">
-        <h4 style="color:var(--blue);">👤 Analiza po igraču</h4>
-        <div style="white-space:pre-wrap; font-size:13px; line-height:1.8; color:var(--text-muted);">${playersText}</div>
-      </div>` : ''}
+    ${analysis.players ? `
+    <div class="analysis-section" style="border-left:3px solid var(--blue);">
+      <h4 style="color:var(--blue);">👤 Analiza po igraču</h4>
+      <div style="white-space:pre-wrap; font-size:13px; line-height:1.8; color:var(--text-muted);">${analysis.players}</div>
+    </div>` : ''}
 
-      <div class="analysis-section" style="border-left:3px solid var(--amber);">
-        <h4 style="color:var(--amber);">💡 Konkretni saveti</h4>
-        <ul>${tips.map(s => `<li>${s}</li>`).join('')}</ul>
-      </div>
+    <div class="analysis-section" style="border-left:3px solid var(--amber);">
+      <h4 style="color:var(--amber);">💡 Konkretni saveti</h4>
+      <ul>${(analysis.tips||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>
 
-      ${training.length ? `
-      <div class="analysis-section" style="border-left:3px solid var(--blue);">
-        <h4 style="color:var(--blue);">🎯 Trening preporuke</h4>
-        <ul>${training.map(s => `<li>${s}</li>`).join('')}</ul>
-      </div>` : ''}
-    `;
-  }catch(e){
-    console.error('[AI] Renderovanje modala nije uspelo:', e);
-    modal.innerHTML = `
-      <button class="modal-close" id="aiModalClose">&times;</button>
-      <h3>🧠 RTS Analiza</h3>
-      <p style="color:var(--text-muted); font-size:13px;">Došlo je do greške pri prikazu analize. Detalji su u konzoli (F12 → Console).</p>
-    `;
-  }
-
+    ${(analysis.training||[]).length ? `
+    <div class="analysis-section" style="border-left:3px solid var(--blue);">
+      <h4 style="color:var(--blue);">🎯 Trening preporuke</h4>
+      <ul>${analysis.training.map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>` : ''}
+  `;
   $('#aiModalClose').addEventListener('click', () => $('#aiModalBackdrop').classList.remove('open'));
   $('#aiModalBackdrop').classList.add('open');
-  console.log('[AI] Modal otvoren.');
 }
 
 $('#aiAnalyzeBtn').addEventListener('click', () => {
@@ -3394,33 +3317,6 @@ $('#aiAnalyzeBtn').addEventListener('click', () => {
   }
   analyzeWithAI(rows);
 });
-
-// sigurnosna mreža: ako NEŠTO potpuno neočekivano pukne bilo gde na stranici dok
-// je dugme za AI analizu u stanju "Analiziram...", vrati ga u normalno stanje i
-// glasno ispiši grešku u konzoli, umesto da ostane zaglavljeno u tišini
-function resetStuckAIButton(source, err){
-  console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
-  const btn = $('#aiAnalyzeBtn');
-  if(btn && btn.disabled){
-    btn.innerHTML = `<span style="font-size:18px;">🧠</span> RTS Analiza`;
-    btn.disabled = false;
-  }
-}
-window.addEventListener('error', e => resetStuckAIButton('window error', e.error || e.message));
-window.addEventListener('unhandledrejection', e => resetStuckAIButton('unhandled promise rejection', e.reason));
-
-// pauziraj animaciju čestica u pozadini dok je AI modal otvoren - manje posla za
-// glavnu nit dok se čeka/čita analiza, i eliminiše je kao mogući uzrok problema
-const aiModalObserver = new MutationObserver(() => {
-  const isOpen = $('#aiModalBackdrop')?.classList.contains('open');
-  if(!particleSystem) return;
-  if(isOpen && particleSystem.animationId){
-    particleSystem.destroy();
-  } else if(!isOpen && !particleSystem.animationId){
-    particleSystem.animate();
-  }
-});
-if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
 
 load();
 </script>
