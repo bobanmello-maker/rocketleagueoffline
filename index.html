@@ -775,7 +775,6 @@
             <tbody id="matchTableBody"></tbody>
           </table>
         </div>
-        <!-- Dodaj posle tabele -->
         <div id="paginationControls" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
           <div style="display:flex; gap:8px; align-items:center;">
             <button id="prevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
@@ -794,10 +793,11 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- MODALI - SAD SU VAN WRAP-A I VAN TABOVA -->
+  </div> <!-- ZATVARANJE #content -->
+</div> <!-- ZATVARANJE .wrap -->
+
+<!-- ===== MODALI - VAN WRAP I VAN TABOVA ===== -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal" id="modalContent"></div>
 </div>
@@ -1015,8 +1015,17 @@ const PLAYER_COLOR_OVERRIDES = {
 const PLAYER_IMAGE_OVERRIDES = {
   'Toške': 'images/toske.png',
   'Cane': 'images/cane.png',
-  'Pajke': 'images/pajke.png',
-  'Ivan': 'images/ivan.png',
+};
+
+// Ime auta (tacno kao sto dolazi iz ballchasing "car_name" polja) -> slicica.
+// Nazivi moraju da se poklapaju TACNO (veliko/malo slovo bitno), npr. "Octane", "Fennec", "Dominus".
+// Slike stavi u images/cars/ folder.
+const CAR_IMAGE_OVERRIDES = {
+  'Octane': 'images/cars/octane.png',
+  'Fennec': 'images/cars/fennec.png',
+  'Dominus': 'images/cars/dominus.png',
+  'Batmobile': 'images/cars/batmobile.png',
+  'Breakout': 'images/cars/breakout.png',
 };
 
 const NAME_MAP_RAW = {
@@ -2772,7 +2781,7 @@ function drawCarBackground(ctx, W, H, color) {
   ctx.restore();
 }
 
-function drawPlayerCard(canvas, data, color, photoImg) {
+function drawPlayerCard(canvas, data, color, photoImg, carImg) {
   try {
     const W = 600, H = 840, scaleF = 2;
     canvas.width = W*scaleF; canvas.height = H*scaleF;
@@ -2857,7 +2866,29 @@ function drawPlayerCard(canvas, data, color, photoImg) {
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
 
-    if(data.lastCar){
+    if(carImg){
+      const bs = 76; // velicina zaobljenog kvadratica
+      const bx = W - 24 - bs, by = 34;
+
+      ctx.save();
+      roundRectPath(ctx, bx, by, bs, bs, 16);
+      ctx.clip();
+
+      const iw = carImg.naturalWidth || carImg.width, ih = carImg.naturalHeight || carImg.height;
+      if(iw > 0 && ih > 0){
+        const s = Math.max(bs/iw, bs/ih);
+        const dw = iw*s, dh = ih*s;
+        ctx.fillStyle = hexToRgba(color, 0.5);
+        ctx.fillRect(bx, by, bs, bs);
+        ctx.drawImage(carImg, bx + bs/2 - dw/2, by + bs/2 - dh/2, dw, dh);
+      }
+      ctx.restore();
+
+      roundRectPath(ctx, bx, by, bs, bs, 16);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+    } else if(data.lastCar){
       ctx.font = "700 20px 'Rajdhani', sans-serif";
       const label = data.lastCar.toUpperCase();
       const padX = 16;
@@ -3007,7 +3038,9 @@ async function renderCardsTab(rows){
     if(imgUrl) {
       photoImg = await loadPlayerImage(imgUrl);
     }
-    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg);
+    const carImgUrl = stats.lastCar ? CAR_IMAGE_OVERRIDES[stats.lastCar] : null;
+    const carImg = carImgUrl ? await loadPlayerImage(carImgUrl) : null;
+    drawPlayerCard(canvas, stats, playerColor[p] || '#3DA9FC', photoImg, carImg);
   }
 
   grid.querySelectorAll('.rlcard-save').forEach(btn => {
