@@ -734,6 +734,13 @@ header.hero::after {
         <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
         <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
       </div>
+      <!-- ===== TILT DETEKTOR - SAMO U PREGLEDU ===== -->
+  <div class="card" style="margin-top:20px;">
+    <h2>😤 Tilt Detector <small>analiza performansi unutar sesije</small></h2>
+    <div id="tiltDetectorContent">
+      <div class="empty">Učitavanje...</div>
+    </div>
+  </div>
     </div>
 
     <div class="tabpanel" id="tab-boost">
@@ -855,14 +862,6 @@ header.hero::after {
         <div class="table-wrap"><table id="monthCompareTable"><thead><tr><th>Igrač</th><th class="mono">Golova (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Win% (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Boost (ovaj/prošli)</th><th class="mono">Δ</th></tr></thead><tbody id="monthCompareBody"></tbody></table></div>
       </div>
     </div>
-    <!-- Dodaj u tab-highlights ili napravi novi tab -->
-<div class="card" style="margin-top:20px;">
-  <h2>Tilt Detector <small>analiza performansi unutar sesije</small></h2>
-  <div id="tiltDetectorContent">
-    <div class="empty">Učitavanje...</div>
-  </div>
-</div>
-
     <div class="tabpanel" id="tab-h2h">
       <div class="card" style="margin-bottom:16px;">
         <h2>Head-to-head <small>uporedi tačno dva igrača, jedan naspram drugog</small></h2>
