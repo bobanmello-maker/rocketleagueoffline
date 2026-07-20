@@ -1,47 +1,72 @@
-name: Update RL stats
+name: Update RL Stats
 
 on:
-  workflow_dispatch: {}        # dugme "Run workflow" na GitHub-u
+  workflow_dispatch:
   schedule:
-    - cron: "*/5 * * * *"      # svakih 5 minuta
-
-permissions:
-  contents: write
+    - cron: '*/5 * * * *'
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Python
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
+          python-version: '3.11'
+      
+      # ===== DODAJ OVO - RUST INSTALACIJA =====
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Install maturin
+        run: pip install maturin
+      # ===== KRAJ DODATKA =====
+      
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Sort new replays into groups
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run auto_sort_replays
         env:
           BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
-          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
-          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
-        run: python auto_sort_replays.py
-
-      - name: Fetch latest stats
+          BALLCHASING_ONLINE_GROUP: "online-30wp20uwjv"
+          BALLCHASING_OFFLINE_GROUP: "exibition-eyc42k96yc"
+        run: |
+          python auto_sort_replays.py
+      
+      - name: Run fetch_stats
         env:
           BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
-          BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
-          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
-          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
-        run: python fetch_stats.py
-
-      - name: Commit updated data.json
+          BALLCHASING_GROUPS: "online-30wp20uwjv,exibition-eyc42k96yc"
+          BALLCHASING_ONLINE_GROUP: "online-30wp20uwjv"
+          BALLCHASING_OFFLINE_GROUP: "exibition-eyc42k96yc"
+          OUTPUT_FILE: "data.json"
+          CACHE_FILE: "replay_cache.json"
+        run: |
+          python fetch_stats.py
+      
+      - name: Commit and push changes
         run: |
           git config user.name "rl-stats-bot"
-          git config user.email "actions@github.com"
-          git add data.json replay_cache.json
-          git diff --staged --quiet || git commit -m "Auto-update stats"
-          git push
+          git config user.email "rl-stats-bot@users.noreply.github.com"
+          
+          git pull origin main --rebase || true
+          
+          git add data.json replay_cache.json subtr_cache.json
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update stats [skip ci]"
+            git push origin main
+          fi
