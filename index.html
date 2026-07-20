@@ -705,6 +705,7 @@ header.hero::after {
     <button class="tabbtn" data-tab="h2h">Poređenje</button>
     <button class="tabbtn" data-tab="matches">Svi mečevi</button>
     <button class="tabbtn" data-tab="cards">Kartice</button>
+    <button class="tabbtn" data-tab="subtr">🧠 Napredna</button>
   </div>
 
   <div id="content">
@@ -917,6 +918,15 @@ header.hero::after {
         </div>
       </div>
     </div>
+    <!-- ===== SUBTR-ACTOR TAB ===== -->
+<div class="tabpanel" id="tab-subtr">
+  <div class="card">
+    <h2>🧠 Napredna analiza (subtr-actor)</h2>
+    <div id="subtrContent">
+      <div class="empty">Učitavanje...</div>
+    </div>
+  </div>
+</div>
 
   </div> <!-- ZATVARANJE #content -->
 </div> <!-- ZATVARANJE .wrap -->
@@ -1705,6 +1715,9 @@ function render(){
 
   renderWrappedTab(rows);
   renderCardsTab(rows);
+  
+  // ===== SUBTR-ACTOR =====
+  renderSubtrData(rows);
 }
 
 // ================================================================
@@ -3863,8 +3876,136 @@ const aiModalObserver = new MutationObserver(() => {
 });
 if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
 
+// ================================================================
+//  SUBTR-ACTOR PRIKAZ
+// ================================================================
+
+function renderSubtrData(rows) {
+    const container = document.getElementById('subtrContent');
+    if (!container) return;
+    
+    const ps = [...activePlayers];
+    if (!ps.length) {
+        container.innerHTML = '<div class="empty">Nema izabranih igrača</div>';
+        return;
+    }
+    
+    let html = '';
+    
+    ps.forEach(p => {
+        const prows = rows.filter(r => r.player === p);
+        if (prows.length < 2) return;
+        
+        const sample = prows.find(r => r.heatmap && r.heatmap.length > 0);
+        if (!sample) {
+            html += `
+                <div class="card" style="margin-bottom:12px; padding:12px;">
+                    <h4 style="color:${playerColor[p]}">${p}</h4>
+                    <div class="empty" style="padding:20px;">Nema subtr-actor podataka za ovog igrača</div>
+                </div>
+            `;
+            return;
+        }
+        
+        const heatmap = sample.heatmap;
+        const ghostCar = sample.ghost_car || {};
+        const adv = sample.advanced_metrics || {};
+        
+        html += `
+            <div class="card" style="margin-bottom:16px; padding:16px;">
+                <h4 style="color:${playerColor[p]}">${p}</h4>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+                    <div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">🔥 Heatmap</div>
+                        <canvas id="subtr-heatmap-${p.replace(/\s/g,'')}" 
+                                width="300" height="200"
+                                style="width:100%; height:auto; border-radius:8px; background:#0B0E14;"></canvas>
+                    </div>
+                    <div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">📊 Napredne metrike</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                            <div style="background:var(--surface-2); padding:10px; border-radius:8px; text-align:center;">
+                                <div style="font-size:20px; font-weight:700; color:${playerColor[p]}">${adv.avg_speed?.toFixed(0) || 'N/A'}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">Prosečna brzina</div>
+                            </div>
+                            <div style="background:var(--surface-2); padding:10px; border-radius:8px; text-align:center;">
+                                <div style="font-size:20px; font-weight:700; color:${playerColor[p]}">${adv.max_speed?.toFixed(0) || 'N/A'}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">Maks. brzina</div>
+                            </div>
+                            <div style="background:var(--surface-2); padding:10px; border-radius:8px; text-align:center;">
+                                <div style="font-size:20px; font-weight:700; color:${playerColor[p]}">${ghostCar.positions?.length || 'N/A'}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">Frejmova</div>
+                            </div>
+                            <div style="background:var(--surface-2); padding:10px; border-radius:8px; text-align:center;">
+                                <div style="font-size:20px; font-weight:700; color:${playerColor[p]}">${((adv.avg_speed || 0) * 3.6).toFixed(0) || 'N/A'}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">km/h (prosek)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    
+    setTimeout(() => {
+        ps.forEach(p => {
+            const canvas = document.getElementById(`subtr-heatmap-${p.replace(/\s/g,'')}`);
+            if (!canvas) return;
+            
+            const prows = rows.filter(r => r.player === p);
+            const sample = prows.find(r => r.heatmap && r.heatmap.length > 0);
+            if (!sample || !sample.heatmap || sample.heatmap.length === 0) return;
+            
+            drawSubtrHeatmap(canvas, sample.heatmap);
+        });
+    }, 200);
+}
+
+function drawSubtrHeatmap(canvas, heatmapData) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    
+    ctx.fillStyle = '#0B0E14';
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(10, 10, w - 20, h - 20);
+    
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 10);
+    ctx.lineTo(w / 2, h - 10);
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.stroke();
+    
+    const rows = heatmapData.length;
+    const cols = heatmapData[0]?.length || 0;
+    if (!rows || !cols) return;
+    
+    const cellW = (w - 20) / cols;
+    const cellH = (h - 20) / rows;
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const value = heatmapData[i]?.[j] || 0;
+            if (value < 0.01) continue;
+            
+            const alpha = Math.min(value * 1.5, 1);
+            const r = Math.min(255, value * 255);
+            const g = Math.min(255, (1 - value) * 255);
+            const b = Math.min(255, (1 - value) * 255 * 0.5);
+            
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.7})`;
+            ctx.fillRect(10 + j * cellW, 10 + i * cellH, cellW + 0.5, cellH + 0.5);
+        }
+    }
+}
+
 load();
 </script>
 </body>
 </html>
-
