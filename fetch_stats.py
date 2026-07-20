@@ -35,17 +35,6 @@ except ImportError:
     print("⚠️ numpy nije instaliran. Instaliraj: pip install numpy")
 
 # ================================================================
-#  BALCHASING IMPORTS
-# ================================================================
-
-try:
-    from ballchasing import BallchasingApi
-    BALLCHASING_API_AVAILABLE = True
-except ImportError:
-    BALLCHASING_API_AVAILABLE = False
-    print("⚠️ ballchasing biblioteka nije instalirana. Instaliraj: pip install python-ballchasing")
-
-# ================================================================
 #  KONFIGURACIJA
 # ================================================================
 
@@ -176,32 +165,31 @@ def calculate_max_speed(velocities):
 # ================================================================
 
 def download_replay_from_ballchasing(replay_id):
-    """Preuzmi replay sa ballchasing.com i vrati putanju do fajla."""
+    """Preuzmi replay sa ballchasing.com (public replay-i)."""
     replay_path = os.path.join(TEMP_REPLAY_FOLDER, f"{replay_id}.replay")
     
-    # Ako već postoji, vrati ga (keširanje)
+    # Ako već postoji, vrati ga
     if os.path.exists(replay_path):
         print(f"  📦 Replay {replay_id} već postoji u kešu")
         return replay_path
     
     try:
-        # 1. Pokušaj sa ballchasing bibliotekom (ako je dostupna)
-        if BALLCHASING_API_AVAILABLE:
-            try:
-                api = BallchasingApi(TOKEN)
-                api.download_replay(
-                    replay_id=replay_id,
-                    path=TEMP_REPLAY_FOLDER
-                )
-                if os.path.exists(replay_path):
-                    print(f"  ✅ Replay {replay_id} preuzet (API)")
-                    return replay_path
-            except Exception as e:
-                print(f"  ⚠️ API download neuspešan: {e}")
+        # 1. Pokušaj sa API tokenom
+        url = f"https://ballchasing.com/api/replays/{replay_id}/file"
+        headers = {"Authorization": TOKEN}
         
-        # 2. Pokušaj sa javnim endpoint-om (ne zahteva token)
-        url = f"https://ballchasing.com/dl/replay/{replay_id}"
-        response = requests.post(url, stream=True, timeout=30)
+        response = requests.get(url, headers=headers, stream=True, timeout=30)
+        
+        if response.status_code == 200:
+            with open(replay_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            print(f"  ✅ Replay {replay_id} preuzet (API)")
+            return replay_path
+        
+        # 2. Ako ne radi, probaj javni download (bez tokena)
+        url_public = f"https://ballchasing.com/dl/replay/{replay_id}"
+        response = requests.post(url_public, stream=True, timeout=30)
         
         if response.status_code == 200:
             with open(replay_path, 'wb') as f:
