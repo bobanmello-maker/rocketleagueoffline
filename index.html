@@ -3616,6 +3616,10 @@ function detectTilt(rows) {
     return results;
 }
 
+// ================================================================
+//  😤 TILT DETECTOR - DORADJENA VERZIJA
+// ================================================================
+
 function renderTiltDetector(rows) {
     const container = document.getElementById('tiltDetectorContent');
     if (!container) return;
@@ -3626,13 +3630,38 @@ function renderTiltDetector(rows) {
         return;
     }
     
-    let html = `<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px;">`;
+    // Prevodimo ključeve na srpski
+    const metricLabels = {
+        goals: 'Golovi',
+        assists: 'Asistencije',
+        saves: 'Odbrane',
+        score: 'Poeni',
+        winrate: 'Pobede',
+        shots: 'Šutevi',
+        boost: 'Boost'
+    };
+    
+    const emojiMap = {
+        tilted: '😤',
+        warning: '😅',
+        improving: '🔥',
+        stable: '😎'
+    };
+    
+    const statusMap = {
+        tilted: '🚨 TILT DETEKTOVAN!',
+        warning: '⚠️ Blagi pad forme',
+        improving: '📈 U poletu!',
+        stable: '✅ Stabilne performanse'
+    };
+    
+    let html = `<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;">`;
     
     Object.entries(results).forEach(([player, data]) => {
         if (data.status === 'insufficient') {
             html += `
-                <div class="card" style="padding:14px; opacity:0.6;">
-                    <h4 style="color:${playerColor[player] || '#fff'}">${player}</h4>
+                <div class="card" style="padding:14px; opacity:0.5; border:1px dashed var(--border);">
+                    <h4 style="color:${playerColor[player] || '#fff'}; margin:0 0 4px;">${player}</h4>
                     <div style="font-size:12px; color:var(--text-muted);">${data.message}</div>
                 </div>
             `;
@@ -3640,51 +3669,92 @@ function renderTiltDetector(rows) {
         }
         
         // Boja na osnovu statusa
-        let bgColor = 'var(--surface-2)';
         let borderColor = 'var(--border)';
-        if (data.status === 'tilted') { bgColor = 'rgba(248,113,113,0.1)'; borderColor = '#F87171'; }
-        else if (data.status === 'warning') { bgColor = 'rgba(251,191,36,0.1)'; borderColor = '#FBBF24'; }
-        else if (data.status === 'improving') { bgColor = 'rgba(74,222,128,0.1)'; borderColor = '#4ADE80'; }
-        else { bgColor = 'rgba(61,169,252,0.05)'; borderColor = '#3DA9FC'; }
+        let bgGradient = 'var(--surface-2)';
+        let accentColor = 'var(--text-muted)';
+        
+        if (data.status === 'tilted') {
+            borderColor = '#F87171';
+            bgGradient = 'linear-gradient(135deg, rgba(248,113,113,0.12), rgba(248,113,113,0.03))';
+            accentColor = '#F87171';
+        } else if (data.status === 'warning') {
+            borderColor = '#FBBF24';
+            bgGradient = 'linear-gradient(135deg, rgba(251,191,36,0.10), rgba(251,191,36,0.02))';
+            accentColor = '#FBBF24';
+        } else if (data.status === 'improving') {
+            borderColor = '#4ADE80';
+            bgGradient = 'linear-gradient(135deg, rgba(74,222,128,0.10), rgba(74,222,128,0.02))';
+            accentColor = '#4ADE80';
+        } else {
+            borderColor = '#3DA9FC';
+            bgGradient = 'linear-gradient(135deg, rgba(61,169,252,0.06), rgba(61,169,252,0.01))';
+            accentColor = '#3DA9FC';
+        }
         
         // Tilt score bar
         const scoreColor = data.tiltScore > 70 ? '#F87171' : data.tiltScore > 40 ? '#FBBF24' : '#4ADE80';
         
+        // Spremi promene za prikaz
+        const changes = Object.entries(data.changes || {});
+        
         html += `
-            <div class="card" style="padding:16px; background:${bgColor}; border-left:3px solid ${borderColor};">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <h4 style="color:${playerColor[player] || '#fff'}; margin:0;">${player}</h4>
-                    <span style="font-size:28px;">${data.emoji}</span>
+            <div class="card" style="
+                padding:16px; 
+                background: ${bgGradient};
+                border-left: 4px solid ${borderColor};
+                transition: all 0.3s ease;
+            ">
+                <!-- Header: Ime i emoji -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <h4 style="color:${playerColor[player] || '#fff'}; margin:0; font-size:17px;">
+                        ${player}
+                    </h4>
+                    <span style="font-size:30px; line-height:1;">${data.emoji || emojiMap[data.status] || '😐'}</span>
                 </div>
                 
-                <div style="font-size:14px; font-weight:600; margin-bottom:4px;">${data.message}</div>
-                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${data.comment}</div>
-                
-                <div style="display:flex; gap:12px; margin:8px 0; font-size:11px; color:var(--text-muted); flex-wrap:wrap;">
-                    <span>📊 ${data.matches} mečeva</span>
-                    <span>📈 Prva polovina: ${data.firstHalf.matches} meč</span>
-                    <span>📉 Druga polovina: ${data.secondHalf.matches} meč</span>
+                <!-- Status i komentar -->
+                <div style="font-size:15px; font-weight:700; color:${accentColor}; margin-bottom:2px;">
+                    ${statusMap[data.status] || data.message}
+                </div>
+                <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px; font-style:italic;">
+                    "${data.comment || 'Nema komentara'}"
                 </div>
                 
-                <div style="margin-top:8px;">
-                    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+                <!-- Info o mečevima -->
+                <div style="display:flex; gap:14px; margin:6px 0 10px; font-size:12px; color:var(--text-muted); flex-wrap:wrap;">
+                    <span>📊 ${data.matches || 0} mečeva</span>
+                    <span>📈 Početak: ${data.firstHalf?.matches || 0} meč</span>
+                    <span>📉 Kraj: ${data.secondHalf?.matches || 0} meč</span>
+                </div>
+                
+                <!-- Tilt score bar -->
+                <div style="margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted);">
                         <span>😌 Smiren</span>
                         <span>😤 Tilt</span>
                     </div>
                     <div style="height:6px; background:var(--boost-track); border-radius:3px; overflow:hidden;">
-                        <div style="height:100%; width:${data.tiltScore}%; background:${scoreColor}; border-radius:3px; transition:width 0.5s ease;"></div>
+                        <div style="height:100%; width:${data.tiltScore || 0}%; background:${scoreColor}; border-radius:3px; transition:width 0.8s ease;"></div>
                     </div>
                 </div>
                 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:10px; font-size:11px;">
-                    <div style="color:var(--text-muted);">Metric</div>
-                    <div style="color:var(--text-muted); text-align:right;">Promena</div>
-                    ${Object.entries(data.changes).map(([key, val]) => `
-                        <div style="color:var(--text);">${key}</div>
-                        <div style="text-align:right; color:${val < -10 ? '#F87171' : val > 10 ? '#4ADE80' : 'var(--text-muted)'};">
-                            ${val > 0 ? '+' : ''}${val.toFixed(0)}%
-                        </div>
-                    `).join('')}
+                <!-- Metrike - dve kolone -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:12px; border-top:1px solid var(--border); padding-top:10px;">
+                    ${changes.map(([key, val]) => {
+                        const label = metricLabels[key] || key;
+                        const isPositive = val > 0;
+                        const isNegative = val < 0;
+                        const color = isPositive ? 'var(--green)' : isNegative ? 'var(--loss)' : 'var(--text-muted)';
+                        const sign = val > 0 ? '+' : '';
+                        return `
+                            <div style="display:flex; justify-content:space-between; padding:2px 0;">
+                                <span style="color:var(--text-muted);">${label}</span>
+                                <span style="color:${color}; font-weight:600; font-family:'JetBrains Mono',monospace;">
+                                    ${sign}${val.toFixed(0)}%
+                                </span>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
