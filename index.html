@@ -3139,10 +3139,16 @@ function prepareDetailedData(rows){
     };
   });
 
+  // "wins" moraju biti brojani po JEDINSTVENOM meču (replay_id), ne po redu.
+  // Svaki meč ima jedan red PO IGRAČU koji je u njemu igrao (npr. 2 reda za
+  // 2v2), pa brojanje rows.filter(win) duplira svaku pobedu onoliko puta
+  // koliko je tvojih igrača bilo u toj partiji.
+  const uniqueMatches = [...new Map(rows.map(r => [r.replay_id, r])).values()];
+
   const teamStats = {
-    total_matches: new Set(rows.map(r => r.replay_id)).size,
+    total_matches: uniqueMatches.length,
     total_goals: rows.reduce((s,r) => s + (getPath(r,'core.goals') || 0), 0),
-    total_wins: rows.filter(r => r.win).length,
+    total_wins: uniqueMatches.filter(r => r.win).length,
     mode: modeFilter,
   };
 
@@ -3168,20 +3174,30 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
     : data;
   const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(payload)}`;
 
-  const response = await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-App-Secret': APP_SECRET },
-    body: JSON.stringify({
-      model: 'openai/gpt-oss-120b',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.6,
-      max_tokens: 2500
-    })
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s - da dugme nikad ne ostane zaglavljeno ako Worker/Groq ne odgovori
 
+  let response;
+  try{
+    response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-App-Secret': APP_SECRET },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-120b',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.6,
+        max_tokens: 2500
+      }),
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  console.log('[AI] Worker response status:', response.status);
   if(!response.ok) throw new Error(`Worker HTTP ${response.status}`);
   const result = await response.json();
   if(result.error) throw new Error(result.error?.message || 'Groq API greška');
@@ -3190,7 +3206,13 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   if(!raw) throw new Error('Prazan odgovor od modela');
 
   const cleaned = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/,'').replace(/```\s*$/,'');
-  const parsed = JSON.parse(cleaned);
+  let parsed;
+  try{
+    parsed = JSON.parse(cleaned);
+  }catch(parseErr){
+    console.error('[AI] JSON.parse nije uspeo. Sirovi odgovor modela:', raw);
+    throw new Error('Odgovor modela nije validan JSON: ' + parseErr.message);
+  }
 
   const required = ['summary','strengths','weaknesses','tips'];
   if(!required.every(k => k in parsed)) throw new Error('Odgovor modela nema sva ocekivana polja');
@@ -3200,6 +3222,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   parsed.tips = parsed.tips || [];
   parsed.training = parsed.training || [];
   parsed.players = parsed.players || '';
+  console.log('[AI] Uspešno parsiran odgovor od Groq-a.');
   return parsed;
 }
 
@@ -3264,6 +3287,7 @@ async function analyzeWithAI(rows){
   const originalHTML = btn.innerHTML;
   btn.innerHTML = `<span class="spinner"></span> Analiziram...`;
   btn.disabled = true;
+  console.log('[AI] Analiza pokrenuta, broj redova:', rows.length);
 
   try{
     const data = prepareDetailedData(rows);
@@ -3272,6 +3296,7 @@ async function analyzeWithAI(rows){
     const cacheKey = aiCacheKey(rows);
 
     if(aiAnalysisCache.has(cacheKey)){
+      console.log('[AI] Koristim keširan rezultat.');
       const cached = aiAnalysisCache.get(cacheKey);
       showAIAnalysisModal(cached.analysis, data, cached.usedFallback);
       return;
@@ -3280,9 +3305,10 @@ async function analyzeWithAI(rows){
     let analysis = null;
     let usedFallback = false;
     try{
+      console.log('[AI] Pozivam Groq Worker...');
       analysis = await callGroqAPI(data, prevData);
     }catch(e){
-      console.warn('AI Worker nije uspeo, koristim fallback:', e.message);
+      console.error('[AI] Worker/Groq nije uspeo, koristim fallback po pravilima. Razlog:', e);
     }
     if(!analysis){
       analysis = generateDetailedFallback(data, prevData);
@@ -3290,9 +3316,11 @@ async function analyzeWithAI(rows){
     }
 
     aiAnalysisCache.set(cacheKey, { analysis, usedFallback });
+    console.log('[AI] Otvaram modal sa rezultatom. usedFallback =', usedFallback);
     showAIAnalysisModal(analysis, data, usedFallback);
   }catch(e){
-    alert('Greška pri analizi: ' + e.message);
+    console.error('[AI] Neočekivana greška u analyzeWithAI:', e);
+    alert('Greška pri analizi: ' + e.message + '\n\n(Detalji su ispisani u konzoli - F12 → Console)');
   }finally{
     btn.innerHTML = originalHTML;
     btn.disabled = false;
@@ -3301,45 +3329,65 @@ async function analyzeWithAI(rows){
 
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
-  modal.innerHTML = `
-    <button class="modal-close" id="aiModalClose">&times;</button>
-    <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
-    <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
-    ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
+  // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
+  // bez ovoga bi .map pukao i ceo modal tiho ne bi prikazao ništa
+  const asArray = v => Array.isArray(v) ? v : (v ? [String(v)] : []);
+  const strengths = asArray(analysis?.strengths);
+  const weaknesses = asArray(analysis?.weaknesses);
+  const tips = asArray(analysis?.tips);
+  const training = asArray(analysis?.training);
+  const summary = analysis?.summary ? String(analysis.summary) : '';
+  const playersText = analysis?.players ? String(analysis.players) : '';
 
-    <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
-      <h4 style="color:#7C3AED;">📊 Sažetak</h4>
-      <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${analysis.summary || ''}</p>
-    </div>
+  try{
+    modal.innerHTML = `
+      <button class="modal-close" id="aiModalClose">&times;</button>
+      <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
+      <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
+      ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-      <div class="analysis-section" style="border-left:3px solid var(--green);">
-        <h4 style="color:var(--green);">✅ Snage</h4>
-        <ul>${(analysis.strengths||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+      <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
+        <h4 style="color:#7C3AED;">📊 Sažetak</h4>
+        <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${summary}</p>
       </div>
-      <div class="analysis-section" style="border-left:3px solid var(--loss);">
-        <h4 style="color:var(--loss);">⚠️ Slabosti</h4>
-        <ul>${(analysis.weaknesses||[]).map(s => `<li>${s}</li>`).join('')}</ul>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div class="analysis-section" style="border-left:3px solid var(--green);">
+          <h4 style="color:var(--green);">✅ Snage</h4>
+          <ul>${strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="analysis-section" style="border-left:3px solid var(--loss);">
+          <h4 style="color:var(--loss);">⚠️ Slabosti</h4>
+          <ul>${weaknesses.map(s => `<li>${s}</li>`).join('')}</ul>
+        </div>
       </div>
-    </div>
 
-    ${analysis.players ? `
-    <div class="analysis-section" style="border-left:3px solid var(--blue);">
-      <h4 style="color:var(--blue);">👤 Analiza po igraču</h4>
-      <div style="white-space:pre-wrap; font-size:13px; line-height:1.8; color:var(--text-muted);">${analysis.players}</div>
-    </div>` : ''}
+      ${playersText ? `
+      <div class="analysis-section" style="border-left:3px solid var(--blue);">
+        <h4 style="color:var(--blue);">👤 Analiza po igraču</h4>
+        <div style="white-space:pre-wrap; font-size:13px; line-height:1.8; color:var(--text-muted);">${playersText}</div>
+      </div>` : ''}
 
-    <div class="analysis-section" style="border-left:3px solid var(--amber);">
-      <h4 style="color:var(--amber);">💡 Konkretni saveti</h4>
-      <ul>${(analysis.tips||[]).map(s => `<li>${s}</li>`).join('')}</ul>
-    </div>
+      <div class="analysis-section" style="border-left:3px solid var(--amber);">
+        <h4 style="color:var(--amber);">💡 Konkretni saveti</h4>
+        <ul>${tips.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
 
-    ${(analysis.training||[]).length ? `
-    <div class="analysis-section" style="border-left:3px solid var(--blue);">
-      <h4 style="color:var(--blue);">🎯 Trening preporuke</h4>
-      <ul>${analysis.training.map(s => `<li>${s}</li>`).join('')}</ul>
-    </div>` : ''}
-  `;
+      ${training.length ? `
+      <div class="analysis-section" style="border-left:3px solid var(--blue);">
+        <h4 style="color:var(--blue);">🎯 Trening preporuke</h4>
+        <ul>${training.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>` : ''}
+    `;
+  }catch(e){
+    console.error('[AI] Renderovanje modala nije uspelo:', e);
+    modal.innerHTML = `
+      <button class="modal-close" id="aiModalClose">&times;</button>
+      <h3>🧠 RTS Analiza</h3>
+      <p style="color:var(--text-muted); font-size:13px;">Došlo je do greške pri prikazu analize. Detalji su u konzoli (F12 → Console).</p>
+    `;
+  }
+
   $('#aiModalClose').addEventListener('click', () => $('#aiModalBackdrop').classList.remove('open'));
   $('#aiModalBackdrop').classList.add('open');
 }
@@ -3353,7 +3401,35 @@ $('#aiAnalyzeBtn').addEventListener('click', () => {
   analyzeWithAI(rows);
 });
 
+// sigurnosna mreža: ako NEŠTO potpuno neočekivano pukne bilo gde na stranici dok
+// je dugme za AI analizu u stanju "Analiziram...", vrati ga u normalno stanje i
+// glasno ispiši grešku u konzoli, umesto da ostane zaglavljeno u tišini
+function resetStuckAIButton(source, err){
+  console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
+  const btn = $('#aiAnalyzeBtn');
+  if(btn && btn.disabled){
+    btn.innerHTML = `<span style="font-size:18px;">🧠</span> RTS Analiza`;
+    btn.disabled = false;
+  }
+}
+window.addEventListener('error', e => resetStuckAIButton('window error', e.error || e.message));
+window.addEventListener('unhandledrejection', e => resetStuckAIButton('unhandled promise rejection', e.reason));
+
+// pauziraj animaciju čestica u pozadini dok je AI modal otvoren - manje posla za
+// glavnu nit dok se čeka/čita analiza
+const aiModalObserver = new MutationObserver(() => {
+  const isOpen = $('#aiModalBackdrop')?.classList.contains('open');
+  if(!particleSystem) return;
+  if(isOpen && particleSystem.animationId){
+    particleSystem.destroy();
+  } else if(!isOpen && !particleSystem.animationId){
+    particleSystem.animate();
+  }
+});
+if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
+
 load();
 </script>
 </body>
 </html>
+
