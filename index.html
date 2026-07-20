@@ -855,6 +855,13 @@ header.hero::after {
         <div class="table-wrap"><table id="monthCompareTable"><thead><tr><th>Igrač</th><th class="mono">Golova (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Win% (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Boost (ovaj/prošli)</th><th class="mono">Δ</th></tr></thead><tbody id="monthCompareBody"></tbody></table></div>
       </div>
     </div>
+    <!-- Dodaj u tab-highlights ili napravi novi tab -->
+<div class="card" style="margin-top:20px;">
+  <h2>Tilt Detector <small>analiza performansi unutar sesije</small></h2>
+  <div id="tiltDetectorContent">
+    <div class="empty">Učitavanje...</div>
+  </div>
+</div>
 
     <div class="tabpanel" id="tab-h2h">
       <div class="card" style="margin-bottom:16px;">
@@ -1692,6 +1699,7 @@ function render(){
   renderChemistry(rows);
   renderRecords(rows);
   renderTable(rows);
+  renderTiltDetector(rows); 
 
   renderHighlights(rows);
   renderH2H();
@@ -3279,7 +3287,7 @@ async function callGroqAPI(data, prevData){
   const systemPrompt = `Ti si iskusan, direktan Rocket League trener - analitičar sa stavom, ne suvoparan
 izveštaj. Pišeš na srpskom jeziku, konkretno i sa ličnošću: pohvališ ono što zaslužuje pohvalu bez
 ustručavanja, ali isto tako otvoreno kažeš kad nešto ne valja, sa malo duha i direktnosti (kao pravi
-trener u svlačionici), NIKAD uvredljivo ili omalovažavajuće prema igračima. Svaka tvrdnja MORA biti
+trener u svlačionici), možeš ponekad koristiti stil koji koristi u analizi Rade Bogdanović sa TV RTS sa primesama rečnika Zorice Marković kada se iznervira ali u šaljivom fazonu. Svaka tvrdnja MORA biti
 potkrepljena konkretnom brojkom iz podataka koje dobiješ.
 ${hasComparison ? 'Dobićeš podatke za TRENUTNI period i za PRETHODNI period iste dužine - obavezno prokomentariši trend (da li je ekipa/igrač napredovala ili nazadovala, sa konkretnim brojkama razlike).' : ''}
 Odgovaraš ISKLJUČIVO validnim JSON objektom, bez markdown code fence-ova (bez \`\`\`), bez ijedne
@@ -3444,7 +3452,247 @@ async function analyzeWithAI(rows){
     btn.disabled = false;
   }
 }
+// ================================================================
+//  😤 TILT DETECTOR
+// ================================================================
 
+function detectTilt(rows) {
+    const ps = [...activePlayers];
+    if (!ps.length) return null;
+    
+    const results = {};
+    
+    ps.forEach(p => {
+        const prows = rows.filter(r => r.player === p);
+        if (prows.length < 4) {
+            results[p] = { status: 'insufficient', message: 'Potrebno najmanje 4 meča za analizu' };
+            return;
+        }
+        
+        // Sortiraj po datumu
+        const sorted = prows.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        
+        // Podeli na polovine
+        const half = Math.floor(sorted.length / 2);
+        const firstHalf = sorted.slice(0, half);
+        const secondHalf = sorted.slice(half);
+        
+        // Izračunaj performanse za svaku polovinu
+        const calcStats = (matches) => {
+            if (!matches.length) return null;
+            const goals = avg(matches.map(r => getPath(r, 'core.goals') || 0));
+            const assists = avg(matches.map(r => getPath(r, 'core.assists') || 0));
+            const saves = avg(matches.map(r => getPath(r, 'core.saves') || 0));
+            const score = avg(matches.map(r => getPath(r, 'core.score') || 0));
+            const winrate = matches.filter(r => r.win).length / matches.length * 100;
+            const shots = avg(matches.map(r => getPath(r, 'core.shots') || 0));
+            const boost = avg(matches.map(r => getPath(r, 'boost.avg_amount') || 0));
+            return { goals, assists, saves, score, winrate, shots, boost, matches: matches.length };
+        };
+        
+        const first = calcStats(firstHalf);
+        const second = calcStats(secondHalf);
+        
+        if (!first || !second) {
+            results[p] = { status: 'error', message: 'Greška pri računanju' };
+            return;
+        }
+        
+        // Izračunaj procentualne promene
+        const changes = {
+            goals: ((second.goals - first.goals) / (first.goals || 0.01)) * 100,
+            assists: ((second.assists - first.assists) / (first.assists || 0.01)) * 100,
+            saves: ((second.saves - first.saves) / (first.saves || 0.01)) * 100,
+            score: ((second.score - first.score) / (first.score || 0.01)) * 100,
+            winrate: second.winrate - first.winrate,
+            shots: ((second.shots - first.shots) / (first.shots || 0.01)) * 100,
+            boost: ((second.boost - first.boost) / (first.boost || 0.01)) * 100,
+        };
+        
+        // Detektuj "tilt" - pad od > 25% u bilo kojoj kategoriji
+        const tiltedCategories = [];
+        const tiltThreshold = 25;
+        const improveThreshold = 15;
+        
+        // Koje kategorije pokazuju pad?
+        if (changes.goals < -tiltThreshold) tiltedCategories.push({ name: 'golovi', change: changes.goals });
+        if (changes.assists < -tiltThreshold) tiltedCategories.push({ name: 'asistencije', change: changes.assists });
+        if (changes.saves < -tiltThreshold) tiltedCategories.push({ name: 'odbrane', change: changes.saves });
+        if (changes.score < -tiltThreshold) tiltedCategories.push({ name: 'score', change: changes.score });
+        if (changes.winrate < -tiltThreshold) tiltedCategories.push({ name: 'win rate', change: changes.winrate });
+        if (changes.shots < -tiltThreshold) tiltedCategories.push({ name: 'šutevi', change: changes.shots });
+        
+        // Koje kategorije pokazuju napredak?
+        const improvedCategories = [];
+        if (changes.goals > improveThreshold) improvedCategories.push({ name: 'golovi', change: changes.goals });
+        if (changes.assists > improveThreshold) improvedCategories.push({ name: 'asistencije', change: changes.assists });
+        if (changes.saves > improveThreshold) improvedCategories.push({ name: 'odbrane', change: changes.saves });
+        if (changes.score > improveThreshold) improvedCategories.push({ name: 'score', change: changes.score });
+        if (changes.winrate > improveThreshold) improvedCategories.push({ name: 'win rate', change: changes.winrate });
+        
+        // Odredi status
+        let status = 'stable';
+        let message = '';
+        let emoji = '😐';
+        let severity = 0;
+        
+        if (tiltedCategories.length >= 3) {
+            status = 'tilted';
+            emoji = '😤';
+            severity = 3;
+            message = `🚨 TEŠKI TILT! Pad u ${tiltedCategories.length} kategorija!`;
+        } else if (tiltedCategories.length >= 2) {
+            status = 'tilted';
+            emoji = '😤';
+            severity = 2;
+            const worst = tiltedCategories.sort((a, b) => a.change - b.change)[0];
+            message = `😤 Tilt detektovan! Najveći pad: ${worst.name} (${worst.change.toFixed(0)}%)`;
+        } else if (tiltedCategories.length === 1) {
+            status = 'warning';
+            emoji = '😅';
+            severity = 1;
+            const cat = tiltedCategories[0];
+            message = `⚠️ Blagi pad u ${cat.name} (${cat.change.toFixed(0)}%)`;
+        } else if (improvedCategories.length >= 2) {
+            status = 'improving';
+            emoji = '🔥';
+            severity = -1;
+            message = `🔥 U poletu! Napredak u ${improvedCategories.length} kategorija!`;
+        } else {
+            status = 'stable';
+            emoji = '😎';
+            message = '✅ Stabilne performanse kroz celu sesiju';
+        }
+        
+        // Dodaj duhoviti komentar
+        const comments = {
+            tilted: [
+                'Izgleda da je neko trebao da pauzira ranije 😅',
+                'Vreme je za pauzu i vodu 💧',
+                'Ko je rekao da je rocket league opuštajuća igra? 😂',
+                'Možda je vreme za switch na casual? 🤔',
+                'Tilt je stvaran, prijatelju! 😤'
+            ],
+            warning: [
+                'Počinje da se oseća umor... 🥱',
+                'Samo jedan loš meč, još uvek si u igri! 💪',
+                'Nisi još na dnu, ali se približavaš... 😅'
+            ],
+            improving: [
+                'Sve jači! Ko te zaustavlja? 🔥',
+                'Ovo je tvoj dan! Nastavi tako! 💪',
+                'Forma je na vrhuncu! 🚀'
+            ],
+            stable: [
+                'Konzistentnost je ključ! 👏',
+                'Kao švajcarski sat - precizno i pouzdano! ⏱️',
+                'Ovo je pravi profesionalac! 🎯'
+            ]
+        };
+        
+        const commentList = comments[status] || comments.stable;
+        const randomComment = commentList[Math.floor(Math.random() * commentList.length)];
+        
+        // Izračunaj ukupni "tilt score" (0-100)
+        const avgChange = Object.values(changes).reduce((a, b) => a + b, 0) / Object.values(changes).length;
+        const tiltScore = Math.min(100, Math.max(0, 50 - avgChange * 0.5));
+        
+        results[p] = {
+            status,
+            emoji,
+            severity,
+            message,
+            comment: randomComment,
+            tiltScore: Math.round(tiltScore),
+            changes,
+            firstHalf: first,
+            secondHalf: second,
+            tiltedCategories,
+            improvedCategories,
+            matches: sorted.length,
+        };
+    });
+    
+    return results;
+}
+
+function renderTiltDetector(rows) {
+    const container = document.getElementById('tiltDetectorContent');
+    if (!container) return;
+    
+    const results = detectTilt(rows);
+    if (!results) {
+        container.innerHTML = '<div class="empty">Nema dovoljno podataka za tilt analizu</div>';
+        return;
+    }
+    
+    let html = `<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px;">`;
+    
+    Object.entries(results).forEach(([player, data]) => {
+        if (data.status === 'insufficient') {
+            html += `
+                <div class="card" style="padding:14px; opacity:0.6;">
+                    <h4 style="color:${playerColor[player] || '#fff'}">${player}</h4>
+                    <div style="font-size:12px; color:var(--text-muted);">${data.message}</div>
+                </div>
+            `;
+            return;
+        }
+        
+        // Boja na osnovu statusa
+        let bgColor = 'var(--surface-2)';
+        let borderColor = 'var(--border)';
+        if (data.status === 'tilted') { bgColor = 'rgba(248,113,113,0.1)'; borderColor = '#F87171'; }
+        else if (data.status === 'warning') { bgColor = 'rgba(251,191,36,0.1)'; borderColor = '#FBBF24'; }
+        else if (data.status === 'improving') { bgColor = 'rgba(74,222,128,0.1)'; borderColor = '#4ADE80'; }
+        else { bgColor = 'rgba(61,169,252,0.05)'; borderColor = '#3DA9FC'; }
+        
+        // Tilt score bar
+        const scoreColor = data.tiltScore > 70 ? '#F87171' : data.tiltScore > 40 ? '#FBBF24' : '#4ADE80';
+        
+        html += `
+            <div class="card" style="padding:16px; background:${bgColor}; border-left:3px solid ${borderColor};">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h4 style="color:${playerColor[player] || '#fff'}; margin:0;">${player}</h4>
+                    <span style="font-size:28px;">${data.emoji}</span>
+                </div>
+                
+                <div style="font-size:14px; font-weight:600; margin-bottom:4px;">${data.message}</div>
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${data.comment}</div>
+                
+                <div style="display:flex; gap:12px; margin:8px 0; font-size:11px; color:var(--text-muted); flex-wrap:wrap;">
+                    <span>📊 ${data.matches} mečeva</span>
+                    <span>📈 Prva polovina: ${data.firstHalf.matches} meč</span>
+                    <span>📉 Druga polovina: ${data.secondHalf.matches} meč</span>
+                </div>
+                
+                <div style="margin-top:8px;">
+                    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+                        <span>😌 Smiren</span>
+                        <span>😤 Tilt</span>
+                    </div>
+                    <div style="height:6px; background:var(--boost-track); border-radius:3px; overflow:hidden;">
+                        <div style="height:100%; width:${data.tiltScore}%; background:${scoreColor}; border-radius:3px; transition:width 0.5s ease;"></div>
+                    </div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:10px; font-size:11px;">
+                    <div style="color:var(--text-muted);">Metric</div>
+                    <div style="color:var(--text-muted); text-align:right;">Promena</div>
+                    ${Object.entries(data.changes).map(([key, val]) => `
+                        <div style="color:var(--text);">${key}</div>
+                        <div style="text-align:right; color:${val < -10 ? '#F87171' : val > 10 ? '#4ADE80' : 'var(--text-muted)'};">
+                            ${val > 0 ? '+' : ''}${val.toFixed(0)}%
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `</div>`;
+    container.innerHTML = html;
+}
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
   // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
