@@ -24,13 +24,11 @@ jobs:
         with:
           python-version: '3.11'
       
-      # ===== DODAJ OVO - RUST INSTALACIJA =====
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
       
       - name: Install maturin
         run: pip install maturin
-      # ===== KRAJ DODATKA =====
       
       - name: Install dependencies
         run: |
@@ -62,7 +60,8 @@ jobs:
           
           git pull origin main --rebase || true
           
-          git add data.json replay_cache.json subtr_cache.json
+          git add data.json replay_cache.json || true
+          git add subtr_cache.json 2>/dev/null || true
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
