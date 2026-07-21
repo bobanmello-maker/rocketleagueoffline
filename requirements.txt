@@ -1,4 +1,4 @@
 requests>=2.31.0
-subtr-actor-py
 numpy
 python-ballchasing
+boxcars
