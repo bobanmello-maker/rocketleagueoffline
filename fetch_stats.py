@@ -2,7 +2,7 @@
 """
 Povlači sve replay-e iz jedne (ili vise) ballchasing.com grupa i pravi
 flat JSON fajl (data.json) koji dashboard (index.html) direktno cita.
-DODATAK: Automatsko preuzimanje replay-a + boxcars za heatmap, ghost car.
+DODATAK: Automatsko preuzimanje replay-a + carball za heatmap, ghost car.
 """
 
 import os
@@ -15,16 +15,17 @@ import requests
 from pathlib import Path
 
 # ================================================================
-#  BOXCARS - ALTERNATIVA ZA SUBTR-ACTOR (RADI NA GITHUB ACTIONS)
+#  CARBALL - ALTERNATIVA ZA SUBTR-ACTOR (RADI NA GITHUB ACTIONS)
 # ================================================================
 
 try:
-    import boxcars
-    BOXCARS_AVAILABLE = True
-    print("✅ boxcars je dostupan!")
+    from carball import analyze_replay_file
+    from carball.analysis.analysis_manager import AnalysisManager
+    CARBALL_AVAILABLE = True
+    print("✅ carball je dostupan!")
 except ImportError:
-    BOXCARS_AVAILABLE = False
-    print("⚠️ boxcars nije instaliran. Instaliraj: pip install boxcars")
+    CARBALL_AVAILABLE = False
+    print("⚠️ carball nije instaliran. Instaliraj: pip install carball")
 
 try:
     import numpy as np
@@ -49,7 +50,7 @@ CACHE_FILE = os.environ.get("CACHE_FILE", "replay_cache.json")
 TEMP_REPLAY_FOLDER = os.path.join(os.path.dirname(__file__), "temp_replays")
 os.makedirs(TEMP_REPLAY_FOLDER, exist_ok=True)
 
-# boxcars keš (da ne parsira svaki put)
+# carball keš (da ne parsira svaki put)
 SUBTR_CACHE_FILE = os.environ.get("SUBTR_CACHE_FILE", "subtr_cache.json")
 
 SLEEP_BETWEEN_CALLS = 0.6
@@ -65,11 +66,11 @@ if not GROUPS:
 HEADERS = {"Authorization": TOKEN}
 
 # ================================================================
-#  BOXCARS FUNKCIJE
+#  CARBALL FUNKCIJE
 # ================================================================
 
 def load_subtr_cache():
-    """Učitaj keš za boxcars podatke."""
+    """Učitaj keš za carball podatke."""
     if os.path.exists(SUBTR_CACHE_FILE):
         try:
             with open(SUBTR_CACHE_FILE, 'r', encoding='utf-8') as f:
@@ -82,52 +83,61 @@ def save_subtr_cache(cache):
     with open(SUBTR_CACHE_FILE, 'w', encoding='utf-8') as f:
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
-def process_replay_with_boxcars(replay_path):
-    """Parsira .replay fajl sa boxcars (radi na GitHub Actions)."""
-    if not BOXCARS_AVAILABLE:
+def process_replay_with_carball(replay_path):
+    """Parsira .replay fajl sa carball (radi na GitHub Actions)."""
+    if not CARBALL_AVAILABLE:
         return None
     
     try:
-        print(f"  🔧 Parsiranje sa boxcars: {os.path.basename(replay_path)}")
+        print(f"  🔧 Parsiranje sa carball: {os.path.basename(replay_path)}")
         
-        # Boxcars parsiranje
-        replay = boxcars.parse(replay_path)
+        # Carball parsiranje
+        analysis_manager = analyze_replay_file(replay_path)
+        proto_game = analysis_manager.get_protobuf_data()
         
-        if not replay or not replay.players:
-            print(f"  ⚠️ boxcars: nema igrača u replay-u")
+        if not proto_game or not proto_game.players:
+            print(f"  ⚠️ carball: nema igrača u replay-u")
             return None
         
-        print(f"  🔧 Igrači pronađeni: {len(replay.players)}")
+        print(f"  🔧 Igrači pronađeni: {len(proto_game.players)}")
         
         result = {}
         
-        for player in replay.players:
+        # Dohvati frame podatke
+        frames = analysis_manager.get_frames()
+        
+        for player in proto_game.players:
             name = player.name
             
             # Ekstraktuj pozicije iz frame-ova
             positions = []
             velocities = []
             
-            if hasattr(player, 'frames') and player.frames:
-                for frame in player.frames[:1000]:  # Ograniči na 1000 frejmova
-                    if hasattr(frame, 'position'):
-                        positions.append([
-                            float(frame.position.x),
-                            float(frame.position.y),
-                            float(frame.position.z)
-                        ])
-                    if hasattr(frame, 'velocity'):
-                        velocities.append([
-                            float(frame.velocity.x),
-                            float(frame.velocity.y),
-                            float(frame.velocity.z)
-                        ])
+            if frames and hasattr(frames, 'get_player_frame'):
+                for i in range(min(len(frames), 1000)):  # Ograniči na 1000 frejmova
+                    try:
+                        frame = frames.get_player_frame(i, player.id)
+                        if frame:
+                            if hasattr(frame, 'position'):
+                                positions.append([
+                                    float(frame.position.x),
+                                    float(frame.position.y),
+                                    float(frame.position.z)
+                                ])
+                            if hasattr(frame, 'velocity'):
+                                velocities.append([
+                                    float(frame.velocity.x),
+                                    float(frame.velocity.y),
+                                    float(frame.velocity.z)
+                                ])
+                    except:
+                        pass
             
             if positions:
                 result[name] = {
                     'positions': positions,
                     'velocities': velocities if velocities else [],
-                    'boost': [],  # Boxcars ne daje boost direktno
+                    'boost': [],  # Carball ne daje boost direktno
                     'heatmap': generate_heatmap(np.array(positions)) if NUMPY_AVAILABLE and positions else [],
                     'avg_speed': calculate_avg_speed(np.array(velocities)) if NUMPY_AVAILABLE and velocities else 0,
                     'max_speed': calculate_max_speed(np.array(velocities)) if NUMPY_AVAILABLE and velocities else 0,
@@ -135,15 +145,15 @@ def process_replay_with_boxcars(replay_path):
                 }
         
         if result:
-            print(f"  ✅ boxcars: obrađeno {len(result)} igrača")
+            print(f"  ✅ carball: obrađeno {len(result)} igrača")
             return result
         else:
-            print(f"  ⚠️ boxcars: nema podataka za igrače")
+            print(f"  ⚠️ carball: nema podataka za igrače")
             return None
             
     except Exception as e:
         import traceback
-        print(f"  ❌ boxcars greška: {e}")
+        print(f"  ❌ carball greška: {e}")
         print(traceback.format_exc())
         return None
 
@@ -367,7 +377,7 @@ def flatten_replay(replay, subtr_data=None):
                 "movement": extract_category(stats, "movement", MOVEMENT_FIELDS),
                 "positioning": extract_category(stats, "positioning", POSITIONING_FIELDS),
                 "demo": extract_category(stats, "demo", DEMO_FIELDS),
-                # ===== BOXCARS DODACI =====
+                # ===== CARBALL DODACI =====
                 "heatmap": subtr_player_data.get("heatmap", []),
                 "ghost_car": {
                     "positions": subtr_player_data.get("positions", []),
@@ -427,14 +437,14 @@ def mode_for_group(group_id):
 
 def main():
     print("\n" + "="*60)
-    print("  🚀 FETCH STATS SA BOXCARS + AUTO DOWNLOAD")
+    print("  🚀 FETCH STATS SA CARBALL + AUTO DOWNLOAD")
     print("="*60 + "\n")
 
     cache = load_cache()
     print(f"📦 Keš: {len(cache)} vec obradjenih replay-a od ranije")
 
     subtr_cache = load_subtr_cache()
-    print(f"📦 boxcars keš: {len(subtr_cache)} replay-a")
+    print(f"📦 carball keš: {len(subtr_cache)} replay-a")
 
     print(f"📁 Privremeni replay folder: {TEMP_REPLAY_FOLDER}")
     print(f"📁 Trenutno fajlova u folderu: {len(glob.glob(os.path.join(TEMP_REPLAY_FOLDER, '*.replay')))}")
@@ -476,11 +486,11 @@ def main():
                     print(f"  ⚠️ Preskacem {rid}: status={replay.get('status')}", file=sys.stderr)
                     continue
 
-                # ===== BOXCARS OBRADA =====
+                # ===== CARBALL OBRADA =====
                 subtr_data = None
                 if rid in subtr_cache:
                     subtr_data = subtr_cache[rid]
-                    print(f"  📦 boxcars: keširano za {rid}")
+                    print(f"  📦 carball: keširano za {rid}")
                 else:
                     # ===== PREUZMI REPLAY SA BALLCHASING.COM =====
                     print(f"  🔽 Preuzimam replay {rid} sa ballchasing.com...")
@@ -488,15 +498,15 @@ def main():
                     
                     if replay_path and os.path.exists(replay_path):
                         print(f"  🔍 Procesiram replay: {os.path.basename(replay_path)}")
-                        subtr_data = process_replay_with_boxcars(replay_path)
+                        subtr_data = process_replay_with_carball(replay_path)
                         if subtr_data:
                             subtr_cache[rid] = subtr_data
                             save_subtr_cache(subtr_cache)
                             subtr_processed += 1
                             downloaded_replays += 1
-                            print(f"  ✅ boxcars: obrađen ({len(subtr_data)} igrača)")
+                            print(f"  ✅ carball: obrađen ({len(subtr_data)} igrača)")
                         else:
-                            print(f"  ⚠️ boxcars: nema podataka za {rid}")
+                            print(f"  ⚠️ carball: nema podataka za {rid}")
                     else:
                         print(f"  ⚠️ Replay {rid} nije moguće preuzeti")
 
@@ -527,7 +537,7 @@ def main():
     print(f"📊 Sacuvano {len(all_rows)} redova (igrac x mec) u {OUTPUT_FILE}")
     print(f"📦 {new_count} novih replay-a fetch-ovano, {cached_count} uzeto iz keša")
     print(f"🔽 {downloaded_replays} replay-a preuzeto sa ballchasing.com")
-    print(f"🎯 boxcars: {subtr_processed} replay-a obrađeno, {len(subtr_cache)} u kešu")
+    print(f"🎯 carball: {subtr_processed} replay-a obrađeno, {len(subtr_cache)} u kešu")
     print("="*60 + "\n")
 
 if __name__ == "__main__":
