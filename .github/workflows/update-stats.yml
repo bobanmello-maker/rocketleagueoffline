@@ -1,65 +1,47 @@
-name: Update RL Stats
+name: Update RL stats
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}        # dugme "Run workflow" na GitHub-u
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: "*/5 * * * *"      # svakih 5 minuta
+
+permissions:
+  contents: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-    
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      
-      - name: Setup Python
+
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-      
-      - name: Run auto_sort_replays
+        run: pip install -r requirements.txt
+
+      - name: Sort new replays into groups
         env:
           BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
-          BALLCHASING_ONLINE_GROUP: "online-30wp20uwjv"
-          BALLCHASING_OFFLINE_GROUP: "exibition-eyc42k96yc"
-        run: |
-          python auto_sort_replays.py
-      
-      - name: Run fetch_stats
+          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
+          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
+        run: python auto_sort_replays.py
+
+      - name: Fetch latest stats
         env:
           BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
-          BALLCHASING_GROUPS: "online-30wp20uwjv,exibition-eyc42k96yc"
-          BALLCHASING_ONLINE_GROUP: "online-30wp20uwjv"
-          BALLCHASING_OFFLINE_GROUP: "exibition-eyc42k96yc"
-          OUTPUT_FILE: "data.json"
-          CACHE_FILE: "replay_cache.json"
-        run: |
-          python fetch_stats.py
-      
-      - name: Commit and push changes
+          BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
+          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
+          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
+        run: python fetch_stats.py
+
+      - name: Commit updated data.json
         run: |
           git config user.name "rl-stats-bot"
-          git config user.email "rl-stats-bot@users.noreply.github.com"
-          
-          git pull origin main --rebase || true
-          
-          git add data.json replay_cache.json || true
-          git add subtr_cache.json 2>/dev/null || true
-          
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-update stats [skip ci]"
-            git push origin main
-          fi
+          git config user.email "actions@github.com"
+          git add data.json replay_cache.json
+          git diff --staged --quiet || git commit -m "Auto-update stats"
+          git push
