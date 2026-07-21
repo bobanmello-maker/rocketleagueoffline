@@ -24,12 +24,6 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-      
-      - name: Install maturin
-        run: pip install maturin
-      
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
