@@ -89,15 +89,20 @@ def process_replay_with_subtr_actor(replay_path):
         return None
     
     try:
+        print(f"  🔧 Parsiranje: {os.path.basename(replay_path)}")
         processor = ReplayProcessor()
         collector = NDArrayCollector()
         replay_data = processor.process(replay_path, collector)
+        
+        print(f"  🔧 Igrači pronađeni: {len(replay_data.players)}")
         
         result = {}
         for player_id, data in replay_data.players.items():
             name = data.name
             positions = data.positions
             velocities = data.velocities
+            
+            print(f"  🔧 Igrač: {name}, pozicija: {len(positions) if positions is not None else 0}")
             
             if positions is not None and len(positions) > 0:
                 # Ograniči podatke za performanse (max 1000 frejmova)
@@ -113,9 +118,17 @@ def process_replay_with_subtr_actor(replay_path):
                     'total_frames': len(positions),
                 }
         
-        return result
+        if result:
+            print(f"  ✅ subtr-actor: obrađeno {len(result)} igrača")
+            return result
+        else:
+            print(f"  ⚠️ subtr-actor: nema podataka za igrače")
+            return None
+            
     except Exception as e:
-        print(f"  ⚠️ subtr-actor greška za {os.path.basename(replay_path)}: {e}")
+        import traceback
+        print(f"  ❌ subtr-actor greška: {e}")
+        print(traceback.format_exc())
         return None
 
 def generate_heatmap(positions):
