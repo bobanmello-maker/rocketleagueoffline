@@ -39,10 +39,6 @@ jobs:
           BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
           BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
         run: python fetch_stats.py
-        
-- name: Debug sprocket-boxcars-py
-  run: |
-    python debug_sprocket.py
     
       - name: Generate heatmap data
         env:
