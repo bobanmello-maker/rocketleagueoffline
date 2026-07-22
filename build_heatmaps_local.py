@@ -1,5 +1,5 @@
 """
-build_heatmaps_local.py (v4) - Koristi sprocket-boxcars-py
+build_heatmaps_local.py (v5) - Prilagođen za sprocket-boxcars-py API
 """
 
 import json
@@ -35,61 +35,58 @@ def add_point(grid, x, y):
     row = min(max(row, 0), GRID_ROWS - 1)
     grid[row][col] += 1
 
-def find_position_indices(headers_list, prefix):
+def find_position_indices(headers, prefix):
+    """Pronalazi indekse za x i y pozicije u headerima."""
     x_idx = y_idx = None
-    for i, name in enumerate(headers_list):
-        low = name.lower()
-        if "location" not in low and "pos" not in low:
+    for i, name in enumerate(headers):
+        if not name:
             continue
-        if low.endswith("_x") or low.endswith(".x") or low.endswith("x"):
+        name_lower = name.lower()
+        if "pos" not in name_lower and "location" not in name_lower:
+            continue
+        if name_lower.endswith("_x") or name_lower.endswith(".x") or name_lower == "x":
             if x_idx is None:
                 x_idx = i
-        if low.endswith("_y") or low.endswith(".y") or low.endswith("y"):
+        if name_lower.endswith("_y") or name_lower.endswith(".y") or name_lower == "y":
             if y_idx is None:
                 y_idx = i
     return x_idx, y_idx
 
 def process_replay_in_process(replay_path):
-    import sprocket_boxcars_py as subtr_actor
+    import sprocket_boxcars_py as sb
     
-    global_adders = ["BallRigidBody"]
-    player_adders = ["PlayerRigidBody"]
+    # Učitaj replay
+    replay = sb.load_replay(str(replay_path))
+    if replay is None:
+        raise RuntimeError("Ne mogu da učitam replay fajl")
     
-    headers = subtr_actor.get_column_headers(
-        global_feature_adders=global_adders,
-        player_feature_adders=player_adders,
-    )
-    meta, ndarray = subtr_actor.get_ndarray_with_info_from_replay_filepath(
-        str(replay_path),
-        global_feature_adders=global_adders,
-        player_feature_adders=player_adders,
-        fps=FPS,
-        dtype="float32",
-    )
+    # Dohvati podatke o igračima
+    players = replay.get_players()
+    if not players:
+        raise RuntimeError("Nema igrača u replay-u")
     
-    global_headers = headers["global_headers"] if isinstance(headers, dict) else headers.global_headers
-    player_headers = headers["player_headers"] if isinstance(headers, dict) else headers.player_headers
-    
-    ball_x_i, ball_y_i = find_position_indices(global_headers, "Ball")
-    if ball_x_i is None or ball_y_i is None:
-        raise RuntimeError(f"Ne mogu da nadjem x/y kolone za loptu u headers: {global_headers}")
-    
-    n_global = len(global_headers)
-    n_player_cols = len(player_headers)
-    px_i, py_i = find_position_indices(player_headers, "Player")
-    if px_i is None or py_i is None:
-        raise RuntimeError(f"Ne mogu da nadjem x/y kolone za igraca u headers: {player_headers}")
-    
-    n_players = (ndarray.shape[1] - n_global) // n_player_cols if n_player_cols else 0
+    # Uzmi frame-ove
+    frames = replay.get_frames()
+    if not frames:
+        raise RuntimeError("Nema frejmova u replay-u")
     
     ball_grid = new_grid()
     player_grid = new_grid()
     
-    for row in ndarray:
-        add_point(ball_grid, float(row[ball_x_i]), float(row[ball_y_i]))
-        for p in range(n_players):
-            base = n_global + p * n_player_cols
-            add_point(player_grid, float(row[base + px_i]), float(row[base + py_i]))
+    # Prođi kroz sve frejmove
+    for frame in frames:
+        # Pozicija lopte
+        ball = frame.get_ball()
+        if ball:
+            ball_pos = ball.get_position()
+            if ball_pos:
+                add_point(ball_grid, ball_pos[0], ball_pos[1])
+        
+        # Pozicije igrača
+        for player in players:
+            pos = frame.get_player_position(player.get_id())
+            if pos:
+                add_point(player_grid, pos[0], pos[1])
     
     return {"ball_grid": ball_grid, "player_grid": player_grid}
 
