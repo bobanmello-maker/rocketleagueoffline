@@ -1,5 +1,5 @@
 """
-build_heatmaps_local.py - Koristi carball za heatmap
+build_heatmaps_local.py - Koristi carball 0.7.5 za heatmap
 """
 
 import json
@@ -35,40 +35,51 @@ def add_point(grid, x, y):
     grid[row][col] += 1
 
 def process_replay(replay_path):
-    """Procesira replay fajl koristeci carball"""
+    """Procesira replay fajl koristeci carball 0.7.5"""
     from carball.analysis.analysis_manager import AnalysisManager
-    from carball.analysis.replay_frame import ReplayFrame
     
     ball_grid = new_grid()
     player_grid = new_grid()
     
-    # Analiziraj replay sa carball
-    am = AnalysisManager(replay_path)
-    am.parse_replay()
-    
-    # Dohvati sve frejmove
-    frames = am.get_frames()
-    if not frames:
-        raise RuntimeError("Nema frejmova u replay-u")
-    
-    # Dohvati igrače
-    players = am.get_players()
-    player_names = {p.id: p.name for p in players}
-    
-    # Prođi kroz frejmove
-    for frame in frames:
-        # Pozicija lopte
-        if hasattr(frame, 'ball') and frame.ball:
-            ball_pos = frame.ball.position
-            if ball_pos:
-                add_point(ball_grid, ball_pos.x, ball_pos.y)
+    try:
+        # Analiziraj replay sa carball
+        am = AnalysisManager(str(replay_path))
+        am.parse_replay(convert_to_seconds=True)
         
-        # Pozicije igrača
-        for player_id, player_data in frame.players.items():
-            if hasattr(player_data, 'position') and player_data.position:
-                add_point(player_grid, player_data.position.x, player_data.position.y)
-    
-    return ball_grid, player_grid
+        # Dohvati protobuf podatke
+        proto_game = am.get_protobuf_data()
+        if not proto_game:
+            raise RuntimeError("Nema protobuf podataka")
+        
+        # Dohvati igrače
+        players = proto_game.players
+        player_ids = {p.id: p.name for p in players}
+        
+        # Dohvati frejmove
+        frames = proto_game.frames
+        if not frames:
+            raise RuntimeError("Nema frejmova u replay-u")
+        
+        # Prođi kroz frejmove (uzimamo svaki 5-ti za brzinu)
+        for i, frame in enumerate(frames):
+            if i % 5 != 0:  # Uzmi svaki 5-ti frejm
+                continue
+                
+            # Pozicija lopte
+            if hasattr(frame, 'ball') and frame.ball:
+                ball = frame.ball
+                if hasattr(ball, 'pos') and ball.pos:
+                    add_point(ball_grid, ball.pos.x, ball.pos.y)
+            
+            # Pozicije igrača
+            for player_id, player_state in frame.players.items():
+                if hasattr(player_state, 'pos') and player_state.pos:
+                    add_point(player_grid, player_state.pos.x, player_state.pos.y)
+        
+        return ball_grid, player_grid
+        
+    except Exception as e:
+        raise RuntimeError(f"Greška pri obradi replay-a: {e}")
 
 def merge_grid(target, addition):
     for r in range(len(target)):
