@@ -20,15 +20,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          rust-version: 'stable'
-
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          RUSTFLAGS="-A dead_code -A unused-variables -A unused-mut" pip install -r requirements.txt
+          pip install -r requirements.txt
 
       - name: Sort new replays into groups
         env:
