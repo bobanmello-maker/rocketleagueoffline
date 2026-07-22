@@ -705,6 +705,7 @@ header.hero::after {
     <button class="tabbtn" data-tab="h2h">Poređenje</button>
     <button class="tabbtn" data-tab="matches">Svi mečevi</button>
     <button class="tabbtn" data-tab="cards">Kartice</button>
+    <button class="tabbtn" data-tab="heatmap">🔥 Heatmap</button>
   </div>
 
   <div id="content">
@@ -872,6 +873,14 @@ header.hero::after {
         </div>
       </div>
       <div id="h2hContent"></div>
+    </div>
+
+    <div class="tabpanel" id="tab-heatmap">
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🔥 Heatmap pozicioniranja <small>na osnovu stvarnih pozicija iz replay fajlova (posebna, nezavisna baza podataka)</small></h2>
+        <div id="heatmapStatus" class="subtle-note"></div>
+      </div>
+      <div id="heatmapGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;"></div>
     </div>
 
     <div class="tabpanel" id="tab-matches">
@@ -1199,6 +1208,7 @@ const RADAR_METRICS = [
 ];
 
 let RAW = [];
+let HEATMAP_RAW = {}; // { "sirovo ime igraca": grid[24][20] } - iz build_heatmaps_local.py
 let allPlayers = [];
 let players = [];
 let playerColor = {};
@@ -1515,6 +1525,11 @@ async function load(){
     RAW = await res.json();
   }catch(e){ RAW = []; }
 
+  try{
+    const hres = await fetch('./heatmap_data.json');
+    HEATMAP_RAW = hres.ok ? await hres.json() : {};
+  }catch(e){ HEATMAP_RAW = {}; }
+
   RAW = RAW.map(r => ({
     ...r,
     player: mapName(r.player),
@@ -1705,6 +1720,7 @@ function render(){
 
   renderWrappedTab(rows);
   renderCardsTab(rows);
+  renderHeatmapTab();
 }
 
 // ================================================================
@@ -3862,6 +3878,79 @@ const aiModalObserver = new MutationObserver(() => {
   }
 });
 if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
+
+/* ---------------- HEATMAP TAB ---------------- */
+
+function renderHeatmapTab(){
+  const statusEl = $('#heatmapStatus');
+  const wrap = $('#heatmapGrid');
+
+  // HEATMAP_RAW kljucevi su SIROVA imena sa ballchasing-a (npr. "ExMirage(1)") -
+  // mapiramo ih preko iste mapName() funkcije da dobijemo "Cane" itd, i
+  // spajamo grid-ove ako se vise sirovih imena mapira na isto prikazano ime.
+  const mapped = {};
+  Object.entries(HEATMAP_RAW || {}).forEach(([rawName, grid]) => {
+    const display = mapName(rawName);
+    if(!mapped[display]) mapped[display] = grid;
+    else mapped[display] = addGrids(mapped[display], grid);
+  });
+
+  const hasAny = Object.keys(mapped).length > 0;
+  statusEl.textContent = hasAny
+    ? 'Podaci se akumuliraju iz svakog obradjenog meca (nezavisno od filtera datuma/rezima gore).'
+    : 'Još nema heatmap podataka. Pokreni build_heatmaps_local.py (ili GitHub Action kad ga povežemo) da se popuni heatmap_data.json.';
+
+  const ps = [...activePlayers].filter(p => mapped[p]);
+  if(!ps.length){
+    wrap.innerHTML = hasAny ? '<div class="empty">Nema heatmap podataka za trenutno izabrane igrače</div>' : '';
+    return;
+  }
+
+  wrap.innerHTML = ps.map(p => `
+    <div class="card">
+      <h2 style="color:${playerColor[p]||'#fff'}">${p}</h2>
+      <canvas id="hmcanvas-${p.replace(/[^a-zA-Z0-9]/g,'')}" width="300" height="360" style="width:100%; height:auto; border-radius:8px;"></canvas>
+    </div>
+  `).join('');
+
+  ps.forEach(p => {
+    const canvas = $(`#hmcanvas-${p.replace(/[^a-zA-Z0-9]/g,'')}`);
+    if(canvas) drawHeatmapGrid(canvas, mapped[p]);
+  });
+}
+
+function addGrids(a, b){
+  return a.map((row, r) => row.map((v, c) => v + (b[r] ? (b[r][c]||0) : 0)));
+}
+
+function drawHeatmapGrid(canvas, grid){
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const rows = grid.length, cols = grid[0].length;
+  const cellW = W / cols, cellH = H / rows;
+  const maxVal = Math.max(1, ...grid.flat());
+
+  for(let r = 0; r < rows; r++){
+    for(let c = 0; c < cols; c++){
+      const intensity = grid[r][c] / maxVal;
+      const alpha = Math.min(0.95, intensity);
+      // plavo (hladno, malo prisustva) -> crveno (vruce, puno prisustva)
+      const hue = 210 - intensity * 210; // 210=plava, 0=crvena
+      ctx.fillStyle = `hsla(${hue}, 85%, 55%, ${0.12 + alpha * 0.8})`;
+      ctx.fillRect(c * cellW, r * cellH, cellW + 1, cellH + 1);
+    }
+  }
+
+  // linija na sredini terena
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, H/2); ctx.lineTo(W, H/2);
+  ctx.stroke();
+  ctx.strokeRect(0, 0, W, H);
+}
 
 load();
 </script>
