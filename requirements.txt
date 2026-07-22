@@ -1,4 +1,2 @@
-requests>=2.31.0
-subtr-actor-py
-numpy
-python-ballchasing
+requests>=2.28.0
+subtr-actor-py>=0.1.0
