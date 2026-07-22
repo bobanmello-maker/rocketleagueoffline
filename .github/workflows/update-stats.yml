@@ -52,6 +52,6 @@ jobs:
         run: |
           git config user.name "rl-stats-bot"
           git config user.email "actions@github.com"
-          git add data.json replay_cache.json heatmap_data.json heatmap_processed.json replays_cache/
+          git add data.json replay_cache.json heatmap_data.json heatmap_processed.json
           git diff --staged --quiet || git commit -m "Auto-update stats & heatmap"
           git push
