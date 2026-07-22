@@ -1,14 +1,15 @@
 """
-build_heatmaps_local.py (v5) - Prilagođen za sprocket-boxcars-py API
+build_heatmaps_local.py (v6) - Koristi boxcars direktno
 """
 
 import json
 import os
-import subprocess
 import sys
-import tempfile
 import time
 from pathlib import Path
+
+import boxcars
+import requests
 
 # Podesavanja
 REPLAY_CACHE = Path("replay_cache.json")
@@ -19,7 +20,6 @@ PROCESSED_FILE = Path("heatmap_processed.json")
 FIELD_X_MIN, FIELD_X_MAX = -4200, 4200
 FIELD_Y_MIN, FIELD_Y_MAX = -5300, 5300
 GRID_COLS, GRID_ROWS = 64, 80
-FPS = 10.0
 
 def new_grid():
     return [[0 for _ in range(GRID_COLS)] for _ in range(GRID_ROWS)]
@@ -35,84 +35,56 @@ def add_point(grid, x, y):
     row = min(max(row, 0), GRID_ROWS - 1)
     grid[row][col] += 1
 
-def find_position_indices(headers, prefix):
-    """Pronalazi indekse za x i y pozicije u headerima."""
-    x_idx = y_idx = None
-    for i, name in enumerate(headers):
-        if not name:
-            continue
-        name_lower = name.lower()
-        if "pos" not in name_lower and "location" not in name_lower:
-            continue
-        if name_lower.endswith("_x") or name_lower.endswith(".x") or name_lower == "x":
-            if x_idx is None:
-                x_idx = i
-        if name_lower.endswith("_y") or name_lower.endswith(".y") or name_lower == "y":
-            if y_idx is None:
-                y_idx = i
-    return x_idx, y_idx
-
-def process_replay_in_process(replay_path):
-    import sprocket_boxcars_py as sb
-    
-    # Učitaj replay
-    replay = sb.load_replay(str(replay_path))
-    if replay is None:
-        raise RuntimeError("Ne mogu da učitam replay fajl")
-    
-    # Dohvati podatke o igračima
-    players = replay.get_players()
-    if not players:
-        raise RuntimeError("Nema igrača u replay-u")
-    
-    # Uzmi frame-ove
-    frames = replay.get_frames()
-    if not frames:
-        raise RuntimeError("Nema frejmova u replay-u")
-    
+def process_replay(replay_path):
+    """Procesira replay fajl i vraca ball_grid i player_grid"""
     ball_grid = new_grid()
     player_grid = new_grid()
     
+    # Učitaj replay sa boxcars
+    with open(replay_path, 'rb') as f:
+        replay_data = f.read()
+    
+    try:
+        replay = boxcars.parse_replay(replay_data)
+    except Exception as e:
+        raise RuntimeError(f"Ne mogu da parsiran replay: {e}")
+    
+    # Dohvati igrače i njihove ID-eve
+    player_ids = {}
+    for player in replay.players:
+        if player.name:
+            player_ids[player.id] = player.name
+    
+    if not player_ids:
+        raise RuntimeError("Nema igrača u replay-u")
+    
     # Prođi kroz sve frejmove
-    for frame in frames:
+    for frame in replay.frames:
         # Pozicija lopte
-        ball = frame.get_ball()
-        if ball:
-            ball_pos = ball.get_position()
+        if hasattr(frame, 'ball') and frame.ball:
+            ball_pos = frame.ball.position
             if ball_pos:
-                add_point(ball_grid, ball_pos[0], ball_pos[1])
+                add_point(ball_grid, ball_pos.x, ball_pos.y)
         
         # Pozicije igrača
-        for player in players:
-            pos = frame.get_player_position(player.get_id())
-            if pos:
-                add_point(player_grid, pos[0], pos[1])
+        for player_id, pos in frame.players.items():
+            if pos and hasattr(pos, 'position'):
+                add_point(player_grid, pos.position.x, pos.position.y)
     
-    return {"ball_grid": ball_grid, "player_grid": player_grid}
-
-def run_worker(replay_path, out_path):
-    result = process_replay_in_process(replay_path)
-    Path(out_path).write_text(json.dumps(result), encoding="utf-8")
-
-def process_replay(replay_path):
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        out_path = Path(tmp_dir) / "result.json"
-        proc = subprocess.run(
-            [sys.executable, str(Path(__file__).resolve()), "--worker", str(replay_path), str(out_path)],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
-        if proc.returncode != 0 or not out_path.exists():
-            stderr_tail = "\n".join(proc.stderr.strip().splitlines()[-5:]) if proc.stderr else "(nema stderr)"
-            raise RuntimeError(f"pod-proces pao (kod {proc.returncode}): {stderr_tail}")
-        result = json.loads(out_path.read_text(encoding="utf-8"))
-        return result["ball_grid"], result["player_grid"]
+    return ball_grid, player_grid
 
 def merge_grid(target, addition):
     for r in range(len(target)):
         for c in range(len(target[r])):
             target[r][c] += addition[r][c]
+
+def download_replay(replay_id, dest_path, token):
+    """Dohvata replay sa Ballchasing API"""
+    url = f"https://ballchasing.com/api/replays/{replay_id}/file"
+    headers = {"Authorization": token}
+    resp = requests.get(url, headers=headers, timeout=60)
+    resp.raise_for_status()
+    dest_path.write_bytes(resp.content)
 
 def main():
     # Učitaj replay_cache.json od fetch_stats.py
@@ -152,6 +124,7 @@ def main():
         }
     
     REPLAY_DIR.mkdir(exist_ok=True)
+    token = os.environ.get("BALLCHASING_TOKEN")
     
     ok_count = 0
     err_count = 0
@@ -161,17 +134,12 @@ def main():
         replay_path = REPLAY_DIR / f"{replay_id}.replay"
         
         try:
-            # Ako replay fajl ne postoji, pokušaj da ga dohvatiš
+            # Ako replay fajl ne postoji, dohvati ga (sa pauzom za rate limit)
             if not replay_path.exists():
-                import requests
-                token = os.environ.get("BALLCHASING_TOKEN")
                 if not token:
                     raise RuntimeError("BALLCHASING_TOKEN nije podesen")
-                url = f"https://ballchasing.com/api/replays/{replay_id}/file"
-                resp = requests.get(url, headers={"Authorization": token}, timeout=60)
-                resp.raise_for_status()
-                replay_path.write_bytes(resp.content)
-                time.sleep(0.5)
+                download_replay(replay_id, replay_path, token)
+                time.sleep(1)  # Pauza za rate limit
             
             ball_grid, player_grid = process_replay(replay_path)
             merge_grid(data["ball_grid"], ball_grid)
@@ -188,11 +156,11 @@ def main():
         # Cuvaj progres posle svakog replay-a
         DATA_FILE.write_text(json.dumps(data), encoding="utf-8")
         PROCESSED_FILE.write_text(json.dumps(sorted(processed)), encoding="utf-8")
+        
+        # Pauza između replay-a za rate limit
+        time.sleep(0.5)
     
     print(f"\nGotovo. Uspesno: {ok_count}. Greske: {err_count}.")
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--worker":
-        run_worker(sys.argv[2], sys.argv[3])
-    else:
-        main()
+    main()
