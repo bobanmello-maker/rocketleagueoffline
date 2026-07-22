@@ -1,0 +1,62 @@
+name: Update RL stats
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          rust-version: 'stable'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          RUSTFLAGS="-A dead_code -A unused-variables -A unused-mut" pip install -r requirements.txt
+
+      - name: Sort new replays into groups
+        env:
+          BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
+          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
+          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
+        run: python auto_sort_replays.py
+
+      - name: Fetch latest stats
+        env:
+          BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
+          BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
+          BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
+          BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
+        run: python fetch_stats.py
+
+      - name: Generate heatmap data
+        env:
+          BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
+          BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
+        run: |
+          mkdir -p replays_cache
+          python build_heatmaps_local.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "rl-stats-bot"
+          git config user.email "actions@github.com"
+          git add data.json replay_cache.json heatmap_data.json heatmap_processed.json replays_cache/
+          git diff --staged --quiet || git commit -m "Auto-update stats & heatmap"
+          git push
