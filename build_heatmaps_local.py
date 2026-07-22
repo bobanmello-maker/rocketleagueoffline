@@ -1,6 +1,5 @@
 """
-build_heatmaps_local.py (v3) - Optimizovan za tvoj repo
-Koristi replay_cache.json od fetch_stats.py
+build_heatmaps_local.py (v4) - Koristi sprocket-boxcars-py
 """
 
 import json
@@ -51,7 +50,7 @@ def find_position_indices(headers_list, prefix):
     return x_idx, y_idx
 
 def process_replay_in_process(replay_path):
-    import subtr_actor
+    import sprocket_boxcars_py as subtr_actor
     
     global_adders = ["BallRigidBody"]
     player_adders = ["PlayerRigidBody"]
