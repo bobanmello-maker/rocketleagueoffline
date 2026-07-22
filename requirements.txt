@@ -1,2 +1,2 @@
 requests>=2.28.0
-subtr-actor-py>=0.1.0
+subtr-actor-py==1.1.0
