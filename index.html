@@ -877,10 +877,33 @@ header.hero::after {
 
     <div class="tabpanel" id="tab-heatmap">
       <div class="card" style="margin-bottom:16px;">
-        <h2>🔥 Heatmap pozicioniranja <small>na osnovu stvarnih pozicija iz replay fajlova (posebna, nezavisna baza podataka)</small></h2>
+        <h2>🔥 Heatmap pozicioniranja <small>po meču i po igraču</small></h2>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
+          <div style="flex:1; min-width:200px;">
+            <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Izaberi meč:</label>
+            <select id="heatmapMatchSelect" style="width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:8px; font-size:13px;">
+              <option value="">-- Učitavanje mečeva --</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:150px;">
+            <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Igrač:</label>
+            <select id="heatmapPlayerSelect" style="width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:8px; font-size:13px;">
+              <option value="all">Svi igrači</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Tip:</label>
+            <div style="display:flex; gap:8px;">
+              <button class="chip heatmap-type-chip active" data-type="player">Pozicije igrača</button>
+              <button class="chip heatmap-type-chip" data-type="ball">Pozicije lopte</button>
+            </div>
+          </div>
+        </div>
         <div id="heatmapStatus" class="subtle-note"></div>
       </div>
-      <div id="heatmapGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;"></div>
+      <div id="heatmapContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div id="heatmapGrid" style="display:grid; grid-template-columns:1fr; gap:20px;"></div>
+      </div>
     </div>
 
     <div class="tabpanel" id="tab-matches">
@@ -1208,7 +1231,7 @@ const RADAR_METRICS = [
 ];
 
 let RAW = [];
-let HEATMAP_RAW = {}; // { "sirovo ime igraca": grid[24][20] } - iz build_heatmaps_local.py
+let HEATMAP_RAW = {}; // { "replay_id": { "ball_grid": [...], "player_grid": [...] } }
 let allPlayers = [];
 let players = [];
 let playerColor = {};
@@ -1227,6 +1250,13 @@ let currentPage = 1;
 let pageSize = 25;
 // ===== KRAJ =====
 
+// ===== HEATMAP VARIJABLE =====
+let heatmapData = {};
+let heatmapMatchSelect = null;
+let heatmapPlayerSelect = null;
+let heatmapType = 'player';
+// =============================
+
 const $ = sel => document.querySelector(sel);
 const getPath = (obj, path) => path.split('.').reduce((o,k) => (o == null ? o : o[k]), obj);
 const avg = arr => arr.length ? arr.reduce((a,b)=>a+(b||0),0)/arr.length : 0;
@@ -1236,6 +1266,10 @@ function fmtDate(iso){
   if(!iso) return '?';
   const d = new Date(iso);
   return d.toLocaleDateString('sr-RS', {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function new_grid() {
+  return Array.from({length: 80}, () => Array(64).fill(0));
 }
 
 // ================================================================
@@ -1528,6 +1562,7 @@ async function load(){
   try{
     const hres = await fetch('./heatmap_data.json');
     HEATMAP_RAW = hres.ok ? await hres.json() : {};
+    heatmapData = HEATMAP_RAW;
   }catch(e){ HEATMAP_RAW = {}; }
 
   RAW = RAW.map(r => ({
@@ -1613,6 +1648,11 @@ async function load(){
     if(Math.abs(dx) > 40) wrappedGo(dx < 0 ? 1 : -1);
     wrappedTouchX = null;
   }, {passive:true});
+
+  // Inicijalizuj heatmap nakon učitavanja
+  setTimeout(() => {
+    loadHeatmapData();
+  }, 1000);
 
   render();
 }
@@ -3316,7 +3356,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(payload)}`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s - da dugme nikad ne ostane zaglavljeno ako Worker/Groq ne odgovori
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   let response;
   try{
@@ -3780,8 +3820,6 @@ function renderTiltDetector(rows) {
 }
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
-  // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
-  // bez ovoga bi .map pukao i ceo modal tiho ne bi prikazao ništa
   const asArray = v => Array.isArray(v) ? v : (v ? [String(v)] : []);
   const strengths = asArray(analysis?.strengths);
   const weaknesses = asArray(analysis?.weaknesses);
@@ -3852,9 +3890,6 @@ $('#aiAnalyzeBtn').addEventListener('click', () => {
   analyzeWithAI(rows);
 });
 
-// sigurnosna mreža: ako NEŠTO potpuno neočekivano pukne bilo gde na stranici dok
-// je dugme za AI analizu u stanju "Analiziram...", vrati ga u normalno stanje i
-// glasno ispiši grešku u konzoli, umesto da ostane zaglavljeno u tišini
 function resetStuckAIButton(source, err){
   console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
   const btn = $('#aiAnalyzeBtn');
@@ -3866,8 +3901,6 @@ function resetStuckAIButton(source, err){
 window.addEventListener('error', e => resetStuckAIButton('window error', e.error || e.message));
 window.addEventListener('unhandledrejection', e => resetStuckAIButton('unhandled promise rejection', e.reason));
 
-// pauziraj animaciju čestica u pozadini dok je AI modal otvoren - manje posla za
-// glavnu nit dok se čeka/čita analiza
 const aiModalObserver = new MutationObserver(() => {
   const isOpen = $('#aiModalBackdrop')?.classList.contains('open');
   if(!particleSystem) return;
@@ -3879,56 +3912,167 @@ const aiModalObserver = new MutationObserver(() => {
 });
 if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
 
-/* ---------------- HEATMAP TAB ---------------- */
+/* ---------------- HEATMAP TAB - NOVI (po meču i po igraču) ---------------- */
 
-function renderHeatmapTab(){
-  const statusEl = $('#heatmapStatus');
-  const wrap = $('#heatmapGrid');
+function loadHeatmapData() {
+  fetch('./heatmap_data.json')
+    .then(res => {
+      if (!res.ok) throw new Error('Nema heatmap podataka');
+      return res.json();
+    })
+    .then(data => {
+      heatmapData = data;
+      populateHeatmapMatches();
+    })
+    .catch(err => {
+      console.warn('Heatmap data not loaded:', err);
+      document.getElementById('heatmapStatus').textContent = 'Još nema heatmap podataka. Pokreni build_heatmaps_local.py.';
+    });
+}
 
-  // HEATMAP_RAW kljucevi su SIROVA imena sa ballchasing-a (npr. "ExMirage(1)") -
-  // mapiramo ih preko iste mapName() funkcije da dobijemo "Cane" itd, i
-  // spajamo grid-ove ako se vise sirovih imena mapira na isto prikazano ime.
-  const mapped = {};
-  Object.entries(HEATMAP_RAW || {}).forEach(([rawName, grid]) => {
-    const display = mapName(rawName);
-    if(!mapped[display]) mapped[display] = grid;
-    else mapped[display] = addGrids(mapped[display], grid);
-  });
+function populateHeatmapMatches() {
+  const select = document.getElementById('heatmapMatchSelect');
+  if (!select) return;
+  
+  fetch('./data.json')
+    .then(res => res.json())
+    .then(rows => {
+      const matches = {};
+      rows.forEach(r => {
+        if (!matches[r.replay_id]) {
+          matches[r.replay_id] = {
+            date: r.date,
+            map: r.map || 'Nepoznata mapa',
+            players: [],
+            team_goals: r.team_goals,
+            opponent_goals: r.opponent_goals,
+            win: r.win
+          };
+        }
+        if (!matches[r.replay_id].players.includes(r.player)) {
+          matches[r.replay_id].players.push(r.player);
+        }
+      });
+      
+      const sorted = Object.keys(matches).sort((a, b) => {
+        return (matches[b].date || '').localeCompare(matches[a].date || '');
+      });
+      
+      select.innerHTML = '<option value="">-- Izaberi meč --</option>';
+      sorted.forEach(id => {
+        const m = matches[id];
+        const dateStr = m.date ? new Date(m.date).toLocaleDateString('sr-RS') : 'Nepoznat datum';
+        const result = m.win ? '🏆 Pobeda' : '❌ Poraz';
+        const label = `${dateStr} — ${m.map} — ${m.team_goals}:${m.opponent_goals} (${result}) — ${m.players.join(', ')}`;
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = label;
+        select.appendChild(option);
+      });
+      
+      const playerSelect = document.getElementById('heatmapPlayerSelect');
+      const allPlayers = [...new Set(rows.map(r => r.player))].sort();
+      playerSelect.innerHTML = '<option value="all">Svi igrači</option>';
+      allPlayers.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        playerSelect.appendChild(opt);
+      });
+      
+      select.addEventListener('change', renderHeatmapMatch);
+      playerSelect.addEventListener('change', renderHeatmapMatch);
+      document.querySelectorAll('.heatmap-type-chip').forEach(chip => {
+        chip.addEventListener('click', function() {
+          document.querySelectorAll('.heatmap-type-chip').forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          heatmapType = this.dataset.type;
+          renderHeatmapMatch();
+        });
+      });
+      
+      document.getElementById('heatmapStatus').textContent = `✅ ${sorted.length} mečeva dostupno za prikaz.`;
+    })
+    .catch(err => {
+      console.error('Greška pri učitavanju mečeva:', err);
+      document.getElementById('heatmapStatus').textContent = 'Greška pri učitavanju podataka o mečevima.';
+    });
+}
 
-  const hasAny = Object.keys(mapped).length > 0;
-  statusEl.textContent = hasAny
-    ? 'Podaci se akumuliraju iz svakog obradjenog meca (nezavisno od filtera datuma/rezima gore).'
-    : 'Još nema heatmap podataka. Pokreni build_heatmaps_local.py (ili GitHub Action kad ga povežemo) da se popuni heatmap_data.json.';
-
-  const ps = [...activePlayers].filter(p => mapped[p]);
-  if(!ps.length){
-    wrap.innerHTML = hasAny ? '<div class="empty">Nema heatmap podataka za trenutno izabrane igrače</div>' : '';
+function renderHeatmapMatch() {
+  const matchSelect = document.getElementById('heatmapMatchSelect');
+  const playerSelect = document.getElementById('heatmapPlayerSelect');
+  const grid = document.getElementById('heatmapGrid');
+  const container = document.getElementById('heatmapContainer');
+  
+  const replayId = matchSelect.value;
+  if (!replayId || !heatmapData[replayId]) {
+    grid.innerHTML = '<div class="empty">Izaberi meč za prikaz heatmape</div>';
     return;
   }
-
-  wrap.innerHTML = ps.map(p => `
-    <div class="card">
-      <h2 style="color:${playerColor[p]||'#fff'}">${p}</h2>
-      <canvas id="hmcanvas-${p.replace(/[^a-zA-Z0-9]/g,'')}" width="300" height="360" style="width:100%; height:auto; border-radius:8px;"></canvas>
-    </div>
-  `).join('');
-
-  ps.forEach(p => {
-    const canvas = $(`#hmcanvas-${p.replace(/[^a-zA-Z0-9]/g,'')}`);
-    if(canvas) drawHeatmapGrid(canvas, mapped[p]);
-  });
+  
+  const data = heatmapData[replayId];
+  const selectedPlayer = playerSelect.value;
+  
+  fetch('./data.json')
+    .then(res => res.json())
+    .then(rows => {
+      const matchRows = rows.filter(r => r.replay_id === replayId);
+      const players = [...new Set(matchRows.map(r => r.player))].sort();
+      
+      let playersToShow = selectedPlayer === 'all' ? players : [selectedPlayer];
+      
+      if (selectedPlayer !== 'all' && !players.includes(selectedPlayer)) {
+        grid.innerHTML = `<div class="empty">Igrač ${selectedPlayer} nije igrao u ovom meču</div>`;
+        return;
+      }
+      
+      grid.innerHTML = '';
+      
+      if (selectedPlayer === 'all') {
+        container.style.gridTemplateColumns = `repeat(${Math.min(players.length, 2)}, 1fr)`;
+      } else {
+        container.style.gridTemplateColumns = '1fr';
+      }
+      
+      const playerGrid = data.player_grid;
+      const ballGrid = data.ball_grid;
+      
+      playersToShow.forEach((player, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        const playerIndex = matchRows.findIndex(r => r.player === player);
+        let gridData;
+        
+        if (heatmapType === 'player') {
+          gridData = playerGrid;
+        } else {
+          gridData = ballGrid;
+        }
+        
+        card.innerHTML = `
+          <h2 style="color:${playerColor[player] || '#fff'}; font-size:14px;">${player}</h2>
+          <canvas id="hm-${replayId}-${player.replace(/[^a-zA-Z0-9]/g,'')}" width="300" height="360" style="width:100%; height:auto; border-radius:8px;"></canvas>
+        `;
+        grid.appendChild(card);
+        
+        setTimeout(() => {
+          const canvas = card.querySelector('canvas');
+          if (canvas) {
+            drawHeatmapGrid(canvas, gridData);
+          }
+        }, 50);
+      });
+    });
 }
 
-function addGrids(a, b){
-  return a.map((row, r) => row.map((v, c) => v + (b[r] ? (b[r][c]||0) : 0)));
-}
-
-function drawHeatmapGrid(canvas, grid){
+function drawHeatmapGrid(canvas, grid) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const rows = grid.length, cols = grid[0].length;
+  const rows = grid.length, cols = grid[0] ? grid[0].length : 64;
   const cellW = W / cols, cellH = H / rows;
   const maxVal = Math.max(1, ...grid.flat());
 
@@ -3936,14 +4080,12 @@ function drawHeatmapGrid(canvas, grid){
     for(let c = 0; c < cols; c++){
       const intensity = grid[r][c] / maxVal;
       const alpha = Math.min(0.95, intensity);
-      // plavo (hladno, malo prisustva) -> crveno (vruce, puno prisustva)
-      const hue = 210 - intensity * 210; // 210=plava, 0=crvena
+      const hue = 210 - intensity * 210;
       ctx.fillStyle = `hsla(${hue}, 85%, 55%, ${0.12 + alpha * 0.8})`;
       ctx.fillRect(c * cellW, r * cellH, cellW + 1, cellH + 1);
     }
   }
 
-  // linija na sredini terena
   ctx.strokeStyle = 'rgba(255,255,255,0.25)';
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -3952,8 +4094,17 @@ function drawHeatmapGrid(canvas, grid){
   ctx.strokeRect(0, 0, W, H);
 }
 
+function renderHeatmapTab() {
+  const statusEl = document.getElementById('heatmapStatus');
+  if (Object.keys(heatmapData).length === 0) {
+    statusEl.textContent = 'Učitavanje heatmap podataka...';
+    loadHeatmapData();
+  } else {
+    statusEl.textContent = `✅ ${Object.keys(heatmapData).length} mečeva u heatmap bazi. Izaberi meč za prikaz.`;
+  }
+}
+
 load();
 </script>
 </body>
 </html>
-
