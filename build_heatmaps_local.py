@@ -1,5 +1,5 @@
 """
-build_heatmaps_local.py (v7) - Ispravan API za sprocket-boxcars-py
+build_heatmaps_local.py - Koristi carball za heatmap
 """
 
 import json
@@ -35,43 +35,38 @@ def add_point(grid, x, y):
     grid[row][col] += 1
 
 def process_replay(replay_path):
-    """Procesira replay fajl koristeci sprocket-boxcars-py"""
-    import sprocket_boxcars_py as sb
+    """Procesira replay fajl koristeci carball"""
+    from carball.analysis.analysis_manager import AnalysisManager
+    from carball.analysis.replay_frame import ReplayFrame
     
     ball_grid = new_grid()
     player_grid = new_grid()
     
-    # Učitaj replay
-    replay = sb.load(str(replay_path))
-    if replay is None:
-        raise RuntimeError("Ne mogu da učitam replay fajl")
+    # Analiziraj replay sa carball
+    am = AnalysisManager(replay_path)
+    am.parse_replay()
     
     # Dohvati sve frejmove
-    frames = replay.get_frames()
+    frames = am.get_frames()
     if not frames:
         raise RuntimeError("Nema frejmova u replay-u")
     
-    # Prođi kroz sve frejmove
+    # Dohvati igrače
+    players = am.get_players()
+    player_names = {p.id: p.name for p in players}
+    
+    # Prođi kroz frejmove
     for frame in frames:
-        # Pozicija lopte - probaj različite načine
-        try:
-            ball = frame.get_ball()
-            if ball:
-                pos = ball.get_position()
-                if pos:
-                    add_point(ball_grid, pos[0], pos[1])
-        except:
-            pass
+        # Pozicija lopte
+        if hasattr(frame, 'ball') and frame.ball:
+            ball_pos = frame.ball.position
+            if ball_pos:
+                add_point(ball_grid, ball_pos.x, ball_pos.y)
         
         # Pozicije igrača
-        try:
-            players = replay.get_players()
-            for player in players:
-                pos = frame.get_player_position(player.get_id())
-                if pos:
-                    add_point(player_grid, pos[0], pos[1])
-        except:
-            pass
+        for player_id, player_data in frame.players.items():
+            if hasattr(player_data, 'position') and player_data.position:
+                add_point(player_grid, player_data.position.x, player_data.position.y)
     
     return ball_grid, player_grid
 
@@ -136,12 +131,12 @@ def main():
         replay_path = REPLAY_DIR / f"{replay_id}.replay"
         
         try:
-            # Ako replay fajl ne postoji, dohvati ga (sa pauzom za rate limit)
+            # Ako replay fajl ne postoji, dohvati ga
             if not replay_path.exists():
                 if not token:
                     raise RuntimeError("BALLCHASING_TOKEN nije podesen")
                 download_replay(replay_id, replay_path, token)
-                time.sleep(2)  # Pauza za rate limit
+                time.sleep(2)
             
             ball_grid, player_grid = process_replay(replay_path)
             merge_grid(data["ball_grid"], ball_grid)
@@ -159,7 +154,6 @@ def main():
         DATA_FILE.write_text(json.dumps(data), encoding="utf-8")
         PROCESSED_FILE.write_text(json.dumps(sorted(processed)), encoding="utf-8")
         
-        # Pauza između replay-a za rate limit
         time.sleep(1)
     
     print(f"\nGotovo. Uspesno: {ok_count}. Greske: {err_count}.")
