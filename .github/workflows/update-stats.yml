@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          RUSTFLAGS="-A dead_code" pip install -r requirements.txt
+          pip install -r requirements.txt
 
       - name: Sort new replays into groups
         env:
