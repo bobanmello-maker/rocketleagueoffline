@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install requests
 
       - name: Sort new replays into groups
         env:
@@ -39,19 +39,11 @@ jobs:
           BALLCHASING_ONLINE_GROUP: ${{ vars.BALLCHASING_ONLINE_GROUP }}
           BALLCHASING_OFFLINE_GROUP: ${{ vars.BALLCHASING_OFFLINE_GROUP }}
         run: python fetch_stats.py
-    
-      - name: Generate heatmap data
-        env:
-          BALLCHASING_TOKEN: ${{ secrets.BALLCHASING_TOKEN }}
-          BALLCHASING_GROUPS: ${{ vars.BALLCHASING_GROUPS }}
-        run: |
-          mkdir -p replays_cache
-          python build_heatmaps_local.py
 
       - name: Commit updated data
         run: |
           git config user.name "rl-stats-bot"
           git config user.email "actions@github.com"
-          git add data.json replay_cache.json heatmap_data.json heatmap_processed.json
-          git diff --staged --quiet || git commit -m "Auto-update stats & heatmap"
+          git add data.json replay_cache.json
+          git diff --staged --quiet || git commit -m "Auto-update stats"
           git push
