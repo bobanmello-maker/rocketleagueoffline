@@ -882,16 +882,29 @@ header.hero::after {
         <div class="table-wrap"><table id="monthCompareTable"><thead><tr><th>Igrač</th><th class="mono">Golova (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Win% (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Boost (ovaj/prošli)</th><th class="mono">Δ</th></tr></thead><tbody id="monthCompareBody"></tbody></table></div>
       </div>
     </div>
+
     <div class="tabpanel" id="tab-h2h">
       <div class="card" style="margin-bottom:16px;">
-        <h2>Head-to-head <small>uporedi tačno dva igrača, jedan naspram drugog</small></h2>
+        <h2>Head-to-head <small>uporedi tačno dva igrača</small></h2>
         <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
           <select class="metric-select" id="h2hPlayerA"></select>
           <span style="color:var(--text-muted); font-weight:700;">VS</span>
           <select class="metric-select" id="h2hPlayerB"></select>
         </div>
       </div>
-      <div id="h2hContent"></div>
+
+      <!-- VS DUEL KARTICA - ZAMENJUJE STARU H2H TABELU -->
+      <div class="card vsduel-card">
+        <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
+        <div class="vsduel-wrap">
+          <canvas id="vsDuelCanvas"></canvas>
+          <div class="btn-row">
+            <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
+            <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
+          </div>
+          <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
+        </div>
+      </div>
     </div>
 
     <div class="tabpanel" id="tab-matches">
@@ -2455,59 +2468,8 @@ function renderH2H(){
     { label:'MVP nagrada', a: rowsA.filter(r=>getPath(r,'core.mvp')).length, b: rowsB.filter(r=>getPath(r,'core.mvp')).length },
   ];
 
-  const seen = new Set();
-  let together = { total:0, wins:0 };
-  let against = { total:0, aWins:0, bWins:0 };
-  rows.forEach(r => {
-    if(r.player !== a) return;
-    if(seen.has(r.replay_id + '|check')) return;
-    const bRowSame = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color === r.team_color);
-    const bRowOpp = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color !== r.team_color);
-    if(bRowSame){
-      together.total++;
-      if(r.win) together.wins++;
-    } else if(bRowOpp){
-      against.total++;
-      if(r.win) against.aWins++; else against.bWins++;
-    }
-  });
-
-  wrap.innerHTML = `
-    <div class="card">
-      <h2>
-        <span style="color:${playerColor[a]}">${a}</span>
-        <span style="color:var(--text-muted); font-weight:400;">vs</span>
-        <span style="color:${playerColor[b]}">${b}</span>
-      </h2>
-      <table style="width:100%; border-collapse:collapse;">
-        ${rowsDef.map(r => `
-          <tr>
-            <td class="mono" style="padding:8px 12px; text-align:right; width:35%; color:${playerColor[a]}; border-bottom:1px solid var(--border);">${r.a}</td>
-            <td style="padding:8px 12px; text-align:center; width:30%; color:var(--text-muted); font-size:12px; text-transform:uppercase; border-bottom:1px solid var(--border);">${r.label}</td>
-            <td class="mono" style="padding:8px 12px; text-align:left; width:35%; color:${playerColor[b]}; border-bottom:1px solid var(--border);">${r.b}</td>
-          </tr>
-        `).join('')}
-      </table>
-    </div>
-    <div class="card" style="margin-top:16px;">
-      <h2>Zajedno vs jedan protiv drugog</h2>
-      <div class="subtle-note" style="margin-top:0;">
-        Isti tim: ${together.total} mečeva, ${together.total ? Math.round((together.wins/together.total)*100) : 0}% win.<br>
-        Suprotni timovi: ${against.total} mečeva — ${a}: ${against.aWins} pobeda, ${b}: ${against.bWins} pobeda.
-      </div>
-    </div>
-    <div class="card vsduel-card">
-      <h2>⚔️ VS Duel <small>slika za deljenje — generiše se automatski za izabranu dvojicu</small></h2>
-      <div class="vsduel-wrap">
-        <canvas id="vsDuelCanvas"></canvas>
-        <div class="btn-row">
-          <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
-          <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
-        </div>
-        <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
-      </div>
-    </div>
-  `;
+  // ===== VS DUEL - ZAMENJUJE STARU H2H TABELU =====
+  wrap.innerHTML = '';
 
   renderVsDuelCanvas(rows, a, b);
 }
@@ -2515,6 +2477,7 @@ function renderH2H(){
 // ================================================================
 //  VS DUEL — fighting-game stil "VS" slika za dva igrača, generiše se
 //  na canvas-u iz H2H podataka i deli preko Web Share API-ja.
+//  Sada sa 10 metrika.
 // ================================================================
 
 function computeDuelStats(rowsPlayer, player){
@@ -2522,12 +2485,15 @@ function computeDuelStats(rowsPlayer, player){
   const wins = rowsPlayer.filter(r=>r.win).length;
   return {
     player,
-    matches,
+    meceva: matches,
     winPct: matches ? Math.round((wins/matches)*100) : 0,
     goalsPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.goals')||0))/matches : 0,
     assistsPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.assists')||0))/matches : 0,
     savesPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.saves')||0))/matches : 0,
+    shotsPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.shots')||0))/matches : 0,
     avgBoost: matches ? avg(rowsPlayer.map(r=>getPath(r,'boost.avg_amount')||0)) : 0,
+    behindBallPct: matches ? avg(rowsPlayer.map(r=>getPath(r,'positioning.percent_behind_ball')||0)) : 0,
+    demosPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'demo.inflicted')||0))/matches : 0,
     mvps: rowsPlayer.filter(r=>getPath(r,'core.mvp')).length,
   };
 }
@@ -2575,7 +2541,7 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
 }
 
 function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record){
-  const W = 1200, H = 720, scaleF = 2;
+  const W = 1200, H = 820, scaleF = 2;
   canvas.width = W*scaleF; canvas.height = H*scaleF;
   const ctx = canvas.getContext('2d');
   ctx.scale(scaleF, scaleF);
@@ -2636,7 +2602,7 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
   ctx.fillText('D I R E K T A N   D U E L', W/2, 35);
 
-  const photoY = 150, photoR = 80;
+  const photoY = 150, photoR = 75;
   const cxA = W*0.22, cxB = W*0.78;
   drawDuelPortrait(ctx, cxA, photoY, photoR, photoA, dataA.player, colorA);
   drawDuelPortrait(ctx, cxB, photoY, photoR, photoB, dataB.player, colorB);
@@ -2645,14 +2611,14 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.save();
   ctx.translate(W/2, photoY);
   ctx.rotate(Math.PI/4);
-  roundRectPath(ctx, -42,-42,84,84,14);
+  roundRectPath(ctx, -38,-38,76,76,12);
   ctx.fillStyle = '#0B0E14';
   ctx.fill();
   ctx.lineWidth = 3;
   ctx.strokeStyle = '#fff';
   ctx.stroke();
   ctx.restore();
-  ctx.font = "700 34px 'Rajdhani', sans-serif";
+  ctx.font = "700 30px 'Rajdhani', sans-serif";
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -2660,73 +2626,79 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.textBaseline = 'alphabetic';
 
   // Imena igrača
-  ctx.font = "700 38px 'Rajdhani', sans-serif";
+  ctx.font = "700 34px 'Rajdhani', sans-serif";
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
-  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 48);
-  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 48);
+  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 44);
+  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 44);
 
-  // Statistike
+  // ===== 10 METRIKA =====
   const stats = [
+    { key:'meceva', label:'MEČEVA', fmt:v=>v, isNumber:true },
     { key:'winPct', label:'WIN %', fmt:v=>Math.round(v)+'%' },
     { key:'goalsPm', label:'GOL/MEČ', fmt:v=>v.toFixed(2) },
     { key:'assistsPm', label:'ASI/MEČ', fmt:v=>v.toFixed(2) },
     { key:'savesPm', label:'ODB/MEČ', fmt:v=>v.toFixed(2) },
+    { key:'shotsPm', label:'ŠUT/MEČ', fmt:v=>v.toFixed(2) },
     { key:'avgBoost', label:'BOOST', fmt:v=>Math.round(v) },
+    { key:'behindBallPct', label:'IZA LOPTE %', fmt:v=>Math.round(v)+'%' },
+    { key:'demosPm', label:'DEMO/MEČ', fmt:v=>v.toFixed(2) },
+    { key:'mvps', label:'MVP', fmt:v=>v, isNumber:true },
   ];
-  const startY = 290, rowH = 54, barMax = 300, barH = 18;
+
+  const startY = 270, rowH = 42, barMax = 260, barH = 14;
   stats.forEach((s, i) => {
     const y = startY + i*rowH;
     const va = dataA[s.key] || 0, vb = dataB[s.key] || 0;
     const maxV = Math.max(va, vb, 0.0001);
     const wa = (va/maxV) * barMax, wb = (vb/maxV) * barMax;
 
-    ctx.font = "700 14px 'Inter', sans-serif";
+    ctx.font = "700 12px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.65)';
     ctx.textAlign = 'center';
-    ctx.fillText(s.label, W/2, y - 10);
+    ctx.fillText(s.label, W/2, y - 6);
 
     ctx.fillStyle = hexToRgba(colorA, 0.85);
-    roundRectPath(ctx, W/2 - wa, y, wa, barH, 6);
+    roundRectPath(ctx, W/2 - wa, y, wa, barH, 4);
     ctx.fill();
     ctx.fillStyle = hexToRgba(colorB, 0.85);
-    roundRectPath(ctx, W/2, y, wb, barH, 6);
+    roundRectPath(ctx, W/2, y, wb, barH, 4);
     ctx.fill();
 
-    ctx.font = "700 17px 'JetBrains Mono', monospace";
+    ctx.font = "700 14px 'JetBrains Mono', monospace";
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'right';
-    ctx.fillText(s.fmt(va), W/2 - wa - 12, y + barH - 2);
+    ctx.fillText(s.fmt(va), W/2 - wa - 10, y + barH - 1);
     ctx.textAlign = 'left';
-    ctx.fillText(s.fmt(vb), W/2 + wb + 12, y + barH - 2);
+    ctx.fillText(s.fmt(vb), W/2 + wb + 10, y + barH - 1);
   });
 
-  const bannerY = H - 65;
+  const bannerY = H - 60;
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60,bannerY-26); ctx.lineTo(W-60,bannerY-26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(60,bannerY-22); ctx.lineTo(W-60,bannerY-22); ctx.stroke();
 
   if(record.against.total > 0){
-    ctx.font = "700 15px 'Inter', sans-serif";
+    ctx.font = "700 14px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.textAlign = 'center';
-    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 6);
+    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 4);
 
-    ctx.font = "700 40px 'Rajdhani', sans-serif";
+    ctx.font = "700 36px 'Rajdhani', sans-serif";
     ctx.textAlign = 'right';
     ctx.fillStyle = colorA;
-    ctx.fillText(String(record.against.aWins), W/2 - 18, bannerY + 36);
+    ctx.fillText(String(record.against.aWins), W/2 - 16, bannerY + 34);
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('—', W/2, bannerY + 36);
+    ctx.fillText('—', W/2, bannerY + 34);
     ctx.textAlign = 'left';
     ctx.fillStyle = colorB;
-    ctx.fillText(String(record.against.bWins), W/2 + 18, bannerY + 36);
+    ctx.fillText(String(record.against.bWins), W/2 + 16, bannerY + 34);
   } else {
-    ctx.font = "600 16px 'Inter', sans-serif";
+    ctx.font = "600 15px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.55)';
     ctx.textAlign = 'center';
-    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 14);
+    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 12);
   }
 }
 
