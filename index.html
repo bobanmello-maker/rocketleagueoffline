@@ -884,28 +884,31 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-h2h">
-      <div class="card" style="margin-bottom:16px;">
-        <h2>Head-to-head <small>uporedi tačno dva igrača</small></h2>
-        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
-          <select class="metric-select" id="h2hPlayerA"></select>
-          <span style="color:var(--text-muted); font-weight:700;">VS</span>
-          <select class="metric-select" id="h2hPlayerB"></select>
-        </div>
-      </div>
-
-      <!-- VS DUEL KARTICA - ZAMENJUJE STARU H2H TABELU -->
-      <div class="card vsduel-card">
-        <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
-        <div class="vsduel-wrap">
-          <canvas id="vsDuelCanvas"></canvas>
-          <div class="btn-row">
-            <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
-            <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
-          </div>
-          <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
-        </div>
-      </div>
+  <div class="card" style="margin-bottom:16px;">
+    <h2>Head-to-head <small>uporedi tačno dva igrača</small></h2>
+    <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+      <select class="metric-select" id="h2hPlayerA"></select>
+      <span style="color:var(--text-muted); font-weight:700;">VS</span>
+      <select class="metric-select" id="h2hPlayerB"></select>
     </div>
+  </div>
+
+  <!-- VS DUEL KARTICA -->
+  <div class="card vsduel-card">
+    <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
+    <div class="vsduel-wrap">
+      <canvas id="vsDuelCanvas"></canvas>
+      <div class="btn-row">
+        <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
+        <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
+      </div>
+      <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
+    </div>
+  </div>
+
+  <!-- OVDE ĆE SE PRIKAZATI DETALJNA TABELA -->
+  <div id="h2hContent"></div>
+</div>
 
     <div class="tabpanel" id="tab-matches">
       <div class="card">
