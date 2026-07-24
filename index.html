@@ -394,7 +394,7 @@
 
   @media (min-width: 900px) {
     .vsduel-wrap canvas {
-      max-width: 750px;
+      max-width: 950px;
     }
   }
 
@@ -673,20 +673,6 @@ header.hero::after {
   position: relative;
   z-index: 1;
 }
-  /* Povećaj VS Duel canvas */
-.vsduel-wrap canvas {
-  max-width: 100%;
-  height: auto;
-  border-radius: 16px;
-  box-shadow: 0 14px 38px rgba(0,0,0,0.5);
-}
-
-/* Na većim ekranima neka bude veći */
-@media (min-width: 900px) {
-  .vsduel-wrap canvas {
-    max-width: 900px;  /* ← POVEĆANO sa 750 na 900 */
-  }
-}
 </style>
 </head>
 <body>
@@ -898,31 +884,31 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-h2h">
-  <div class="card" style="margin-bottom:16px;">
-    <h2>Head-to-head <small>uporedi tačno dva igrača</small></h2>
-    <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
-      <select class="metric-select" id="h2hPlayerA"></select>
-      <span style="color:var(--text-muted); font-weight:700;">VS</span>
-      <select class="metric-select" id="h2hPlayerB"></select>
-    </div>
-  </div>
-
-  <!-- VS DUEL KARTICA -->
-  <div class="card vsduel-card">
-    <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
-    <div class="vsduel-wrap">
-      <canvas id="vsDuelCanvas"></canvas>
-      <div class="btn-row">
-        <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
-        <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>Head-to-head <small>uporedi tačno dva igrača</small></h2>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+          <select class="metric-select" id="h2hPlayerA"></select>
+          <span style="color:var(--text-muted); font-weight:700;">VS</span>
+          <select class="metric-select" id="h2hPlayerB"></select>
+        </div>
       </div>
-      <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
-    </div>
-  </div>
 
-  <!-- OVDE ĆE SE PRIKAZATI DETALJNA TABELA -->
-  <div id="h2hContent"></div>
-</div>
+      <!-- VS DUEL KARTICA -->
+      <div class="card vsduel-card">
+        <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
+        <div class="vsduel-wrap">
+          <canvas id="vsDuelCanvas"></canvas>
+          <div class="btn-row">
+            <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
+            <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
+          </div>
+          <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
+        </div>
+      </div>
+
+      <!-- ===== DODATO: h2hContent ===== -->
+      <div id="h2hContent"></div>
+    </div>
 
     <div class="tabpanel" id="tab-matches">
       <div class="card">
@@ -2459,6 +2445,8 @@ function renderH2H(){
   initH2HSelectors();
   const a = $('#h2hPlayerA').value, b = $('#h2hPlayerB').value;
   const wrap = $('#h2hContent');
+  if(!wrap) return;
+  
   if(!a || !b || a === b){
     wrap.innerHTML = '<div class="card"><div class="empty">Izaberi dva različita igrača</div></div>';
     return;
@@ -2467,7 +2455,11 @@ function renderH2H(){
   const rows = getFiltered();
   const rowsA = rows.filter(r => r.player === a);
   const rowsB = rows.filter(r => r.player === b);
-
+  
+  // Postavi podatke za VS Duel canvas
+  renderVsDuelCanvas(rows, a, b);
+  
+  // Takođe prikaži i tabelu sa poređenjem
   const metric = (arr, path) => avg(arr.map(r => getPath(r, path) || 0));
   const totalMetric = (arr, path) => sum(arr.map(r => getPath(r, path) || 0));
   const winPct = arr => arr.length ? Math.round((arr.filter(r=>r.win).length/arr.length)*100) : 0;
@@ -2485,16 +2477,48 @@ function renderH2H(){
     { label:'MVP nagrada', a: rowsA.filter(r=>getPath(r,'core.mvp')).length, b: rowsB.filter(r=>getPath(r,'core.mvp')).length },
   ];
 
-  // ===== VS DUEL - ZAMENJUJE STARU H2H TABELU =====
-  wrap.innerHTML = '';
+  const seen = new Set();
+  let together = { total:0, wins:0 };
+  let against = { total:0, aWins:0, bWins:0 };
+  rows.forEach(r => {
+    if(r.player !== a) return;
+    if(seen.has(r.replay_id + '|check')) return;
+    const bRowSame = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color === r.team_color);
+    const bRowOpp = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color !== r.team_color);
+    if(bRowSame){
+      together.total++;
+      if(r.win) together.wins++;
+    } else if(bRowOpp){
+      against.total++;
+      if(r.win) against.aWins++; else against.bWins++;
+    }
+  });
 
-  renderVsDuelCanvas(rows, a, b);
+  // Prikaži tabelu ispod VS Duel canvas-a
+  wrap.innerHTML = `
+    <div class="card" style="margin-top:16px;">
+      <h2 style="font-size:14px; text-transform:uppercase; color:var(--text-muted);">📋 Detaljno poređenje</h2>
+      <table style="width:100%; border-collapse:collapse;">
+        ${rowsDef.map(r => `
+          <tr>
+            <td class="mono" style="padding:8px 12px; text-align:right; width:35%; color:${playerColor[a]}; border-bottom:1px solid var(--border);">${r.a}</td>
+            <td style="padding:8px 12px; text-align:center; width:30%; color:var(--text-muted); font-size:12px; text-transform:uppercase; border-bottom:1px solid var(--border);">${r.label}</td>
+            <td class="mono" style="padding:8px 12px; text-align:left; width:35%; color:${playerColor[b]}; border-bottom:1px solid var(--border);">${r.b}</td>
+          </tr>
+        `).join('')}
+      </table>
+      <div class="subtle-note" style="margin-top:12px;">
+        Isti tim: ${together.total} mečeva, ${together.total ? Math.round((together.wins/together.total)*100) : 0}% win.<br>
+        Suprotni timovi: ${against.total} mečeva — ${a}: ${against.aWins} pobeda, ${b}: ${against.bWins} pobeda.
+      </div>
+    </div>
+  `;
 }
 
 // ================================================================
 //  VS DUEL — fighting-game stil "VS" slika za dva igrača, generiše se
 //  na canvas-u iz H2H podataka i deli preko Web Share API-ja.
-//  Sada sa 10 metrika.
+//  Sada sa 10 metrika i WOW dizajnom.
 // ================================================================
 
 function computeDuelStats(rowsPlayer, player){
@@ -2580,6 +2604,7 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   ctx.strokeStyle = 'rgba(255,255,255,0.1)';
   ctx.stroke();
 }
+
 function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record){
   const W = 1400, H = 960, scaleF = 2;
   canvas.width = W*scaleF; canvas.height = H*scaleF;
@@ -2640,7 +2665,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
 
   // ===== CENTRALNA LINIJA - TANJA, SA GLOW-OM =====
   ctx.save();
-  // Glow
   ctx.shadowColor = 'rgba(255,255,255,0.15)';
   ctx.shadowBlur = 12;
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
@@ -2651,7 +2675,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.stroke();
   ctx.restore();
 
-  // Tanja linija preko
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = 0.5;
   ctx.beginPath();
@@ -2663,7 +2686,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
   
-  // Glow za naslov
   ctx.shadowColor = 'rgba(255,255,255,0.1)';
   ctx.shadowBlur = 20;
   ctx.font = "700 20px 'Rajdhani', sans-serif";
@@ -2701,7 +2723,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.save();
   ctx.translate(W/2, photoY);
   
-  // Glow pozadina
   ctx.shadowColor = 'rgba(255,255,255,0.2)';
   ctx.shadowBlur = 30;
   ctx.beginPath(); 
@@ -2710,7 +2731,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fill();
   ctx.shadowBlur = 0;
   
-  // Krug
   ctx.beginPath(); 
   ctx.arc(0, 0, 48, 0, Math.PI*2);
   ctx.fillStyle = 'rgba(10,14,23,0.85)';
@@ -2719,7 +2739,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.stroke();
   
-  // VS tekst
   ctx.font = "700 32px 'Rajdhani', sans-serif";
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
@@ -2733,7 +2752,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   // ===== IMENA - SA GRADIJENTOM =====
   ctx.textBaseline = 'alphabetic';
   
-  // Ime A
   ctx.font = "700 38px 'Rajdhani', sans-serif";
   ctx.textAlign = 'center';
   ctx.shadowColor = hexToRgba(colorA, 0.5);
@@ -2742,7 +2760,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 52);
   ctx.shadowBlur = 0;
   
-  // Ime B
   ctx.shadowColor = hexToRgba(colorB, 0.5);
   ctx.shadowBlur = 30;
   ctx.fillStyle = colorB;
@@ -2821,7 +2838,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   // ===== FOOTER - DIREKTNI DUELI =====
   const bannerY = H - 70;
   
-  // Linija
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 0.5;
   ctx.beginPath();
@@ -2835,7 +2851,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     ctx.textAlign = 'center';
     ctx.fillText('DIREKTNI DUELI  •  ' + record.against.total + ' meč' + (record.against.total===1?'':'a'), W/2, bannerY);
 
-    // Rezultat - veliki i bold
     ctx.font = "700 44px 'Rajdhani', sans-serif";
     
     ctx.textAlign = 'right';
@@ -2888,17 +2903,35 @@ async function renderVsDuelCanvas(rows, a, b){
   const filename = `vs-duel-${cssSafe(a)}-${cssSafe(b)}.png`;
   const saveBtn = document.getElementById('vsDuelSaveBtn');
   const shareBtn = document.getElementById('vsDuelShareBtn');
-  if(saveBtn) saveBtn.addEventListener('click', () => {
-    try{
-      const link = document.createElement('a');
-      link.download = filename;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }catch(e){ alert('Ne mogu da snimim sliku.'); }
-  });
-  if(shareBtn) shareBtn.addEventListener('click', () => {
-    shareOrDownloadCanvas(canvas, filename, `${a} vs ${b}`, `⚔️ Duel: ${a} vs ${b}`);
-  });
+
+  // ==== SAVE BUTTON ====
+  if(saveBtn) {
+    const newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.addEventListener('click', () => {
+      try{
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }catch(e){ 
+        alert('Ne mogu da snimim sliku.'); 
+      }
+    });
+  }
+
+  // ==== SHARE BUTTON ====
+  if(shareBtn) {
+    const newShareBtn = shareBtn.cloneNode(true);
+    shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
+    newShareBtn.addEventListener('click', () => {
+      // Uzmi trenutne vrednosti iz selectora
+      const playerA = document.getElementById('h2hPlayerA').value;
+      const playerB = document.getElementById('h2hPlayerB').value;
+      const currentFilename = `vs-duel-${cssSafe(playerA)}-${cssSafe(playerB)}.png`;
+      shareOrDownloadCanvas(canvas, currentFilename, `${playerA} vs ${playerB}`, `⚔️ Duel: ${playerA} vs ${playerB}`);
+    });
+  }
 }
 
 // ================================================================
