@@ -673,6 +673,20 @@ header.hero::after {
   position: relative;
   z-index: 1;
 }
+  /* Povećaj VS Duel canvas */
+.vsduel-wrap canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 14px 38px rgba(0,0,0,0.5);
+}
+
+/* Na većim ekranima neka bude veći */
+@media (min-width: 900px) {
+  .vsduel-wrap canvas {
+    max-width: 900px;  /* ← POVEĆANO sa 750 na 900 */
+  }
+}
 </style>
 </head>
 <body>
@@ -2529,7 +2543,7 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   } else {
     ctx.fillStyle = hexToRgba(color, 0.35);
     ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    ctx.font = "700 " + Math.round(r*0.8) + "px 'Rajdhani', sans-serif";
+    ctx.font = "700 " + Math.round(r*0.9) + "px 'Rajdhani', sans-serif";  // ← POVEĆANO: 0.8→0.9
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -2539,12 +2553,11 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   ctx.restore();
   ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
   ctx.lineWidth = 5; ctx.strokeStyle = '#fff'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx,cy,r+6,0,Math.PI*2);
+  ctx.beginPath(); ctx.arc(cx,cy,r+7,0,Math.PI*2);  // ← POVEĆANO: 6→7
   ctx.lineWidth = 3; ctx.strokeStyle = hexToRgba(color,0.9); ctx.stroke();
 }
-
 function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record){
-  const W = 1200, H = 820, scaleF = 2;
+  const W = 1400, H = 960, scaleF = 2;  // ← POVEĆANO
   canvas.width = W*scaleF; canvas.height = H*scaleF;
   const ctx = canvas.getContext('2d');
   ctx.scale(scaleF, scaleF);
@@ -2585,9 +2598,9 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   // Bela linija na spoju (vertikalna)
   ctx.save();
   ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;  // ← POVEĆANO: 3→4
   ctx.shadowColor = 'rgba(255,255,255,0.8)';
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur = 25;  // ← POVEĆANO: 20→25
   ctx.beginPath();
   ctx.moveTo(splitX, 0);
   ctx.lineTo(splitX, H);
@@ -2601,11 +2614,11 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  ctx.font = "700 18px 'Rajdhani', sans-serif";
+  ctx.font = "700 22px 'Rajdhani', sans-serif";  // ← POVEĆANO: 18→22
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.fillText('D I R E K T A N   D U E L', W/2, 35);
+  ctx.fillText('D I R E K T A N   D U E L', W/2, 40);  // ← POVEĆANO: 35→40
 
-  const photoY = 150, photoR = 75;
+  const photoY = 175, photoR = 95;  // ← POVEĆANO: 150→175, 75→95
   const cxA = W*0.22, cxB = W*0.78;
   drawDuelPortrait(ctx, cxA, photoY, photoR, photoA, dataA.player, colorA);
   drawDuelPortrait(ctx, cxB, photoY, photoR, photoB, dataB.player, colorB);
@@ -2614,14 +2627,14 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.save();
   ctx.translate(W/2, photoY);
   ctx.rotate(Math.PI/4);
-  roundRectPath(ctx, -38,-38,76,76,12);
+  roundRectPath(ctx, -46,-46,92,92,14);  // ← POVEĆANO: 38→46, 76→92
   ctx.fillStyle = '#0B0E14';
   ctx.fill();
   ctx.lineWidth = 3;
   ctx.strokeStyle = '#fff';
   ctx.stroke();
   ctx.restore();
-  ctx.font = "700 30px 'Rajdhani', sans-serif";
+  ctx.font = "700 38px 'Rajdhani', sans-serif";  // ← POVEĆANO: 30→38
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -2629,11 +2642,11 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.textBaseline = 'alphabetic';
 
   // Imena igrača
-  ctx.font = "700 34px 'Rajdhani', sans-serif";
+  ctx.font = "700 40px 'Rajdhani', sans-serif";  // ← POVEĆANO: 34→40
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
-  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 44);
-  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 44);
+  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 52);  // ← POVEĆANO: 44→52
+  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 52);
 
   // ===== 10 METRIKA =====
   const stats = [
@@ -2649,59 +2662,59 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     { key:'mvps', label:'MVP', fmt:v=>v, isNumber:true },
   ];
 
-  const startY = 270, rowH = 42, barMax = 260, barH = 14;
+  const startY = 320, rowH = 50, barMax = 300, barH = 18;  // ← POVEĆANO
   stats.forEach((s, i) => {
     const y = startY + i*rowH;
     const va = dataA[s.key] || 0, vb = dataB[s.key] || 0;
     const maxV = Math.max(va, vb, 0.0001);
     const wa = (va/maxV) * barMax, wb = (vb/maxV) * barMax;
 
-    ctx.font = "700 12px 'Inter', sans-serif";
+    ctx.font = "700 14px 'Inter', sans-serif";  // ← POVEĆANO: 12→14
     ctx.fillStyle = 'rgba(255,255,255,0.65)';
     ctx.textAlign = 'center';
-    ctx.fillText(s.label, W/2, y - 6);
+    ctx.fillText(s.label, W/2, y - 8);
 
     ctx.fillStyle = hexToRgba(colorA, 0.85);
-    roundRectPath(ctx, W/2 - wa, y, wa, barH, 4);
+    roundRectPath(ctx, W/2 - wa, y, wa, barH, 5);
     ctx.fill();
     ctx.fillStyle = hexToRgba(colorB, 0.85);
-    roundRectPath(ctx, W/2, y, wb, barH, 4);
+    roundRectPath(ctx, W/2, y, wb, barH, 5);
     ctx.fill();
 
-    ctx.font = "700 14px 'JetBrains Mono', monospace";
+    ctx.font = "700 16px 'JetBrains Mono', monospace";  // ← POVEĆANO: 14→16
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'right';
-    ctx.fillText(s.fmt(va), W/2 - wa - 10, y + barH - 1);
+    ctx.fillText(s.fmt(va), W/2 - wa - 12, y + barH - 1);
     ctx.textAlign = 'left';
-    ctx.fillText(s.fmt(vb), W/2 + wb + 10, y + barH - 1);
+    ctx.fillText(s.fmt(vb), W/2 + wb + 12, y + barH - 1);
   });
 
-  const bannerY = H - 60;
+  const bannerY = H - 75;  // ← POVEĆANO: 60→75
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60,bannerY-22); ctx.lineTo(W-60,bannerY-22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(60,bannerY-28); ctx.lineTo(W-60,bannerY-28); ctx.stroke();
 
   if(record.against.total > 0){
-    ctx.font = "700 14px 'Inter', sans-serif";
+    ctx.font = "700 16px 'Inter', sans-serif";  // ← POVEĆANO: 14→16
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.textAlign = 'center';
-    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 4);
+    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 6);
 
-    ctx.font = "700 36px 'Rajdhani', sans-serif";
+    ctx.font = "700 42px 'Rajdhani', sans-serif";  // ← POVEĆANO: 36→42
     ctx.textAlign = 'right';
     ctx.fillStyle = colorA;
-    ctx.fillText(String(record.against.aWins), W/2 - 16, bannerY + 34);
+    ctx.fillText(String(record.against.aWins), W/2 - 20, bannerY + 40);
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('—', W/2, bannerY + 34);
+    ctx.fillText('—', W/2, bannerY + 40);
     ctx.textAlign = 'left';
     ctx.fillStyle = colorB;
-    ctx.fillText(String(record.against.bWins), W/2 + 16, bannerY + 34);
+    ctx.fillText(String(record.against.bWins), W/2 + 20, bannerY + 40);
   } else {
-    ctx.font = "600 15px 'Inter', sans-serif";
+    ctx.font = "600 17px 'Inter', sans-serif";  // ← POVEĆANO: 15→17
     ctx.fillStyle = 'rgba(255,255,255,0.55)';
     ctx.textAlign = 'center';
-    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 12);
+    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 16);
   }
 }
 
