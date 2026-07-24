@@ -378,6 +378,20 @@
   }
   .rlcard-save:hover{ border-color:var(--text-muted); }
 
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .rlcard-share{
+    background:linear-gradient(135deg, #7C3AED, #6D28D9); border:none; color:#fff; padding:8px 18px;
+    border-radius:999px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;
+    display:flex; align-items:center; gap:6px; box-shadow:0 4px 16px rgba(124,58,237,0.35);
+  }
+  .rlcard-share:hover{ transform:translateY(-1px); box-shadow:0 6px 22px rgba(124,58,237,0.5); }
+  .rlcard-share:active{ transform:translateY(0); }
+
+  .vsduel-card{ margin-top:16px; }
+  .vsduel-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .vsduel-wrap canvas{ width:100%; max-width:640px; height:auto; border-radius:16px; box-shadow:0 14px 38px rgba(0,0,0,0.5); }
+  .vsduel-hint{ color:var(--text-muted); font-size:12px; text-align:center; }
+
   @media (max-width:900px){
     .grid, .grid3{ grid-template-columns:1fr; }
     .scoreline{ gap:16px; }
@@ -1473,7 +1487,7 @@ function renderPlayerImpact(rows) {
 
   if (!stats.length || stats.every(s => s.matches === 0)) {
     pisCard.innerHTML = `
-      <h2><span>📊 UTICAJ IGRAČA <small>ukupan uticaj na igru</small></h2>
+      <h2><span>📊 Player Impact Score <small>ukupan uticaj na igru</small></h2>
       <div class="empty">Nema dovoljno podataka za PIS izračun</div>
     `;
     overviewTab.appendChild(pisCard);
@@ -2476,7 +2490,261 @@ function renderH2H(){
         Suprotni timovi: ${against.total} mečeva — ${a}: ${against.aWins} pobeda, ${b}: ${against.bWins} pobeda.
       </div>
     </div>
+    <div class="card vsduel-card">
+      <h2>⚔️ VS Duel <small>slika za deljenje — generiše se automatski za izabranu dvojicu</small></h2>
+      <div class="vsduel-wrap">
+        <canvas id="vsDuelCanvas"></canvas>
+        <div class="btn-row">
+          <button class="rlcard-save" id="vsDuelSaveBtn">💾 Sačuvaj sliku</button>
+          <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
+        </div>
+        <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
+      </div>
+    </div>
   `;
+
+  renderVsDuelCanvas(rows, a, b);
+}
+
+// ================================================================
+//  VS DUEL — fighting-game stil "VS" slika za dva igrača, generiše se
+//  na canvas-u iz H2H podataka i deli preko Web Share API-ja.
+// ================================================================
+
+function computeDuelStats(rowsPlayer, player){
+  const matches = rowsPlayer.length;
+  const wins = rowsPlayer.filter(r=>r.win).length;
+  return {
+    player,
+    matches,
+    winPct: matches ? Math.round((wins/matches)*100) : 0,
+    goalsPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.goals')||0))/matches : 0,
+    assistsPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.assists')||0))/matches : 0,
+    savesPm: matches ? sum(rowsPlayer.map(r=>getPath(r,'core.saves')||0))/matches : 0,
+    avgBoost: matches ? avg(rowsPlayer.map(r=>getPath(r,'boost.avg_amount')||0)) : 0,
+    mvps: rowsPlayer.filter(r=>getPath(r,'core.mvp')).length,
+  };
+}
+
+function computeDuelHeadToHead(rows, a, b){
+  const against = { total:0, aWins:0, bWins:0 };
+  const together = { total:0, wins:0 };
+  rows.forEach(r => {
+    if(r.player !== a) return;
+    const bRowSame = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color === r.team_color);
+    const bRowOpp  = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color !== r.team_color);
+    if(bRowSame){ together.total++; if(r.win) together.wins++; }
+    else if(bRowOpp){ against.total++; if(r.win) against.aWins++; else against.bWins++; }
+  });
+  return { against, together };
+}
+
+function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.closePath(); ctx.clip();
+  if(img){
+    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+    if(iw>0 && ih>0){
+      const s = Math.max((r*2)/iw, (r*2)/ih);
+      const dw = iw*s, dh = ih*s;
+      ctx.fillStyle = '#0B0E14';
+      ctx.fillRect(cx-r,cy-r,r*2,r*2);
+      ctx.drawImage(img, cx-dw/2, cy-dh/2, dw, dh);
+    }
+  } else {
+    ctx.fillStyle = hexToRgba(color, 0.35);
+    ctx.fillRect(cx-r,cy-r,r*2,r*2);
+    ctx.font = "700 " + Math.round(r*0.7) + "px 'Rajdhani', sans-serif";
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name.slice(0,2).toUpperCase(), cx, cy+2);
+    ctx.textBaseline = 'alphabetic';
+  }
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx,cy,r+5,0,Math.PI*2);
+  ctx.lineWidth = 2; ctx.strokeStyle = hexToRgba(color,0.9); ctx.stroke();
+}
+
+function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record){
+  const W = 1000, H = 580, scaleF = 2;
+  canvas.width = W*scaleF; canvas.height = H*scaleF;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scaleF, scaleF);
+
+  roundRectPath(ctx, 0, 0, W, H, 26);
+  ctx.clip();
+
+  ctx.fillStyle = '#05070B';
+  ctx.fillRect(0,0,W,H);
+
+  // dijagonalni split pozadine - leva/desna polovina u boji igrača
+  const splitTop = W*0.53, splitBottom = W*0.47;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(0,0); ctx.lineTo(splitTop,0); ctx.lineTo(splitBottom,H); ctx.lineTo(0,H); ctx.closePath();
+  ctx.clip();
+  const gA = ctx.createLinearGradient(0,0,W*0.6,H);
+  gA.addColorStop(0, hexToRgba(colorA,0.95));
+  gA.addColorStop(1, '#0B0E14');
+  ctx.fillStyle = gA;
+  ctx.fillRect(0,0,W,H);
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(splitTop,0); ctx.lineTo(W,0); ctx.lineTo(W,H); ctx.lineTo(splitBottom,H); ctx.closePath();
+  ctx.clip();
+  const gB = ctx.createLinearGradient(W,0,W*0.4,H);
+  gB.addColorStop(0, hexToRgba(colorB,0.95));
+  gB.addColorStop(1, '#0B0E14');
+  ctx.fillStyle = gB;
+  ctx.fillRect(0,0,W,H);
+  ctx.restore();
+
+  // sjaj na spoju
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = 'rgba(255,255,255,0.8)';
+  ctx.shadowBlur = 20;
+  ctx.beginPath();
+  ctx.moveTo(splitTop,0); ctx.lineTo(splitBottom,H);
+  ctx.stroke();
+  ctx.restore();
+
+  roundRectPath(ctx, 5,5,W-10,H-10,22);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.stroke();
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = "700 15px 'Rajdhani', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillText('D I R E K T A N   D U E L', W/2, 30);
+
+  const photoY = 130, photoR = 60;
+  const cxA = W*0.22, cxB = W*0.78;
+  drawDuelPortrait(ctx, cxA, photoY, photoR, photoA, dataA.player, colorA);
+  drawDuelPortrait(ctx, cxB, photoY, photoR, photoB, dataB.player, colorB);
+
+  ctx.save();
+  ctx.translate(W/2, photoY);
+  ctx.rotate(Math.PI/4);
+  roundRectPath(ctx, -34,-34,68,68,12);
+  ctx.fillStyle = '#0B0E14';
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#fff';
+  ctx.stroke();
+  ctx.restore();
+  ctx.font = "700 26px 'Rajdhani', sans-serif";
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('VS', W/2, photoY+1);
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.font = "700 32px 'Rajdhani', sans-serif";
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 42);
+  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 42);
+
+  const stats = [
+    { key:'winPct', label:'WIN %', fmt:v=>Math.round(v)+'%' },
+    { key:'goalsPm', label:'GOL/MEČ', fmt:v=>v.toFixed(2) },
+    { key:'assistsPm', label:'ASI/MEČ', fmt:v=>v.toFixed(2) },
+    { key:'savesPm', label:'ODB/MEČ', fmt:v=>v.toFixed(2) },
+    { key:'avgBoost', label:'BOOST', fmt:v=>Math.round(v) },
+  ];
+  const startY = 250, rowH = 46, barMax = 250, barH = 14;
+  stats.forEach((s, i) => {
+    const y = startY + i*rowH;
+    const va = dataA[s.key] || 0, vb = dataB[s.key] || 0;
+    const maxV = Math.max(va, vb, 0.0001);
+    const wa = (va/maxV) * barMax, wb = (vb/maxV) * barMax;
+
+    ctx.font = "700 12px 'Inter', sans-serif";
+    ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    ctx.textAlign = 'center';
+    ctx.fillText(s.label, W/2, y - 8);
+
+    ctx.fillStyle = hexToRgba(colorA, 0.85);
+    roundRectPath(ctx, W/2 - wa, y, wa, barH, 6);
+    ctx.fill();
+    ctx.fillStyle = hexToRgba(colorB, 0.85);
+    roundRectPath(ctx, W/2, y, wb, barH, 6);
+    ctx.fill();
+
+    ctx.font = "700 15px 'JetBrains Mono', monospace";
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'right';
+    ctx.fillText(s.fmt(va), W/2 - wa - 10, y + barH - 2);
+    ctx.textAlign = 'left';
+    ctx.fillText(s.fmt(vb), W/2 + wb + 10, y + barH - 2);
+  });
+
+  const bannerY = H - 55;
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60,bannerY-22); ctx.lineTo(W-60,bannerY-22); ctx.stroke();
+
+  if(record.against.total > 0){
+    ctx.font = "700 13px 'Inter', sans-serif";
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.textAlign = 'center';
+    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 4);
+
+    ctx.font = "700 34px 'Rajdhani', sans-serif";
+    ctx.textAlign = 'right';
+    ctx.fillStyle = colorA;
+    ctx.fillText(String(record.against.aWins), W/2 - 14, bannerY + 30);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText('—', W/2, bannerY + 30);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = colorB;
+    ctx.fillText(String(record.against.bWins), W/2 + 14, bannerY + 30);
+  } else {
+    ctx.font = "600 14px 'Inter', sans-serif";
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.textAlign = 'center';
+    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 10);
+  }
+}
+
+async function renderVsDuelCanvas(rows, a, b){
+  const canvas = document.getElementById('vsDuelCanvas');
+  if(!canvas) return;
+  const rowsA = rows.filter(r => r.player === a);
+  const rowsB = rows.filter(r => r.player === b);
+  const dataA = computeDuelStats(rowsA, a);
+  const dataB = computeDuelStats(rowsB, b);
+  const record = computeDuelHeadToHead(rows, a, b);
+
+  const photoA = PLAYER_IMAGE_OVERRIDES[a] ? await loadPlayerImage(PLAYER_IMAGE_OVERRIDES[a]) : null;
+  const photoB = PLAYER_IMAGE_OVERRIDES[b] ? await loadPlayerImage(PLAYER_IMAGE_OVERRIDES[b]) : null;
+
+  drawVsDuel(canvas, dataA, dataB, playerColor[a] || '#3DA9FC', playerColor[b] || '#FF6B35', photoA, photoB, record);
+
+  const filename = `vs-duel-${cssSafe(a)}-${cssSafe(b)}.png`;
+  const saveBtn = document.getElementById('vsDuelSaveBtn');
+  const shareBtn = document.getElementById('vsDuelShareBtn');
+  if(saveBtn) saveBtn.addEventListener('click', () => {
+    try{
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }catch(e){ alert('Ne mogu da snimim sliku.'); }
+  });
+  if(shareBtn) shareBtn.addEventListener('click', () => {
+    shareOrDownloadCanvas(canvas, filename, `${a} vs ${b}`, `⚔️ Duel: ${a} vs ${b}`);
+  });
 }
 
 // ================================================================
@@ -2878,6 +3146,49 @@ function hexToRgba(hex, a){
   return `rgba(${r},${g},${b},${a})`;
 }
 
+// ================================================================
+//  WEB SHARE API — deljenje slike direktno u Viber/WhatsApp/itd. preko
+//  sistemskog "Podeli" menija telefona, bez ručnog screenshot-a.
+//  Radi identično na iOS Safari-ju i Android Chrome-u jer je to
+//  ugrađena funkcija browsera, ne posebna aplikacija.
+//  Fallback: ako uređaj/browser ne podržava deljenje fajlova (npr.
+//  desktop), automatski skida sliku kao i pre.
+// ================================================================
+function canvasToBlob(canvas){
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+}
+
+async function shareOrDownloadCanvas(canvas, filename, shareTitle, shareText){
+  try{
+    const blob = await canvasToBlob(canvas);
+    if(!blob) throw new Error('Konverzija u sliku nije uspela');
+    const file = new File([blob], filename, { type: 'image/png' });
+
+    if(navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: shareTitle, text: shareText });
+      return;
+    }
+    // fallback: nema podrške za deljenje fajlova (najčešće desktop) - skini kao pre
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 4000);
+  }catch(e){
+    if(e && e.name === 'AbortError') return; // korisnik otkazao deljenje - nije greška
+    console.error('[Share] Nije uspelo:', e);
+    // poslednji fallback preko dataURL-a
+    try{
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }catch(e2){
+      alert('Ne mogu da sačuvam/podelim sliku na ovom uređaju.');
+    }
+  }
+}
+
 function drawCarBackground(ctx, W, H, color) {
   ctx.save();
   ctx.globalAlpha = 0.25;
@@ -3150,7 +3461,10 @@ async function renderCardsTab(rows){
   grid.innerHTML = ps.map(p => `
     <div class="rlcard-wrap">
       <canvas id="rlcard-${cssSafe(p)}"></canvas>
-      <button class="rlcard-save" data-player="${p}">💾 Sačuvaj sliku</button>
+      <div class="btn-row">
+        <button class="rlcard-save" data-player="${p}">💾 Sačuvaj sliku</button>
+        <button class="rlcard-share" data-player="${p}">📤 Podeli</button>
+      </div>
     </div>
   `).join('');
 
@@ -3183,6 +3497,15 @@ async function renderCardsTab(rows){
       }catch(e){
         alert('Ne mogu da snimim sliku - greška pri konverziji.');
       }
+    });
+  });
+
+  grid.querySelectorAll('.rlcard-share').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.player;
+      const canvas = document.getElementById('rlcard-' + cssSafe(p));
+      if(!canvas) return;
+      shareOrDownloadCanvas(canvas, `rl-karta-${cssSafe(p)}.png`, `${p} — RL karta`, `Trading karta za ${p} 🃏`);
     });
   });
 }
