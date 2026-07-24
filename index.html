@@ -389,8 +389,14 @@
 
   .vsduel-card{ margin-top:16px; }
   .vsduel-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
-  .vsduel-wrap canvas{ width:100%; max-width:640px; height:auto; border-radius:16px; box-shadow:0 14px 38px rgba(0,0,0,0.5); }
+  .vsduel-wrap canvas{ width:100%; max-width:100%; height:auto; border-radius:16px; box-shadow:0 14px 38px rgba(0,0,0,0.5); }
   .vsduel-hint{ color:var(--text-muted); font-size:12px; text-align:center; }
+
+  @media (min-width: 900px) {
+    .vsduel-wrap canvas {
+      max-width: 750px;
+    }
+  }
 
   @media (max-width:900px){
     .grid, .grid3{ grid-template-columns:1fr; }
@@ -2554,7 +2560,7 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   } else {
     ctx.fillStyle = hexToRgba(color, 0.35);
     ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    ctx.font = "700 " + Math.round(r*0.7) + "px 'Rajdhani', sans-serif";
+    ctx.font = "700 " + Math.round(r*0.8) + "px 'Rajdhani', sans-serif";
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -2563,13 +2569,13 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   }
   ctx.restore();
   ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx,cy,r+5,0,Math.PI*2);
-  ctx.lineWidth = 2; ctx.strokeStyle = hexToRgba(color,0.9); ctx.stroke();
+  ctx.lineWidth = 5; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx,cy,r+6,0,Math.PI*2);
+  ctx.lineWidth = 3; ctx.strokeStyle = hexToRgba(color,0.9); ctx.stroke();
 }
 
 function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record){
-  const W = 1000, H = 580, scaleF = 2;
+  const W = 1200, H = 720, scaleF = 2;
   canvas.width = W*scaleF; canvas.height = H*scaleF;
   const ctx = canvas.getContext('2d');
   ctx.scale(scaleF, scaleF);
@@ -2580,38 +2586,42 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillStyle = '#05070B';
   ctx.fillRect(0,0,W,H);
 
-  // dijagonalni split pozadine - leva/desna polovina u boji igrača
-  const splitTop = W*0.53, splitBottom = W*0.47;
+  // Vertikalna podela
+  const splitX = W / 2;
+  
+  // Leva polovina (igrač A)
   ctx.save();
   ctx.beginPath();
-  ctx.moveTo(0,0); ctx.lineTo(splitTop,0); ctx.lineTo(splitBottom,H); ctx.lineTo(0,H); ctx.closePath();
+  ctx.rect(0, 0, splitX, H);
   ctx.clip();
-  const gA = ctx.createLinearGradient(0,0,W*0.6,H);
-  gA.addColorStop(0, hexToRgba(colorA,0.95));
-  gA.addColorStop(1, '#0B0E14');
+  const gA = ctx.createLinearGradient(0, 0, splitX, 0);
+  gA.addColorStop(0, hexToRgba(colorA, 0.85));
+  gA.addColorStop(1, hexToRgba(colorA, 0.65));
   ctx.fillStyle = gA;
-  ctx.fillRect(0,0,W,H);
+  ctx.fillRect(0, 0, splitX, H);
   ctx.restore();
 
+  // Desna polovina (igrač B)
   ctx.save();
   ctx.beginPath();
-  ctx.moveTo(splitTop,0); ctx.lineTo(W,0); ctx.lineTo(W,H); ctx.lineTo(splitBottom,H); ctx.closePath();
+  ctx.rect(splitX, 0, W - splitX, H);
   ctx.clip();
-  const gB = ctx.createLinearGradient(W,0,W*0.4,H);
-  gB.addColorStop(0, hexToRgba(colorB,0.95));
-  gB.addColorStop(1, '#0B0E14');
+  const gB = ctx.createLinearGradient(splitX, 0, W, 0);
+  gB.addColorStop(0, hexToRgba(colorB, 0.65));
+  gB.addColorStop(1, hexToRgba(colorB, 0.85));
   ctx.fillStyle = gB;
-  ctx.fillRect(0,0,W,H);
+  ctx.fillRect(splitX, 0, W - splitX, H);
   ctx.restore();
 
-  // sjaj na spoju
+  // Bela linija na spoju (vertikalna)
   ctx.save();
   ctx.strokeStyle = 'rgba(255,255,255,0.8)';
   ctx.lineWidth = 3;
   ctx.shadowColor = 'rgba(255,255,255,0.8)';
   ctx.shadowBlur = 20;
   ctx.beginPath();
-  ctx.moveTo(splitTop,0); ctx.lineTo(splitBottom,H);
+  ctx.moveTo(splitX, 0);
+  ctx.lineTo(splitX, H);
   ctx.stroke();
   ctx.restore();
 
@@ -2622,38 +2632,41 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  ctx.font = "700 15px 'Rajdhani', sans-serif";
+  ctx.font = "700 18px 'Rajdhani', sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.fillText('D I R E K T A N   D U E L', W/2, 30);
+  ctx.fillText('D I R E K T A N   D U E L', W/2, 35);
 
-  const photoY = 130, photoR = 60;
+  const photoY = 150, photoR = 80;
   const cxA = W*0.22, cxB = W*0.78;
   drawDuelPortrait(ctx, cxA, photoY, photoR, photoA, dataA.player, colorA);
   drawDuelPortrait(ctx, cxB, photoY, photoR, photoB, dataB.player, colorB);
 
+  // VS logo
   ctx.save();
   ctx.translate(W/2, photoY);
   ctx.rotate(Math.PI/4);
-  roundRectPath(ctx, -34,-34,68,68,12);
+  roundRectPath(ctx, -42,-42,84,84,14);
   ctx.fillStyle = '#0B0E14';
   ctx.fill();
   ctx.lineWidth = 3;
   ctx.strokeStyle = '#fff';
   ctx.stroke();
   ctx.restore();
-  ctx.font = "700 26px 'Rajdhani', sans-serif";
+  ctx.font = "700 34px 'Rajdhani', sans-serif";
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('VS', W/2, photoY+1);
   ctx.textBaseline = 'alphabetic';
 
-  ctx.font = "700 32px 'Rajdhani', sans-serif";
+  // Imena igrača
+  ctx.font = "700 38px 'Rajdhani', sans-serif";
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
-  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 42);
-  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 42);
+  ctx.fillText(dataA.player.toUpperCase(), cxA, photoY + photoR + 48);
+  ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 48);
 
+  // Statistike
   const stats = [
     { key:'winPct', label:'WIN %', fmt:v=>Math.round(v)+'%' },
     { key:'goalsPm', label:'GOL/MEČ', fmt:v=>v.toFixed(2) },
@@ -2661,17 +2674,17 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     { key:'savesPm', label:'ODB/MEČ', fmt:v=>v.toFixed(2) },
     { key:'avgBoost', label:'BOOST', fmt:v=>Math.round(v) },
   ];
-  const startY = 250, rowH = 46, barMax = 250, barH = 14;
+  const startY = 290, rowH = 54, barMax = 300, barH = 18;
   stats.forEach((s, i) => {
     const y = startY + i*rowH;
     const va = dataA[s.key] || 0, vb = dataB[s.key] || 0;
     const maxV = Math.max(va, vb, 0.0001);
     const wa = (va/maxV) * barMax, wb = (vb/maxV) * barMax;
 
-    ctx.font = "700 12px 'Inter', sans-serif";
+    ctx.font = "700 14px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.65)';
     ctx.textAlign = 'center';
-    ctx.fillText(s.label, W/2, y - 8);
+    ctx.fillText(s.label, W/2, y - 10);
 
     ctx.fillStyle = hexToRgba(colorA, 0.85);
     roundRectPath(ctx, W/2 - wa, y, wa, barH, 6);
@@ -2680,40 +2693,40 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     roundRectPath(ctx, W/2, y, wb, barH, 6);
     ctx.fill();
 
-    ctx.font = "700 15px 'JetBrains Mono', monospace";
+    ctx.font = "700 17px 'JetBrains Mono', monospace";
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'right';
-    ctx.fillText(s.fmt(va), W/2 - wa - 10, y + barH - 2);
+    ctx.fillText(s.fmt(va), W/2 - wa - 12, y + barH - 2);
     ctx.textAlign = 'left';
-    ctx.fillText(s.fmt(vb), W/2 + wb + 10, y + barH - 2);
+    ctx.fillText(s.fmt(vb), W/2 + wb + 12, y + barH - 2);
   });
 
-  const bannerY = H - 55;
+  const bannerY = H - 65;
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60,bannerY-22); ctx.lineTo(W-60,bannerY-22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(60,bannerY-26); ctx.lineTo(W-60,bannerY-26); ctx.stroke();
 
   if(record.against.total > 0){
-    ctx.font = "700 13px 'Inter', sans-serif";
+    ctx.font = "700 15px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.textAlign = 'center';
-    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 4);
+    ctx.fillText('DIREKTNI DUELI (' + record.against.total + ' meč' + (record.against.total===1?'':'a') + ')', W/2, bannerY - 6);
 
-    ctx.font = "700 34px 'Rajdhani', sans-serif";
+    ctx.font = "700 40px 'Rajdhani', sans-serif";
     ctx.textAlign = 'right';
     ctx.fillStyle = colorA;
-    ctx.fillText(String(record.against.aWins), W/2 - 14, bannerY + 30);
+    ctx.fillText(String(record.against.aWins), W/2 - 18, bannerY + 36);
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('—', W/2, bannerY + 30);
+    ctx.fillText('—', W/2, bannerY + 36);
     ctx.textAlign = 'left';
     ctx.fillStyle = colorB;
-    ctx.fillText(String(record.against.bWins), W/2 + 14, bannerY + 30);
+    ctx.fillText(String(record.against.bWins), W/2 + 18, bannerY + 36);
   } else {
-    ctx.font = "600 14px 'Inter', sans-serif";
+    ctx.font = "600 16px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.55)';
     ctx.textAlign = 'center';
-    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 10);
+    ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 14);
   }
 }
 
@@ -4190,4 +4203,3 @@ load();
 </script>
 </body>
 </html>
-
