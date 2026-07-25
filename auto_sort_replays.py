@@ -35,9 +35,13 @@ def normalize(name):
 
 
 # Vasa 4 splitscreen imena (normalizovana)
-OFFLINE_NAMES = {normalize(n) for n in ["ExMirage", "ExMirage(1)", "ExMirage(2)", "ExMirage(3)"]}
-# Tvoj online ranked duo
-ONLINE_NAMES = {normalize(n) for n in ["ExMirage", "Rarely_Sober"]}
+OFFLINE_NAMES = {normalize(n) for n in [
+    "ExMirage", "ExMirage(1)", "ExMirage(2)", "ExMirage(3)",
+    "Zbunjena Inila", "Zbunjena Inila(1)", "Zbunjena Inila(2)", "Zbunjena Inila(3)",
+]}
+# Svi poznati igraci - ako se ITKO od njih pojavi u mecu koji nije 100% offline
+# sastav, tretiramo ga kao online (bilo solo, bilo sa poznatim saigracem).
+KNOWN_NAMES = OFFLINE_NAMES | {normalize(n) for n in ["Rarely_Sober"]}
 
 
 def api_get(path, params=None, url=None):
@@ -112,7 +116,7 @@ def main():
 
         if names.issubset(OFFLINE_NAMES) and len(names) >= 2:
             target = OFFLINE_GROUP
-        elif ONLINE_NAMES.issubset(names):
+        elif names & KNOWN_NAMES:
             target = ONLINE_GROUP
         else:
             continue  # ne prepoznajemo ovaj obrazac, ostavljamo na miru
