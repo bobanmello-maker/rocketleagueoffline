@@ -198,6 +198,10 @@
   }
   /* ===== BOOST BAR FILL - SUPILNIJI ===== */
 .meter-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--amber), #f5a623);
+  box-shadow: 0 0 8px rgba(245, 166, 35, 0.5);
   animation: boostMeterFill 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   opacity: 0;
   animation-fill-mode: forwards;
@@ -1886,7 +1890,7 @@ function renderBoostMeters(rows){
     row.className = 'meter-row';
     row.innerHTML = `
       <div class="meter-name">${p}</div>
-      <div class="meter-track"><div class="meter-fill" style="width:${Math.min(value,100)}%"></div></div>
+      <div class="meter-track"><div class="meter-fill" style="--boost-width:${Math.min(value,100)}%"></div></div>
       <div class="meter-val mono">${value.toFixed(0)}</div>
     `;
     wrap.appendChild(row);
