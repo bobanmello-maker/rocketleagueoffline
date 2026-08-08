@@ -3,7 +3,7 @@ name: Update RL stats
 on:
   workflow_dispatch: {}        # dugme "Run workflow" na GitHub-u
   schedule:
-    - cron: "0 * * * *"      # svakih 60 minuta
+    - cron: "0 */2 * * *"      # svakih 120 minuta
 
 permissions:
   contents: write
