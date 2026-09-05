@@ -37,6 +37,7 @@ def mode_for_group(group_id):
 # Ballchasing rate limit za "regular" (non-patreon) nalog: 2 poziva/sekundi.
 # Stavljamo malo vece kasnjenje da budemo sigurni da ne udarimo u 429.
 SLEEP_BETWEEN_CALLS = 0.6
+MAX_RETRIES = 5
 
 
 def normalize(name):
@@ -65,17 +66,45 @@ if not GROUPS:
 HEADERS = {"Authorization": TOKEN}
 
 
-def api_get(path, params=None):
-    url = f"{API_BASE}{path}"
-    while True:
-        r = requests.get(url, headers=HEADERS, params=params)
+def api_get(path, params=None, url=None):
+    """GET zahtev sa automatskim retry-em na privremene mrezne greske
+    (Connection reset, timeout), na 429 (rate limit) i na 5xx greske sa
+    ballchasing strane - umesto da ceo skript padne na prvom hiccup-u.
+    Posle MAX_RETRIES neuspesnih pokusaja, ipak digne gresku dalje (poziv
+    ce se preskociti gore u main(), ne rusi ceo skript)."""
+    target = url or f"{API_BASE}{path}"
+    last_exc = None
+
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            r = requests.get(target, headers=HEADERS, params=params if not url else None, timeout=30)
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+            last_exc = e
+            wait = min(5 * attempt, 30)
+            print(f"    Mrezna greska ({type(e).__name__}), pokusaj {attempt}/{MAX_RETRIES}, cekam {wait}s...")
+            time.sleep(wait)
+            continue
+
         if r.status_code == 429:
-            print("Rate limited, cekam 5s...")
+            print(f"    Rate limited, pokusaj {attempt}/{MAX_RETRIES}, cekam 5s...")
             time.sleep(5)
             continue
+
+        if r.status_code >= 500:
+            last_exc = requests.exceptions.HTTPError(f"{r.status_code} server error")
+            wait = min(5 * attempt, 30)
+            print(f"    Server greska ({r.status_code}), pokusaj {attempt}/{MAX_RETRIES}, cekam {wait}s...")
+            time.sleep(wait)
+            continue
+
         r.raise_for_status()
         time.sleep(SLEEP_BETWEEN_CALLS)
         return r.json()
+
+    # Iscrpljeni pokusaji - digni poslednju gresku da je pozivalac uhvati i preskoci ovaj item
+    if last_exc:
+        raise last_exc
+    raise RuntimeError("Nepoznata greska posle svih pokusaja.")
 
 
 def list_replay_ids(group_id):
@@ -85,9 +114,7 @@ def list_replay_ids(group_id):
     next_url = None
     while True:
         if next_url:
-            r = requests.get(next_url, headers=HEADERS)
-            time.sleep(SLEEP_BETWEEN_CALLS)
-            data = r.json()
+            data = api_get(None, url=next_url)
         else:
             data = api_get("/replays", params=params)
         for replay in data.get("list", []):
@@ -307,13 +334,14 @@ def main():
     seen_ids = set()
     new_count = 0
     cached_count = 0
+    skipped_count = 0
 
     for group_id in GROUPS:
         print(f"Grupa: {group_id}")
         try:
             replay_ids = list_replay_ids(group_id)
-        except requests.HTTPError as e:
-            print(f"  Ne mogu da ucitam grupu {group_id}: {e}", file=sys.stderr)
+        except requests.exceptions.RequestException as e:
+            print(f"  Ne mogu da ucitam grupu {group_id} (probace se sledeci put): {e}", file=sys.stderr)
             continue
 
         print(f"  Nadjeno {len(replay_ids)} replay-a")
@@ -330,8 +358,11 @@ def main():
             else:
                 try:
                     replay = api_get(f"/replays/{rid}")
-                except requests.HTTPError as e:
-                    print(f"  Preskacem {rid}: {e}", file=sys.stderr)
+                except requests.exceptions.RequestException as e:
+                    # Ne rusi ceo skript zbog jednog replay-a - preskacemo ga,
+                    # probace se ponovo sledeci put (nije u kesu pa ce se opet pokusati).
+                    print(f"  Preskacem {rid} (probace se sledeci put): {e}", file=sys.stderr)
+                    skipped_count += 1
                     continue
                 if replay.get("status") not in (None, "ok"):
                     print(f"  Preskacem {rid}: status={replay.get('status')}", file=sys.stderr)
@@ -360,7 +391,7 @@ def main():
     save_cache(cache)
 
     print(f"\nSacuvano {len(all_rows)} redova (igrac x mec) u {OUTPUT_FILE}")
-    print(f"({new_count} novih replay-a fetch-ovano, {cached_count} uzeto iz keša)")
+    print(f"({new_count} novih replay-a fetch-ovano, {cached_count} uzeto iz keša, {skipped_count} preskoceno zbog greske - probace se sledeci put)")
 
 
 if __name__ == "__main__":
