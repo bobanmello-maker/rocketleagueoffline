@@ -868,7 +868,12 @@ header.hero::after {
             <tbody id="chemBody"></tbody>
           </table>
         </div>
-        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč.</div>
+        <div style="display:flex; align-items:center; gap:12px; justify-content:center; margin-top:14px;">
+          <button id="chemPrevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
+          <span id="chemPageInfo" style="color:var(--text-muted); font-size:13px;">Strana 1 od 1</span>
+          <button id="chemNextPageBtn" class="chip" style="background:var(--surface-2);">Sledeća ▶</button>
+        </div>
+        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč. Klikni na red za detaljnu analizu te kombinacije.</div>
       </div>
     </div>
 
@@ -1600,8 +1605,15 @@ async function load(){
       document.querySelectorAll('.chem-mode-chip').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       chemMode = btn.dataset.chemmode;
+      chemCurrentPage = 1;
       render();
     });
+  });
+  $('#chemPrevPageBtn').addEventListener('click', () => {
+    if(chemCurrentPage > 1){ chemCurrentPage--; render(); }
+  });
+  $('#chemNextPageBtn').addEventListener('click', () => {
+    chemCurrentPage++; render();
   });
   $('#resetBtn').addEventListener('click', () => {
     $('#dateFrom').value = ''; $('#dateTo').value = '';
@@ -2182,8 +2194,13 @@ function renderDemoTrend(rows){
 // ================================================================
 
 let chemMode = '2v2';
+let chemCurrentPage = 1;
+const CHEM_PAGE_SIZE = 25;
+let lastChemRows = [];       // filtrirani redovi na osnovu kojih je Chemistry racunat
+let lastChemGroups = {};     // { combKey: { total, wins, matches:[{replay_id,date,map,win,team_goals,opponent_goals}] } }
 
 function renderChemistry(rows){
+  lastChemRows = rows;
   const seen = new Set();
   const groups2 = {};
   const groups3 = {};
@@ -2200,19 +2217,109 @@ function renderChemistry(rows){
     else return;
 
     const combKey = [...teamMembers].sort().join(' & ');
-    if(!target[combKey]) target[combKey] = { total:0, wins:0 };
+    if(!target[combKey]) target[combKey] = { total:0, wins:0, matches:[] };
     target[combKey].total++;
     if(r.win) target[combKey].wins++;
+    target[combKey].matches.push({
+      replay_id: r.replay_id, date: r.date, map: r.map,
+      win: r.win, team_goals: r.team_goals, opponent_goals: r.opponent_goals,
+    });
   });
 
   const active = chemMode === '3v3' ? groups3 : groups2;
+  lastChemGroups = active;
   $('#chemColLabel').textContent = chemMode === '3v3' ? 'Trojka' : 'Dvojka';
 
   const entries = Object.entries(active).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
-  $('#chemBody').innerHTML = entries.length ? entries.map(([comb, d]) => `
-    <tr><td>${comb}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
-    <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
+
+  const totalPages = Math.ceil(entries.length / CHEM_PAGE_SIZE) || 1;
+  if(chemCurrentPage > totalPages) chemCurrentPage = totalPages;
+  if(chemCurrentPage < 1) chemCurrentPage = 1;
+  const start = (chemCurrentPage - 1) * CHEM_PAGE_SIZE;
+  const pageEntries = entries.slice(start, start + CHEM_PAGE_SIZE);
+
+  $('#chemBody').innerHTML = pageEntries.length ? pageEntries.map(([comb, d]) => `
+    <tr class="chem-row" data-comb="${comb.replace(/"/g,'&quot;')}" style="cursor:pointer;">
+      <td>${comb}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
+      <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
   `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
+
+  $('#chemPageInfo').textContent = `Strana ${chemCurrentPage} od ${totalPages}`;
+  $('#chemPrevPageBtn').disabled = chemCurrentPage <= 1;
+  $('#chemNextPageBtn').disabled = chemCurrentPage >= totalPages;
+
+  document.querySelectorAll('#chemBody .chem-row').forEach(tr => {
+    tr.addEventListener('click', () => openTeamComboModal(tr.dataset.comb));
+  });
+}
+
+function openTeamComboModal(combKey){
+  const data = lastChemGroups[combKey];
+  if(!data) return;
+  const members = combKey.split(' & ');
+
+  const matchesSorted = data.matches.slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const winPct = ((data.wins/data.total)*100).toFixed(0);
+
+  const catBlocks = ['core','boost','movement','positioning','demo'];
+  const catLabels = { core:'Core', boost:'Boost', movement:'Kretanje', positioning:'Pozicioniranje', demo:'Demo' };
+  const catKeys = {
+    core: ['goals','assists','saves','shots','score','shooting_percentage'],
+    boost: ['bpm','avg_amount','amount_collected','amount_stolen','percent_zero_boost','percent_full_boost'],
+    movement: ['avg_speed','percent_supersonic_speed','percent_ground','percent_low_air','count_powerslide'],
+    positioning: ['percent_defensive_third','percent_offensive_third','percent_behind_ball','avg_distance_to_ball','avg_distance_to_mates'],
+    demo: ['inflicted','taken'],
+  };
+
+  const memberBlocksHtml = members.map(name => {
+    const prows = lastChemRows.filter(r => data.matches.some(m => m.replay_id === r.replay_id) && r.player === name);
+    const statHtml = catBlocks.map(cat => {
+      const rowsHtml = catKeys[cat].map(k => {
+        const v = avg(prows.map(r => getPath(r, `${cat}.${k}`) || 0));
+        return `<div class="stat-line"><span>${k}</span><span>${v.toFixed(2)}</span></div>`;
+      }).join('');
+      return `<div class="stat-block"><h4>${catLabels[cat]}</h4>${rowsHtml}</div>`;
+    }).join('');
+    return `
+      <div style="margin-bottom:18px;">
+        <h4 style="color:${playerColor[name]||'#fff'}; font-family:'Rajdhani',sans-serif; font-size:18px; margin-bottom:8px;">${name}</h4>
+        ${statHtml}
+      </div>
+    `;
+  }).join('');
+
+  const matchRowsHtml = matchesSorted.map(m => `
+    <tr class="chem-match-row" data-replay="${m.replay_id}" style="cursor:pointer;">
+      <td class="mono">${fmtDate(m.date)}</td><td>${m.map||''}</td>
+      <td><span class="pill ${m.win?'win':'loss'}">${m.team_goals}–${m.opponent_goals}</span></td>
+    </tr>
+  `).join('');
+
+  $('#modalContent').innerHTML = `
+    <button class="modal-close" id="modalCloseBtn">&times;</button>
+    <h3>${members.map(n => `<span style="color:${playerColor[n]||'#fff'}">${n}</span>`).join(' & ')}</h3>
+    <div class="sub">${data.total} mečeva zajedno &middot; ${data.wins} pobeda &middot; <b>${winPct}% win rate</b></div>
+
+    <div class="stat-block"><h4>Statistika po igraču (prosek preko svih zajedničkih mečeva)</h4></div>
+    ${memberBlocksHtml}
+
+    <div class="stat-block"><h4>Svi zajednički mečevi</h4>
+      <div class="table-wrap">
+        <table style="width:100%;">
+          <thead><tr><th>Datum</th><th>Mapa</th><th>Rezultat</th></tr></thead>
+          <tbody>${matchRowsHtml}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  $('#modalCloseBtn').addEventListener('click', closeModal);
+  document.querySelectorAll('.chem-match-row').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const r = lastChemRows.find(row => row.replay_id === tr.dataset.replay && members.includes(row.player));
+      if(r) openModal(r);
+    });
+  });
+  $('#modalBackdrop').classList.add('open');
 }
 
 // ================================================================
