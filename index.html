@@ -1174,6 +1174,39 @@ window.addEventListener('beforeunload', () => {
 });
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
+// Prevodi naziva statistika (koriste se svuda gde se sirovi kljucevi iz
+// core/boost/movement/positioning/demo prikazuju korisniku).
+const STAT_LABELS = {
+  goals: 'Golovi',
+  assists: 'Asistencije',
+  saves: 'Odbrane',
+  shots: 'Šutevi',
+  score: 'Poeni',
+  shooting_percentage: 'Preciznost šuta (%)',
+  bpm: 'Boost u minuti',
+  avg_amount: 'Prosečan boost',
+  amount_collected: 'Sakupljeno boosta',
+  amount_stolen: 'Ukradeno boosta',
+  count_collected_big: 'Veliki boost pokupljen',
+  count_collected_small: 'Mali boost pokupljen',
+  percent_zero_boost: 'Vreme bez boosta (%)',
+  percent_full_boost: 'Vreme sa punim boostom (%)',
+  avg_speed: 'Prosečna brzina',
+  percent_supersonic_speed: 'Supersonična brzina (%)',
+  percent_ground: 'Na zemlji (%)',
+  percent_low_air: 'Nizak let (%)',
+  percent_high_air: 'Visok let (%)',
+  count_powerslide: 'Broj powerslide-ova',
+  percent_defensive_third: 'U odbrani (%)',
+  percent_offensive_third: 'U napadu (%)',
+  percent_behind_ball: 'Iza lopte (%)',
+  avg_distance_to_ball: 'Prosečna udaljenost od lopte',
+  avg_distance_to_mates: 'Prosečna udaljenost od saigrača',
+  inflicted: 'Zadate demolicije',
+  taken: 'Primljene demolicije',
+};
+function statLabel(key){ return STAT_LABELS[key] || key; }
+
 const PLAYER_COLOR_OVERRIDES = {
   'Toške': '#3DA9FC',
   'Cane':  '#E00306',
@@ -2262,7 +2295,7 @@ function openTeamComboModal(combKey){
   const winPct = ((data.wins/data.total)*100).toFixed(0);
 
   const catBlocks = ['core','boost','movement','positioning','demo'];
-  const catLabels = { core:'Core', boost:'Boost', movement:'Kretanje', positioning:'Pozicioniranje', demo:'Demo' };
+  const catLabels = { core:'Osnovno', boost:'Boost', movement:'Kretanje', positioning:'Pozicioniranje', demo:'Demo' };
   const catKeys = {
     core: ['goals','assists','saves','shots','score','shooting_percentage'],
     boost: ['bpm','avg_amount','amount_collected','amount_stolen','percent_zero_boost','percent_full_boost'],
@@ -2273,10 +2306,20 @@ function openTeamComboModal(combKey){
 
   const memberBlocksHtml = members.map(name => {
     const prows = lastChemRows.filter(r => data.matches.some(m => m.replay_id === r.replay_id) && r.player === name);
+
+    if(!prows.length){
+      return `
+        <div style="margin-bottom:18px;">
+          <h4 style="color:${playerColor[name]||'#fff'}; font-family:'Rajdhani',sans-serif; font-size:18px; margin-bottom:8px;">${name}</h4>
+          <div class="subtle-note" style="margin-top:0;">Nemamo detaljnu statistiku za ovog igrača — nije neko od nas četvoro, pa se njegovi podaci ne prate pojedinačno (samo se zna da je bio saigrač u ovim mečevima).</div>
+        </div>
+      `;
+    }
+
     const statHtml = catBlocks.map(cat => {
       const rowsHtml = catKeys[cat].map(k => {
         const v = avg(prows.map(r => getPath(r, `${cat}.${k}`) || 0));
-        return `<div class="stat-line"><span>${k}</span><span>${v.toFixed(2)}</span></div>`;
+        return `<div class="stat-line"><span>${statLabel(k)}</span><span>${v.toFixed(2)}</span></div>`;
       }).join('');
       return `<div class="stat-block"><h4>${catLabels[cat]}</h4>${rowsHtml}</div>`;
     }).join('');
@@ -3117,20 +3160,20 @@ function openModal(r){
     <div class="sub">${fmtDate(r.date)} &middot; ${r.map} &middot; ${r.playlist} &middot;
       <span class="pill ${r.win?'win':'loss'}">${r.team_goals}–${r.opponent_goals}</span></div>
 
-    <div class="stat-block"><h4>Core</h4>
-      ${['goals','assists','saves','shots','score','shooting_percentage'].map(k=>`<div class="stat-line"><span>${k}</span><span>${c[k]}</span></div>`).join('')}
+    <div class="stat-block"><h4>Osnovno</h4>
+      ${['goals','assists','saves','shots','score','shooting_percentage'].map(k=>`<div class="stat-line"><span>${statLabel(k)}</span><span>${c[k]}</span></div>`).join('')}
     </div>
     <div class="stat-block"><h4>Boost</h4>
-      ${['bpm','avg_amount','amount_collected','amount_stolen','count_collected_big','count_collected_small','percent_zero_boost','percent_full_boost'].map(k=>`<div class="stat-line"><span>${k}</span><span>${b[k]}</span></div>`).join('')}
+      ${['bpm','avg_amount','amount_collected','amount_stolen','count_collected_big','count_collected_small','percent_zero_boost','percent_full_boost'].map(k=>`<div class="stat-line"><span>${statLabel(k)}</span><span>${b[k]}</span></div>`).join('')}
     </div>
     <div class="stat-block"><h4>Kretanje</h4>
-      ${['avg_speed','percent_supersonic_speed','percent_ground','percent_low_air','percent_high_air','count_powerslide'].map(k=>`<div class="stat-line"><span>${k}</span><span>${m[k]}</span></div>`).join('')}
+      ${['avg_speed','percent_supersonic_speed','percent_ground','percent_low_air','percent_high_air','count_powerslide'].map(k=>`<div class="stat-line"><span>${statLabel(k)}</span><span>${m[k]}</span></div>`).join('')}
     </div>
     <div class="stat-block"><h4>Pozicioniranje</h4>
-      ${['percent_defensive_third','percent_offensive_third','percent_behind_ball','avg_distance_to_ball','avg_distance_to_mates'].map(k=>`<div class="stat-line"><span>${k}</span><span>${p[k]}</span></div>`).join('')}
+      ${['percent_defensive_third','percent_offensive_third','percent_behind_ball','avg_distance_to_ball','avg_distance_to_mates'].map(k=>`<div class="stat-line"><span>${statLabel(k)}</span><span>${p[k]}</span></div>`).join('')}
     </div>
     <div class="stat-block"><h4>Demo</h4>
-      ${['inflicted','taken'].map(k=>`<div class="stat-line"><span>${k}</span><span>${d[k]}</span></div>`).join('')}
+      ${['inflicted','taken'].map(k=>`<div class="stat-line"><span>${statLabel(k)}</span><span>${d[k]}</span></div>`).join('')}
     </div>
   `;
   $('#modalCloseBtn').addEventListener('click', closeModal);
