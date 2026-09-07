@@ -222,7 +222,10 @@
   .meter-val{ width:48px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); }
 
   .table-wrap{ overflow-x:auto; }
-  .chem-chart-wrap{ position:relative; width:100%; }
+  .chem-combo-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
+  .chem-combo-card{ cursor:pointer; }
+  .chem-combo-card .bar-track{ height:6px; background:var(--boost-track); border-radius:3px; overflow:hidden; margin-top:8px; }
+  .chem-combo-card .bar-fill{ height:100%; border-radius:3px; width:0; transition:width .6s cubic-bezier(0.16,1,0.3,1); }
   .combo-cat-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:6px; }
   .combo-cat-block{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
   .combo-cat-block h4{ margin:0 0 8px; font-size:13px; color:var(--text-muted); font-weight:700; letter-spacing:0.02em; }
@@ -929,7 +932,7 @@ header.hero::after {
             <button class="chip chem-mode-chip" data-chemmode="3v3">3v3</button>
           </span>
         </h2>
-        <div class="chem-chart-wrap" id="chemChartWrap"><canvas id="chemChart"></canvas></div>
+        <div class="chem-combo-grid" id="chemComboGrid"></div>
         <div id="chemEmpty" class="empty" style="display:none;"></div>
         <div style="display:flex; align-items:center; gap:12px; justify-content:center; margin-top:14px;">
           <button id="chemPrevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
@@ -2397,7 +2400,8 @@ function renderChemistry(rows){
   const active = chemMode === '3v3' ? groups3 : groups2;
   lastChemGroups = active;
 
-  const entries = Object.entries(active).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
+  // Sortirano po broju odigranih mečeva zajedno (najviše prvo).
+  const entries = Object.entries(active).sort((a,b) => b[1].total - a[1].total);
 
   const totalPages = Math.ceil(entries.length / CHEM_PAGE_SIZE) || 1;
   if(chemCurrentPage > totalPages) chemCurrentPage = totalPages;
@@ -2409,53 +2413,42 @@ function renderChemistry(rows){
   $('#chemPrevPageBtn').disabled = chemCurrentPage <= 1;
   $('#chemNextPageBtn').disabled = chemCurrentPage >= totalPages;
 
-  destroyChart('chemChart');
   const emptyEl = $('#chemEmpty');
-  const canvasEl = $('#chemChart');
+  const gridEl = $('#chemComboGrid');
 
   if(!pageEntries.length){
     emptyEl.style.display = 'block';
     emptyEl.textContent = `Nema ${chemMode} mečeva u izabranom periodu`;
-    canvasEl.style.display = 'none';
+    gridEl.innerHTML = '';
     return;
   }
   emptyEl.style.display = 'none';
-  canvasEl.style.display = 'block';
-  $('#chemChartWrap').style.height = Math.max(220, pageEntries.length * 34) + 'px';
 
-  const labels = pageEntries.map(([comb]) => comb);
-  const pcts = pageEntries.map(([,d]) => (d.wins/d.total)*100);
-  const barColors = pageEntries.map(([,d]) => blendColors(d.members.map(m => playerColor[m] || '#9CA3AF')));
+  gridEl.innerHTML = pageEntries.map(([comb, d]) => {
+    const losses = d.total - d.wins;
+    const pct = Math.round((d.wins/d.total)*100);
+    const borderColor = blendColors(d.members.map(m => playerColor[m] || '#9CA3AF'));
+    const namesHtml = d.members.map(m => `<span style="color:${playerColor[m]||'#9CA3AF'}">${m}</span>`).join(' &amp; ');
+    return `
+      <div class="prec-card chem-combo-card" style="border-left-color:${borderColor}" data-comb="${comb.replace(/"/g,'&quot;')}">
+        <div class="name">${namesHtml}</div>
+        <div class="row">
+          <span class="wl"><span class="w">${d.wins}P</span> – <span class="l">${losses}I</span></span>
+          <span class="pct">${pct}% win</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-pct="${pct}" style="background:${borderColor}"></div></div>
+        <div class="matches">${d.total} mečeva zajedno</div>
+      </div>
+    `;
+  }).join('');
 
-  charts.chemChart = new Chart(canvasEl, {
-    type: 'bar',
-    data: { labels, datasets: [{ label:'Win %', data: pcts, backgroundColor: barColors, borderRadius:5, maxBarThickness:26 }] },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 650, easing: 'easeOutQuart' },
-      plugins: {
-        legend: { display:false },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const d = pageEntries[ctx.dataIndex][1];
-              return `${d.wins}/${d.total} pobeda (${ctx.parsed.x.toFixed(0)}%)`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: { min:0, max:100, ticks:{ color:'#8A93A3', callback:v=>v+'%' }, grid:{ color:'rgba(255,255,255,0.05)' } },
-        y: { ticks:{ color:'#E8ECF1', font:{ size:12 } }, grid:{ display:false } }
-      },
-      onClick: (evt, elements) => {
-        if(!elements.length) return;
-        openTeamComboModal(pageEntries[elements[0].index][0]);
-      },
-      onHover: (evt, elements) => { evt.native.target.style.cursor = elements.length ? 'pointer' : 'default'; }
-    }
+  gridEl.querySelectorAll('.chem-combo-card').forEach(card => {
+    card.addEventListener('click', () => openTeamComboModal(card.dataset.comb));
+  });
+
+  // Animiraj popunjavanje bar-a posle rendera (umesto da odmah bude pun).
+  requestAnimationFrame(() => {
+    gridEl.querySelectorAll('.bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
   });
 }
 
