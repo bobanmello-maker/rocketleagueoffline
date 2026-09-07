@@ -223,7 +223,6 @@
 
   .table-wrap{ overflow-x:auto; }
   .chem-chart-wrap{ position:relative; width:100%; }
-  .combo-radar-wrap{ position:relative; width:100%; max-width:420px; height:280px; margin:10px auto 18px; }
   .combo-cat-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:6px; }
   .combo-cat-block{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
   .combo-cat-block h4{ margin:0 0 8px; font-size:13px; color:var(--text-muted); font-weight:700; letter-spacing:0.02em; }
@@ -2460,15 +2459,7 @@ function renderChemistry(rows){
   });
 }
 
-const COMBO_RADAR_METRICS = [
-  {key:'core.goals', label:'Golovi'},
-  {key:'core.assists', label:'Asistencije'},
-  {key:'core.saves', label:'Odbrane'},
-  {key:'core.shots', label:'Šutevi'},
-  {key:'boost.avg_amount', label:'Boost'},
-  {key:'positioning.percent_behind_ball', label:'Iza lopte %'},
-];
-const COMBO_CHART_KEYS = ['comboRadar','comboCat_core','comboCat_boost','comboCat_movement','comboCat_positioning','comboCat_demo'];
+const COMBO_CHART_KEYS = ['comboCat_core','comboCat_boost','comboCat_movement','comboCat_positioning','comboCat_demo'];
 
 function openTeamComboModal(combKey){
   const data = lastChemGroups[combKey];
@@ -2519,7 +2510,6 @@ function openTeamComboModal(combKey){
 
     ${withStats.length ? `
       <div class="stat-block"><h4>Poređenje po igraču (prosek preko svih zajedničkih mečeva)</h4></div>
-      <div class="combo-radar-wrap"><canvas id="comboRadarChart"></canvas></div>
       ${missingNote}
       <div class="combo-cat-grid">
         ${catBlocks.map(cat => `
@@ -2548,34 +2538,14 @@ function openTeamComboModal(combKey){
     });
   });
 
+  // Bitno: modal mora biti VIDLJIV (display:flex) PRE nego sto Chart.js
+  // izmeri canvas i nacrta grafikon - u suprotnom canvas ima 0x0 dimenzije
+  // u trenutku kreiranja i neki tipovi grafikona (npr. radar) ostanu prazni.
+  $('#modalBackdrop').classList.add('open');
+
   COMBO_CHART_KEYS.forEach(destroyChart);
 
   if(withStats.length){
-    const maxes = COMBO_RADAR_METRICS.map(m => Math.max(1, ...withStats.map(w => getPath(w.agg.stats, m.key) || 0)));
-    charts.comboRadar = new Chart($('#comboRadarChart'), {
-      type: 'radar',
-      data: {
-        labels: COMBO_RADAR_METRICS.map(m=>m.label),
-        datasets: withStats.map(w => ({
-          label: w.name,
-          data: COMBO_RADAR_METRICS.map((m,i) => (getPath(w.agg.stats, m.key) || 0) / maxes[i] * 100),
-          borderColor: w.color,
-          backgroundColor: w.color + '33',
-          pointBackgroundColor: w.color,
-        }))
-      },
-      options: {
-        responsive:true, maintainAspectRatio:false,
-        animation:{ duration:700, easing:'easeOutQuart' },
-        plugins:{ legend:{ labels:{ color:'#8A93A3' } } },
-        scales:{ r:{
-          angleLines:{ color:'rgba(255,255,255,0.08)' }, grid:{ color:'rgba(255,255,255,0.08)' },
-          pointLabels:{ color:'#E8ECF1', font:{ size:11 } }, ticks:{ display:false, backdropColor:'transparent' },
-          suggestedMin:0, suggestedMax:100
-        }}
-      }
-    });
-
     catBlocks.forEach(cat => {
       const keys = catKeys[cat];
       charts['comboCat_'+cat] = new Chart($('#comboCat_'+cat), {
@@ -2600,8 +2570,6 @@ function openTeamComboModal(combKey){
       });
     });
   }
-
-  $('#modalBackdrop').classList.add('open');
 }
 
 // ================================================================
