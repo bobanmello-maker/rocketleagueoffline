@@ -26,6 +26,12 @@ OFFLINE_GROUP = os.environ.get("BALLCHASING_OFFLINE_GROUP", "")
 OUTPUT_FILE = os.environ.get("OUTPUT_FILE", "data.json")
 CACHE_FILE = os.environ.get("CACHE_FILE", "replay_cache.json")
 
+# Verzija formata keša. Kad promenimo STA se izvlaci iz replay-a (npr. dodamo
+# novo polje kao teammate_stats), povecamo ovaj broj - stari kes (koji nema
+# to polje) se automatski ignorise i SVI replay-i se fetch-uju iznova, umesto
+# da zauvek ostanu "zaglavljeni" u starom formatu.
+CACHE_SCHEMA_VERSION = 2
+
 
 def mode_for_group(group_id):
     if group_id == ONLINE_GROUP:
@@ -271,6 +277,26 @@ def flatten_replay(replay):
         teammates = [pl.get("name", "?") for pl in team.get("players", [])]
         narrative = compute_match_narrative(goal_events, team_goals, opp_goals, color, overtime)
 
+        # Statistika SVIH igraca u timu (ne samo nase poznate cetvorke) za ovaj
+        # konkretan mec - koristi se SAMO u "Slaganje" tabu na sajtu da bi se
+        # prikazala prava statistika i za povremenog/gostujuceg saigraca, bez
+        # da taj igrac ikad dobije svoj sopstveni red u data.json (i time ne
+        # zavrsi u dostignucima/rekordima/ostatku sajta - i dalje se prati
+        # samo nasa cetvorka kao "pravi" igraci).
+        team_player_stats = {}
+        for pl in team.get("players", []):
+            pl_name = pl.get("name", "?")
+            pl_stats = pl.get("stats", {}) or {}
+            pl_core = extract_category(pl_stats, "core", CORE_FIELDS)
+            pl_core["mvp"] = bool(pl_core.get("mvp", False))
+            team_player_stats[pl_name] = {
+                "core": pl_core,
+                "boost": extract_category(pl_stats, "boost", BOOST_FIELDS),
+                "movement": extract_category(pl_stats, "movement", MOVEMENT_FIELDS),
+                "positioning": extract_category(pl_stats, "positioning", POSITIONING_FIELDS),
+                "demo": extract_category(pl_stats, "demo", DEMO_FIELDS),
+            }
+
         for p in team.get("players", []):
             player_name = p.get("name", "?")
             if normalize(player_name) not in KNOWN_PLAYERS:
@@ -304,26 +330,36 @@ def flatten_replay(replay):
                 "movement": extract_category(stats, "movement", MOVEMENT_FIELDS),
                 "positioning": extract_category(stats, "positioning", POSITIONING_FIELDS),
                 "demo": extract_category(stats, "demo", DEMO_FIELDS),
+                "teammate_stats": team_player_stats,
             })
     return rows
 
 
 def load_cache():
     """Ucita vec obradjene replay-e sa proslog pokretanja - da ne moramo
-    ponovo da ih fetch-ujemo (ustedjuje vreme i API pozive)."""
+    ponovo da ih fetch-ujemo (ustedjuje vreme i API pozive).
+    Ako je kes iz starije verzije skripte (drugaciji CACHE_SCHEMA_VERSION),
+    ignorise se u potpunosti - svi replay-i ce se fetch-ovati iznova jednom,
+    da bi dobili nova polja (npr. teammate_stats)."""
     if not os.path.exists(CACHE_FILE):
         return {}
     try:
         with open(CACHE_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            raw = json.load(f)
     except (json.JSONDecodeError, OSError):
         print(f"  Upozorenje: {CACHE_FILE} je ostecen, pravim novi keš od nule.", file=sys.stderr)
         return {}
 
+    if not isinstance(raw, dict) or raw.get("_schema") != CACHE_SCHEMA_VERSION:
+        print(f"  Keš je iz starije verzije skripte (schema != {CACHE_SCHEMA_VERSION}) - "
+              f"ignorišem ga, svi replay-i će se fetch-ovati iznova (jednokratno).")
+        return {}
+    return raw.get("replays", {})
+
 
 def save_cache(cache):
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        json.dump(cache, f, ensure_ascii=False)
+        json.dump({"_schema": CACHE_SCHEMA_VERSION, "replays": cache}, f, ensure_ascii=False)
 
 
 def main():

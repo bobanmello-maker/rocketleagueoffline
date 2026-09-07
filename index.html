@@ -222,6 +222,17 @@
   .meter-val{ width:48px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); }
 
   .table-wrap{ overflow-x:auto; }
+  .chem-chart-wrap{ position:relative; width:100%; }
+  .combo-radar-wrap{ position:relative; width:100%; max-width:420px; height:280px; margin:10px auto 18px; }
+  .combo-cat-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:6px; }
+  .combo-cat-block{ background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+  .combo-cat-block h4{ margin:0 0 8px; font-size:13px; color:var(--text-muted); font-weight:700; letter-spacing:0.02em; }
+  .combo-cat-block canvas{ max-height:190px; }
+  .guest-tag{
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase;
+    color:var(--text-muted); background:var(--surface-2); border:1px solid var(--border);
+    border-radius:5px; padding:1px 6px; margin-left:8px; vertical-align:middle;
+  }
   table{ width:100%; border-collapse:collapse; font-size:13px; }
   th, td{ padding:9px 12px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
   th{ color:var(--text-muted); text-transform:uppercase; font-size:11px; letter-spacing:0.05em; cursor:pointer; user-select:none; }
@@ -260,6 +271,63 @@
   .badge-chip:hover{ transform:translateY(-3px); border-color:var(--amber); }
   .badge-chip .b-emoji{ font-size:22px; line-height:1; }
   .badge-chip .b-name{ font-size:9px; color:var(--text-muted); margin-top:4px; line-height:1.2; display:block; }
+
+  /* ===== TROFEJNA VITRINA — 3D ROTIRAJUĆA POLICA (čist CSS/JS, bez 3D biblioteka) ===== */
+  .trophy-scene{
+    position:relative; height:190px; margin:4px 0 8px;
+    perspective:900px; perspective-origin:50% 60%;
+    touch-action:pan-y;
+  }
+  .trophy-scene::before{
+    content:''; position:absolute; left:8%; right:8%; bottom:14px; height:14px;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 72%);
+    z-index:0; pointer-events:none;
+  }
+  .trophy-stage{
+    position:absolute; left:50%; top:52%; width:0; height:0;
+    transform-style:preserve-3d; cursor:grab; will-change:transform;
+  }
+  .trophy-scene.dragging .trophy-stage{ cursor:grabbing; }
+  .trophy-item{
+    position:absolute; left:0; top:0; width:86px; height:112px; margin:-56px 0 0 -43px;
+    display:flex; align-items:center; justify-content:center;
+    backface-visibility:hidden;
+  }
+  .trophy-face{
+    width:100%; height:100%; border-radius:12px; text-align:center;
+    background:linear-gradient(160deg, var(--surface-2), var(--surface));
+    border:1px solid var(--border);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    padding:8px 6px 7px; box-shadow:0 10px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition:border-color .2s ease, box-shadow .2s ease;
+    position:relative; overflow:hidden;
+  }
+  .trophy-face::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.14) 48%, transparent 66%);
+    background-size:220% 220%; background-position:120% -20%;
+  }
+  .trophy-item.unlocked .trophy-face{
+    border-color:rgba(251,191,36,0.55);
+    box-shadow:0 10px 26px rgba(0,0,0,0.5), 0 0 22px rgba(251,191,36,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .trophy-item.unlocked .trophy-face:hover{
+    border-color:var(--amber);
+    box-shadow:0 10px 26px rgba(0,0,0,0.5), 0 0 34px rgba(251,191,36,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .trophy-face .b-emoji{ font-size:26px; line-height:1; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+  .trophy-face .b-name{ font-size:9.5px; color:var(--text-muted); line-height:1.25; padding:0 2px; }
+  .trophy-item.unlocked .b-name{ color:var(--text); }
+  .trophy-hint{
+    position:absolute; bottom:0; left:0; right:0; text-align:center; z-index:1;
+    font-size:10px; color:var(--text-muted); letter-spacing:0.04em; pointer-events:none;
+  }
+  .trophy-empty-note{ text-align:center; color:var(--text-muted); font-size:12px; padding:14px 0; }
+  @media (max-width:768px){
+    .trophy-scene{ height:170px; }
+    .trophy-item{ width:74px; height:98px; margin:-49px 0 0 -37px; }
+    .trophy-face .b-emoji{ font-size:22px; }
+  }
 
   .empty{ text-align:center; color:var(--text-muted); padding:60px 20px; font-size:14px; }
   .empty b{ color:var(--text); }
@@ -862,18 +930,14 @@ header.hero::after {
             <button class="chip chem-mode-chip" data-chemmode="3v3">3v3</button>
           </span>
         </h2>
-        <div class="table-wrap">
-          <table id="chemTable">
-            <thead><tr><th id="chemColLabel">Dvojka</th><th class="mono">Mečeva</th><th class="mono">Pobede</th><th class="mono">Win %</th></tr></thead>
-            <tbody id="chemBody"></tbody>
-          </table>
-        </div>
+        <div class="chem-chart-wrap" id="chemChartWrap"><canvas id="chemChart"></canvas></div>
+        <div id="chemEmpty" class="empty" style="display:none;"></div>
         <div style="display:flex; align-items:center; gap:12px; justify-content:center; margin-top:14px;">
           <button id="chemPrevPageBtn" class="chip" style="background:var(--surface-2);">◀ Prethodna</button>
           <span id="chemPageInfo" style="color:var(--text-muted); font-size:13px;">Strana 1 od 1</span>
           <button id="chemNextPageBtn" class="chip" style="background:var(--surface-2);">Sledeća ▶</button>
         </div>
-        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč. Klikni na red za detaljnu analizu te kombinacije.</div>
+        <div class="subtle-note">Napomena: ovo ima smisla samo kad se sastav timova menja iz meča u meč. Klikni na traku za detaljnu analizu te kombinacije.</div>
       </div>
     </div>
 
@@ -883,7 +947,10 @@ header.hero::after {
 
     <div class="tabpanel" id="tab-highlights">
       <div class="card">
-        <h2>🏆 Dostignuća <small>pragovi otključani u trenutno izabranom periodu i režimu (Sve/Offline/Online)</small></h2>
+        <h2>
+          <span>🏆 Dostignuća <small>pragovi otključani u trenutno izabranom periodu i režimu (Sve/Offline/Online)</small></span>
+          <button class="chip" id="highlightsViewToggle" style="background:var(--surface-2); white-space:nowrap;">🏛️ Vitrina</button>
+        </h2>
         <div id="milestoneGrid"></div>
       </div>
       <div class="card">
@@ -1281,6 +1348,10 @@ let allPlayers = [];
 let players = [];
 let playerColor = {};
 let activePlayers = new Set();
+let highlightsViewMode = (function(){
+  try{ return localStorage.getItem('rl_highlights_view') || 'shelf'; }catch(e){ return 'shelf'; }
+})();
+let activeTrophyShelves = [];
 let modeFilter = 'offline';
 let sortKey = 'date';
 let sortDir = -1;
@@ -1593,11 +1664,20 @@ async function load(){
     RAW = await res.json();
   }catch(e){ RAW = []; }
 
-  RAW = RAW.map(r => ({
-    ...r,
-    player: mapName(r.player),
-    teammates: (r.teammates || []).map(mapName),
-  }));
+  RAW = RAW.map(r => {
+    const mappedTeammateStats = {};
+    if(r.teammate_stats){
+      Object.entries(r.teammate_stats).forEach(([name, stats]) => {
+        mappedTeammateStats[mapName(name)] = stats;
+      });
+    }
+    return {
+      ...r,
+      player: mapName(r.player),
+      teammates: (r.teammates || []).map(mapName),
+      teammate_stats: mappedTeammateStats,
+    };
+  });
 
   if(!RAW.length){
     $('#content').innerHTML = `<div class="empty">Nema podataka jos uvek.<br><b>data.json</b> je prazan ili ga fetch_stats.py jos nije generisao.<br>Pokreni GitHub Action "Update RL stats" (tab Actions &rarr; Run workflow).</div>`;
@@ -1664,6 +1744,14 @@ async function load(){
     });
   });
   $('#modalBackdrop').addEventListener('click', e => { if(e.target.id === 'modalBackdrop') closeModal(); });
+
+  $('#highlightsViewToggle').textContent = highlightsViewMode === 'shelf' ? '🏛️ Vitrina' : '▦ Mreža';
+  $('#highlightsViewToggle').addEventListener('click', () => {
+    highlightsViewMode = highlightsViewMode === 'shelf' ? 'grid' : 'shelf';
+    try{ localStorage.setItem('rl_highlights_view', highlightsViewMode); }catch(e){}
+    $('#highlightsViewToggle').textContent = highlightsViewMode === 'shelf' ? '🏛️ Vitrina' : '▦ Mreža';
+    renderMilestones(getFiltered());
+  });
 
   $('#wrappedGoBtn').addEventListener('click', openWrapped);
   $('#wrappedCloseBtn').addEventListener('click', closeWrapped);
@@ -2228,9 +2316,56 @@ function renderDemoTrend(rows){
 
 let chemMode = '2v2';
 let chemCurrentPage = 1;
-const CHEM_PAGE_SIZE = 25;
+const CHEM_PAGE_SIZE = 14;
 let lastChemRows = [];       // filtrirani redovi na osnovu kojih je Chemistry racunat
-let lastChemGroups = {};     // { combKey: { total, wins, matches:[{replay_id,date,map,win,team_goals,opponent_goals}] } }
+let lastChemGroups = {};     // { combKey: { total, wins, members:[...], matches:[{replay_id,team_color,date,map,win,team_goals,opponent_goals}] } }
+
+const GUEST_PALETTE = ['#9CA3AF', '#C084FC', '#38BDF8', '#F472B6', '#34D399'];
+
+function hexToRgb(hex){
+  const h = (hex || '#8A93A3').replace('#','');
+  const n = h.length === 3 ? h.split('').map(c => c+c).join('') : h;
+  const num = parseInt(n, 16) || 0;
+  return [(num>>16)&255, (num>>8)&255, num&255];
+}
+function blendColors(hexArr){
+  if(!hexArr.length) return '#8A93A3';
+  const sum = [0,0,0];
+  hexArr.forEach(h => { const [r,g,b] = hexToRgb(h); sum[0]+=r; sum[1]+=g; sum[2]+=b; });
+  const n = hexArr.length;
+  return `rgb(${Math.round(sum[0]/n)}, ${Math.round(sum[1]/n)}, ${Math.round(sum[2]/n)})`;
+}
+
+// Prosecna statistika jednog clana kombinacije preko svih zajednickih meceva.
+// Prvo pokusava sopstveni red (nasa cetvorka - kao i do sada), a ako igrac
+// nema sopstveni red (gost, nije neko od nas cetvoro) - vadi njegovu statistiku
+// iz teammate_stats snapshot-a koji su nasi igraci sacuvali za taj mec. To
+// polje postoji tek posle sledeceg osvezavanja podataka (fetch_stats.py) -
+// dok se to ne desi, gost jednostavno nema dostupnu statistiku.
+function getMemberAggStats(data, name, catKeys){
+  const matchIds = new Set(data.matches.map(m => m.replay_id));
+  const buildFromSource = (sourceList, pathFn) => {
+    const stats = {};
+    Object.keys(catKeys).forEach(cat => {
+      stats[cat] = {};
+      catKeys[cat].forEach(k => { stats[cat][k] = avg(sourceList.map(s => Number(pathFn(s, cat, k)) || 0)); });
+    });
+    return stats;
+  };
+
+  const ownRows = lastChemRows.filter(r => r.player === name && matchIds.has(r.replay_id));
+  if(ownRows.length){
+    return { stats: buildFromSource(ownRows, (r,cat,k) => getPath(r, `${cat}.${k}`)), matches: ownRows.length };
+  }
+
+  const samples = [];
+  data.matches.forEach(m => {
+    const row = lastChemRows.find(r => r.replay_id === m.replay_id && r.team_color === m.team_color && r.teammate_stats && r.teammate_stats[name]);
+    if(row) samples.push(row.teammate_stats[name]);
+  });
+  if(!samples.length) return null;
+  return { stats: buildFromSource(samples, (s,cat,k) => (s[cat]||{})[k]), matches: samples.length };
+}
 
 function renderChemistry(rows){
   lastChemRows = rows;
@@ -2249,19 +2384,19 @@ function renderChemistry(rows){
     else if(teamMembers.length === 3) target = groups3;
     else return;
 
-    const combKey = [...teamMembers].sort().join(' & ');
-    if(!target[combKey]) target[combKey] = { total:0, wins:0, matches:[] };
+    const membersSorted = [...teamMembers].sort();
+    const combKey = membersSorted.join(' & ');
+    if(!target[combKey]) target[combKey] = { total:0, wins:0, members:membersSorted, matches:[] };
     target[combKey].total++;
     if(r.win) target[combKey].wins++;
     target[combKey].matches.push({
-      replay_id: r.replay_id, date: r.date, map: r.map,
+      replay_id: r.replay_id, team_color: r.team_color, date: r.date, map: r.map,
       win: r.win, team_goals: r.team_goals, opponent_goals: r.opponent_goals,
     });
   });
 
   const active = chemMode === '3v3' ? groups3 : groups2;
   lastChemGroups = active;
-  $('#chemColLabel').textContent = chemMode === '3v3' ? 'Trojka' : 'Dvojka';
 
   const entries = Object.entries(active).sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total));
 
@@ -2271,20 +2406,69 @@ function renderChemistry(rows){
   const start = (chemCurrentPage - 1) * CHEM_PAGE_SIZE;
   const pageEntries = entries.slice(start, start + CHEM_PAGE_SIZE);
 
-  $('#chemBody').innerHTML = pageEntries.length ? pageEntries.map(([comb, d]) => `
-    <tr class="chem-row" data-comb="${comb.replace(/"/g,'&quot;')}" style="cursor:pointer;">
-      <td>${comb}</td><td class="mono">${d.total}</td><td class="mono">${d.wins}</td>
-      <td class="mono">${((d.wins/d.total)*100).toFixed(0)}%</td></tr>
-  `).join('') : `<tr><td colspan="4" class="empty">Nema ${chemMode} mečeva u izabranom periodu</td></tr>`;
-
   $('#chemPageInfo').textContent = `Strana ${chemCurrentPage} od ${totalPages}`;
   $('#chemPrevPageBtn').disabled = chemCurrentPage <= 1;
   $('#chemNextPageBtn').disabled = chemCurrentPage >= totalPages;
 
-  document.querySelectorAll('#chemBody .chem-row').forEach(tr => {
-    tr.addEventListener('click', () => openTeamComboModal(tr.dataset.comb));
+  destroyChart('chemChart');
+  const emptyEl = $('#chemEmpty');
+  const canvasEl = $('#chemChart');
+
+  if(!pageEntries.length){
+    emptyEl.style.display = 'block';
+    emptyEl.textContent = `Nema ${chemMode} mečeva u izabranom periodu`;
+    canvasEl.style.display = 'none';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  canvasEl.style.display = 'block';
+  $('#chemChartWrap').style.height = Math.max(220, pageEntries.length * 34) + 'px';
+
+  const labels = pageEntries.map(([comb]) => comb);
+  const pcts = pageEntries.map(([,d]) => (d.wins/d.total)*100);
+  const barColors = pageEntries.map(([,d]) => blendColors(d.members.map(m => playerColor[m] || '#9CA3AF')));
+
+  charts.chemChart = new Chart(canvasEl, {
+    type: 'bar',
+    data: { labels, datasets: [{ label:'Win %', data: pcts, backgroundColor: barColors, borderRadius:5, maxBarThickness:26 }] },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 650, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display:false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const d = pageEntries[ctx.dataIndex][1];
+              return `${d.wins}/${d.total} pobeda (${ctx.parsed.x.toFixed(0)}%)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { min:0, max:100, ticks:{ color:'#8A93A3', callback:v=>v+'%' }, grid:{ color:'rgba(255,255,255,0.05)' } },
+        y: { ticks:{ color:'#E8ECF1', font:{ size:12 } }, grid:{ display:false } }
+      },
+      onClick: (evt, elements) => {
+        if(!elements.length) return;
+        openTeamComboModal(pageEntries[elements[0].index][0]);
+      },
+      onHover: (evt, elements) => { evt.native.target.style.cursor = elements.length ? 'pointer' : 'default'; }
+    }
   });
 }
+
+const COMBO_RADAR_METRICS = [
+  {key:'core.goals', label:'Golovi'},
+  {key:'core.assists', label:'Asistencije'},
+  {key:'core.saves', label:'Odbrane'},
+  {key:'core.shots', label:'Šutevi'},
+  {key:'boost.avg_amount', label:'Boost'},
+  {key:'positioning.percent_behind_ball', label:'Iza lopte %'},
+];
+const COMBO_CHART_KEYS = ['comboRadar','comboCat_core','comboCat_boost','comboCat_movement','comboCat_positioning','comboCat_demo'];
 
 function openTeamComboModal(combKey){
   const data = lastChemGroups[combKey];
@@ -2304,32 +2488,22 @@ function openTeamComboModal(combKey){
     demo: ['inflicted','taken'],
   };
 
-  const memberBlocksHtml = members.map(name => {
-    const prows = lastChemRows.filter(r => data.matches.some(m => m.replay_id === r.replay_id) && r.player === name);
+  let guestIdx = 0;
+  const memberInfo = members.map(name => {
+    const isGuest = !playerColor[name];
+    const color = playerColor[name] || GUEST_PALETTE[guestIdx++ % GUEST_PALETTE.length];
+    return { name, color, isGuest, agg: getMemberAggStats(data, name, catKeys) };
+  });
 
-    if(!prows.length){
-      return `
-        <div style="margin-bottom:18px;">
-          <h4 style="color:${playerColor[name]||'#fff'}; font-family:'Rajdhani',sans-serif; font-size:18px; margin-bottom:8px;">${name}</h4>
-          <div class="subtle-note" style="margin-top:0;">Nemamo detaljnu statistiku za ovog igrača — nije neko od nas četvoro, pa se njegovi podaci ne prate pojedinačno (samo se zna da je bio saigrač u ovim mečevima).</div>
-        </div>
-      `;
-    }
+  const namesHeaderHtml = memberInfo.map(m =>
+    `<span style="color:${m.color}">${m.name}</span>${m.isGuest ? '<span class="guest-tag">gost</span>' : ''}`
+  ).join(' &amp; ');
 
-    const statHtml = catBlocks.map(cat => {
-      const rowsHtml = catKeys[cat].map(k => {
-        const v = avg(prows.map(r => getPath(r, `${cat}.${k}`) || 0));
-        return `<div class="stat-line"><span>${statLabel(k)}</span><span>${v.toFixed(2)}</span></div>`;
-      }).join('');
-      return `<div class="stat-block"><h4>${catLabels[cat]}</h4>${rowsHtml}</div>`;
-    }).join('');
-    return `
-      <div style="margin-bottom:18px;">
-        <h4 style="color:${playerColor[name]||'#fff'}; font-family:'Rajdhani',sans-serif; font-size:18px; margin-bottom:8px;">${name}</h4>
-        ${statHtml}
-      </div>
-    `;
-  }).join('');
+  const withStats = memberInfo.filter(m => m.agg);
+  const missing = memberInfo.filter(m => !m.agg);
+  const missingNote = missing.length
+    ? `<div class="subtle-note" style="margin-top:0;">${missing.map(m=>m.name).join(', ')}: statistika još nije sačuvana za ove mečeve (biće dostupna posle sledećeg osvežavanja podataka).</div>`
+    : '';
 
   const matchRowsHtml = matchesSorted.map(m => `
     <tr class="chem-match-row" data-replay="${m.replay_id}" style="cursor:pointer;">
@@ -2340,13 +2514,24 @@ function openTeamComboModal(combKey){
 
   $('#modalContent').innerHTML = `
     <button class="modal-close" id="modalCloseBtn">&times;</button>
-    <h3>${members.map(n => `<span style="color:${playerColor[n]||'#fff'}">${n}</span>`).join(' & ')}</h3>
+    <h3>${namesHeaderHtml}</h3>
     <div class="sub">${data.total} mečeva zajedno &middot; ${data.wins} pobeda &middot; <b>${winPct}% win rate</b></div>
 
-    <div class="stat-block"><h4>Statistika po igraču (prosek preko svih zajedničkih mečeva)</h4></div>
-    ${memberBlocksHtml}
+    ${withStats.length ? `
+      <div class="stat-block"><h4>Poređenje po igraču (prosek preko svih zajedničkih mečeva)</h4></div>
+      <div class="combo-radar-wrap"><canvas id="comboRadarChart"></canvas></div>
+      ${missingNote}
+      <div class="combo-cat-grid">
+        ${catBlocks.map(cat => `
+          <div class="combo-cat-block">
+            <h4>${catLabels[cat]}</h4>
+            <canvas id="comboCat_${cat}"></canvas>
+          </div>
+        `).join('')}
+      </div>
+    ` : missingNote}
 
-    <div class="stat-block"><h4>Svi zajednički mečevi</h4>
+    <div class="stat-block" style="margin-top:18px;"><h4>Svi zajednički mečevi</h4>
       <div class="table-wrap">
         <table style="width:100%;">
           <thead><tr><th>Datum</th><th>Mapa</th><th>Rezultat</th></tr></thead>
@@ -2362,6 +2547,60 @@ function openTeamComboModal(combKey){
       if(r) openModal(r);
     });
   });
+
+  COMBO_CHART_KEYS.forEach(destroyChart);
+
+  if(withStats.length){
+    const maxes = COMBO_RADAR_METRICS.map(m => Math.max(1, ...withStats.map(w => getPath(w.agg.stats, m.key) || 0)));
+    charts.comboRadar = new Chart($('#comboRadarChart'), {
+      type: 'radar',
+      data: {
+        labels: COMBO_RADAR_METRICS.map(m=>m.label),
+        datasets: withStats.map(w => ({
+          label: w.name,
+          data: COMBO_RADAR_METRICS.map((m,i) => (getPath(w.agg.stats, m.key) || 0) / maxes[i] * 100),
+          borderColor: w.color,
+          backgroundColor: w.color + '33',
+          pointBackgroundColor: w.color,
+        }))
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        animation:{ duration:700, easing:'easeOutQuart' },
+        plugins:{ legend:{ labels:{ color:'#8A93A3' } } },
+        scales:{ r:{
+          angleLines:{ color:'rgba(255,255,255,0.08)' }, grid:{ color:'rgba(255,255,255,0.08)' },
+          pointLabels:{ color:'#E8ECF1', font:{ size:11 } }, ticks:{ display:false, backdropColor:'transparent' },
+          suggestedMin:0, suggestedMax:100
+        }}
+      }
+    });
+
+    catBlocks.forEach(cat => {
+      const keys = catKeys[cat];
+      charts['comboCat_'+cat] = new Chart($('#comboCat_'+cat), {
+        type:'bar',
+        data:{
+          labels: keys.map(statLabel),
+          datasets: withStats.map(w => ({
+            label: w.name,
+            data: keys.map(k => Number((getPath(w.agg.stats, `${cat}.${k}`) || 0).toFixed(2))),
+            backgroundColor: w.color,
+          }))
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          animation:{ duration:600, easing:'easeOutQuart' },
+          plugins:{ legend:{ display: withStats.length > 1, labels:{ color:'#8A93A3', boxWidth:10, font:{size:10} } } },
+          scales:{
+            x:{ ticks:{ color:'#8A93A3', font:{size:10} }, grid:{ display:false } },
+            y:{ ticks:{ color:'#8A93A3', font:{size:10} }, grid:{ color:'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    });
+  }
+
   $('#modalBackdrop').classList.add('open');
 }
 
@@ -2503,11 +2742,104 @@ function getPlayerAchievements(rows, player){
   return achievements;
 }
 
-function renderMilestones(rows){
-  const wrap = $('#milestoneGrid');
-  const ps = [...activePlayers];
-  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+// ===== TROFEJNA VITRINA — rotirajuća 3D polica (čist CSS transform + rAF, bez 3D biblioteka) =====
+class TrophyShelf{
+  constructor(container, achievements, player){
+    this.container = container;
+    this.achievements = achievements;
+    this.player = player;
+    this.angle = Math.random() * 360;
+    this.speed = 10; // stepeni/sek auto-rotacija
+    this.dragging = false;
+    this.dragged = false;
+    this.lastX = 0;
+    this.lastT = null;
+    this.raf = null;
+    this._tick = this._tick.bind(this);
+    this._build();
+    this._bind();
+    this.raf = requestAnimationFrame(this._tick);
+  }
+  _build(){
+    const n = this.achievements.length;
+    const radius = n <= 4 ? 115 : n <= 6 ? 140 : n <= 9 ? 168 : 195;
+    this.radius = radius;
+    this.container.innerHTML = `<div class="trophy-stage"></div><div class="trophy-hint">prevuci da okreneš vitrinu</div>`;
+    this.stage = this.container.querySelector('.trophy-stage');
+    this.achievements.forEach((a, i) => {
+      const ang = (360 / n) * i;
+      const item = document.createElement('div');
+      item.className = 'trophy-item unlocked';
+      item.style.transform = `rotateY(${ang}deg) translateZ(${radius}px)`;
+      item.innerHTML = `
+        <div class="trophy-face" title="${a.name} — ${a.desc}">
+          <div class="b-emoji">${a.emoji}</div>
+          <span class="b-name">${a.name}</span>
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        if(this.dragged) return;
+        openBadgeModal(a, this.player);
+      });
+      this.stage.appendChild(item);
+    });
+  }
+  _bind(){
+    const el = this.container;
+    el.addEventListener('pointerdown', e => {
+      this.dragging = true;
+      this.dragged = false;
+      el.classList.add('dragging');
+      this.lastX = e.clientX;
+      try{ el.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    el.addEventListener('pointermove', e => {
+      if(!this.dragging) return;
+      const dx = e.clientX - this.lastX;
+      if(Math.abs(dx) > 2) this.dragged = true;
+      this.angle -= dx * 0.5;
+      this.lastX = e.clientX;
+    });
+    const end = () => { this.dragging = false; el.classList.remove('dragging'); };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+  }
+  _tick(t){
+    if(this.lastT == null) this.lastT = t;
+    const dt = Math.min((t - this.lastT) / 1000, 0.1);
+    this.lastT = t;
+    if(!this.dragging) this.angle += this.speed * dt;
+    if(this.stage) this.stage.style.transform = `rotateY(${this.angle}deg)`;
+    this.raf = requestAnimationFrame(this._tick);
+  }
+  destroy(){
+    if(this.raf) cancelAnimationFrame(this.raf);
+    this.raf = null;
+  }
+}
 
+function destroyTrophyShelves(){
+  activeTrophyShelves.forEach(s => s.destroy());
+  activeTrophyShelves = [];
+}
+
+function openBadgeModal(a, player){
+  $('#modalContent').innerHTML = `
+    <button class="modal-close" id="modalCloseBtn">&times;</button>
+    <div style="font-size:52px; text-align:center; margin-bottom:4px;">${a.emoji}</div>
+    <h3 style="text-align:center;">${a.name}</h3>
+    <div class="sub" style="text-align:center; color:${playerColor[player]||'var(--text-muted)'}">${player}</div>
+    <div class="stat-block">
+      <div class="stat-line"><span>Opis</span><span>${a.desc}</span></div>
+      <div class="stat-line"><span>Status</span><span style="color:var(--amber);">🏆 Otključano</span></div>
+    </div>
+  `;
+  $('#modalCloseBtn').addEventListener('click', closeModal);
+  $('#modalBackdrop').classList.add('open');
+}
+
+function renderMilestonesGrid(ps, rows){
+  const wrap = $('#milestoneGrid');
   const blocks = ps.map(p => {
     const achievements = getPlayerAchievements(rows, p);
     if(!achievements.length) return '';
@@ -2529,6 +2861,41 @@ function renderMilestones(rows){
   }).filter(Boolean).join('');
 
   wrap.innerHTML = blocks || '<div class="empty">Još uvek nema dostignuća (nedovoljno mečeva)</div>';
+}
+
+function renderMilestonesShelf(ps, rows){
+  const wrap = $('#milestoneGrid');
+  const withAch = ps.map(p => ({ p, achievements: getPlayerAchievements(rows, p) })).filter(x => x.achievements.length);
+
+  if(!withAch.length){
+    wrap.innerHTML = '<div class="empty">Još uvek nema dostignuća (nedovoljno mečeva)</div>';
+    return;
+  }
+
+  wrap.innerHTML = withAch.map(({p, achievements}, idx) => `
+    <div class="achievement-block">
+      <div class="achievement-block-head">
+        <span class="name" style="color:${playerColor[p]||'#fff'}">${p}</span>
+        <span class="count">${achievements.length} otključano</span>
+      </div>
+      <div class="trophy-scene" data-shelf-idx="${idx}"></div>
+    </div>
+  `).join('');
+
+  withAch.forEach(({p, achievements}, idx) => {
+    const scene = wrap.querySelector(`.trophy-scene[data-shelf-idx="${idx}"]`);
+    if(scene) activeTrophyShelves.push(new TrophyShelf(scene, achievements, p));
+  });
+}
+
+function renderMilestones(rows){
+  const wrap = $('#milestoneGrid');
+  const ps = [...activePlayers];
+  destroyTrophyShelves();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  if(highlightsViewMode === 'shelf') renderMilestonesShelf(ps, rows);
+  else renderMilestonesGrid(ps, rows);
 }
 
 function renderMonthCompare(){
