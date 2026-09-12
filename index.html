@@ -271,6 +271,33 @@
     transition:background .2s ease, transform .2s ease;
   }
   .pattern-dot.active{ background:var(--amber); transform:scale(1.25); }
+
+  /* ===== ZVEZDANA MAPA ===== */
+  .starmap-wrap{
+    position:relative; width:100%; height:560px; border-radius:12px; overflow:hidden;
+    background:#03050c; border:1px solid var(--border); cursor:grab; touch-action:none;
+  }
+  .starmap-wrap.dragging{ cursor:grabbing; }
+  #starmapCanvas{ display:block; width:100%; height:100%; }
+  .starmap-hint{
+    position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+    font-size:11px; color:var(--text-muted); background:rgba(0,0,0,0.4);
+    padding:5px 12px; border-radius:20px; pointer-events:none; letter-spacing:0.02em; white-space:nowrap;
+  }
+  .starmap-legend{
+    position:absolute; top:12px; right:12px; display:flex; gap:12px; align-items:center;
+    background:rgba(0,0,0,0.4); padding:6px 12px; border-radius:20px; font-size:11px; color:var(--text-muted);
+    flex-wrap:wrap; max-width:calc(100% - 24px);
+  }
+  .starmap-legend .sw{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle; }
+  .starmap-legend .sw.win{ background:#8EC9FF; box-shadow:0 0 6px #8EC9FF; }
+  .starmap-legend .sw.loss{ background:#FF6B6B; box-shadow:0 0 6px #FF6B6B; }
+  .starmap-legend .sw.big{ width:11px; height:11px; background:#fff; box-shadow:0 0 10px #fff; }
+  .starmap-reset-btn{ font-size:10px; padding:3px 10px; background:var(--surface-2); }
+  @media (max-width:768px){
+    .starmap-wrap{ height:420px; }
+    .starmap-legend{ font-size:10px; gap:8px; }
+  }
   .chem-combo-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
   .chem-combo-card{ cursor:pointer; }
   .chem-combo-card .bar-track{ height:6px; background:var(--boost-track); border-radius:3px; overflow:hidden; margin-top:8px; }
@@ -847,6 +874,7 @@ header.hero::after {
     <button class="tabbtn" data-tab="highlights">Dostignuća</button>
     <button class="tabbtn" data-tab="h2h">Poređenje</button>
     <button class="tabbtn" data-tab="matches">Svi mečevi</button>
+    <button class="tabbtn" data-tab="starmap">🌌 Zvezdana mapa</button>
     <button class="tabbtn" data-tab="cards">Kartice</button>
   </div>
 
@@ -1092,6 +1120,22 @@ header.hero::after {
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-starmap">
+      <div class="card starmap-card">
+        <h2>🌌 Zvezdana mapa <small>svaki odigrani meč je jedna zvezda — pozicija prati vreme, boja ishod, sjaj značaj partije</small></h2>
+        <div class="starmap-wrap" id="starmapWrap">
+          <canvas id="starmapCanvas"></canvas>
+          <div class="starmap-hint">prevuci da "letiš" · skroluj/pinč da zumiraš · klik na zvezdu = detalji meča</div>
+          <div class="starmap-legend">
+            <span><i class="sw win"></i>pobeda</span>
+            <span><i class="sw loss"></i>poraz</span>
+            <span><i class="sw big"></i>MVP / ubedljivo</span>
+            <button class="chip starmap-reset-btn" id="starmapResetBtn">Resetuj pogled</button>
           </div>
         </div>
       </div>
@@ -1824,6 +1868,7 @@ async function load(){
   $('#wrappedCloseBtn').addEventListener('click', closeWrapped);
   $('#wrappedNavLeft').addEventListener('click', () => wrappedGo(-1));
   $('#wrappedNavRight').addEventListener('click', () => wrappedGo(1));
+  initStarMapInteractions();
   document.addEventListener('keydown', e => {
     if(!$('#wrappedOverlay').classList.contains('open')) return;
     if(e.key === 'Escape') closeWrapped();
@@ -1849,6 +1894,7 @@ function buildTabs(){
       document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       $('#tab-' + btn.dataset.tab).classList.add('active');
+      if(btn.dataset.tab === 'starmap') startStarMapLoop(); else stopStarMapLoop();
     });
   });
 }
@@ -1949,6 +1995,7 @@ function render(){
 
   renderWrappedTab(rows);
   renderCardsTab(rows);
+  renderStarMap(rows);
 }
 
 // ================================================================
@@ -3849,6 +3896,231 @@ function renderTable(rows){
     });
   }
 }
+// ================================================================
+//  ZVEZDANA MAPA — svaki meč je jedna zvezda (canvas, čist JS, bez biblioteka)
+// ================================================================
+
+const starMapState = {
+  stars: [],
+  bgStars: [],
+  camX: 0, camY: 0, zoom: 1,
+  driftVX: 0.10, driftVY: 0.018,
+  dragging: false, dragged: false, lastX: 0, lastY: 0,
+  canvas: null, ctx: null, raf: null,
+};
+
+// Deterministicki "seed" random po replay_id - ista zvezda uvek zavrsi na istom
+// mestu na mapi, cak i posle ponovnog rendera/filtriranja.
+function seededRand(seedStr){
+  let h = 0;
+  for(let i=0;i<seedStr.length;i++){ h = (h*31 + seedStr.charCodeAt(i)) | 0; }
+  return function(){
+    h = (h*1664525 + 1013904223) | 0;
+    return ((h >>> 0) / 4294967296);
+  };
+}
+
+function buildStarMapData(rows){
+  const byReplay = {};
+  rows.forEach(r => {
+    if(!r.replay_id || !r.date) return;
+    (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r);
+  });
+  const entries = Object.entries(byReplay);
+  if(!entries.length) return [];
+
+  const times = entries.map(([,rs]) => new Date(rs[0].date).getTime()).filter(t => !isNaN(t));
+  const minT = times.length ? Math.min(...times) : 0;
+  const maxT = times.length ? Math.max(...times) : 1;
+  const span = Math.max(1, maxT - minT);
+
+  return entries.map(([rid, rs]) => {
+    const rnd = seededRand(rid);
+    const rep = rs[0];
+    const t = new Date(rep.date).getTime();
+    const tFrac = isNaN(t) ? rnd() : (t - minT) / span;
+
+    const maxGoals = Math.max(0, ...rs.map(r => getPath(r,'core.goals') || 0));
+    const anyMvp = rs.some(r => getPath(r,'core.mvp'));
+    const margin = Math.abs((rep.team_goals||0) - (rep.opponent_goals||0));
+
+    let significance = 0.15 + Math.min(0.35, margin*0.06) + Math.min(0.3, maxGoals*0.08);
+    if(anyMvp) significance += 0.25;
+    significance = Math.min(1, significance);
+
+    return {
+      replay_id: rid,
+      row: rep,
+      win: !!rep.win,
+      worldX: (tFrac - 0.5) * 3600 + (rnd()-0.5) * 100,
+      worldY: (rnd()-0.5) * 900,
+      significance,
+      radius: 1.3 + significance * 3.4,
+      twinklePhase: rnd() * Math.PI * 2,
+      twinkleSpeed: 0.5 + rnd() * 1.0,
+      _sx: null, _sy: null, _sr: null,
+    };
+  });
+}
+
+function buildStarMapBgStars(w, h, count){
+  const arr = [];
+  for(let i=0;i<count;i++){
+    arr.push({
+      x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.1 + 0.3,
+      baseAlpha: 0.2 + Math.random()*0.45,
+      phase: Math.random()*Math.PI*2, speed: 0.25 + Math.random()*0.8,
+    });
+  }
+  return arr;
+}
+
+function resizeStarMapCanvas(){
+  const wrap = $('#starmapWrap');
+  const canvas = starMapState.canvas;
+  if(!wrap || !canvas) return;
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  if(w < 4 || h < 4) return;
+  canvas.width = w;
+  canvas.height = h;
+  starMapState.bgStars = buildStarMapBgStars(w, h, 140);
+}
+
+function drawStarMap(){
+  const st = starMapState;
+  if(st.canvas && st.ctx){
+    const { ctx, canvas } = st;
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    const grad = ctx.createRadialGradient(w*0.5,h*0.42,0, w*0.5,h*0.42, Math.max(w,h)*0.75);
+    grad.addColorStop(0, 'rgba(45,25,85,0.30)');
+    grad.addColorStop(1, 'rgba(3,5,12,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,w,h);
+
+    const t = performance.now()/1000;
+
+    ctx.fillStyle = '#ffffff';
+    st.bgStars.forEach(b => {
+      const tw = 0.35 + 0.65 * (0.5 + 0.5*Math.sin(t*b.speed + b.phase));
+      ctx.globalAlpha = b.baseAlpha * tw;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    st.stars.forEach(s => {
+      const sx = (s.worldX - st.camX) * st.zoom + w/2;
+      const sy = (s.worldY - st.camY) * st.zoom + h/2;
+      if(sx < -40 || sx > w+40 || sy < -40 || sy > h+40){ s._sr = null; return; }
+
+      const twinkle = 0.75 + 0.25 * Math.sin(t*s.twinkleSpeed + s.twinklePhase);
+      const r = Math.max(0.6, s.radius * st.zoom * twinkle);
+      const color = s.win ? [142,201,255] : [255,107,107];
+      const alpha = Math.min(1, 0.55 + s.significance*0.5) * twinkle;
+
+      if(s.significance > 0.45){
+        const glowR = r * (3 + s.significance*3);
+        const glow = ctx.createRadialGradient(sx,sy,0, sx,sy,glowR);
+        glow.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},${0.35*twinkle})`);
+        glow.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0)`);
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(sx, sy, glowR, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI*2);
+      ctx.fill();
+
+      s._sx = sx; s._sy = sy; s._sr = Math.max(r, 7);
+    });
+
+    if(!st.dragging){ st.camX += st.driftVX; st.camY += st.driftVY; }
+  }
+  st.raf = requestAnimationFrame(drawStarMap);
+}
+
+function startStarMapLoop(){
+  resizeStarMapCanvas();
+  if(!starMapState.raf) starMapState.raf = requestAnimationFrame(drawStarMap);
+}
+function stopStarMapLoop(){
+  if(starMapState.raf){ cancelAnimationFrame(starMapState.raf); starMapState.raf = null; }
+}
+
+function handleStarMapClick(clientX, clientY){
+  const canvas = starMapState.canvas;
+  if(!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = clientX - rect.left, my = clientY - rect.top;
+  let best = null, bestD = Infinity;
+  starMapState.stars.forEach(s => {
+    if(s._sr == null) return;
+    const dx = mx - s._sx, dy = my - s._sy;
+    const d = Math.hypot(dx, dy);
+    if(d <= s._sr + 4 && d < bestD){ bestD = d; best = s; }
+  });
+  if(best) openModal(best.row);
+}
+
+function initStarMapInteractions(){
+  const wrap = $('#starmapWrap');
+  const canvas = $('#starmapCanvas');
+  if(!wrap || !canvas) return;
+  starMapState.canvas = canvas;
+  starMapState.ctx = canvas.getContext('2d');
+
+  wrap.addEventListener('pointerdown', e => {
+    if(e.target.closest('.starmap-reset-btn')) return;
+    starMapState.dragging = true;
+    starMapState.dragged = false;
+    wrap.classList.add('dragging');
+    starMapState.lastX = e.clientX;
+    starMapState.lastY = e.clientY;
+    try{ wrap.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  wrap.addEventListener('pointermove', e => {
+    if(!starMapState.dragging) return;
+    const dx = e.clientX - starMapState.lastX;
+    const dy = e.clientY - starMapState.lastY;
+    if(Math.abs(dx) > 2 || Math.abs(dy) > 2) starMapState.dragged = true;
+    starMapState.camX -= dx / starMapState.zoom;
+    starMapState.camY -= dy / starMapState.zoom;
+    starMapState.lastX = e.clientX;
+    starMapState.lastY = e.clientY;
+  });
+  const endDrag = e => {
+    starMapState.dragging = false;
+    wrap.classList.remove('dragging');
+    if(!starMapState.dragged && e) handleStarMapClick(e.clientX, e.clientY);
+  };
+  wrap.addEventListener('pointerup', endDrag);
+  wrap.addEventListener('pointercancel', () => { starMapState.dragging = false; wrap.classList.remove('dragging'); });
+
+  wrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+    starMapState.zoom = Math.max(0.35, Math.min(6, starMapState.zoom * factor));
+  }, { passive:false });
+
+  $('#starmapResetBtn').addEventListener('click', () => {
+    starMapState.camX = 0; starMapState.camY = 0; starMapState.zoom = 1;
+  });
+
+  window.addEventListener('resize', () => {
+    if($('#tab-starmap').classList.contains('active')) resizeStarMapCanvas();
+  });
+}
+
+function renderStarMap(rows){
+  starMapState.stars = buildStarMapData(rows);
+}
+
 function openModal(r){
   const c = r.core, b = r.boost, m = r.movement, p = r.positioning, d = r.demo;
   $('#modalContent').innerHTML = `
