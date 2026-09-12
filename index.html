@@ -3936,7 +3936,11 @@ function buildStarMapData(rows){
 
   return entries.map(([rid, rs]) => {
     const rnd = seededRand(rid);
-    const rep = rs[0];
+    // Predstavnik meca za modal - onaj od nasih igraca sa najboljim score-om u
+    // TOM mecu (ne prosto prvi u nizu, jer taj redosled zna da bude dosledno
+    // isti igrac - npr. kod offline/splitscreen meceva - sto bi znacilo da bi
+    // svaka zvezda otvarala istog igraca bez obzira ko je zaista bio "glavni").
+    const rep = rs.reduce((best, r) => (getPath(r,'core.score')||0) > (getPath(best,'core.score')||0) ? r : best, rs[0]);
     const t = new Date(rep.date).getTime();
     const tFrac = isNaN(t) ? rnd() : (t - minT) / span;
 
