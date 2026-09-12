@@ -874,7 +874,6 @@ header.hero::after {
     <button class="tabbtn" data-tab="highlights">Dostignuća</button>
     <button class="tabbtn" data-tab="h2h">Poređenje</button>
     <button class="tabbtn" data-tab="matches">Svi mečevi</button>
-    <button class="tabbtn" data-tab="starmap">🌌 Zvezdana mapa</button>
     <button class="tabbtn" data-tab="cards">Kartice</button>
   </div>
 
@@ -1082,6 +1081,19 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-matches">
+      <div class="card starmap-card">
+        <h2>🌌 Zvezdana mapa <small>svaki odigrani meč je jedna zvezda — pozicija prati vreme, boja ishod, sjaj značaj partije</small></h2>
+        <div class="starmap-wrap" id="starmapWrap">
+          <canvas id="starmapCanvas"></canvas>
+          <div class="starmap-hint">prevuci da "letiš" · skroluj/pinč da zumiraš · klik na zvezdu = detalji meča</div>
+          <div class="starmap-legend">
+            <span><i class="sw win"></i>pobeda</span>
+            <span><i class="sw loss"></i>poraz</span>
+            <span><i class="sw big"></i>MVP / ubedljivo</span>
+            <button class="chip starmap-reset-btn" id="starmapResetBtn">Resetuj pogled</button>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <h2>Svi mečevi <small>klik na kolonu = sortiranje, klik na red = detalji</small></h2>
         <div class="table-wrap">
@@ -1120,22 +1132,6 @@ header.hero::after {
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tabpanel" id="tab-starmap">
-      <div class="card starmap-card">
-        <h2>🌌 Zvezdana mapa <small>svaki odigrani meč je jedna zvezda — pozicija prati vreme, boja ishod, sjaj značaj partije</small></h2>
-        <div class="starmap-wrap" id="starmapWrap">
-          <canvas id="starmapCanvas"></canvas>
-          <div class="starmap-hint">prevuci da "letiš" · skroluj/pinč da zumiraš · klik na zvezdu = detalji meča</div>
-          <div class="starmap-legend">
-            <span><i class="sw win"></i>pobeda</span>
-            <span><i class="sw loss"></i>poraz</span>
-            <span><i class="sw big"></i>MVP / ubedljivo</span>
-            <button class="chip starmap-reset-btn" id="starmapResetBtn">Resetuj pogled</button>
           </div>
         </div>
       </div>
@@ -1894,7 +1890,7 @@ function buildTabs(){
       document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       $('#tab-' + btn.dataset.tab).classList.add('active');
-      if(btn.dataset.tab === 'starmap') startStarMapLoop(); else stopStarMapLoop();
+      if(btn.dataset.tab === 'matches') startStarMapLoop(); else stopStarMapLoop();
     });
   });
 }
@@ -4117,7 +4113,7 @@ function initStarMapInteractions(){
   });
 
   window.addEventListener('resize', () => {
-    if($('#tab-starmap').classList.contains('active')) resizeStarMapCanvas();
+    if($('#tab-matches').classList.contains('active')) resizeStarMapCanvas();
   });
 }
 
