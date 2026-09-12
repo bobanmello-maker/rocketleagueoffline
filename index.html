@@ -222,6 +222,55 @@
   .meter-val{ width:48px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); }
 
   .table-wrap{ overflow-x:auto; }
+
+  /* ===== PRAVI RL HUD — kružni merači kao u igri (čist SVG/CSS) ===== */
+  .hud-row{ display:flex; flex-wrap:wrap; gap:18px; justify-content:center; padding:8px 0 4px; }
+  .hud-gauge-card{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:14px;
+    padding:16px 14px 14px; min-width:132px;
+  }
+  .hud-ring-wrap{ position:relative; width:112px; height:112px; }
+  .hud-ring-wrap svg{ width:100%; height:100%; transform:rotate(0deg); }
+  .hud-ring-track{ fill:none; stroke:var(--boost-track); stroke-width:10; }
+  .hud-ring-fill{
+    fill:none; stroke-width:10; stroke-linecap:round;
+    transition:stroke-dashoffset 1.1s cubic-bezier(0.16,1,0.3,1);
+    filter:drop-shadow(0 0 6px currentColor);
+  }
+  .hud-ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .hud-ring-value{ font-size:22px; font-weight:700; letter-spacing:0.02em; line-height:1; }
+  .hud-ring-unit{ font-size:9px; color:var(--text-muted); letter-spacing:0.08em; margin-top:3px; }
+  .hud-gauge-name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.02em; }
+  .hud-gauge-sub{ font-size:10px; color:var(--text-muted); text-align:center; line-height:1.3; }
+  .hud-compass-legend{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:2px; }
+  .hud-compass-legend span{ font-size:9px; color:var(--text-muted); display:flex; align-items:center; gap:3px; }
+  .hud-compass-legend i{ width:7px; height:7px; border-radius:2px; display:inline-block; }
+
+  /* ===== LOVAC NA OBRASCE ===== */
+  .pattern-hunter-card{
+    background:linear-gradient(135deg, rgba(251,191,36,0.06), var(--surface));
+    border-color:rgba(251,191,36,0.25);
+  }
+  .pattern-spotlight{
+    display:flex; align-items:center; gap:16px; padding:10px 6px;
+    transition:opacity .22s ease, transform .22s ease; opacity:1; transform:translateY(0);
+  }
+  .pattern-spotlight.fade-out{ opacity:0; transform:translateY(6px); }
+  .pattern-icon{ font-size:34px; flex-shrink:0; filter:drop-shadow(0 0 8px rgba(251,191,36,0.35)); }
+  .pattern-text{ font-size:15px; line-height:1.5; color:var(--text); }
+  .pattern-text b{ font-weight:700; }
+  .pattern-text .pat-good{ color:var(--green); }
+  .pattern-text .pat-bad{ color:var(--loss); }
+  .pattern-baseline{ color:var(--text-muted); font-size:12.5px; }
+  .pattern-dots{ display:flex; gap:6px; justify-content:center; margin-top:6px; }
+  .pattern-dot{
+    width:7px; height:7px; border-radius:50%; background:var(--boost-track); cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .pattern-dot.active{ background:var(--amber); transform:scale(1.25); }
   .chem-combo-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
   .chem-combo-card{ cursor:pointer; }
   .chem-combo-card .bar-track{ height:6px; background:var(--boost-track); border-radius:3px; overflow:hidden; margin-top:8px; }
@@ -804,6 +853,10 @@ header.hero::after {
   <div id="content">
 
     <div class="tabpanel active" id="tab-overview">
+      <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
+        <h2>🔍 Lovac na obrasce <small>automatski otkriveni šabloni iz istorije mečeva — niko ih nije tražio</small></h2>
+        <div id="patternHunterBody"></div>
+      </div>
       <div class="grid">
         <div class="card">
           <h2>
@@ -838,6 +891,10 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-boost">
+      <div class="card">
+        <h2>🎮 Boost HUD <small>prosečan boost po igraču — kao merač u samoj igri</small></h2>
+        <div class="hud-row" id="boostHud"></div>
+      </div>
       <div class="grid">
         <div class="card">
           <h2>BPM (potrošnja boosta / min) <small>manje ne znači loše — zavisi od stila</small></h2>
@@ -857,6 +914,10 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-movement">
+      <div class="card">
+        <h2>🎮 Brzinomer <small>prosečna brzina po igraču, u odnosu na maksimum (supersonic ~2300 uu/s)</small></h2>
+        <div class="hud-row" id="speedHud"></div>
+      </div>
       <div class="grid">
         <div class="card">
           <h2>Vreme u vazduhu / na zemlji <small>% od trajanja meča</small></h2>
@@ -876,6 +937,10 @@ header.hero::after {
     </div>
 
     <div class="tabpanel" id="tab-positioning">
+      <div class="card">
+        <h2>🎮 Pozicioni kompas <small>raspodela vremena po trećinama terena — odbrana / sredina / napad</small></h2>
+        <div class="hud-row" id="posHud"></div>
+      </div>
       <div class="grid">
         <div class="card">
           <h2>Pozicioniranje po trećinama <small>% vremena po zonama terena</small></h2>
@@ -1844,6 +1909,7 @@ function destroyChart(key){ if(charts[key]){ charts[key].destroy(); delete chart
 function render(){
   const rows = getFiltered();
   renderScoreline(rows);
+  renderPatternHunter(rows);
   renderPlayerRecords(rows);
   
   renderGamification(rows);
@@ -1858,14 +1924,17 @@ function render(){
   renderBpmChart(rows);
   renderBoostDistChart(rows);
   renderBoostTable(rows);
+  renderBoostHud(rows);
 
   renderAirChart(rows);
   renderSpeedChart(rows);
   renderMovementTable(rows);
+  renderSpeedHud(rows);
 
   renderPositioningChart(rows);
   renderRotationTrend(rows);
   renderPosTable(rows);
+  renderPositionHud(rows);
 
   renderDemoChart(rows);
   renderDemoTrend(rows);
@@ -2139,6 +2208,306 @@ function renderRadar(rows){
 // ================================================================
 //  BOOST TAB FUNKCIJE (skraćeno)
 // ================================================================
+
+// ================================================================
+//  LOVAC NA OBRASCE — automatska detekcija neobičnih korelacija
+// ================================================================
+
+const PATTERN_MIN_SAMPLE = 5;     // minimalan broj meceva da bi se sablon uopste razmatrao
+const PATTERN_MIN_DEVIATION = 18; // minimalna razlika u procentnim poenima da bude "zanimljivo"
+
+const DAY_NAMES_INSTR = ['Nedeljom','Ponedeljkom','Utorkom','Sredom','Četvrtkom','Petkom','Subotom'];
+
+function hourBucketLabel(h){
+  if(h >= 6 && h < 12) return 'Ujutru (6-12h)';
+  if(h >= 12 && h < 18) return 'Popodne (12-18h)';
+  if(h >= 18 && h < 24) return 'Uveče (18-24h)';
+  return 'Posle ponoći (0-6h)';
+}
+
+function winPctOf(list){
+  if(!list.length) return null;
+  return (list.filter(r => r.win).length / list.length) * 100;
+}
+
+function pushPatternIfInteresting(found, { icon, groupRows, baseline, sampleSize, text }){
+  if(sampleSize < PATTERN_MIN_SAMPLE) return;
+  const pct = winPctOf(groupRows);
+  if(pct == null) return;
+  const dev = pct - baseline;
+  if(Math.abs(dev) < PATTERN_MIN_DEVIATION) return;
+  found.push({
+    icon,
+    weight: Math.abs(dev) * Math.log2(sampleSize + 1),
+    html: text(pct, dev, baseline, sampleSize),
+  });
+}
+
+function detectPatterns(rows){
+  const found = [];
+  if(!rows.length) return found;
+  const overall = winPctOf(rows);
+
+  // --- Auto po igraču (poređeno sa TIM igračevim sopstvenim prosekom) ---
+  const byPlayer = {};
+  rows.forEach(r => { (byPlayer[r.player] = byPlayer[r.player] || []).push(r); });
+  Object.entries(byPlayer).forEach(([player, prows]) => {
+    const baseline = winPctOf(prows);
+    const byCar = {};
+    prows.forEach(r => { if(r.car_name) (byCar[r.car_name] = byCar[r.car_name] || []).push(r); });
+    Object.entries(byCar).forEach(([car, crows]) => {
+      pushPatternIfInteresting(found, {
+        icon: '🚗', groupRows: crows, baseline, sampleSize: crows.length,
+        text: (pct, dev, base, n) => `Kad <b style="color:${playerColor[player]||'#fff'}">${player}</b> vozi <b>${car}</b>, tim ${dev>=0?'pobeđuje':'gubi'} <b class="${dev>=0?'pat-good':'pat-bad'}">${pct.toFixed(0)}%</b> mečeva <span class="pattern-baseline">(inače ${base.toFixed(0)}%, ${n} mečeva)</span>`,
+      });
+    });
+  });
+
+  // --- Mapa ---
+  const byMap = {};
+  rows.forEach(r => { if(r.map) (byMap[r.map] = byMap[r.map] || []).push(r); });
+  Object.entries(byMap).forEach(([map, mrows]) => {
+    pushPatternIfInteresting(found, {
+      icon: '🗺️', groupRows: mrows, baseline: overall, sampleSize: mrows.length,
+      text: (pct, dev, base, n) => `Na mapi <b>${map}</b> imate <b class="${dev>=0?'pat-good':'pat-bad'}">${pct.toFixed(0)}%</b> win rate <span class="pattern-baseline">(inače ${base.toFixed(0)}%, ${n} mečeva)</span>`,
+    });
+  });
+
+  // --- Dan u nedelji ---
+  const byDay = {};
+  rows.forEach(r => {
+    if(!r.date) return;
+    const d = new Date(r.date);
+    if(isNaN(d)) return;
+    const k = d.getDay();
+    (byDay[k] = byDay[k] || []).push(r);
+  });
+  Object.entries(byDay).forEach(([day, drows]) => {
+    pushPatternIfInteresting(found, {
+      icon: '📅', groupRows: drows, baseline: overall, sampleSize: drows.length,
+      text: (pct, dev, base, n) => `${DAY_NAMES_INSTR[+day]} imate <b class="${dev>=0?'pat-good':'pat-bad'}">${pct.toFixed(0)}%</b> win rate <span class="pattern-baseline">(inače ${base.toFixed(0)}%, ${n} mečeva)</span>`,
+    });
+  });
+
+  // --- Doba dana ---
+  const byHour = {};
+  rows.forEach(r => {
+    if(!r.date) return;
+    const d = new Date(r.date);
+    if(isNaN(d)) return;
+    const k = hourBucketLabel(d.getHours());
+    (byHour[k] = byHour[k] || []).push(r);
+  });
+  Object.entries(byHour).forEach(([bucket, hrows]) => {
+    pushPatternIfInteresting(found, {
+      icon: '🕒', groupRows: hrows, baseline: overall, sampleSize: hrows.length,
+      text: (pct, dev, base, n) => `${bucket} imate <b class="${dev>=0?'pat-good':'pat-bad'}">${pct.toFixed(0)}%</b> win rate <span class="pattern-baseline">(inače ${base.toFixed(0)}%, ${n} mečeva)</span>`,
+    });
+  });
+
+  found.sort((a,b) => b.weight - a.weight);
+  return found.slice(0, 6);
+}
+
+let patternList = [];
+let patternIndex = 0;
+let patternTimer = null;
+
+function renderPatternHunter(rows){
+  const card = $('#patternHunterCard');
+  const body = $('#patternHunterBody');
+  if(patternTimer){ clearInterval(patternTimer); patternTimer = null; }
+
+  patternList = detectPatterns(rows);
+  patternIndex = 0;
+
+  if(!patternList.length){
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = '';
+
+  body.innerHTML = `
+    <div class="pattern-spotlight" id="patternSpotlight">
+      <div class="pattern-icon">${patternList[0].icon}</div>
+      <div class="pattern-text">${patternList[0].html}</div>
+    </div>
+    <div class="pattern-dots" id="patternDots">
+      ${patternList.map((_,i) => `<span class="pattern-dot ${i===0?'active':''}" data-i="${i}"></span>`).join('')}
+    </div>
+  `;
+
+  body.querySelectorAll('.pattern-dot').forEach(dot => {
+    dot.addEventListener('click', () => showPattern(+dot.dataset.i, true));
+  });
+
+  if(patternList.length > 1){
+    patternTimer = setInterval(() => showPattern((patternIndex + 1) % patternList.length), 6000);
+  }
+}
+
+function showPattern(i, userTriggered){
+  patternIndex = i;
+  const spotlight = $('#patternSpotlight');
+  if(!spotlight) return;
+  spotlight.classList.add('fade-out');
+  setTimeout(() => {
+    const pat = patternList[i];
+    if(!pat) return;
+    spotlight.innerHTML = `<div class="pattern-icon">${pat.icon}</div><div class="pattern-text">${pat.html}</div>`;
+    spotlight.classList.remove('fade-out');
+  }, 220);
+  document.querySelectorAll('.pattern-dot').forEach(d => d.classList.toggle('active', +d.dataset.i === i));
+  if(userTriggered && patternTimer){
+    clearInterval(patternTimer);
+    patternTimer = setInterval(() => showPattern((patternIndex + 1) % patternList.length), 6000);
+  }
+}
+
+// ================================================================
+//  PRAVI RL HUD — SVG kružni merači (bez ijedne nove biblioteke)
+// ================================================================
+
+const HUD_RING_R = 50;
+const HUD_RING_C = 2 * Math.PI * HUD_RING_R; // obim kruga
+
+// Jednostavan prsten (jedna vrednost 0-100%), animira se od praznog ka punom.
+function buildRingGauge(pct, color){
+  const clamped = Math.max(0, Math.min(100, pct));
+  const offset = HUD_RING_C * (1 - clamped / 100);
+  return `
+    <svg viewBox="0 0 120 120">
+      <circle class="hud-ring-track" cx="60" cy="60" r="${HUD_RING_R}"/>
+      <circle class="hud-ring-fill" cx="60" cy="60" r="${HUD_RING_R}"
+        transform="rotate(-90 60 60)" style="color:${color}; stroke:${color};"
+        stroke-dasharray="${HUD_RING_C}" stroke-dashoffset="${HUD_RING_C}" data-offset="${offset}"/>
+    </svg>
+  `;
+}
+
+// Segmentirani "kompas" prsten - vise vrednosti kao lukovi razlicitih boja jedan za drugim.
+function buildCompassDonut(segments){
+  const total = segments.reduce((s,seg) => s + Math.max(0, seg.value), 0) || 1;
+  let cumulative = 0;
+  const circles = segments.map(seg => {
+    const frac = Math.max(0, seg.value) / total;
+    const len = HUD_RING_C * frac;
+    const rotateDeg = -90 + cumulative * 360;
+    cumulative += frac;
+    return `<circle class="hud-ring-fill" cx="60" cy="60" r="${HUD_RING_R}"
+      transform="rotate(${rotateDeg} 60 60)" style="color:${seg.color}; stroke:${seg.color};"
+      stroke-dasharray="${len} ${HUD_RING_C}" stroke-dashoffset="0" data-offset="0"/>`;
+  }).join('');
+  return `
+    <svg viewBox="0 0 120 120">
+      <circle class="hud-ring-track" cx="60" cy="60" r="${HUD_RING_R}"/>
+      ${circles}
+    </svg>
+  `;
+}
+
+// Pokrene animaciju punjenja prstena (mora posle umetanja u DOM, u sledecem frejmu).
+function animateHudRings(container){
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.hud-ring-fill[data-offset]').forEach(el => {
+      el.style.strokeDashoffset = el.dataset.offset;
+    });
+  });
+}
+
+function renderBoostHud(rows){
+  const wrap = $('#boostHud');
+  const ps = [...activePlayers].sort();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  wrap.innerHTML = ps.map(p => {
+    const value = avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'boost.avg_amount')||0));
+    const color = playerColor[p] || '#FBBF24';
+    return `
+      <div class="hud-gauge-card">
+        <div class="hud-ring-wrap">
+          ${buildRingGauge(value, color)}
+          <div class="hud-ring-center">
+            <div class="hud-ring-value mono" style="color:${color}">${value.toFixed(0)}</div>
+            <div class="hud-ring-unit">BOOST</div>
+          </div>
+        </div>
+        <div class="hud-gauge-name" style="color:${color}">${p}</div>
+      </div>
+    `;
+  }).join('');
+  animateHudRings(wrap);
+}
+
+const HUD_MAX_SPEED = 2300; // uu/s, priblizno supersonic prag u igri
+
+function renderSpeedHud(rows){
+  const wrap = $('#speedHud');
+  const ps = [...activePlayers].sort();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  wrap.innerHTML = ps.map(p => {
+    const value = avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'movement.avg_speed')||0));
+    const pct = (value / HUD_MAX_SPEED) * 100;
+    const color = playerColor[p] || '#3DA9FC';
+    return `
+      <div class="hud-gauge-card">
+        <div class="hud-ring-wrap">
+          ${buildRingGauge(pct, color)}
+          <div class="hud-ring-center">
+            <div class="hud-ring-value mono" style="color:${color}">${value.toFixed(0)}</div>
+            <div class="hud-ring-unit">UU/S</div>
+          </div>
+        </div>
+        <div class="hud-gauge-name" style="color:${color}">${p}</div>
+      </div>
+    `;
+  }).join('');
+  animateHudRings(wrap);
+}
+
+const HUD_ZONE_COLORS = { def:'#3DA9FC', neu:'#8A93A3', off:'#FF6B35' };
+const HUD_ZONE_LABELS = { def:'ODBRANA', neu:'SREDINA', off:'NAPAD' };
+
+function renderPositionHud(rows){
+  const wrap = $('#posHud');
+  const ps = [...activePlayers].sort();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  wrap.innerHTML = ps.map(p => {
+    const prows = rows.filter(r=>r.player===p);
+    const def = avg(prows.map(r=>getPath(r,'positioning.percent_defensive_third')||0));
+    const off = avg(prows.map(r=>getPath(r,'positioning.percent_offensive_third')||0));
+    const neu = Math.max(0, 100 - def - off);
+    const color = playerColor[p] || '#8A93A3';
+
+    const zones = [{k:'def',v:def},{k:'neu',v:neu},{k:'off',v:off}];
+    const dominant = zones.reduce((a,b) => b.v > a.v ? b : a);
+
+    return `
+      <div class="hud-gauge-card">
+        <div class="hud-ring-wrap">
+          ${buildCompassDonut([
+            {value:def, color:HUD_ZONE_COLORS.def},
+            {value:neu, color:HUD_ZONE_COLORS.neu},
+            {value:off, color:HUD_ZONE_COLORS.off},
+          ])}
+          <div class="hud-ring-center">
+            <div class="hud-ring-value mono" style="color:${HUD_ZONE_COLORS[dominant.k]}; font-size:15px;">${HUD_ZONE_LABELS[dominant.k]}</div>
+            <div class="hud-ring-unit">${dominant.v.toFixed(0)}%</div>
+          </div>
+        </div>
+        <div class="hud-gauge-name" style="color:${color}">${p}</div>
+        <div class="hud-compass-legend">
+          <span><i style="background:${HUD_ZONE_COLORS.def}"></i>${def.toFixed(0)}%</span>
+          <span><i style="background:${HUD_ZONE_COLORS.neu}"></i>${neu.toFixed(0)}%</span>
+          <span><i style="background:${HUD_ZONE_COLORS.off}"></i>${off.toFixed(0)}%</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+  animateHudRings(wrap);
+}
 
 function renderBpmChart(rows){
   const ps = [...activePlayers].sort();
