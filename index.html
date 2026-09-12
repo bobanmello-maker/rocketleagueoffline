@@ -39,6 +39,98 @@
   .mono{ font-family:'JetBrains Mono',monospace; }
   .wrap{ max-width:1320px; margin:0 auto; padding:28px 20px 80px; }
 
+  /* ===== SPLASH SCREEN SA POTPISOM ===== */
+  #splashScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(circle at 50% 50%, #0B0E14 0%, #05070B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  #splashScreen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .splash-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+  }
+
+  #signatureSvg {
+    width: min(90vw, 700px);
+    height: auto;
+    overflow: visible;
+  }
+
+  #signatureText {
+    filter: drop-shadow(0 0 8px rgba(61, 169, 252, 0.4));
+  }
+
+  #signatureSub {
+    filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.3));
+  }
+
+  /* Animacija potpisa - potez pera */
+  #signatureText.signing {
+    animation: signStroke 2.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+
+  #signatureSub.signing {
+    animation: signStrokeSub 1.6s cubic-bezier(0.65, 0, 0.35, 1) 1.8s forwards;
+  }
+
+  @keyframes signStroke {
+    0% { stroke-dashoffset: 2000; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  @keyframes signStrokeSub {
+    0% { stroke-dashoffset: 1500; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* Logo koji se pojavljuje nakon potpisa */
+  #splashLogo {
+    width: min(45vw, 280px);
+    height: auto;
+    opacity: 0;
+    transform: scale(0.85);
+    filter: drop-shadow(0 0 30px rgba(61, 169, 252, 0.5));
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  #splashLogo.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Fade-in za main content nakon splasha */
+  .wrap.splash-hidden {
+    opacity: 0;
+  }
+
+  .wrap.splash-visible {
+    opacity: 1;
+    transition: opacity 0.8s ease;
+  }
+
+  /* Mobile optimizacija */
+  @media (max-width: 768px) {
+    #signatureText { font-size: 32px; }
+    #signatureSub { font-size: 14px; }
+    #splashLogo { width: 60vw; }
+  }
+
   header.hero{
     display:flex; justify-content:space-between; align-items:flex-end;
     flex-wrap:wrap; gap:20px;
@@ -196,7 +288,6 @@
     flex:1; height:16px; background:var(--boost-track); border-radius:4px; overflow:hidden;
     position:relative; border:1px solid var(--border);
   }
-  /* ===== BOOST BAR FILL - SUPILNIJI ===== */
 .meter-fill {
   height: 100%;
   border-radius: 4px;
@@ -223,7 +314,6 @@
 
   .table-wrap{ overflow-x:auto; }
 
-  /* ===== PRAVI RL HUD — kružni merači kao u igri (čist SVG/CSS) ===== */
   .hud-row{ display:flex; flex-wrap:wrap; gap:18px; justify-content:center; padding:8px 0 4px; }
   .hud-gauge-card{
     display:flex; flex-direction:column; align-items:center; gap:8px;
@@ -249,7 +339,6 @@
   .hud-compass-legend span{ font-size:9px; color:var(--text-muted); display:flex; align-items:center; gap:3px; }
   .hud-compass-legend i{ width:7px; height:7px; border-radius:2px; display:inline-block; }
 
-  /* ===== LOVAC NA OBRASCE ===== */
   .pattern-hunter-card{
     background:linear-gradient(135deg, rgba(251,191,36,0.06), var(--surface));
     border-color:rgba(251,191,36,0.25);
@@ -272,7 +361,6 @@
   }
   .pattern-dot.active{ background:var(--amber); transform:scale(1.25); }
 
-  /* ===== ZVEZDANA MAPA ===== */
   .starmap-wrap{
     position:relative; width:100%; height:560px; border-radius:12px; overflow:hidden;
     background:#03050c; border:1px solid var(--border); cursor:grab; touch-action:none;
@@ -350,7 +438,6 @@
   .badge-chip .b-emoji{ font-size:22px; line-height:1; }
   .badge-chip .b-name{ font-size:9px; color:var(--text-muted); margin-top:4px; line-height:1.2; display:block; }
 
-  /* ===== TROFEJNA VITRINA — 3D ROTIRAJUĆA POLICA (čist CSS/JS, bez 3D biblioteka) ===== */
   .trophy-scene{
     position:relative; height:190px; margin:4px 0 8px;
     perspective:900px; perspective-origin:50% 60%;
@@ -553,7 +640,6 @@
     .scoreline{ gap:16px; }
     .wrapped-slide .megahero{ font-size:min(26vw,120px); }
   }
-  /* === BACKGROUND ANIMACIJA - ČESTICE === */
 #particles-canvas {
   position: fixed;
   top: 0;
@@ -570,11 +656,9 @@
   z-index: 1;
 }
 
-/* Čestice sa glow efektom */
 .particle-glow {
   filter: blur(1px);
 }
-  /* Fade-in animacija za kartice */
 .card {
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
@@ -592,7 +676,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Pulse efekat za važne brojke */
 .pulse-number {
   animation: pulse 2s ease-in-out infinite;
 }
@@ -602,7 +685,6 @@
   50% { transform: scale(1.05); }
 }
 
-/* Shimmer efekat za loading */
 .shimmer {
   background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
   background-size: 200% 100%;
@@ -613,7 +695,6 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-  /* === MOBILNI RESPONSIVE === */
 @media (max-width: 768px) {
   .wrap { padding: 12px 10px 40px; }
   
@@ -701,7 +782,6 @@
   .tabbtn { font-size: 10px; padding: 6px 8px; }
   .rlcard-wrap canvas { max-width: 150px; }
 }
-  /* 3D rotacija na hover */
 .prec-card {
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   transform-style: preserve-3d;
@@ -717,7 +797,6 @@
 .prec-card:active {
   transform: rotateX(0) rotateY(0) scale(0.98);
 }
-  /* ===== SCANLINE/CRT EFEKAT NA HEADERU ===== */
 header.hero {
   position: relative;
   overflow: hidden;
@@ -739,7 +818,6 @@ header.hero::after {
     rgba(0, 0, 0, 0.08) 4px
   );
 }
-/* Scanline animacija (blagi pokret) */
 @keyframes scanlineMove {
   0% { transform: translateY(0); }
   100% { transform: translateY(4px); }
@@ -747,7 +825,6 @@ header.hero::after {
 header.hero::after {
   animation: scanlineMove 8s linear infinite;
 }
-  /* ===== NEON GLOW NA HOVER ===== */
 .ai-btn:hover {
   box-shadow: 0 0 30px rgba(124, 58, 237, 0.8), 0 0 60px rgba(124, 58, 237, 0.3);
 }
@@ -761,7 +838,6 @@ header.hero::after {
 .tabbtn.active {
   text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
 }
-  /* ===== SCANLINE NA STAT KARTICAMA ===== */
 .prec-card {
   position: relative;
   overflow: hidden;
@@ -790,7 +866,6 @@ header.hero::after {
   position: relative;
   z-index: 1;
 }
-  /* ===== CRT GLOW NA IVICAMA ===== */
 .card {
   position: relative;
   overflow: hidden;
@@ -826,6 +901,25 @@ header.hero::after {
 </style>
 </head>
 <body>
+  <!-- ===== SPLASH SCREEN SA POTPISOM ===== -->
+  <div id="splashScreen">
+    <div class="splash-inner">
+      <svg id="signatureSvg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
+        <text id="signatureText" x="450" y="110" text-anchor="middle"
+              font-family="'Rajdhani', sans-serif" font-weight="700" font-size="42"
+              fill="none" stroke="#3DA9FC" stroke-width="1.5"
+              stroke-dasharray="2000" stroke-dashoffset="2000"
+              letter-spacing="0.05em">Lan Poselo</text>
+        <text id="signatureSub" x="450" y="160" text-anchor="middle"
+              font-family="'Inter', sans-serif" font-weight="500" font-size="18"
+              fill="none" stroke="#FF6B35" stroke-width="1"
+              stroke-dasharray="1500" stroke-dashoffset="1500"
+              letter-spacing="0.15em">ROCKET LEAGUE ANALIZA</text>
+      </svg>
+      <img id="splashLogo" src="images/rtsanaliza.png" alt="RTS Analiza" />
+    </div>
+  </div>
+
   <canvas id="particles-canvas"></canvas>
 <div class="wrap">
 
@@ -908,7 +1002,6 @@ header.hero::after {
         <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
         <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
       </div>
-      <!-- ===== TILT DETEKTOR - SAMO U PREGLEDU ===== -->
   <div class="card" style="margin-top:20px;">
     <h2>😤 Tilt Detector <small>analiza performansi unutar sesije</small></h2>
     <div id="tiltDetectorContent">
@@ -1063,7 +1156,6 @@ header.hero::after {
         </div>
       </div>
 
-      <!-- VS DUEL KARTICA -->
       <div class="card vsduel-card">
         <h2>⚔️ VS Duel <small>sve metrike na jednom mestu — generiše se automatski</small></h2>
         <div class="vsduel-wrap">
@@ -1076,7 +1168,6 @@ header.hero::after {
         </div>
       </div>
 
-      <!-- ===== DODATO: h2hContent ===== -->
       <div id="h2hContent"></div>
     </div>
 
@@ -1137,10 +1228,9 @@ header.hero::after {
       </div>
     </div>
 
-  </div> <!-- ZATVARANJE #content -->
-</div> <!-- ZATVARANJE .wrap -->
+  </div>
+</div>
 
-<!-- ===== MODALI - VAN WRAP I VAN TABOVA ===== -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal" id="modalContent"></div>
 </div>
@@ -1160,8 +1250,44 @@ header.hero::after {
 </div>
 
 <script>
- 
-  // ================================================================
+
+// ================================================================
+//  SPLASH SCREEN SA POTPISOM - animacija pri svakom otvaranju
+// ================================================================
+function runSplashScreen(){
+  const splash = document.getElementById('splashScreen');
+  const sigText = document.getElementById('signatureText');
+  const sigSub = document.getElementById('signatureSub');
+  const logo = document.getElementById('splashLogo');
+  const wrap = document.querySelector('.wrap');
+
+  if(!splash) return;
+
+  if(wrap) wrap.classList.add('splash-hidden');
+
+  requestAnimationFrame(() => {
+    sigText.classList.add('signing');
+    sigSub.classList.add('signing');
+  });
+
+  setTimeout(() => {
+    logo.classList.add('show');
+  }, 3200);
+
+  setTimeout(() => {
+    splash.classList.add('hidden');
+    if(wrap) {
+      wrap.classList.remove('splash-hidden');
+      wrap.classList.add('splash-visible');
+    }
+  }, 4800);
+
+  setTimeout(() => {
+    splash.style.display = 'none';
+  }, 5600);
+}
+
+// ================================================================
 //  BACKGROUND ANIMACIJA - ROCKET LEAGUE STYLE ČESTICE
 // ================================================================
 
@@ -1218,7 +1344,6 @@ class ParticleSystem {
       this.mouse.y = null;
     });
     
-    // Touch support
     this.canvas.addEventListener('touchmove', (e) => {
       const touch = e.touches[0];
       this.mouse.x = touch.clientX;
@@ -1238,20 +1363,16 @@ class ParticleSystem {
     
     ctx.clearRect(0, 0, W, H);
     
-    // Ažuriraj i nacrtaj čestice
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       
-      // Pomeranje
       p.x += p.speedX;
       p.y += p.speedY;
       p.pulse += p.pulseSpeed;
       
-      // Odbijanje od zidova
       if (p.x < 0 || p.x > W) p.speedX *= -1;
       if (p.y < 0 || p.y > H) p.speedY *= -1;
       
-      // Privlačenje ka mišu
       if (this.mouse.x !== null) {
         const dx = this.mouse.x - p.x;
         const dy = this.mouse.y - p.y;
@@ -1260,7 +1381,6 @@ class ParticleSystem {
           const force = (200 - dist) / 200 * 0.02;
           p.speedX += dx * force * 0.01;
           p.speedY += dy * force * 0.01;
-          // Ograniči brzinu
           const speed = Math.sqrt(p.speedX * p.speedX + p.speedY * p.speedY);
           if (speed > 1.5) {
             p.speedX = (p.speedX / speed) * 1.5;
@@ -1269,7 +1389,6 @@ class ParticleSystem {
         }
       }
       
-      // Crtanje čestice sa pulsiranjem
       const pulseSize = 1 + Math.sin(p.pulse) * 0.3;
       const size = p.size * pulseSize;
       const opacity = p.opacity * (0.7 + Math.sin(p.pulse) * 0.3);
@@ -1280,7 +1399,6 @@ class ParticleSystem {
       ctx.globalAlpha = opacity;
       ctx.fill();
       
-      // Glow efekat
       if (size > 2) {
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 4);
         gradient.addColorStop(0, p.color + '33');
@@ -1292,7 +1410,6 @@ class ParticleSystem {
       }
     }
     
-    // Povezivanje čestica linijama
     ctx.globalAlpha = 0.15;
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
@@ -1327,7 +1444,6 @@ class ParticleSystem {
   }
 }
 
-// Pokreni čestice nakon što se stranica učita
 let particleSystem = null;
 
 function initParticles() {
@@ -1337,19 +1453,14 @@ function initParticles() {
   particleSystem = new ParticleSystem();
 }
 
-// Pokreni kada se DOM učita
-document.addEventListener('DOMContentLoaded', initParticles);
-
-// Zaustavi čestice kada se stranica zatvori
 window.addEventListener('beforeunload', () => {
   if (particleSystem) {
     particleSystem.destroy();
   }
 });
+
 const PALETTE = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6'];
 
-// Prevodi naziva statistika (koriste se svuda gde se sirovi kljucevi iz
-// core/boost/movement/positioning/demo prikazuju korisniku).
 const STAT_LABELS = {
   goals: 'Golovi',
   assists: 'Asistencije',
@@ -1395,9 +1506,6 @@ const PLAYER_IMAGE_OVERRIDES = {
   'Pajke': 'images/pajke.png',
 };
 
-// Ime auta (tacno kao sto dolazi iz ballchasing "car_name" polja) -> slicica.
-// Nazivi moraju da se poklapaju TACNO (veliko/malo slovo bitno), npr. "Octane", "Fennec", "Dominus".
-// Slike stavi u images/cars/ folder.
 const CAR_IMAGE_OVERRIDES = {
   'Octane': 'images/cars/Octane.png',
   'Fennec': 'images/cars/Fennec.png',
@@ -1468,10 +1576,8 @@ let wrappedIndex = 0;
 let wrappedTimer = null;
 let wrappedRows = [];
 const WRAPPED_SLIDE_MS = 6000;
-  // ===== DODAJ OVO - PAGINACIJA VARIJABLE =====
 let currentPage = 1;
 let pageSize = 25;
-// ===== KRAJ =====
 
 const $ = sel => document.querySelector(sel);
 const getPath = (obj, path) => path.split('.').reduce((o,k) => (o == null ? o : o[k]), obj);
@@ -1483,10 +1589,6 @@ function fmtDate(iso){
   const d = new Date(iso);
   return d.toLocaleDateString('sr-RS', {day:'2-digit', month:'2-digit', year:'numeric'});
 }
-
-// ================================================================
-//  LEVEL SISTEM I GAMIFIKACIJA
-// ================================================================
 
 const LEVEL_THRESHOLDS = [
   { level: 1, name: 'Bronza I', xp: 0, badge: '🥉' },
@@ -1603,10 +1705,6 @@ function renderGamification(rows) {
   });
 }
 
-// ================================================================
-//  CLUTCH ANALIZA
-// ================================================================
-
 function renderClutchAnalysis(rows) {
   const ps = [...activePlayers].sort();
   if (!ps.length) return;
@@ -1668,10 +1766,6 @@ function renderClutchAnalysis(rows) {
 
   overviewTab.appendChild(clutchCard);
 }
-
-// ================================================================
-//  PLAYER IMPACT SCORE (PIS)
-// ================================================================
 
 function computePIS(rows, player) {
   const prows = rows.filter(r => r.player === player);
@@ -1760,10 +1854,6 @@ function renderPlayerImpact(rows) {
 
   overviewTab.appendChild(pisCard);
 }
-
-// ================================================================
-//  LOAD I RENDER FUNKCIJE
-// ================================================================
 
 async function load(){
   try{
@@ -1993,10 +2083,6 @@ function render(){
   renderCardsTab(rows);
   renderStarMap(rows);
 }
-
-// ================================================================
-//  OVERVIEW FUNKCIJE
-// ================================================================
 
 function renderScoreline(rows){
   const uniqueMatches = new Set(rows.map(r => r.replay_id));
@@ -2248,16 +2334,8 @@ function renderRadar(rows){
   });
 }
 
-// ================================================================
-//  BOOST TAB FUNKCIJE (skraćeno)
-// ================================================================
-
-// ================================================================
-//  LOVAC NA OBRASCE — automatska detekcija neobičnih korelacija
-// ================================================================
-
-const PATTERN_MIN_SAMPLE = 3;     // minimalan broj meceva da bi se sablon uopste razmatrao
-const PATTERN_MIN_DEVIATION = 18; // minimalna razlika u procentnim poenima da bude "zanimljivo"
+const PATTERN_MIN_SAMPLE = 3;
+const PATTERN_MIN_DEVIATION = 18;
 
 const DAY_NAMES_INSTR = ['Nedeljom','Ponedeljkom','Utorkom','Sredom','Četvrtkom','Petkom','Subotom'];
 
@@ -2291,7 +2369,6 @@ function detectPatterns(rows){
   if(!rows.length) return found;
   const overall = winPctOf(rows);
 
-  // --- Auto po igraču (poređeno sa TIM igračevim sopstvenim prosekom) ---
   const byPlayer = {};
   rows.forEach(r => { (byPlayer[r.player] = byPlayer[r.player] || []).push(r); });
   Object.entries(byPlayer).forEach(([player, prows]) => {
@@ -2306,7 +2383,6 @@ function detectPatterns(rows){
     });
   });
 
-  // --- Mapa ---
   const byMap = {};
   rows.forEach(r => { if(r.map) (byMap[r.map] = byMap[r.map] || []).push(r); });
   Object.entries(byMap).forEach(([map, mrows]) => {
@@ -2316,7 +2392,6 @@ function detectPatterns(rows){
     });
   });
 
-  // --- Dan u nedelji ---
   const byDay = {};
   rows.forEach(r => {
     if(!r.date) return;
@@ -2332,7 +2407,6 @@ function detectPatterns(rows){
     });
   });
 
-  // --- Doba dana ---
   const byHour = {};
   rows.forEach(r => {
     if(!r.date) return;
@@ -2407,14 +2481,9 @@ function showPattern(i, userTriggered){
   }
 }
 
-// ================================================================
-//  PRAVI RL HUD — SVG kružni merači (bez ijedne nove biblioteke)
-// ================================================================
-
 const HUD_RING_R = 50;
-const HUD_RING_C = 2 * Math.PI * HUD_RING_R; // obim kruga
+const HUD_RING_C = 2 * Math.PI * HUD_RING_R;
 
-// Jednostavan prsten (jedna vrednost 0-100%), animira se od praznog ka punom.
 function buildRingGauge(pct, color){
   const clamped = Math.max(0, Math.min(100, pct));
   const offset = HUD_RING_C * (1 - clamped / 100);
@@ -2428,7 +2497,6 @@ function buildRingGauge(pct, color){
   `;
 }
 
-// Segmentirani "kompas" prsten - vise vrednosti kao lukovi razlicitih boja jedan za drugim.
 function buildCompassDonut(segments){
   const total = segments.reduce((s,seg) => s + Math.max(0, seg.value), 0) || 1;
   let cumulative = 0;
@@ -2449,7 +2517,6 @@ function buildCompassDonut(segments){
   `;
 }
 
-// Pokrene animaciju punjenja prstena (mora posle umetanja u DOM, u sledecem frejmu).
 function animateHudRings(container){
   requestAnimationFrame(() => {
     container.querySelectorAll('.hud-ring-fill[data-offset]').forEach(el => {
@@ -2482,7 +2549,7 @@ function renderBoostHud(rows){
   animateHudRings(wrap);
 }
 
-const HUD_MAX_SPEED = 2300; // uu/s, priblizno supersonic prag u igri
+const HUD_MAX_SPEED = 2300;
 
 function renderSpeedHud(rows){
   const wrap = $('#speedHud');
@@ -2611,10 +2678,6 @@ function renderBoostTable(rows){
   ]);
 }
 
-// ================================================================
-//  OSTALE TAB FUNKCIJE (skraćeno - postoje u originalu)
-// ================================================================
-
 function renderAirChart(rows){
   const ps = [...activePlayers].sort();
   const ground = ps.map(p => avg(rows.filter(r=>r.player===p).map(r=>getPath(r,'movement.percent_ground')||0)));
@@ -2724,15 +2787,11 @@ function renderDemoTrend(rows){
   lineChartFor('#demoTrendChart', 'demoTrend', ordered);
 }
 
-// ================================================================
-//  CHEMISTRY TAB
-// ================================================================
-
 let chemMode = '2v2';
 let chemCurrentPage = 1;
 const CHEM_PAGE_SIZE = 14;
-let lastChemRows = [];       // filtrirani redovi na osnovu kojih je Chemistry racunat
-let lastChemGroups = {};     // { combKey: { total, wins, members:[...], matches:[{replay_id,team_color,date,map,win,team_goals,opponent_goals}] } }
+let lastChemRows = [];
+let lastChemGroups = {};
 
 const GUEST_PALETTE = ['#9CA3AF', '#C084FC', '#38BDF8', '#F472B6', '#34D399'];
 
@@ -2750,12 +2809,6 @@ function blendColors(hexArr){
   return `rgb(${Math.round(sum[0]/n)}, ${Math.round(sum[1]/n)}, ${Math.round(sum[2]/n)})`;
 }
 
-// Prosecna statistika jednog clana kombinacije preko svih zajednickih meceva.
-// Prvo pokusava sopstveni red (nasa cetvorka - kao i do sada), a ako igrac
-// nema sopstveni red (gost, nije neko od nas cetvoro) - vadi njegovu statistiku
-// iz teammate_stats snapshot-a koji su nasi igraci sacuvali za taj mec. To
-// polje postoji tek posle sledeceg osvezavanja podataka (fetch_stats.py) -
-// dok se to ne desi, gost jednostavno nema dostupnu statistiku.
 function getMemberAggStats(data, name, catKeys){
   const matchIds = new Set(data.matches.map(m => m.replay_id));
   const buildFromSource = (sourceList, pathFn) => {
@@ -2812,7 +2865,6 @@ function renderChemistry(rows){
   const active = chemMode === '3v3' ? groups3 : groups2;
   lastChemGroups = active;
 
-  // Sortirano po broju odigranih mečeva zajedno (najviše prvo).
   const entries = Object.entries(active).sort((a,b) => b[1].total - a[1].total);
 
   const totalPages = Math.ceil(entries.length / CHEM_PAGE_SIZE) || 1;
@@ -2858,7 +2910,6 @@ function renderChemistry(rows){
     card.addEventListener('click', () => openTeamComboModal(card.dataset.comb));
   });
 
-  // Animiraj popunjavanje bar-a posle rendera (umesto da odmah bude pun).
   requestAnimationFrame(() => {
     gridEl.querySelectorAll('.bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
   });
@@ -2943,9 +2994,6 @@ function openTeamComboModal(combKey){
     });
   });
 
-  // Bitno: modal mora biti VIDLJIV (display:flex) PRE nego sto Chart.js
-  // izmeri canvas i nacrta grafikon - u suprotnom canvas ima 0x0 dimenzije
-  // u trenutku kreiranja i neki tipovi grafikona (npr. radar) ostanu prazni.
   $('#modalBackdrop').classList.add('open');
 
   COMBO_CHART_KEYS.forEach(destroyChart);
@@ -2976,10 +3024,6 @@ function openTeamComboModal(combKey){
     });
   }
 }
-
-// ================================================================
-//  RECORDS TAB
-// ================================================================
 
 function renderRecords(rows){
   const ps = [...activePlayers];
@@ -3029,10 +3073,6 @@ function renderRecords(rows){
     </div>
   `).join('');
 }
-
-// ================================================================
-//  HIGHLIGHTS TAB
-// ================================================================
 
 function dedupeByMatchTeam(rows){
   const seen = new Set();
@@ -3115,14 +3155,13 @@ function getPlayerAchievements(rows, player){
   return achievements;
 }
 
-// ===== TROFEJNA VITRINA — rotirajuća 3D polica (čist CSS transform + rAF, bez 3D biblioteka) =====
 class TrophyShelf{
   constructor(container, achievements, player){
     this.container = container;
     this.achievements = achievements;
     this.player = player;
     this.angle = Math.random() * 360;
-    this.speed = 10; // stepeni/sek auto-rotacija
+    this.speed = 10;
     this.dragging = false;
     this.dragged = false;
     this.lastX = 0;
@@ -3311,10 +3350,6 @@ function renderMonthCompare(){
   $('#monthCompareBody').innerHTML = body || '<tr><td colspan="7" class="empty">Nema mečeva ovog ili prošlog meseca za izabrane igrače</td></tr>';
 }
 
-// ================================================================
-//  HEAD TO HEAD TAB
-// ================================================================
-
 let h2hInitialized = false;
 
 function initH2HSelectors(){
@@ -3350,10 +3385,8 @@ function renderH2H(){
   const rowsA = rows.filter(r => r.player === a);
   const rowsB = rows.filter(r => r.player === b);
   
-  // Postavi podatke za VS Duel canvas
   renderVsDuelCanvas(rows, a, b);
   
-  // Takođe prikaži i tabelu sa poređenjem
   const metric = (arr, path) => avg(arr.map(r => getPath(r, path) || 0));
   const totalMetric = (arr, path) => sum(arr.map(r => getPath(r, path) || 0));
   const winPct = arr => arr.length ? Math.round((arr.filter(r=>r.win).length/arr.length)*100) : 0;
@@ -3388,7 +3421,6 @@ function renderH2H(){
     }
   });
 
-  // Prikaži tabelu ispod VS Duel canvas-a
   wrap.innerHTML = `
     <div class="card" style="margin-top:16px;">
       <h2 style="font-size:14px; text-transform:uppercase; color:var(--text-muted);">📋 Detaljno poređenje</h2>
@@ -3408,12 +3440,6 @@ function renderH2H(){
     </div>
   `;
 }
-
-// ================================================================
-//  VS DUEL — fighting-game stil "VS" slika za dva igrača, generiše se
-//  na canvas-u iz H2H podataka i deli preko Web Share API-ja.
-//  Sada sa 10 metrika i WOW dizajnom.
-// ================================================================
 
 function computeDuelStats(rowsPlayer, player){
   const matches = rowsPlayer.length;
@@ -3447,7 +3473,6 @@ function computeDuelHeadToHead(rows, a, b){
 }
 
 function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
-  // Neon glow krug
   ctx.save();
   ctx.shadowColor = hexToRgba(color, 0.3);
   ctx.shadowBlur = 50;
@@ -3481,7 +3506,6 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   }
   ctx.restore();
   
-  // Neon border
   ctx.save();
   ctx.shadowColor = hexToRgba(color, 0.5);
   ctx.shadowBlur = 25;
@@ -3492,7 +3516,6 @@ function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
   ctx.shadowBlur = 0;
   ctx.restore();
   
-  // Tanki svetleći prsten
   ctx.beginPath(); ctx.arc(cx, cy, r + 3, 0, Math.PI*2); ctx.closePath();
   ctx.lineWidth = 1;
   ctx.strokeStyle = 'rgba(255,255,255,0.1)';
@@ -3505,7 +3528,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   const ctx = canvas.getContext('2d');
   ctx.scale(scaleF, scaleF);
 
-  // ===== POZADINA - DUBOKA TAMNA SA GRADIJENTOM =====
   const bgGrad = ctx.createLinearGradient(0, 0, W, H);
   bgGrad.addColorStop(0, '#0a0e17');
   bgGrad.addColorStop(0.5, '#111827');
@@ -3513,28 +3535,23 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // ===== SUPTILNA TEKSTURA (šum) =====
   for (let i = 0; i < 200; i++) {
     ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.02})`;
     ctx.fillRect(Math.random() * W, Math.random() * H, 2, 2);
   }
 
-  // ===== OKVIR KARTICE - TANKI NEON BORDER =====
   roundRectPath(ctx, 8, 8, W-16, H-16, 24);
   ctx.lineWidth = 1.5;
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.stroke();
 
-  // ===== DRUGI OKVIR - GLOW EFEKAT =====
   roundRectPath(ctx, 10, 10, W-20, H-20, 22);
   ctx.lineWidth = 0.5;
   ctx.strokeStyle = 'rgba(255,255,255,0.03)';
   ctx.stroke();
 
-  // ===== SPLIT LINIJA - TANJA I SUPILNA =====
   const splitX = W / 2;
   
-  // Suptilna podela pozadine
   ctx.save();
   ctx.beginPath();
   ctx.rect(0, 0, splitX, H);
@@ -3557,7 +3574,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillRect(splitX, 0, W - splitX, H);
   ctx.restore();
 
-  // ===== CENTRALNA LINIJA - TANJA, SA GLOW-OM =====
   ctx.save();
   ctx.shadowColor = 'rgba(255,255,255,0.15)';
   ctx.shadowBlur = 12;
@@ -3576,7 +3592,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.lineTo(splitX, H - 20);
   ctx.stroke();
 
-  // ===== HEADER - "VS DUEL" SA GLOW-OM =====
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
   
@@ -3587,11 +3602,9 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillText('⚔️  V S   D U E L', W/2, 42);
   ctx.shadowBlur = 0;
 
-  // ===== PORTRAITI - VEĆI SA NEON KRUGOM =====
   const photoY = 170, photoR = 100;
   const cxA = W*0.22, cxB = W*0.78;
   
-  // Neon krugovi iza portreta
   ctx.save();
   ctx.shadowColor = hexToRgba(colorA, 0.4);
   ctx.shadowBlur = 40;
@@ -3613,7 +3626,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   drawDuelPortrait(ctx, cxA, photoY, photoR, photoA, dataA.player, colorA);
   drawDuelPortrait(ctx, cxB, photoY, photoR, photoB, dataB.player, colorB);
 
-  // ===== VS LOGO - STAKLENI EFEKAT =====
   ctx.save();
   ctx.translate(W/2, photoY);
   
@@ -3643,7 +3655,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.shadowBlur = 0;
   ctx.restore();
 
-  // ===== IMENA - SA GRADIJENTOM =====
   ctx.textBaseline = 'alphabetic';
   
   ctx.font = "700 38px 'Rajdhani', sans-serif";
@@ -3660,7 +3671,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.fillText(dataB.player.toUpperCase(), cxB, photoY + photoR + 52);
   ctx.shadowBlur = 0;
 
-  // Suptilna linija ispod imena
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 0.5;
   ctx.beginPath();
@@ -3672,7 +3682,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
   ctx.lineTo(cxB + 60, photoY + photoR + 62);
   ctx.stroke();
 
-  // ===== STATISTIKE - SA PROGRES BAROVIMA =====
   const stats = [
     { key:'meceva', label:'MEČEVA', fmt:v=>v, isNumber:true },
     { key:'winPct', label:'WIN %', fmt:v=>Math.round(v)+'%' },
@@ -3694,13 +3703,11 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     const maxV = Math.max(va, vb, 0.0001);
     const wa = (va/maxV) * barMax, wb = (vb/maxV) * barMax;
 
-    // Label
     ctx.font = "700 13px 'Inter', sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.textAlign = 'center';
     ctx.fillText(s.label, W/2, y - 6);
 
-    // Bar A (levo)
     ctx.fillStyle = hexToRgba(colorA, 0.25);
     roundRectPath(ctx, W/2 - barMax - 4, y, barMax, barH, 4);
     ctx.fill();
@@ -3709,7 +3716,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     roundRectPath(ctx, W/2 - wa - 4, y, wa, barH, 4);
     ctx.fill();
 
-    // Bar B (desno)
     ctx.fillStyle = hexToRgba(colorB, 0.25);
     roundRectPath(ctx, W/2 + 4, y, barMax, barH, 4);
     ctx.fill();
@@ -3718,7 +3724,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     roundRectPath(ctx, W/2 + 4, y, wb, barH, 4);
     ctx.fill();
 
-    // Vrednosti
     ctx.font = "700 15px 'JetBrains Mono', monospace";
     ctx.textAlign = 'right';
     ctx.fillStyle = colorA;
@@ -3729,7 +3734,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     ctx.fillText(s.fmt(vb), W/2 + wb + 16, y + barH - 1);
   });
 
-  // ===== FOOTER - DIREKTNI DUELI =====
   const bannerY = H - 70;
   
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
@@ -3771,7 +3775,6 @@ function drawVsDuel(canvas, dataA, dataB, colorA, colorB, photoA, photoB, record
     ctx.fillText('Još se nisu sreli kao protivnici u ovom periodu', W/2, bannerY + 12);
   }
 
-  // ===== BRANDING - RLS LOGO =====
   ctx.font = "500 10px 'Inter', sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.textAlign = 'right';
@@ -3798,7 +3801,6 @@ async function renderVsDuelCanvas(rows, a, b){
   const saveBtn = document.getElementById('vsDuelSaveBtn');
   const shareBtn = document.getElementById('vsDuelShareBtn');
 
-  // ==== SAVE BUTTON ====
   if(saveBtn) {
     const newSaveBtn = saveBtn.cloneNode(true);
     saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
@@ -3814,12 +3816,10 @@ async function renderVsDuelCanvas(rows, a, b){
     });
   }
 
-  // ==== SHARE BUTTON ====
   if(shareBtn) {
     const newShareBtn = shareBtn.cloneNode(true);
     shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
     newShareBtn.addEventListener('click', () => {
-      // Uzmi trenutne vrednosti iz selectora
       const playerA = document.getElementById('h2hPlayerA').value;
       const playerB = document.getElementById('h2hPlayerB').value;
       const currentFilename = `vs-duel-${cssSafe(playerA)}-${cssSafe(playerB)}.png`;
@@ -3827,10 +3827,6 @@ async function renderVsDuelCanvas(rows, a, b){
     });
   }
 }
-
-// ================================================================
-//  MATCHES TAB
-// ================================================================
 
 function renderTable(rows){
   const sorted = [...rows].sort((a,b) => {
@@ -3871,12 +3867,10 @@ function renderTable(rows){
     tr.addEventListener('click', () => openModal(sorted[+tr.dataset.idx]));
   });
 
-  // Update pagination info
   $('#pageInfo').textContent = `Strana ${currentPage} od ${totalPages}`;
   $('#prevPageBtn').disabled = currentPage <= 1;
   $('#nextPageBtn').disabled = currentPage >= totalPages;
   
-  // Event listeneri za paginaciju (samo jednom)
   if (!window._paginationInitialized) {
     window._paginationInitialized = true;
     $('#prevPageBtn').addEventListener('click', () => {
@@ -3892,9 +3886,6 @@ function renderTable(rows){
     });
   }
 }
-// ================================================================
-//  ZVEZDANA MAPA — svaki meč je jedna zvezda (canvas, čist JS, bez biblioteka)
-// ================================================================
 
 const starMapState = {
   stars: [],
@@ -3905,8 +3896,6 @@ const starMapState = {
   canvas: null, ctx: null, raf: null,
 };
 
-// Deterministicki "seed" random po replay_id - ista zvezda uvek zavrsi na istom
-// mestu na mapi, cak i posle ponovnog rendera/filtriranja.
 function seededRand(seedStr){
   let h = 0;
   for(let i=0;i<seedStr.length;i++){ h = (h*31 + seedStr.charCodeAt(i)) | 0; }
@@ -3932,10 +3921,6 @@ function buildStarMapData(rows){
 
   return entries.map(([rid, rs]) => {
     const rnd = seededRand(rid);
-    // Predstavnik meca za modal - onaj od nasih igraca sa najboljim score-om u
-    // TOM mecu (ne prosto prvi u nizu, jer taj redosled zna da bude dosledno
-    // isti igrac - npr. kod offline/splitscreen meceva - sto bi znacilo da bi
-    // svaka zvezda otvarala istog igraca bez obzira ko je zaista bio "glavni").
     const rep = rs.reduce((best, r) => (getPath(r,'core.score')||0) > (getPath(best,'core.score')||0) ? r : best, rs[0]);
     const t = new Date(rep.date).getTime();
     const tFrac = isNaN(t) ? rnd() : (t - minT) / span;
@@ -4150,10 +4135,6 @@ function openModal(r){
 }
 
 function closeModal(){ $('#modalBackdrop').classList.remove('open'); }
-
-// ================================================================
-//  SEASON WRAPPED
-// ================================================================
 
 function longestWinStreakFor(rows, player){
   const sorted = rows.filter(r => r.player === player).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
@@ -4399,10 +4380,6 @@ function wrappedGo(dir){
   showWrappedSlide(next);
 }
 
-// ================================================================
-//  TRADING KARTE
-// ================================================================
-
 function clampScale(v, lo, hi, outLo=40, outHi=99){
   if(hi === lo) return Math.round((outLo+outHi)/2);
   const t = Math.max(0, Math.min(1, (v - lo) / (hi - lo)));
@@ -4456,14 +4433,6 @@ function hexToRgba(hex, a){
   return `rgba(${r},${g},${b},${a})`;
 }
 
-// ================================================================
-//  WEB SHARE API — deljenje slike direktno u Viber/WhatsApp/itd. preko
-//  sistemskog "Podeli" menija telefona, bez ručnog screenshot-a.
-//  Radi identično na iOS Safari-ju i Android Chrome-u jer je to
-//  ugrađena funkcija browsera, ne posebna aplikacija.
-//  Fallback: ako uređaj/browser ne podržava deljenje fajlova (npr.
-//  desktop), automatski skida sliku kao i pre.
-// ================================================================
 function canvasToBlob(canvas){
   return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 }
@@ -4478,16 +4447,14 @@ async function shareOrDownloadCanvas(canvas, filename, shareTitle, shareText){
       await navigator.share({ files: [file], title: shareTitle, text: shareText });
       return;
     }
-    // fallback: nema podrške za deljenje fajlova (najčešće desktop) - skini kao pre
     const link = document.createElement('a');
     link.download = filename;
     link.href = URL.createObjectURL(blob);
     link.click();
     setTimeout(() => URL.revokeObjectURL(link.href), 4000);
   }catch(e){
-    if(e && e.name === 'AbortError') return; // korisnik otkazao deljenje - nije greška
+    if(e && e.name === 'AbortError') return;
     console.error('[Share] Nije uspelo:', e);
-    // poslednji fallback preko dataURL-a
     try{
       const link = document.createElement('a');
       link.download = filename;
@@ -4615,7 +4582,7 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
     ctx.fillText(data.position, 44, 140);
 
     if(carImg){
-      const bs = 76; // velicina zaobljenog kvadratica
+      const bs = 76;
       const bx = W - 24 - bs, by = 34;
 
       ctx.save();
@@ -4820,10 +4787,6 @@ async function renderCardsTab(rows){
   });
 }
 
-// ================================================================
-//  AI ANALITIČAR
-// ================================================================
-
 const WORKER_URL = 'https://rocketleague-ai-proxy.boban-mello.workers.dev';
 const APP_SECRET = 'promeni-ovo-2026-rl-stats';
 
@@ -4897,10 +4860,6 @@ function prepareDetailedData(rows){
     };
   });
 
-  // "wins" moraju biti brojani po JEDINSTVENOM meču (replay_id), ne po redu.
-  // Svaki meč ima jedan red PO IGRAČU koji je u njemu igrao (npr. 2 reda za
-  // 2v2), pa brojanje rows.filter(win) duplira svaku pobedu onoliko puta
-  // koliko je tvojih igrača bilo u toj partiji.
   const uniqueMatches = [...new Map(rows.map(r => [r.replay_id, r])).values()];
 
   const teamStats = {
@@ -4933,7 +4892,7 @@ Strengths/weaknesses/tips/training: 4-6 stavki svaka, svaka stavka konkretna i s
   const userPrompt = `Analiziraj ove podatke i vrati ISKLJUČIVO JSON (bez ičeg drugog):\n\n${JSON.stringify(payload)}`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s - da dugme nikad ne ostane zaglavljeno ako Worker/Groq ne odgovori
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   let response;
   try{
@@ -5005,8 +4964,6 @@ function generateDetailedFallback(data, prevData){
 
   let trendNote = '';
   if(prevData && Object.keys(prevData.players || {}).length){
-    const currTotalGoals = Object.values(data.players).reduce((s,p) => s + (p.goals_pm * p.matches), 0);
-    const prevTotalGoals = Object.values(prevData.players).reduce((s,p) => s + (p.goals_pm * p.matches), 0);
     const currWr = data.teamStats?.total_matches ? Math.round((data.teamStats.total_wins/data.teamStats.total_matches)*100) : 0;
     const prevWr = prevData.teamStats?.total_matches ? Math.round((prevData.teamStats.total_wins/prevData.teamStats.total_matches)*100) : 0;
     const diff = currWr - prevWr;
@@ -5084,9 +5041,6 @@ async function analyzeWithAI(rows){
     btn.disabled = false;
   }
 }
-// ================================================================
-//  😤 TILT DETECTOR
-// ================================================================
 
 function detectTilt(rows) {
     const ps = [...activePlayers];
@@ -5101,15 +5055,12 @@ function detectTilt(rows) {
             return;
         }
         
-        // Sortiraj po datumu
         const sorted = prows.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         
-        // Podeli na polovine
         const half = Math.floor(sorted.length / 2);
         const firstHalf = sorted.slice(0, half);
         const secondHalf = sorted.slice(half);
         
-        // Izračunaj performanse za svaku polovinu
         const calcStats = (matches) => {
             if (!matches.length) return null;
             const goals = avg(matches.map(r => getPath(r, 'core.goals') || 0));
@@ -5130,7 +5081,6 @@ function detectTilt(rows) {
             return;
         }
         
-        // Izračunaj procentualne promene
         const changes = {
             goals: ((second.goals - first.goals) / (first.goals || 0.01)) * 100,
             assists: ((second.assists - first.assists) / (first.assists || 0.01)) * 100,
@@ -5141,12 +5091,10 @@ function detectTilt(rows) {
             boost: ((second.boost - first.boost) / (first.boost || 0.01)) * 100,
         };
         
-        // Detektuj "tilt" - pad od > 25% u bilo kojoj kategoriji
         const tiltedCategories = [];
         const tiltThreshold = 25;
         const improveThreshold = 15;
         
-        // Koje kategorije pokazuju pad?
         if (changes.goals < -tiltThreshold) tiltedCategories.push({ name: 'golovi', change: changes.goals });
         if (changes.assists < -tiltThreshold) tiltedCategories.push({ name: 'asistencije', change: changes.assists });
         if (changes.saves < -tiltThreshold) tiltedCategories.push({ name: 'odbrane', change: changes.saves });
@@ -5154,7 +5102,6 @@ function detectTilt(rows) {
         if (changes.winrate < -tiltThreshold) tiltedCategories.push({ name: 'win rate', change: changes.winrate });
         if (changes.shots < -tiltThreshold) tiltedCategories.push({ name: 'šutevi', change: changes.shots });
         
-        // Koje kategorije pokazuju napredak?
         const improvedCategories = [];
         if (changes.goals > improveThreshold) improvedCategories.push({ name: 'golovi', change: changes.goals });
         if (changes.assists > improveThreshold) improvedCategories.push({ name: 'asistencije', change: changes.assists });
@@ -5162,7 +5109,6 @@ function detectTilt(rows) {
         if (changes.score > improveThreshold) improvedCategories.push({ name: 'score', change: changes.score });
         if (changes.winrate > improveThreshold) improvedCategories.push({ name: 'win rate', change: changes.winrate });
         
-        // Odredi status
         let status = 'stable';
         let message = '';
         let emoji = '😐';
@@ -5196,7 +5142,6 @@ function detectTilt(rows) {
             message = '✅ Stabilne performanse kroz celu sesiju';
         }
         
-        // Dodaj duhoviti komentar
         const comments = {
             tilted: [
                 'Izgleda da je neko trebao da pauzira ranije 😅',
@@ -5225,7 +5170,6 @@ function detectTilt(rows) {
         const commentList = comments[status] || comments.stable;
         const randomComment = commentList[Math.floor(Math.random() * commentList.length)];
         
-        // Izračunaj ukupni "tilt score" (0-100)
         const avgChange = Object.values(changes).reduce((a, b) => a + b, 0) / Object.values(changes).length;
         const tiltScore = Math.min(100, Math.max(0, 50 - avgChange * 0.5));
         
@@ -5248,10 +5192,6 @@ function detectTilt(rows) {
     return results;
 }
 
-// ================================================================
-//  😤 TILT DETECTOR - DORADJENA VERZIJA
-// ================================================================
-
 function renderTiltDetector(rows) {
     const container = document.getElementById('tiltDetectorContent');
     if (!container) return;
@@ -5262,7 +5202,6 @@ function renderTiltDetector(rows) {
         return;
     }
     
-    // Prevodimo ključeve na srpski
     const metricLabels = {
         goals: 'Golovi',
         assists: 'Asistencije',
@@ -5300,7 +5239,6 @@ function renderTiltDetector(rows) {
             return;
         }
         
-        // Boja na osnovu statusa
         let borderColor = 'var(--border)';
         let bgGradient = 'var(--surface-2)';
         let accentColor = 'var(--text-muted)';
@@ -5323,10 +5261,8 @@ function renderTiltDetector(rows) {
             accentColor = '#3DA9FC';
         }
         
-        // Tilt score bar
         const scoreColor = data.tiltScore > 70 ? '#F87171' : data.tiltScore > 40 ? '#FBBF24' : '#4ADE80';
         
-        // Spremi promene za prikaz
         const changes = Object.entries(data.changes || {});
         
         html += `
@@ -5336,7 +5272,6 @@ function renderTiltDetector(rows) {
                 border-left: 4px solid ${borderColor};
                 transition: all 0.3s ease;
             ">
-                <!-- Header: Ime i emoji -->
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <h4 style="color:${playerColor[player] || '#fff'}; margin:0; font-size:17px;">
                         ${player}
@@ -5344,7 +5279,6 @@ function renderTiltDetector(rows) {
                     <span style="font-size:30px; line-height:1;">${data.emoji || emojiMap[data.status] || '😐'}</span>
                 </div>
                 
-                <!-- Status i komentar -->
                 <div style="font-size:15px; font-weight:700; color:${accentColor}; margin-bottom:2px;">
                     ${statusMap[data.status] || data.message}
                 </div>
@@ -5352,14 +5286,12 @@ function renderTiltDetector(rows) {
                     "${data.comment || 'Nema komentara'}"
                 </div>
                 
-                <!-- Info o mečevima -->
                 <div style="display:flex; gap:14px; margin:6px 0 10px; font-size:12px; color:var(--text-muted); flex-wrap:wrap;">
                     <span>📊 ${data.matches || 0} mečeva</span>
                     <span>📈 Početak: ${data.firstHalf?.matches || 0} meč</span>
                     <span>📉 Kraj: ${data.secondHalf?.matches || 0} meč</span>
                 </div>
                 
-                <!-- Tilt score bar -->
                 <div style="margin-bottom:12px;">
                     <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted);">
                         <span>😌 Smiren</span>
@@ -5370,7 +5302,6 @@ function renderTiltDetector(rows) {
                     </div>
                 </div>
                 
-                <!-- Metrike - dve kolone -->
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px 16px; font-size:12px; border-top:1px solid var(--border); padding-top:10px;">
                     ${changes.map(([key, val]) => {
                         const label = metricLabels[key] || key;
@@ -5395,10 +5326,9 @@ function renderTiltDetector(rows) {
     html += `</div>`;
     container.innerHTML = html;
 }
+
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
-  // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
-  // bez ovoga bi .map pukao i ceo modal tiho ne bi prikazao ništa
   const asArray = v => Array.isArray(v) ? v : (v ? [String(v)] : []);
   const strengths = asArray(analysis?.strengths);
   const weaknesses = asArray(analysis?.weaknesses);
@@ -5469,9 +5399,6 @@ $('#aiAnalyzeBtn').addEventListener('click', () => {
   analyzeWithAI(rows);
 });
 
-// sigurnosna mreža: ako NEŠTO potpuno neočekivano pukne bilo gde na stranici dok
-// je dugme za AI analizu u stanju "Analiziram...", vrati ga u normalno stanje i
-// glasno ispiši grešku u konzoli, umesto da ostane zaglavljeno u tišini
 function resetStuckAIButton(source, err){
   console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
   const btn = $('#aiAnalyzeBtn');
@@ -5483,8 +5410,6 @@ function resetStuckAIButton(source, err){
 window.addEventListener('error', e => resetStuckAIButton('window error', e.error || e.message));
 window.addEventListener('unhandledrejection', e => resetStuckAIButton('unhandled promise rejection', e.reason));
 
-// pauziraj animaciju čestica u pozadini dok je AI modal otvoren - manje posla za
-// glavnu nit dok se čeka/čita analiza
 const aiModalObserver = new MutationObserver(() => {
   const isOpen = $('#aiModalBackdrop')?.classList.contains('open');
   if(!particleSystem) return;
@@ -5496,7 +5421,14 @@ const aiModalObserver = new MutationObserver(() => {
 });
 if($('#aiModalBackdrop')) aiModalObserver.observe($('#aiModalBackdrop'), { attributes: true, attributeFilter: ['class'] });
 
-load();
+// ================================================================
+//  INICIJALIZACIJA - splash + particles + load
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  runSplashScreen();
+  initParticles();
+  load();
+});
 </script>
 </body>
 </html>
