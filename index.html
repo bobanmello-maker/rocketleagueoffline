@@ -1742,7 +1742,7 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
 
     <div class="tabpanel" id="tab-cards">
       <div class="cards-toolbar">
-        <div class="sub">Overall rating izračunat iz golova, asistencija, odbrana, boost menadžmenta, win rate-a i score-a — plus auto-otkrivena specijalnost i forma (🔥 vreo / 🧊 leden, na osnovu poslednjih mečeva). Klik na dugme ispod karte = snimi kao sliku.</div>
+        <div class="sub">Overall rating izračunat iz golova, asistencija, odbrana, boost menadžmenta, win rate-a i score-a — obrub karte reaguje na formu (🔥 vreo / 🧊 leden, na osnovu poslednjih mečeva). Klik na dugme ispod karte = snimi kao sliku.</div>
       </div>
       <div class="card-grid" id="cardGrid"></div>
     </div>
@@ -6583,24 +6583,6 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
     ctx.font = "700 22px 'Rajdhani', sans-serif";
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
-
-    // ===== SPECIJALNOST + FORMA PILL =====
-    const pillLabel = (data.formTier === 'hot' ? '🔥 ' : data.formTier === 'cold' ? '🧊 ' : '') + (data.specialty || '');
-    ctx.font = "700 15px 'Inter', sans-serif";
-    const pillPadX = 12, pillH = 27;
-    const pillW = ctx.measureText(pillLabel).width + pillPadX * 2;
-    const pillX = 40, pillY = 152;
-    ctx.beginPath();
-    roundRectPath(ctx, pillX, pillY, pillW, pillH, pillH / 2);
-    ctx.fillStyle = data.formTier === 'hot' ? 'rgba(255,183,3,0.32)' : data.formTier === 'cold' ? 'rgba(142,207,255,0.28)' : hexToRgba(color, 0.3);
-    ctx.fill();
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = data.formTier === 'hot' ? '#FFD76B' : data.formTier === 'cold' ? '#BEE7FF' : hexToRgba('#ffffff', 0.4);
-    ctx.stroke();
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(pillLabel, pillX + pillPadX, pillY + pillH / 2 + 1);
     ctx.textBaseline = 'top';
 
     if(carImg){
