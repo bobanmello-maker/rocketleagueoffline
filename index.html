@@ -980,6 +980,106 @@ body.intro-active{ overflow:hidden; }
   position:fixed; inset:0; z-index:9500; display:none; align-items:center; justify-content:center;
   background:rgba(3,5,10,0.86); backdrop-filter:blur(3px);
 }
+
+/* ===== VS INTRO — borilacki ekran pri otvaranju Rivalry/VS Duel karte ===== */
+.vsintro-overlay{
+  position:fixed; inset:0; z-index:9400; display:none;
+  align-items:center; justify-content:center; overflow:hidden;
+  background:radial-gradient(circle at 50% 50%, rgba(20,10,30,0.94), rgba(2,2,6,0.985));
+}
+.vsintro-overlay.open{ display:flex; }
+.vsintro-flash{ position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+.vsintro-flash.flash-hit{ animation:vsIntroFlash .28s ease-out; }
+@keyframes vsIntroFlash{ 0%{ opacity:0.85; } 100%{ opacity:0; } }
+
+.vsintro-portrait{
+  position:absolute; top:50%; display:flex; flex-direction:column; align-items:center; gap:10px;
+  transform:translateY(-50%); opacity:0;
+}
+.vsintro-left{ left:-32vw; }
+.vsintro-right{ right:-32vw; }
+.vsintro-left.fly-in{ animation:vsIntroFlyLeft .55s cubic-bezier(.2,.85,.35,1) forwards; }
+.vsintro-right.fly-in{ animation:vsIntroFlyRight .55s cubic-bezier(.2,.85,.35,1) forwards; }
+@keyframes vsIntroFlyLeft{ 0%{ left:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ left:calc(50% - 190px); opacity:1; } }
+@keyframes vsIntroFlyRight{ 0%{ right:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ right:calc(50% - 190px); opacity:1; } }
+
+.vsintro-photo-wrap{
+  width:150px; height:150px; border-radius:50%; overflow:hidden;
+  border:4px solid rgba(255,255,255,0.85); box-shadow:0 0 40px rgba(255,255,255,0.25);
+  background:#141A24; display:flex; align-items:center; justify-content:center;
+  font-size:56px; font-weight:800; color:#fff; font-family:'Rajdhani',sans-serif;
+}
+.vsintro-photo-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+.vsintro-name{
+  font-family:'Rajdhani', sans-serif; font-weight:800; font-size:24px; letter-spacing:0.03em;
+  text-transform:uppercase; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,0.6);
+}
+.vsintro-vs-text{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(0);
+  font-family:'Rajdhani', sans-serif; font-weight:900; font-size:70px; color:#fff;
+  text-shadow:0 0 30px rgba(255,255,255,0.6); opacity:0;
+}
+.vsintro-vs-text.pop{ animation:vsIntroVsPop .35s cubic-bezier(.3,1.6,.4,1) forwards; }
+@keyframes vsIntroVsPop{
+  0%{ transform:translate(-50%,-50%) scale(0); opacity:0; }
+  60%{ transform:translate(-50%,-50%) scale(1.35); opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+}
+.vsintro-ready-text{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(2.4);
+  font-family:'Rajdhani', sans-serif; font-weight:900; font-size:60px; letter-spacing:0.08em;
+  background:linear-gradient(90deg, var(--blue), var(--orange));
+  -webkit-background-clip:text; background-clip:text; color:transparent; opacity:0;
+}
+.vsintro-ready-text.explode{ animation:vsIntroReadyExplode .5s cubic-bezier(.2,.9,.3,1) forwards; }
+@keyframes vsIntroReadyExplode{
+  0%{ transform:translate(-50%,-50%) scale(2.4); opacity:0; }
+  35%{ opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+}
+.vsintro-ready-text.fade-out{ animation:vsIntroFadeOut .3s ease forwards; }
+@keyframes vsIntroFadeOut{ to{ opacity:0; transform:translate(-50%,-50%) scale(0.85); } }
+
+body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
+@keyframes screenShakeKf{
+  10%{ transform:translate(-6px,3px); } 20%{ transform:translate(6px,-4px); }
+  30%{ transform:translate(-5px,4px); } 40%{ transform:translate(5px,-3px); }
+  50%{ transform:translate(-4px,2px); } 60%{ transform:translate(4px,-2px); }
+  70%{ transform:translate(-2px,1px); } 80%{ transform:translate(2px,-1px); }
+  90%{ transform:translate(-1px,0); } 100%{ transform:translate(0,0); }
+}
+
+/* ===== MARQUEE TRAKA — "berzanski tiker" trenutne forme ekipe ===== */
+.form-marquee{
+  position:relative; overflow:hidden; width:100%;
+  background:linear-gradient(90deg, rgba(61,169,252,0.10), rgba(255,107,53,0.10));
+  border-bottom:1px solid var(--border);
+  padding:7px 0;
+}
+.form-marquee-track{
+  display:inline-flex; white-space:nowrap; will-change:transform;
+  animation:marqueeScroll linear infinite;
+}
+.form-marquee-track .fm-item{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12.5px; font-weight:600; color:var(--text-muted);
+  padding:0 26px; border-right:1px solid var(--border);
+}
+.form-marquee-track .fm-item b{ color:#fff; font-weight:700; }
+@keyframes marqueeScroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+@media (prefers-reduced-motion:reduce){
+  .form-marquee-track{ animation:none; }
+}
+@media (max-width:560px){
+  .vsintro-photo-wrap{ width:104px; height:104px; font-size:40px; }
+  .vsintro-name{ font-size:17px; }
+  .vsintro-vs-text{ font-size:44px; }
+  .vsintro-ready-text{ font-size:34px; }
+  .vsintro-left.fly-in{ animation-name:vsIntroFlyLeftM; }
+  .vsintro-right.fly-in{ animation-name:vsIntroFlyRightM; }
+  @keyframes vsIntroFlyLeftM{ 0%{ left:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ left:calc(50% - 118px); opacity:1; } }
+  @keyframes vsIntroFlyRightM{ 0%{ right:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ right:calc(50% - 118px); opacity:1; } }
+}
 .lootbox-overlay.open{ display:flex; }
 .lootbox-close-btn{
   position:absolute; top:18px; right:18px; background:none; border:1px solid var(--border);
@@ -1178,6 +1278,20 @@ body.intro-active{ overflow:hidden; }
     </div>
   </div>
 
+  <div class="vsintro-overlay" id="vsIntroOverlay">
+    <div class="vsintro-flash" id="vsIntroFlash"></div>
+    <div class="vsintro-portrait vsintro-left" id="vsIntroPortraitA">
+      <div class="vsintro-photo-wrap" id="vsIntroPhotoA"></div>
+      <div class="vsintro-name" id="vsIntroNameA"></div>
+    </div>
+    <div class="vsintro-portrait vsintro-right" id="vsIntroPortraitB">
+      <div class="vsintro-photo-wrap" id="vsIntroPhotoB"></div>
+      <div class="vsintro-name" id="vsIntroNameB"></div>
+    </div>
+    <div class="vsintro-vs-text" id="vsIntroVsText">VS</div>
+    <div class="vsintro-ready-text" id="vsIntroReadyText">SPREMNI?</div>
+  </div>
+
   <canvas id="particles-canvas"></canvas>
   <script>
   // ================================================================
@@ -1234,6 +1348,7 @@ body.intro-active{ overflow:hidden; }
       click(){ tone(600, 0.06, 'square', 0.10); },
       whoosh(){ sweep(180, 900, 0.35, 0.13); },
       shake(){ tone(90, 0.07, 'square', 0.09); },
+      impact(){ tone(70, 0.18, 'square', 0.22); tone(48, 0.22, 'sine', 0.18, 0.02); },
       unlock(){ tone(523.25, 0.12, 'triangle', 0.16); tone(659.25, 0.12, 'triangle', 0.15, 0.09); tone(783.99, 0.22, 'triangle', 0.17, 0.18); },
       fanfare(){ tone(523.25, 0.14, 'triangle', 0.18, 0); tone(659.25, 0.14, 'triangle', 0.18, 0.12); tone(783.99, 0.14, 'triangle', 0.18, 0.24); tone(1046.5, 0.34, 'triangle', 0.2, 0.36); },
     };
@@ -1384,6 +1499,9 @@ body.intro-active{ overflow:hidden; }
     };
   })();
   </script>
+<div class="form-marquee" id="formMarquee">
+  <div class="form-marquee-track" id="formMarqueeTrack"></div>
+</div>
 <div class="wrap">
 
   <header class="hero">
@@ -2522,6 +2640,7 @@ async function load(){
     wrappedTouchX = null;
   }, {passive:true});
 
+  renderFormMarquee();
   render();
 }
 
@@ -2533,6 +2652,7 @@ function buildTabs(){
       btn.classList.add('active');
       $('#tab-' + btn.dataset.tab).classList.add('active');
       if(btn.dataset.tab === 'matches') startStarMapLoop(); else stopStarMapLoop();
+      if(btn.dataset.tab === 'h2h') maybePlayVsIntro(true);
     });
   });
 }
@@ -3807,6 +3927,83 @@ function openTeamComboModal(combKey){
 //  RECORDS TAB
 // ================================================================
 
+// ================================================================
+//  📻 MARQUEE TRAKA — automatski generisane "vesti" o trenutnoj
+//  formi ekipe, iz celokupne istorije (RAW), nezavisno od filtera.
+// ================================================================
+function computeFormMarqueeItems(){
+  const items = [];
+  if(!allPlayers.length) return items;
+
+  const byPlayer = p => RAW.filter(r => r.player === p);
+
+  allPlayers.forEach(p => {
+    const v = byPlayer(p).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    if(v.length < 3) return;
+
+    // trenutni niz (pobede ili porazi unazad od poslednjeg meca)
+    let streak = 0, streakWin = null;
+    for(let i = v.length - 1; i >= 0; i--){
+      const w = !!v[i].win;
+      if(streakWin === null){ streakWin = w; streak = 1; }
+      else if(w === streakWin){ streak++; }
+      else break;
+    }
+    if(streak >= 3){
+      if(streakWin) items.push(`🔥 <b>${p}</b> u vatri — ${streak} pobeda zaredom`);
+      else items.push(`📉 <b>${p}</b> u padu forme — ${streak} poraza zaredom`);
+    }
+  });
+
+  // ko se priblizava rekordu golova
+  const totalGoals = p => sum(byPlayer(p).map(r => getPath(r,'core.goals') || 0));
+  const goalTotals = allPlayers.map(p => ({ p, g: totalGoals(p) })).sort((a,b) => b.g - a.g);
+  if(goalTotals.length >= 2 && goalTotals[0].g > 0){
+    const leader = goalTotals[0], chaser = goalTotals[1];
+    const gap = leader.g - chaser.g;
+    if(gap > 0 && gap <= Math.max(3, leader.g * 0.08)){
+      items.push(`🎯 <b>${chaser.p}</b> se približava rekordu golova — zaostaje ${gap} iza <b>${leader.p}</b>`);
+    }
+  }
+
+  // poslednji odigran mec — MVP i rezultat
+  const byReplay = {};
+  RAW.forEach(r => { if(r.replay_id && r.date) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
+  const replays = Object.values(byReplay).sort((a,b) => (b[0].date||'').localeCompare(a[0].date||''));
+  if(replays.length){
+    const last = replays[0];
+    const mvpRow = last.find(r => getPath(r,'core.mvp'));
+    if(mvpRow) items.push(`⭐ <b>${mvpRow.player}</b> je bio MVP u poslednjem odigranom meču`);
+    const rep = last.reduce((best, r) => (getPath(r,'core.score')||0) > (getPath(best,'core.score')||0) ? r : best, last[0]);
+    items.push(`🕹️ Poslednji meč: <b>${rep.team_goals}–${rep.opponent_goals}</b> na ${rep.map || 'nepoznatoj mapi'}`);
+  }
+
+  // ukupan broj odigranih meceva ikad
+  items.push(`📊 Ukupno odigrano <b>${replays.length || Object.keys(byReplay).length}</b> mečeva u istoriji ekipe`);
+
+  return items;
+}
+
+function renderFormMarquee(){
+  const bar = $('#formMarquee'), track = $('#formMarqueeTrack');
+  if(!bar || !track) return;
+  const items = computeFormMarqueeItems();
+  if(!items.length){ bar.style.display = 'none'; return; }
+  bar.style.display = 'block';
+
+  // dupliraj sadrzaj radi neprekidnog "beskonacnog" skrolovanja
+  const html = items.map(it => `<span class="fm-item">${it}</span>`).join('');
+  track.innerHTML = html + html;
+
+  // brzina skrolovanja skalirana prema kolicini teksta (konzistentan tempo)
+  const speedPxPerSec = 55;
+  requestAnimationFrame(() => {
+    const fullWidth = track.scrollWidth / 2;
+    const duration = Math.max(18, fullWidth / speedPxPerSec);
+    track.style.animationDuration = duration + 's';
+  });
+}
+
 function renderRecords(rows){
   const ps = [...activePlayers];
   if(!ps.length){ $('#awardGrid').innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
@@ -4300,6 +4497,100 @@ function initH2HSelectors(){
   }
 }
 
+// ================================================================
+//  🥊 VS INTRO — borilacki ekran (Mortal Kombat fazon) pre nego sto
+//  se otvori Rivalry/VS Duel karta. Kratko (~1.5s), ali dramaticno.
+// ================================================================
+let lastVsIntroKey = null;
+
+function currentH2HPlayers(){
+  const a = $('#h2hPlayerA')?.value, b = $('#h2hPlayerB')?.value;
+  return (a && b && a !== b) ? { a, b } : null;
+}
+
+function vsIntroPortraitHtml(name){
+  const url = PLAYER_IMAGE_OVERRIDES[name];
+  const initial = (name || '?').charAt(0).toUpperCase();
+  if(url) return `<img src="${url}" alt="${name}" onerror="this.outerHTML='${initial}';">`;
+  return initial;
+}
+
+function playVsFightIntro(a, b){
+  const overlay = $('#vsIntroOverlay');
+  if(!overlay) return;
+  const portraitA = $('#vsIntroPortraitA'), portraitB = $('#vsIntroPortraitB');
+  const photoA = $('#vsIntroPhotoA'), photoB = $('#vsIntroPhotoB');
+  const nameA = $('#vsIntroNameA'), nameB = $('#vsIntroNameB');
+  const vsText = $('#vsIntroVsText'), readyText = $('#vsIntroReadyText'), flash = $('#vsIntroFlash');
+  if(!portraitA || !portraitB) return;
+
+  // resetuj klase za slucaj da se animacija ponovo pokrene pre nego sto se prethodna zavrsila
+  [portraitA, portraitB, vsText, readyText, flash].forEach(el => {
+    el.classList.remove('fly-in', 'pop', 'explode', 'fade-out', 'flash-hit');
+  });
+  overlay.style.transition = '';
+  overlay.style.opacity = '';
+  overlay.classList.add('open');
+
+  photoA.innerHTML = vsIntroPortraitHtml(a);
+  photoB.innerHTML = vsIntroPortraitHtml(b);
+  const colorA = (typeof playerColor !== 'undefined' && playerColor[a]) || '#3DA9FC';
+  const colorB = (typeof playerColor !== 'undefined' && playerColor[b]) || '#FF6B35';
+  photoA.style.borderColor = colorA;
+  photoB.style.borderColor = colorB;
+  nameA.textContent = a;
+  nameB.textContent = b;
+  nameA.style.color = colorA;
+  nameB.style.color = colorB;
+
+  if(window.SFX) SFX.whoosh();
+
+  requestAnimationFrame(() => {
+    portraitA.classList.add('fly-in');
+    portraitB.classList.add('fly-in');
+  });
+
+  // sudar na sredini
+  setTimeout(() => {
+    document.body.classList.add('screen-shake');
+    flash.classList.add('flash-hit');
+    vsText.classList.add('pop');
+    if(window.SFX) SFX.impact();
+    setTimeout(() => document.body.classList.remove('screen-shake'), 360);
+  }, 520);
+
+  // "SPREMNI?" eksplodira
+  setTimeout(() => {
+    readyText.classList.add('explode');
+    if(window.SFX) SFX.fanfare();
+  }, 820);
+
+  // nestani i zatvori (ukupno ~1.5s)
+  setTimeout(() => {
+    readyText.classList.add('fade-out');
+    overlay.style.transition = 'opacity .3s ease';
+    overlay.style.opacity = '0';
+  }, 1300);
+
+  setTimeout(() => {
+    overlay.classList.remove('open');
+    overlay.style.opacity = '';
+    overlay.style.transition = '';
+  }, 1620);
+}
+
+function maybePlayVsIntro(force){
+  const tabEl = $('#tab-h2h');
+  if(!tabEl || !tabEl.classList.contains('active')) return;
+  const pair = currentH2HPlayers();
+  if(!pair) return;
+  const key = pair.a + '::' + pair.b;
+  if(force || key !== lastVsIntroKey){
+    lastVsIntroKey = key;
+    playVsFightIntro(pair.a, pair.b);
+  }
+}
+
 function renderH2H(){
   initH2HSelectors();
   const a = $('#h2hPlayerA').value, b = $('#h2hPlayerB').value;
@@ -4318,6 +4609,7 @@ function renderH2H(){
   // Postavi podatke za VS Duel canvas
   renderVsDuelCanvas(rows, a, b);
   renderRivalryCanvas(rows, a, b);
+  maybePlayVsIntro(false);
   
   // Takođe prikaži i tabelu sa poređenjem
   const metric = (arr, path) => avg(arr.map(r => getPath(r, path) || 0));
