@@ -46,7 +46,9 @@
     padding-bottom:22px; margin-bottom:20px;
   }
   .hero-title{ display:flex; align-items:baseline; gap:14px; }
-  .hero-title .bar{ width:6px; height:34px; background:linear-gradient(var(--blue),var(--orange)); border-radius:3px; }
+  .hero-title .bar{ width:6px; height:34px; background:linear-gradient(var(--blue),var(--orange)); border-radius:3px; transition:background .6s ease, box-shadow .6s ease; }
+  .hero-title .bar.season-winter{ background:linear-gradient(#BFE7FF,#3DA9FC); box-shadow:0 0 14px rgba(191,231,255,0.55); }
+  .hero-title .bar.season-halloween{ background:linear-gradient(#FF8A2B,#7C3AED); box-shadow:0 0 14px rgba(124,58,237,0.55); }
   .hero-title h1{ font-size:30px; margin:0; text-transform:uppercase; }
   .hero-title span{ color:var(--text-muted); font-size:14px; }
   .scoreline{ display:flex; gap:26px; flex-wrap:wrap; }
@@ -272,7 +274,43 @@
   }
   .pattern-dot.active{ background:var(--amber); transform:scale(1.25); }
 
-  /* ===== ZVEZDANA MAPA ===== */
+  /* ===== ŠTA BI BILO DA... (kontrafaktualna kartica) ===== */
+  .whatif-card{
+    background:linear-gradient(135deg, rgba(192,132,252,0.07), var(--surface));
+    border-color:rgba(192,132,252,0.28);
+  }
+  .whatif-spotlight{
+    display:flex; align-items:center; gap:16px; padding:10px 6px;
+    transition:opacity .22s ease, transform .22s ease; opacity:1; transform:translateY(0);
+  }
+  .whatif-spotlight.fade-out{ opacity:0; transform:translateY(6px); }
+  .whatif-icon{ font-size:34px; flex-shrink:0; filter:drop-shadow(0 0 8px rgba(192,132,252,0.4)); }
+  .whatif-text{ font-size:14.5px; line-height:1.5; color:var(--text); }
+  .whatif-text b{ font-weight:700; }
+  .whatif-text .wi-good{ color:var(--green); }
+  .whatif-text .wi-bad{ color:var(--loss); }
+  .whatif-baseline{ color:var(--text-muted); font-size:12px; }
+  .whatif-dots{ display:flex; gap:6px; justify-content:center; margin-top:6px; }
+  .whatif-dot{
+    width:7px; height:7px; border-radius:50%; background:var(--boost-track); cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .whatif-dot.active{ background:#C084FC; transform:scale(1.25); }
+
+  /* ===== HALL OF SHAME ===== */
+  .shame-card{
+    background:linear-gradient(135deg, rgba(248,113,113,0.06), var(--surface));
+    border-color:rgba(248,113,113,0.22);
+  }
+  .shame-chip{
+    width:64px; text-align:center; background:var(--surface-2); border:1px solid rgba(248,113,113,0.3);
+    border-radius:10px; padding:8px 4px 6px; cursor:default; transition:transform .15s ease;
+  }
+  .shame-chip:hover{ transform:translateY(-3px); border-color:var(--loss); }
+  .shame-chip .b-emoji{ font-size:22px; line-height:1; filter:grayscale(0.15); }
+  .shame-chip .b-name{ font-size:9px; color:var(--text-muted); margin-top:4px; line-height:1.2; display:block; }
+
+  /* ===== ZVEZDANA MAPA / GALAKSIJA KARIJERE ===== */
   .starmap-wrap{
     position:relative; width:100%; height:560px; border-radius:12px; overflow:hidden;
     background:#03050c; border:1px solid var(--border); cursor:grab; touch-action:none;
@@ -293,6 +331,7 @@
   .starmap-legend .sw.win{ background:#8EC9FF; box-shadow:0 0 6px #8EC9FF; }
   .starmap-legend .sw.loss{ background:#FF6B6B; box-shadow:0 0 6px #FF6B6B; }
   .starmap-legend .sw.big{ width:11px; height:11px; background:#fff; box-shadow:0 0 10px #fff; }
+  .starmap-legend .sw.ring{ width:11px; height:11px; border-radius:50%; background:transparent; border:1.5px solid #FBBF24; box-shadow:none; }
   .starmap-reset-btn{ font-size:10px; padding:3px 10px; background:var(--surface-2); }
   @media (max-width:768px){
     .starmap-wrap{ height:420px; }
@@ -1398,9 +1437,15 @@ body.intro-active{ overflow:hidden; }
   <div id="content">
 
     <div class="tabpanel active" id="tab-overview">
-      <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
-        <h2>Lovac na obrasce <small>Automatski otkriveni šabloni iz istorije mečeva</small></h2>
-        <div id="patternHunterBody"></div>
+      <div class="grid">
+        <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
+          <h2>Lovac na obrasce <small>Automatski otkriveni šabloni iz istorije mečeva</small></h2>
+          <div id="patternHunterBody"></div>
+        </div>
+        <div class="card whatif-card" id="whatIfCard" style="display:none;">
+          <h2>🌀 Šta bi bilo da... <small>kontrafaktualni scenariji iz stvarnih podataka</small></h2>
+          <div id="whatIfBody"></div>
+        </div>
       </div>
       <div class="grid">
         <div class="card">
@@ -1568,6 +1613,10 @@ body.intro-active{ overflow:hidden; }
         </h2>
         <div id="milestoneGrid"></div>
       </div>
+      <div class="card shame-card">
+        <h2>😈 Hall of Shame <small>najcrnji trenuci — isti motor kao dostignuća, samo naopako</small></h2>
+        <div id="shameGrid"></div>
+      </div>
       <div class="card">
         <h2>📈 Ovaj mesec vs prošli mesec <small>poređenje po igraču</small></h2>
         <div class="table-wrap"><table id="monthCompareTable"><thead><tr><th>Igrač</th><th class="mono">Golova (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Win% (ovaj/prošli)</th><th class="mono">Δ</th><th class="mono">Boost (ovaj/prošli)</th><th class="mono">Δ</th></tr></thead><tbody id="monthCompareBody"></tbody></table></div>
@@ -1615,14 +1664,15 @@ body.intro-active{ overflow:hidden; }
 
     <div class="tabpanel" id="tab-matches">
       <div class="card starmap-card">
-        <h2>🌌 Zvezdana mapa <small>svaki odigrani meč je jedna zvezda — pozicija prati vreme, boja ishod, sjaj značaj partije</small></h2>
+        <h2>🌌 Galaksija karijere <small>svaki aktivni igrač je sunce, svaki njegov meč je planeta u suncokret-spirali oko njega</small></h2>
         <div class="starmap-wrap" id="starmapWrap">
           <canvas id="starmapCanvas"></canvas>
-          <div class="starmap-hint">prevuci da "letiš" · skroluj/pinč da zumiraš · klik na zvezdu = detalji meča</div>
+          <div class="starmap-hint">prevuci da "letiš" · skroluj/pinč da zumiraš · klik na planetu = kinematski zum + detalji meča</div>
           <div class="starmap-legend">
             <span><i class="sw win"></i>pobeda</span>
             <span><i class="sw loss"></i>poraz</span>
             <span><i class="sw big"></i>MVP / ubedljivo</span>
+            <span><i class="sw ring"></i>OT / preokret</span>
             <button class="chip starmap-reset-btn" id="starmapResetBtn">Resetuj pogled</button>
           </div>
         </div>
@@ -1698,16 +1748,36 @@ body.intro-active{ overflow:hidden; }
 //  BACKGROUND ANIMACIJA - ROCKET LEAGUE STYLE ČESTICE
 // ================================================================
 
+// Prepoznavanje sezone po datumu - vraca 'winter', 'halloween' ili null.
+// Zima: 15.12 - 10.1 (preko granice godine). Noc vestica: 24.10 - 31.10.
+function detectSeasonTheme(d){
+  d = d || new Date();
+  const month = d.getMonth() + 1, day = d.getDate();
+  if((month === 12 && day >= 15) || (month === 1 && day <= 10)) return 'winter';
+  if(month === 10 && day >= 24 && day <= 31) return 'halloween';
+  return null;
+}
+
+// Primeni suptilan sezonski akcenat na logo-liniju u headeru.
+function applySeasonToHeader(season){
+  const bar = document.querySelector('.hero-title .bar');
+  if(!bar) return;
+  bar.classList.remove('season-winter', 'season-halloween');
+  if(season) bar.classList.add('season-' + season);
+}
+
 class ParticleSystem {
   constructor() {
     this.canvas = document.getElementById('particles-canvas');
     this.ctx = this.canvas.getContext('2d');
     this.particles = [];
     this.mouse = { x: null, y: null };
-    this.count = 80;
-    this.connectionDistance = 150;
+    this.season = detectSeasonTheme();
+    this.count = this.season === 'winter' ? 90 : 80;
+    this.connectionDistance = this.season === 'winter' ? 0 : 150; // pahulje se ne povezuju linijama
     this.animationId = null;
-    
+    applySeasonToHeader(this.season);
+
     this.resize();
     this.initParticles();
     this.bindEvents();
@@ -1721,20 +1791,45 @@ class ParticleSystem {
   
   initParticles() {
     this.particles = [];
-    const colors = ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6', '#ffffff'];
-    
+    const palettes = {
+      winter: ['#ffffff', '#E8F4FF', '#BFE7FF', '#8EC9FF'],
+      halloween: ['#FF8A2B', '#7C3AED', '#FBBF24', '#C084FC', '#39FF14'],
+      default: ['#3DA9FC', '#FF6B35', '#4ADE80', '#FBBF24', '#C084FC', '#F472B6', '#ffffff'],
+    };
+    const colors = palettes[this.season] || palettes.default;
+
     for (let i = 0; i < this.count; i++) {
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        size: Math.random() * 3 + 1.5,
-        speedX: (Math.random() - 0.5) * 0.6,
-        speedY: (Math.random() - 0.5) * 0.6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        opacity: Math.random() * 0.6 + 0.2,
-        pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.01 + Math.random() * 0.02,
-      });
+      if(this.season === 'winter'){
+        // Prave padajuce pahulje - kreću odozgo, blago se ljuljaju levo-desno, padaju naniže.
+        this.particles.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          size: Math.random() * 2.6 + 1.6,
+          speedX: 0,
+          speedY: Math.random() * 0.5 + 0.35,
+          swayPhase: Math.random() * Math.PI * 2,
+          swaySpeed: 0.01 + Math.random() * 0.02,
+          swayAmount: 0.4 + Math.random() * 0.6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.5 + 0.35,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.01 + Math.random() * 0.02,
+          snow: true,
+        });
+      } else {
+        this.particles.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          size: Math.random() * 3 + 1.5,
+          speedX: (Math.random() - 0.5) * 0.6,
+          speedY: (Math.random() - 0.5) * 0.6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.6 + 0.2,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.01 + Math.random() * 0.02,
+          snow: false,
+        });
+      }
     }
   }
   
@@ -1775,29 +1870,40 @@ class ParticleSystem {
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       
-      // Pomeranje
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.pulse += p.pulseSpeed;
-      
-      // Odbijanje od zidova
-      if (p.x < 0 || p.x > W) p.speedX *= -1;
-      if (p.y < 0 || p.y > H) p.speedY *= -1;
-      
-      // Privlačenje ka mišu
-      if (this.mouse.x !== null) {
-        const dx = this.mouse.x - p.x;
-        const dy = this.mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-          const force = (200 - dist) / 200 * 0.02;
-          p.speedX += dx * force * 0.01;
-          p.speedY += dy * force * 0.01;
-          // Ograniči brzinu
-          const speed = Math.sqrt(p.speedX * p.speedX + p.speedY * p.speedY);
-          if (speed > 1.5) {
-            p.speedX = (p.speedX / speed) * 1.5;
-            p.speedY = (p.speedY / speed) * 1.5;
+      if (p.snow) {
+        // Prava padajuća pahulja: pada naniže, blago se ljulja levo-desno, vraća se na vrh
+        p.swayPhase += p.swaySpeed;
+        p.x += Math.sin(p.swayPhase) * p.swayAmount;
+        p.y += p.speedY;
+        p.pulse += p.pulseSpeed;
+        if (p.y > H + 10) { p.y = -10; p.x = Math.random() * W; }
+        if (p.x < -10) p.x = W + 10;
+        if (p.x > W + 10) p.x = -10;
+      } else {
+        // Pomeranje
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.pulse += p.pulseSpeed;
+
+        // Odbijanje od zidova
+        if (p.x < 0 || p.x > W) p.speedX *= -1;
+        if (p.y < 0 || p.y > H) p.speedY *= -1;
+
+        // Privlačenje ka mišu
+        if (this.mouse.x !== null) {
+          const dx = this.mouse.x - p.x;
+          const dy = this.mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 200) {
+            const force = (200 - dist) / 200 * 0.02;
+            p.speedX += dx * force * 0.01;
+            p.speedY += dy * force * 0.01;
+            // Ograniči brzinu
+            const speed = Math.sqrt(p.speedX * p.speedX + p.speedY * p.speedY);
+            if (speed > 1.5) {
+              p.speedX = (p.speedX / speed) * 1.5;
+              p.speedY = (p.speedY / speed) * 1.5;
+            }
           }
         }
       }
@@ -1825,9 +1931,9 @@ class ParticleSystem {
       }
     }
     
-    // Povezivanje čestica linijama
+    // Povezivanje čestica linijama (preskoči za pahulje - nema smisla)
     ctx.globalAlpha = 0.15;
-    for (let i = 0; i < this.particles.length; i++) {
+    for (let i = 0; i < (this.connectionDistance > 0 ? this.particles.length : 0); i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         const a = this.particles[i];
         const b = this.particles[j];
@@ -2488,6 +2594,7 @@ function render(){
   const rows = getFiltered();
   renderScoreline(rows);
   renderPatternHunter(rows);
+  renderWhatIf(rows);
   renderPlayerRecords(rows);
   
   renderGamification(rows);
@@ -2940,6 +3047,189 @@ function showPattern(i, userTriggered){
   if(userTriggered && patternTimer){
     clearInterval(patternTimer);
     patternTimer = setInterval(() => showPattern((patternIndex + 1) % patternList.length), 6000);
+  }
+}
+
+// ================================================================
+//  🌀 ŠTA BI BILO DA... — kontrafaktualni scenariji iz stvarnih podataka
+// ================================================================
+
+function buildSimple2v2Combos(rows){
+  const seen = new Set();
+  const groups = {};
+  rows.forEach(r => {
+    const key = r.replay_id + '|' + r.team_color;
+    if(seen.has(key)) return;
+    seen.add(key);
+    const teamMembers = [...new Set([r.player, ...(r.teammates || [])])];
+    if(teamMembers.length !== 2) return;
+    const membersSorted = [...teamMembers].sort();
+    const combKey = membersSorted.join(' & ');
+    if(!groups[combKey]) groups[combKey] = { total:0, wins:0, members:membersSorted };
+    groups[combKey].total++;
+    if(r.win) groups[combKey].wins++;
+  });
+  return groups;
+}
+
+const WHATIF_MILESTONES = [
+  { stat:'matches', label:'Veteran/Legenda', emoji:'🎯', fn: prows => prows.length, steps:[10,50,100] },
+  { stat:'wins', label:'Kralj pobeda', emoji:'🏆', fn: prows => prows.filter(r=>r.win).length, steps:[10,25,50] },
+  { stat:'goals', label:'Mašina za golove', emoji:'⚽', fn: prows => sum(prows.map(r=>getPath(r,'core.goals')||0)), steps:[50,100] },
+  { stat:'assists', label:'Playmaker', emoji:'🎪', fn: prows => sum(prows.map(r=>getPath(r,'core.assists')||0)), steps:[25,50] },
+  { stat:'saves', label:'Tvrđava', emoji:'🧤', fn: prows => sum(prows.map(r=>getPath(r,'core.saves')||0)), steps:[50,100] },
+  { stat:'demos', label:'Demo kralj', emoji:'💥', fn: prows => sum(prows.map(r=>getPath(r,'demo.inflicted')||0)), steps:[20,50] },
+  { stat:'mvps', label:'Super MVP', emoji:'⭐', fn: prows => prows.filter(r=>getPath(r,'core.mvp')).length, steps:[5,10] },
+];
+
+function detectCounterfactuals(rows){
+  const found = [];
+  if(!rows.length) return found;
+  const ps = [...activePlayers];
+
+  // --- A: promena plasmana da je poslednji poraz bio pobeda ---
+  const rankRows = ps.map(p => {
+    const prows = rows.filter(r => r.player === p);
+    if(!prows.length) return null;
+    const wins = prows.filter(r=>r.win).length;
+    const pct = (wins/prows.length)*100;
+    const lastLoss = prows.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).reverse().find(r=>!r.win);
+    return { p, prows, wins, pct, lastLoss };
+  }).filter(Boolean);
+  if(rankRows.length >= 2){
+    const ranked = rankRows.slice().sort((a,b)=>b.pct-a.pct);
+    const rankOf = (p) => ranked.findIndex(x=>x.p===p) + 1;
+    rankRows.forEach(rr => {
+      if(!rr.lastLoss) return;
+      const newWins = rr.wins + 1;
+      const newPct = (newWins/rr.prows.length)*100;
+      const simulated = ranked.map(x => x.p===rr.p ? { ...x, pct:newPct } : x).sort((a,b)=>b.pct-a.pct);
+      const newRank = simulated.findIndex(x=>x.p===rr.p) + 1;
+      const oldRank = rankOf(rr.p);
+      if(newRank < oldRank){
+        found.push({
+          icon:'📊', weight: (oldRank-newRank)*30 + 10,
+          html: `Da je <b style="color:${playerColor[rr.p]||'#fff'}">${rr.p}</b>-ov poslednji poraz (${fmtDate(rr.lastLoss.date)} · ${mapDisplay(rr.lastLoss.map)}) bio pobeda, popeo bi se sa <b>#${oldRank}</b> na <b class="wi-good">#${newRank}</b> mesto po win rate-u <span class="whatif-baseline">(${rr.pct.toFixed(0)}% → ${newPct.toFixed(0)}%)</span>`,
+        });
+      }
+    });
+  }
+
+  // --- B: bez crne serije win rate bi bio X% ---
+  ps.forEach(p => {
+    const prows = rows.filter(r => r.player === p);
+    if(prows.length < 5) return;
+    const sorted = prows.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    let curStart = -1, curLen = 0, bestStart = -1, bestLen = 0;
+    sorted.forEach((r,i) => {
+      if(!r.win){ if(curLen===0) curStart = i; curLen++; if(curLen>bestLen){ bestLen=curLen; bestStart=curStart; } }
+      else curLen = 0;
+    });
+    if(bestLen < 3) return;
+    const withoutStreak = sorted.filter((r,i) => i < bestStart || i >= bestStart+bestLen);
+    if(!withoutStreak.length) return;
+    const actualPct = (sorted.filter(r=>r.win).length/sorted.length)*100;
+    const hypoPct = (withoutStreak.filter(r=>r.win).length/withoutStreak.length)*100;
+    found.push({
+      icon:'💭', weight: Math.abs(hypoPct-actualPct)*1.5 + bestLen*2,
+      html: `Bez te crne serije od <b>${bestLen}</b> poraza zaredom, <b style="color:${playerColor[p]||'#fff'}">${p}</b>-ov win rate bi bio <b class="wi-good">${hypoPct.toFixed(0)}%</b> <span class="whatif-baseline">(trenutno ${actualPct.toFixed(0)}%)</span>`,
+    });
+  });
+
+  // --- C: blizina sledećeg dostignuća ---
+  let closest = null;
+  ps.forEach(p => {
+    const prows = rows.filter(r => r.player === p);
+    if(!prows.length) return;
+    WHATIF_MILESTONES.forEach(ms => {
+      const val = ms.fn(prows);
+      const next = ms.steps.find(s => s > val);
+      if(next == null) return;
+      const dist = next - val;
+      const relDist = dist / next;
+      if(!closest || relDist < closest.relDist){
+        closest = { p, ms, val, next, dist, relDist };
+      }
+    });
+  });
+  if(closest && closest.dist > 0){
+    found.push({
+      icon: closest.ms.emoji, weight: (1 - closest.relDist) * 40,
+      html: `<b style="color:${playerColor[closest.p]||'#fff'}">${closest.p}</b> je na samo <b class="wi-good">${closest.dist}</b> od sledećeg praga za "${closest.ms.label}" <span class="whatif-baseline">(trenutno ${closest.val}, treba ${closest.next})</span>`,
+    });
+  }
+
+  // --- D: poređenje najbolje/najgore hemije ---
+  const combos = buildSimple2v2Combos(rows);
+  const comboArr = Object.entries(combos).map(([k,v]) => ({ key:k, ...v, pct: (v.wins/v.total)*100 })).filter(c => c.total >= 3);
+  if(comboArr.length >= 2){
+    const best = comboArr.slice().sort((a,b)=>b.pct-a.pct)[0];
+    const worst = comboArr.slice().sort((a,b)=>a.pct-b.pct)[0];
+    if(best.key !== worst.key){
+      found.push({
+        icon:'⚗️', weight: (best.pct - worst.pct) * 0.8,
+        html: `Najbolja hemija: <b class="wi-good">${best.key}</b> sa <b>${best.pct.toFixed(0)}%</b> win rate-a <span class="whatif-baseline">(${best.total} mečeva)</span> — najgora: <b class="wi-bad">${worst.key}</b> sa <b>${worst.pct.toFixed(0)}%</b> <span class="whatif-baseline">(${worst.total} mečeva)</span>`,
+      });
+    }
+  }
+
+  found.sort((a,b) => b.weight - a.weight);
+  return found.slice(0, 6);
+}
+
+let whatifList = [];
+let whatifIndex = 0;
+let whatifTimer = null;
+
+function renderWhatIf(rows){
+  const card = $('#whatIfCard');
+  const body = $('#whatIfBody');
+  if(!card || !body) return;
+  if(whatifTimer){ clearInterval(whatifTimer); whatifTimer = null; }
+
+  whatifList = detectCounterfactuals(rows);
+  whatifIndex = 0;
+
+  if(!whatifList.length){
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = '';
+
+  body.innerHTML = `
+    <div class="whatif-spotlight" id="whatifSpotlight">
+      <div class="whatif-icon">${whatifList[0].icon}</div>
+      <div class="whatif-text">${whatifList[0].html}</div>
+    </div>
+    <div class="whatif-dots" id="whatifDots">
+      ${whatifList.map((_,i) => `<span class="whatif-dot ${i===0?'active':''}" data-i="${i}"></span>`).join('')}
+    </div>
+  `;
+
+  body.querySelectorAll('.whatif-dot').forEach(dot => {
+    dot.addEventListener('click', () => showWhatIf(+dot.dataset.i, true));
+  });
+
+  if(whatifList.length > 1){
+    whatifTimer = setInterval(() => showWhatIf((whatifIndex + 1) % whatifList.length), 7000);
+  }
+}
+
+function showWhatIf(i, userTriggered){
+  whatifIndex = i;
+  const spotlight = $('#whatifSpotlight');
+  if(!spotlight) return;
+  spotlight.classList.add('fade-out');
+  setTimeout(() => {
+    const wi = whatifList[i];
+    if(!wi) return;
+    spotlight.innerHTML = `<div class="whatif-icon">${wi.icon}</div><div class="whatif-text">${wi.html}</div>`;
+    spotlight.classList.remove('fade-out');
+  }, 220);
+  document.querySelectorAll('.whatif-dot').forEach(d => d.classList.toggle('active', +d.dataset.i === i));
+  if(userTriggered && whatifTimer){
+    clearInterval(whatifTimer);
+    whatifTimer = setInterval(() => showWhatIf((whatifIndex + 1) % whatifList.length), 7000);
   }
 }
 
@@ -3584,6 +3874,7 @@ function dedupeByMatchTeam(rows){
 
 function renderHighlights(rows){
   renderMilestones(rows);
+  renderShame(rows);
   renderMonthCompare();
 }
 
@@ -3649,6 +3940,93 @@ function getPlayerAchievements(rows, player){
   if(accuracy >= 80) achievements.push({ emoji:'🎯', name:'Oštri strelac', desc:`${Math.round(accuracy)}% šut preciznost`, tier:'legendary' });
 
   return achievements;
+}
+
+// ================================================================
+//  😈 HALL OF SHAME — isti motor kao dostignuća, samo obrnuto
+// ================================================================
+
+function getPlayerShame(rows, player){
+  const prows = rows.filter(r => r.player === player);
+  if(!prows.length) return [];
+  const shame = [];
+  const sorted = prows.slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+
+  // --- Crna serija poraza ---
+  let worstLossStreak = 0, curLoss = 0;
+  sorted.forEach(r => {
+    if(!r.win){ curLoss++; worstLossStreak = Math.max(worstLossStreak, curLoss); }
+    else curLoss = 0;
+  });
+  if(worstLossStreak >= 3) shame.push({ emoji:'💀', name:'Crna serija', desc:`${worstLossStreak} poraza zaredom`, tier:'common' });
+  if(worstLossStreak >= 5) shame.push({ emoji:'🕳️', name:'Bezdan', desc:`${worstLossStreak}+ poraza zaredom`, tier:'rare' });
+  if(worstLossStreak >= 8) shame.push({ emoji:'☠️', name:'Ambis', desc:`${worstLossStreak} poraza zaredom — dno dna`, tier:'legendary' });
+
+  // --- Suša golova (uzastopni mečevi bez gola) ---
+  let worstDrought = 0, curDrought = 0;
+  sorted.forEach(r => {
+    const g = getPath(r,'core.goals') || 0;
+    if(g === 0){ curDrought++; worstDrought = Math.max(worstDrought, curDrought); }
+    else curDrought = 0;
+  });
+  if(worstDrought >= 3) shame.push({ emoji:'🏜️', name:'Suša golova', desc:`${worstDrought} mečeva bez gola zaredom`, tier:'common' });
+  if(worstDrought >= 6) shame.push({ emoji:'🌵', name:'Sahara', desc:`${worstDrought}+ mečeva bez gola zaredom`, tier:'epic' });
+
+  // --- Rešeto (najviše primljenih golova u jednom meču) ---
+  let worstConceded = 0, worstConcededRow = null;
+  prows.forEach(r => {
+    const ga = getPath(r,'core.goals_against');
+    if(ga != null && ga > worstConceded){ worstConceded = ga; worstConcededRow = r; }
+  });
+  if(worstConceded >= 5) shame.push({ emoji:'🪣', name:'Rešeto', desc:`${worstConceded} primljenih golova u jednom meču${worstConcededRow ? ' ('+mapDisplay(worstConcededRow.map)+')' : ''}`, tier:'common' });
+  if(worstConceded >= 8) shame.push({ emoji:'🧀', name:'Švajcarski sir', desc:`${worstConceded} primljenih golova u jednom meču`, tier:'epic' });
+
+  // --- Veliki čoking (najveće ispušteno vođstvo) ---
+  let worstChoke = 0;
+  prows.forEach(r => { const l = r.max_lead_lost || 0; if(l > worstChoke) worstChoke = l; });
+  if(worstChoke >= 2) shame.push({ emoji:'😱', name:'Čoking', desc:`ispušteno vođstvo od ${worstChoke} gola`, tier:'common' });
+  if(worstChoke >= 3) shame.push({ emoji:'🫠', name:'Veliki čoking', desc:`ispušteno vođstvo od ${worstChoke}+ gola — legendarni pad`, tier:'legendary' });
+
+  // --- Masakr (najbolniji poraz po razlici u golovima) ---
+  let worstMargin = 0, worstMarginRow = null;
+  prows.forEach(r => {
+    if(r.win) return;
+    const margin = (r.opponent_goals||0) - (r.team_goals||0);
+    if(margin > worstMargin){ worstMargin = margin; worstMarginRow = r; }
+  });
+  if(worstMargin >= 3) shame.push({ emoji:'🔪', name:'Bolan poraz', desc:worstMarginRow ? `poraz ${worstMarginRow.team_goals}–${worstMarginRow.opponent_goals} (${mapDisplay(worstMarginRow.map)})` : `poraz razlike ${worstMargin}`, tier:'common' });
+  if(worstMargin >= 5) shame.push({ emoji:'🩸', name:'Masakr', desc:worstMarginRow ? `poraz ${worstMarginRow.team_goals}–${worstMarginRow.opponent_goals} — pravi masakr` : `poraz razlike ${worstMargin}+`, tier:'legendary' });
+
+  return shame;
+}
+
+function renderShame(rows){
+  const wrap = $('#shameGrid');
+  if(!wrap) return;
+  const ps = [...activePlayers];
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  const blocks = ps.map(p => {
+    const shame = getPlayerShame(rows, p);
+    if(!shame.length) return '';
+    const chips = shame.map(a => `
+      <div class="shame-chip" title="${a.name} — ${a.desc}">
+        <div class="b-emoji">${a.emoji}</div>
+        <span class="b-name">${a.name}</span>
+      </div>
+    `).join('');
+    return `
+      <div class="achievement-block">
+        <div class="achievement-block-head">
+          <span class="name" style="color:${playerColor[p]||'#fff'}">${p}</span>
+          <span class="count">${shame.length} sramota</span>
+        </div>
+        <div class="badge-shelf">${chips}</div>
+      </div>
+    `;
+  }).filter(Boolean).join('');
+
+  wrap.innerHTML = blocks || '<div class="empty">Čista savest — bar za sada 😇</div>';
 }
 
 // ===== LOOT BOX — detekcija novih dostignuća (karijera, sva vremena/režimi) =====
@@ -4702,20 +5080,24 @@ function renderTable(rows){
   }
 }
 // ================================================================
-//  ZVEZDANA MAPA — svaki meč je jedna zvezda (canvas, čist JS, bez biblioteka)
+//  🌌 GALAKSIJA KARIJERE — svaki igrač je sunce, svaki meč planeta u
+//  suncokret-spirali koja kruži oko njega (canvas, čist JS, bez biblioteka)
 // ================================================================
 
+const GALAXY_GOLDEN_ANGLE = 2.399963229728653; // ~137.5° u radijanima - suncokret spirala
+
 const starMapState = {
-  stars: [],
+  suns: [],
   bgStars: [],
   camX: 0, camY: 0, zoom: 1,
-  driftVX: 0.10, driftVY: 0.018,
+  driftVX: 0.06, driftVY: 0.012,
   dragging: false, dragged: false, lastX: 0, lastY: 0,
   canvas: null, ctx: null, raf: null,
+  flying: false, flyFrom:null, flyTo:null, flyStart:0, flyDur:850, flyThenOpen:null,
 };
 
-// Deterministicki "seed" random po replay_id - ista zvezda uvek zavrsi na istom
-// mestu na mapi, cak i posle ponovnog rendera/filtriranja.
+// Deterministicki "seed" random po replay_id - ista planeta uvek zavrsi na istom
+// mestu na orbiti, cak i posle ponovnog rendera/filtriranja.
 function seededRand(seedStr){
   let h = 0;
   for(let i=0;i<seedStr.length;i++){ h = (h*31 + seedStr.charCodeAt(i)) | 0; }
@@ -4725,51 +5107,81 @@ function seededRand(seedStr){
   };
 }
 
-function buildStarMapData(rows){
-  const byReplay = {};
-  rows.forEach(r => {
-    if(!r.replay_id || !r.date) return;
-    (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r);
-  });
-  const entries = Object.entries(byReplay);
-  if(!entries.length) return [];
+// Izgradi jedan sistem (sunce + planete) za jednog igrača.
+function buildSunSystem(player, prows, sunX, sunY){
+  const sorted = prows.filter(r => r.replay_id && r.date).slice()
+    .sort((a,b) => (a.date||'').localeCompare(b.date||''));
 
-  const times = entries.map(([,rs]) => new Date(rs[0].date).getTime()).filter(t => !isNaN(t));
-  const minT = times.length ? Math.min(...times) : 0;
-  const maxT = times.length ? Math.max(...times) : 1;
-  const span = Math.max(1, maxT - minT);
+  const spiralC = 15.5;    // konstanta rasta Fermatove/suncokret spirale (r = c*sqrt(i))
+  const baseR = 46;        // razmak od samog sunca do prve orbite
 
-  return entries.map(([rid, rs]) => {
-    const rnd = seededRand(rid);
-    // Predstavnik meca za modal - onaj od nasih igraca sa najboljim score-om u
-    // TOM mecu (ne prosto prvi u nizu, jer taj redosled zna da bude dosledno
-    // isti igrac - npr. kod offline/splitscreen meceva - sto bi znacilo da bi
-    // svaka zvezda otvarala istog igraca bez obzira ko je zaista bio "glavni").
-    const rep = rs.reduce((best, r) => (getPath(r,'core.score')||0) > (getPath(best,'core.score')||0) ? r : best, rs[0]);
-    const t = new Date(rep.date).getTime();
-    const tFrac = isNaN(t) ? rnd() : (t - minT) / span;
+  const planets = sorted.map((r, i) => {
+    const rnd = seededRand(r.replay_id + '|' + player);
+    const orbitRadius = baseR + spiralC * Math.sqrt(i + 1);
+    const angle0 = i * GALAXY_GOLDEN_ANGLE;
+    // Blize suncu (starije) = brze kruzi, kao prava orbitalna mehanika.
+    const orbitSpeed = (0.22 + rnd()*0.10) / Math.sqrt(orbitRadius / baseR);
 
-    const maxGoals = Math.max(0, ...rs.map(r => getPath(r,'core.goals') || 0));
-    const anyMvp = rs.some(r => getPath(r,'core.mvp'));
-    const margin = Math.abs((rep.team_goals||0) - (rep.opponent_goals||0));
-
-    let significance = 0.15 + Math.min(0.35, margin*0.06) + Math.min(0.3, maxGoals*0.08);
-    if(anyMvp) significance += 0.25;
+    const goals = getPath(r,'core.goals') || 0;
+    const mvp = !!getPath(r,'core.mvp');
+    const margin = Math.abs((r.team_goals||0) - (r.opponent_goals||0));
+    let significance = 0.18 + Math.min(0.3, margin*0.06) + Math.min(0.3, goals*0.09);
+    if(mvp) significance += 0.25;
     significance = Math.min(1, significance);
 
+    const hasRing = !!r.overtime || (r.max_deficit_overcome||0) >= 2;
+
     return {
-      replay_id: rid,
-      row: rep,
-      win: !!rep.win,
-      worldX: (tFrac - 0.5) * 3600 + (rnd()-0.5) * 100,
-      worldY: (rnd()-0.5) * 900,
+      replay_id: r.replay_id,
+      row: r,
+      win: !!r.win,
+      orbitRadius,
+      angle: angle0,
+      orbitSpeed: r.win ? orbitSpeed : -orbitSpeed, // pobede i porazi kruze u suprotnim smerovima - vizuelno "citljivije"
       significance,
-      radius: 1.3 + significance * 3.4,
+      radius: 2.0 + significance * 3.6,
+      hasRing,
       twinklePhase: rnd() * Math.PI * 2,
       twinkleSpeed: 0.5 + rnd() * 1.0,
-      _sx: null, _sy: null, _sr: null,
+      _sx:null, _sy:null, _sr:null,
     };
   });
+
+  const maxOrbit = planets.length ? planets[planets.length-1].orbitRadius + 14 : baseR;
+
+  return {
+    player, sunX, sunY,
+    color: playerColor[player] || '#8EC9FF',
+    sunRadius: 12 + Math.min(10, Math.sqrt(planets.length)),
+    maxOrbit,
+    planets,
+    _sx:null, _sy:null, _sr:null,
+  };
+}
+
+function buildGalaxyData(rows){
+  const ps = [...activePlayers];
+  if(!ps.length) return [];
+
+  const byPlayer = {};
+  ps.forEach(p => byPlayer[p] = []);
+  rows.forEach(r => { if(byPlayer[r.player]) byPlayer[r.player].push(r); });
+
+  // Rasporedi suncane sisteme u red, sa razmakom proporcionalnim velicini
+  // svakog sistema, tako da se orbite razlicitih igraca ne preklapaju previse.
+  const systems = [];
+  let cursorX = 0;
+  ps.forEach((p, idx) => {
+    const prows = byPlayer[p] || [];
+    // privremeno sagradi da izracunamo maxOrbit, pa tek onda pozicioniramo
+    const tmp = buildSunSystem(p, prows, 0, 0);
+    if(idx > 0) cursorX += systems[idx-1].maxOrbit + tmp.maxOrbit + 90;
+    const sunY = (idx % 2 === 0) ? 0 : (idx % 4 === 1 ? 160 : -160);
+    const sys = buildSunSystem(p, prows, cursorX, sunY);
+    systems.push(sys);
+  });
+
+  return systems;
 }
 
 function buildStarMapBgStars(w, h, count){
@@ -4795,6 +5207,8 @@ function resizeStarMapCanvas(){
   starMapState.bgStars = buildStarMapBgStars(w, h, 140);
 }
 
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
 function drawStarMap(){
   const st = starMapState;
   if(st.canvas && st.ctx){
@@ -4809,6 +5223,8 @@ function drawStarMap(){
     ctx.fillRect(0,0,w,h);
 
     const t = performance.now()/1000;
+    const dt = Math.min(0.05, st._lastT ? (t - st._lastT) : 0.016);
+    st._lastT = t;
 
     ctx.fillStyle = '#ffffff';
     st.bgStars.forEach(b => {
@@ -4820,36 +5236,100 @@ function drawStarMap(){
     });
     ctx.globalAlpha = 1;
 
-    st.stars.forEach(s => {
-      const sx = (s.worldX - st.camX) * st.zoom + w/2;
-      const sy = (s.worldY - st.camY) * st.zoom + h/2;
-      if(sx < -40 || sx > w+40 || sy < -40 || sy > h+40){ s._sr = null; return; }
-
-      const twinkle = 0.75 + 0.25 * Math.sin(t*s.twinkleSpeed + s.twinklePhase);
-      const r = Math.max(0.6, s.radius * st.zoom * twinkle);
-      const color = s.win ? [142,201,255] : [255,107,107];
-      const alpha = Math.min(1, 0.55 + s.significance*0.5) * twinkle;
-
-      if(s.significance > 0.45){
-        const glowR = r * (3 + s.significance*3);
-        const glow = ctx.createRadialGradient(sx,sy,0, sx,sy,glowR);
-        glow.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},${0.35*twinkle})`);
-        glow.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0)`);
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(sx, sy, glowR, 0, Math.PI*2);
-        ctx.fill();
+    // Kinematski "let" kamere ka izabranoj planeti
+    if(st.flying){
+      const elapsed = performance.now() - st.flyStart;
+      const frac = Math.min(1, elapsed / st.flyDur);
+      const e = easeOutCubic(frac);
+      st.camX = st.flyFrom.x + (st.flyTo.x - st.flyFrom.x) * e;
+      st.camY = st.flyFrom.y + (st.flyTo.y - st.flyFrom.y) * e;
+      st.zoom = st.flyFrom.zoom + (st.flyTo.zoom - st.flyFrom.zoom) * e;
+      if(frac >= 1){
+        st.flying = false;
+        if(st.flyThenOpen){ const cb = st.flyThenOpen; st.flyThenOpen = null; cb(); }
       }
+    }
 
-      ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
-      ctx.beginPath();
-      ctx.arc(sx, sy, r, 0, Math.PI*2);
-      ctx.fill();
+    st.suns.forEach(sys => {
+      const cx = (sys.sunX - st.camX) * st.zoom + w/2;
+      const cy = (sys.sunY - st.camY) * st.zoom + h/2;
+      sys._sx = cx; sys._sy = cy; sys._sr = sys.sunRadius * st.zoom;
 
-      s._sx = sx; s._sy = sy; s._sr = Math.max(r, 7);
+      const onScreen = cx > -sys.maxOrbit*st.zoom-60 && cx < w+sys.maxOrbit*st.zoom+60 && cy > -sys.maxOrbit*st.zoom-60 && cy < h+sys.maxOrbit*st.zoom+60;
+      if(!onScreen){ sys.planets.forEach(p => p._sr=null); return; }
+
+      // Planete (crtaju se prvo, ispod sunca)
+      sys.planets.forEach(p => {
+        if(!st.dragging && !st.flying) p.angle += p.orbitSpeed * dt;
+        const px = cx + Math.cos(p.angle) * p.orbitRadius * st.zoom;
+        const py = cy + Math.sin(p.angle) * p.orbitRadius * st.zoom * 0.62; // blago spljosteno - elipticna orbita
+        if(px < -30 || px > w+30 || py < -30 || py > h+30){ p._sr = null; return; }
+
+        const twinkle = 0.8 + 0.2 * Math.sin(t*p.twinkleSpeed + p.twinklePhase);
+        const r = Math.max(0.8, p.radius * st.zoom * twinkle);
+        const color = p.win ? [142,201,255] : [255,107,107];
+        const alpha = Math.min(1, 0.6 + p.significance*0.4) * twinkle;
+
+        // Suptilna orbitalna staza
+        ctx.strokeStyle = `rgba(255,255,255,${0.05*st.zoom < 0.05 ? 0.035 : 0.05})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, p.orbitRadius*st.zoom, p.orbitRadius*st.zoom*0.62, 0, 0, Math.PI*2);
+        ctx.stroke();
+
+        if(p.significance > 0.5){
+          const glowR = r * (3 + p.significance*3);
+          const glow = ctx.createRadialGradient(px,py,0, px,py,glowR);
+          glow.addColorStop(0, `rgba(${color[0]},${color[1]},${color[2]},${0.35*twinkle})`);
+          glow.addColorStop(1, `rgba(${color[0]},${color[1]},${color[2]},0)`);
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(px, py, glowR, 0, Math.PI*2);
+          ctx.fill();
+        }
+
+        // Prsten kao Saturn - za OT ili preokret (comeback)
+        if(p.hasRing){
+          ctx.save();
+          ctx.translate(px, py);
+          ctx.rotate(0.45);
+          ctx.strokeStyle = `rgba(251,191,36,${0.75*twinkle})`;
+          ctx.lineWidth = Math.max(1, r*0.35);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, r*2.1, r*0.8, 0, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
+        ctx.beginPath();
+        ctx.arc(px, py, r, 0, Math.PI*2);
+        ctx.fill();
+
+        p._sx = px; p._sy = py; p._sr = Math.max(r, 7);
+      });
+
+      // Sunce - veliko, sija u boji igraca
+      const sunR = Math.max(2, sys._sr);
+      const [sr,sg,sb] = hexToRgb(sys.color);
+      const sunGlow = ctx.createRadialGradient(cx,cy,0, cx,cy, sunR*4.5);
+      sunGlow.addColorStop(0, `rgba(${sr},${sg},${sb},0.55)`);
+      sunGlow.addColorStop(1, `rgba(${sr},${sg},${sb},0)`);
+      ctx.fillStyle = sunGlow;
+      ctx.beginPath(); ctx.arc(cx, cy, sunR*4.5, 0, Math.PI*2); ctx.fill();
+
+      ctx.fillStyle = sys.color;
+      ctx.beginPath(); ctx.arc(cx, cy, sunR, 0, Math.PI*2); ctx.fill();
+
+      if(st.zoom > 0.5){
+        ctx.font = `700 ${Math.max(10, 12*Math.min(1.3,st.zoom))}px Rajdhani, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.fillText(sys.player, cx, cy - sunR - 10);
+      }
     });
 
-    if(!st.dragging){ st.camX += st.driftVX; st.camY += st.driftVY; }
+    if(!st.dragging && !st.flying){ st.camX += st.driftVX; st.camY += st.driftVY; }
   }
   st.raf = requestAnimationFrame(drawStarMap);
 }
@@ -4862,19 +5342,41 @@ function stopStarMapLoop(){
   if(starMapState.raf){ cancelAnimationFrame(starMapState.raf); starMapState.raf = null; }
 }
 
+function flyStarMapCameraTo(worldX, worldY, targetZoom, onDone){
+  const st = starMapState;
+  st.flying = true;
+  st.flyFrom = { x: st.camX, y: st.camY, zoom: st.zoom };
+  st.flyTo = { x: worldX, y: worldY, zoom: targetZoom };
+  st.flyStart = performance.now();
+  st.flyDur = 850;
+  st.flyThenOpen = onDone;
+}
+
 function handleStarMapClick(clientX, clientY){
   const canvas = starMapState.canvas;
-  if(!canvas) return;
+  if(!canvas || starMapState.flying) return;
   const rect = canvas.getBoundingClientRect();
   const mx = clientX - rect.left, my = clientY - rect.top;
-  let best = null, bestD = Infinity;
-  starMapState.stars.forEach(s => {
-    if(s._sr == null) return;
-    const dx = mx - s._sx, dy = my - s._sy;
-    const d = Math.hypot(dx, dy);
-    if(d <= s._sr + 4 && d < bestD){ bestD = d; best = s; }
+  let best = null, bestSys = null, bestD = Infinity;
+  starMapState.suns.forEach(sys => {
+    sys.planets.forEach(p => {
+      if(p._sr == null) return;
+      const dx = mx - p._sx, dy = my - p._sy;
+      const d = Math.hypot(dx, dy);
+      if(d <= p._sr + 4 && d < bestD){ bestD = d; best = p; bestSys = sys; }
+    });
   });
-  if(best) openModal(best.row);
+  if(best && bestSys){
+    // Trenutna svetska pozicija planete (ugao je zamrznut tokom leta, pa je bezbedno ciljati je)
+    const worldX = bestSys.sunX + Math.cos(best.angle) * best.orbitRadius;
+    const worldY = bestSys.sunY + Math.sin(best.angle) * best.orbitRadius * 0.62;
+    // "Cinematic zoom": kamera prvo doleti (ease-out, ~0.85s) do planete, tek onda se otvaraju detalji
+    flyStarMapCameraTo(
+      worldX, worldY,
+      Math.min(4.2, Math.max(2.4, starMapState.zoom * 1.8)),
+      () => openModal(best.row)
+    );
+  }
 }
 
 function initStarMapInteractions(){
@@ -4888,6 +5390,7 @@ function initStarMapInteractions(){
     if(e.target.closest('.starmap-reset-btn')) return;
     starMapState.dragging = true;
     starMapState.dragged = false;
+    starMapState.flying = false;
     wrap.classList.add('dragging');
     starMapState.lastX = e.clientX;
     starMapState.lastY = e.clientY;
@@ -4918,6 +5421,7 @@ function initStarMapInteractions(){
   }, { passive:false });
 
   $('#starmapResetBtn').addEventListener('click', () => {
+    starMapState.flying = false;
     starMapState.camX = 0; starMapState.camY = 0; starMapState.zoom = 1;
   });
 
@@ -4927,7 +5431,7 @@ function initStarMapInteractions(){
 }
 
 function renderStarMap(rows){
-  starMapState.stars = buildStarMapData(rows);
+  starMapState.suns = buildGalaxyData(rows);
 }
 
 function openModal(r){
