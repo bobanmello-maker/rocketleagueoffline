@@ -1528,7 +1528,7 @@ body.intro-active{ overflow:hidden; }
 
     <div class="tabpanel" id="tab-cards">
       <div class="cards-toolbar">
-        <div class="sub">Overall rating izračunat iz golova, asistencija, odbrana, boost menadžmenta, win rate-a i score-a. Klik na dugme ispod karte = snimi kao sliku.</div>
+        <div class="sub">Overall rating izračunat iz golova, asistencija, odbrana, boost menadžmenta, win rate-a i score-a — plus auto-otkrivena specijalnost i forma (🔥 vreo / 🧊 leden, na osnovu poslednjih mečeva). Klik na dugme ispod karte = snimi kao sliku.</div>
       </div>
       <div class="card-grid" id="cardGrid"></div>
     </div>
@@ -1594,6 +1594,18 @@ body.intro-active{ overflow:hidden; }
             <button class="rlcard-share" id="vsDuelShareBtn">📤 Podeli</button>
           </div>
           <div class="vsduel-hint">Direktno u Viber/WhatsApp preko dugmeta "Podeli" — bez screenshot-a.</div>
+        </div>
+      </div>
+
+      <!-- RIVALRY KARTICA -->
+      <div class="card rivalry-card">
+        <h2>🔥 Rivalstvo <small>priča iza brojki — ko trenutno ima psihološku prednost</small></h2>
+        <div class="vsduel-wrap">
+          <canvas id="rivalryCanvas"></canvas>
+          <div class="btn-row">
+            <button class="rlcard-save" id="rivalrySaveBtn">💾 Sačuvaj sliku</button>
+            <button class="rlcard-share" id="rivalryShareBtn">📤 Podeli</button>
+          </div>
         </div>
       </div>
 
@@ -3927,6 +3939,7 @@ function renderH2H(){
   
   // Postavi podatke za VS Duel canvas
   renderVsDuelCanvas(rows, a, b);
+  renderRivalryCanvas(rows, a, b);
   
   // Takođe prikaži i tabelu sa poređenjem
   const metric = (arr, path) => avg(arr.map(r => getPath(r, path) || 0));
@@ -4019,6 +4032,227 @@ function computeDuelHeadToHead(rows, a, b){
     else if(bRowOpp){ against.total++; if(r.win) against.aWins++; else against.bWins++; }
   });
   return { against, together };
+}
+
+// ================================================================
+//  🔥 RIVALRY CARD — pretvara suvi head-to-head u pravu priču:
+//  ko vodi, ko je "vreo" u poslednje vreme i ko trenutno ima
+//  psihološku prednost (momentum meter).
+// ================================================================
+function computeRivalryStory(rows, a, b){
+  const duels = [];
+  rows.forEach(r => {
+    if(r.player !== a) return;
+    const bRow = rows.find(x => x.replay_id === r.replay_id && x.player === b && x.team_color !== r.team_color);
+    if(bRow) duels.push({ date: r.date || '', aWin: !!r.win });
+  });
+  duels.sort((x,y) => (x.date||'').localeCompare(y.date||''));
+
+  const total = duels.length;
+  const aWins = duels.filter(d => d.aWin).length;
+  const bWins = total - aWins;
+
+  let streakHolder = null, streakLen = 0;
+  for(let i = duels.length - 1; i >= 0; i--){
+    const holder = duels[i].aWin ? 'a' : 'b';
+    if(streakHolder === null){ streakHolder = holder; streakLen = 1; }
+    else if(holder === streakHolder){ streakLen++; }
+    else break;
+  }
+
+  const leader = aWins > bWins ? 'a' : bWins > aWins ? 'b' : null;
+
+  // momentum: -100 (potpuno na strani B) .. +100 (potpuno na strani A)
+  const recordScore = total ? ((aWins - bWins) / total) * 55 : 0;
+  const streakScore = streakLen >= 2 ? (streakHolder === 'a' ? 1 : -1) * Math.min(streakLen, 5) * 9 : 0;
+  const momentum = Math.max(-100, Math.min(100, Math.round(recordScore + streakScore)));
+
+  const last5 = duels.slice(-5).map(d => d.aWin ? 'a' : 'b');
+
+  return { total, aWins, bWins, leader, streakHolder, streakLen, momentum, last5 };
+}
+
+function buildRivalryNarrative(a, b, story){
+  if(!story.total) return `${a} i ${b} se još nisu sreli jedan protiv drugog u ovom periodu.`;
+
+  const leaderName = story.leader === 'a' ? a : story.leader === 'b' ? b : null;
+  let sentence = leaderName
+    ? `${a} vs ${b} — ${story.total} duela, ${leaderName} vodi ${story.aWins}:${story.bWins}.`
+    : `${a} vs ${b} — ${story.total} duela, potpuno izjednačeno ${story.aWins}:${story.bWins}.`;
+
+  if(story.streakLen >= 2){
+    const streakName = story.streakHolder === 'a' ? a : b;
+    if(leaderName && streakName !== leaderName){
+      sentence += ` Ali ${streakName} je pobedio poslednja ${story.streakLen} zaredom — osveta u toku!`;
+    } else {
+      sentence += ` ${streakName} je pobedio ${story.streakLen} zaredom i produžava dominaciju.`;
+    }
+  }
+  return sentence;
+}
+
+function wrapCanvasText(ctx, text, maxWidth){
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  words.forEach(w => {
+    const test = line ? line + ' ' + w : w;
+    if(ctx.measureText(test).width > maxWidth && line){ lines.push(line); line = w; }
+    else line = test;
+  });
+  if(line) lines.push(line);
+  return lines;
+}
+
+function drawRivalryCard(canvas, a, b, colorA, colorB, story, narrative){
+  const W = 1200, H = 760, scaleF = 2;
+  canvas.width = W*scaleF; canvas.height = H*scaleF;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scaleF, scaleF);
+
+  roundRectPath(ctx, 0, 0, W, H, 24);
+  ctx.clip();
+
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, hexToRgba(colorA, 0.35));
+  bg.addColorStop(0.5, '#0B0E14');
+  bg.addColorStop(1, hexToRgba(colorB, 0.35));
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  roundRectPath(ctx, 5, 5, W-10, H-10, 20);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.stroke();
+
+  // kicker
+  ctx.textAlign = 'center';
+  ctx.font = "700 20px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillText('⚔️  R I V A L S T V O', W/2, 46);
+
+  // imena i veliki skor
+  ctx.font = "700 42px 'Rajdhani', sans-serif";
+  ctx.fillStyle = colorA;
+  ctx.textAlign = 'right';
+  ctx.fillText(a.toUpperCase(), W/2 - 70, 130);
+  ctx.fillStyle = colorB;
+  ctx.textAlign = 'left';
+  ctx.fillText(b.toUpperCase(), W/2 + 70, 130);
+  ctx.font = "700 20px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.textAlign = 'center';
+  ctx.fillText('VS', W/2, 126);
+
+  ctx.font = "700 110px 'Rajdhani', sans-serif";
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.fillText(`${story.aWins} : ${story.bWins}`, W/2, 230);
+  ctx.font = "600 16px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText(`${story.total} odigranih duela`, W/2, 350);
+
+  // ===== MOMENTUM GAUGE (poluokrugli merač psihološke prednosti) =====
+  const gx = W/2, gy = 470, gr = 130;
+  const grad = ctx.createLinearGradient(gx-gr, gy, gx+gr, gy);
+  grad.addColorStop(0, colorA);
+  grad.addColorStop(1, colorB);
+  ctx.beginPath();
+  ctx.lineWidth = 22;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = grad;
+  ctx.globalAlpha = 0.28;
+  ctx.arc(gx, gy, gr, Math.PI, 2*Math.PI, false);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // igla
+  const angle = Math.PI + ((story.momentum + 100) / 200) * Math.PI;
+  const needleLen = gr - 8;
+  ctx.save();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(gx, gy);
+  ctx.lineTo(gx + Math.cos(angle)*needleLen, gy + Math.sin(angle)*needleLen);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(gx, gy, 9, 0, Math.PI*2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.font = "700 15px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.textAlign = 'center';
+  ctx.fillText('PSIHOLOŠKA PREDNOST', gx, gy + 34);
+  const edgeName = story.momentum > 12 ? a : story.momentum < -12 ? b : 'Izjednačeno';
+  ctx.font = "700 22px 'Rajdhani', sans-serif";
+  ctx.fillStyle = story.momentum > 12 ? colorA : story.momentum < -12 ? colorB : '#fff';
+  ctx.fillText(edgeName.toUpperCase(), gx, gy + 62);
+
+  // narativ
+  ctx.font = "500 21px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.textAlign = 'center';
+  const lines = wrapCanvasText(ctx, narrative, W - 140);
+  const narrY = gy + 108;
+  lines.forEach((ln, i) => ctx.fillText(ln, W/2, narrY + i*28));
+
+  // poslednjih 5 duela — niz tačkica
+  if(story.last5.length){
+    const dotR = 9, gap = 26;
+    const startX = W/2 - ((story.last5.length-1)*gap)/2;
+    const dotY = H - 46;
+    ctx.font = "600 13px 'Inter', sans-serif";
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText('POSLEDNJIH ' + story.last5.length, W/2, dotY - 26);
+    story.last5.forEach((who, i) => {
+      const x = startX + i*gap;
+      ctx.beginPath();
+      ctx.arc(x, dotY, dotR, 0, Math.PI*2);
+      ctx.fillStyle = who === 'a' ? colorA : colorB;
+      ctx.fill();
+    });
+  }
+
+  ctx.font = "700 13px 'Inter', sans-serif";
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.textAlign = 'center';
+  ctx.fillText('RTS ANALIZA', W/2, H - 18);
+}
+
+async function renderRivalryCanvas(rows, a, b){
+  const canvas = document.getElementById('rivalryCanvas');
+  if(!canvas) return;
+  const story = computeRivalryStory(rows, a, b);
+  const narrative = buildRivalryNarrative(a, b, story);
+  drawRivalryCard(canvas, a, b, playerColor[a] || '#3DA9FC', playerColor[b] || '#FF6B35', story, narrative);
+
+  const filename = `rivalstvo-${cssSafe(a)}-${cssSafe(b)}.png`;
+  const saveBtn = document.getElementById('rivalrySaveBtn');
+  const shareBtn = document.getElementById('rivalryShareBtn');
+
+  if(saveBtn){
+    const newSaveBtn = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    newSaveBtn.addEventListener('click', () => {
+      try{
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }catch(e){ alert('Ne mogu da snimim sliku.'); }
+    });
+  }
+  if(shareBtn){
+    const newShareBtn = shareBtn.cloneNode(true);
+    shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
+    newShareBtn.addEventListener('click', () => {
+      shareOrDownloadCanvas(canvas, filename, `${a} vs ${b} — Rivalstvo`, narrative);
+    });
+  }
 }
 
 function drawDuelPortrait(ctx, cx, cy, r, img, name, color){
@@ -5017,8 +5251,11 @@ function computeCardStats(rows, player){
   const goalsPm = sum(v.map(r=>getPath(r,'core.goals')||0)) / matches;
   const assistsPm = sum(v.map(r=>getPath(r,'core.assists')||0)) / matches;
   const savesPm = sum(v.map(r=>getPath(r,'core.saves')||0)) / matches;
+  const demosPm = sum(v.map(r=>getPath(r,'demo.inflicted')||0)) / matches;
   const avgBoost = avg(v.map(r=>getPath(r,'boost.avg_amount')||0));
+  const zeroBoostPct = avg(v.map(r=>getPath(r,'boost.percent_zero_boost')||0));
   const avgScore = avg(v.map(r=>getPath(r,'core.score')||0));
+  const mvpRate = v.filter(r=>getPath(r,'core.mvp')).length / matches;
 
   const attrs = {
     GOL: clampScale(goalsPm, 0, 1.6),
@@ -5033,10 +5270,32 @@ function computeCardStats(rows, player){
   const top = Object.entries(attrs).sort((a,b)=>b[1]-a[1])[0][0];
   const position = top === 'GOL' ? 'NAPADAČ' : top === 'ODB' ? 'GOLMAN' : top === 'ASI' ? 'PLEJMEJKER' : 'ALL-ROUND';
 
+  // ===== SPECIJALNOST — auto-otkriven "stil igre" na osnovu dominantne osobine =====
+  let specialty = 'Svestran igrač';
+  if(mvpRate >= 0.3) specialty = 'Clutch majstor';
+  else if(zeroBoostPct >= 25) specialty = 'Boost lakomac';
+  else if(attrs.BUST >= 80) specialty = 'Boost menadžer';
+  else if(demosPm >= 1) specialty = 'Demolišer';
+  else if(attrs.ODB >= 85) specialty = 'Zid odbrane';
+  else if(attrs.ASI >= 85) specialty = 'Plejmejker';
+  else if(attrs.GOL >= 85) specialty = 'Napadačka mašina';
+  else if(attrs.WIN >= 80) specialty = 'Pobednički mentalitet';
+
+  // ===== FORMA — poslednjih do 8 mečeva naspram sopstvenog proseka (potreban minimalan uzorak) =====
+  let formTier = 'neutral';
+  if(matches >= 6){
+    const sorted = v.slice().sort((x,y) => (x.date||'').localeCompare(y.date||''));
+    const recent = sorted.slice(-8);
+    const recentWinPct = (recent.filter(r=>r.win).length / recent.length) * 100;
+    const diff = recentWinPct - winPct;
+    if(diff >= 15) formTier = 'hot';
+    else if(diff <= -15) formTier = 'cold';
+  }
+
   const withCar = v.filter(r => r.car_name).slice().sort((a,b) => (b.date||'').localeCompare(a.date||''));
   const lastCar = withCar.length ? withCar[0].car_name : null;
 
-  return { player, matches, wins, losses: matches-wins, winPct, goalsPm, attrs, ovr, position, lastCar };
+  return { player, matches, wins, losses: matches-wins, winPct, goalsPm, attrs, ovr, position, lastCar, specialty, formTier };
 }
 
 function roundRectPath(ctx, x, y, w, h, r){
@@ -5139,9 +5398,19 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
     ctx.clip();
 
     const bg = ctx.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, hexToRgba(color, 0.9));
-    bg.addColorStop(0.45, '#141A24');
-    bg.addColorStop(1, '#05070B');
+    if(data.formTier === 'hot'){
+      bg.addColorStop(0, '#FFD76B');
+      bg.addColorStop(0.45, '#4a3000');
+      bg.addColorStop(1, '#1a0f00');
+    } else if(data.formTier === 'cold'){
+      bg.addColorStop(0, '#BEE7FF');
+      bg.addColorStop(0.45, '#1c2c3a');
+      bg.addColorStop(1, '#050b12');
+    } else {
+      bg.addColorStop(0, hexToRgba(color, 0.9));
+      bg.addColorStop(0.45, '#141A24');
+      bg.addColorStop(1, '#05070B');
+    }
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
@@ -5163,7 +5432,7 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
 
     roundRectPath(ctx, 6, 6, W-12, H-12, 24);
     ctx.lineWidth = 4;
-    ctx.strokeStyle = hexToRgba(color, 0.9);
+    ctx.strokeStyle = data.formTier === 'hot' ? '#FFD76B' : data.formTier === 'cold' ? '#BEE7FF' : hexToRgba(color, 0.9);
     ctx.stroke();
 
     if(photoImg) {
@@ -5212,6 +5481,25 @@ function drawPlayerCard(canvas, data, color, photoImg, carImg) {
     ctx.font = "700 22px 'Rajdhani', sans-serif";
     ctx.fillStyle = hexToRgba('#ffffff', 0.85);
     ctx.fillText(data.position, 44, 140);
+
+    // ===== SPECIJALNOST + FORMA PILL =====
+    const pillLabel = (data.formTier === 'hot' ? '🔥 ' : data.formTier === 'cold' ? '🧊 ' : '') + (data.specialty || '');
+    ctx.font = "700 15px 'Inter', sans-serif";
+    const pillPadX = 12, pillH = 27;
+    const pillW = ctx.measureText(pillLabel).width + pillPadX * 2;
+    const pillX = 40, pillY = 152;
+    ctx.beginPath();
+    roundRectPath(ctx, pillX, pillY, pillW, pillH, pillH / 2);
+    ctx.fillStyle = data.formTier === 'hot' ? 'rgba(255,183,3,0.32)' : data.formTier === 'cold' ? 'rgba(142,207,255,0.28)' : hexToRgba(color, 0.3);
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = data.formTier === 'hot' ? '#FFD76B' : data.formTier === 'cold' ? '#BEE7FF' : hexToRgba('#ffffff', 0.4);
+    ctx.stroke();
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(pillLabel, pillX + pillPadX, pillY + pillH / 2 + 1);
+    ctx.textBaseline = 'top';
 
     if(carImg){
       const bs = 76; // velicina zaobljenog kvadratica
