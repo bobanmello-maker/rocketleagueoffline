@@ -1413,7 +1413,7 @@ body.intro-active{ overflow:hidden; }
     </div>
     <div class="group" id="playerChips"></div>
     <button class="ai-btn" id="aiAnalyzeBtn">
-      <span style="font-size:18px;">🧔</span> Pitaj Trenera Pantu
+      <span style="font-size:18px;"></span> Analiza
     </button>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
   </div>
@@ -6905,7 +6905,7 @@ function resetStuckAIButton(source, err){
   console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
   const btn = $('#aiAnalyzeBtn');
   if(btn && btn.disabled){
-    btn.innerHTML = `<span style="font-size:18px;">🧔</span> Pitaj Trenera Pantu`;
+    btn.innerHTML = `<span style="font-size:18px;"></span> Analiza`;
     btn.disabled = false;
   }
 }
