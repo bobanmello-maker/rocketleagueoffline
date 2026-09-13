@@ -906,6 +906,123 @@ body.intro-active{ overflow:hidden; }
 @media (max-width:560px){
   .intro-signature-text{ white-space:normal; max-width:88vw; }
 }
+
+/* ===== SFX MUTE DUGME ===== */
+.sfx-toggle-btn{
+  position:fixed; top:16px; right:16px; z-index:500;
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+  background:var(--surface); color:var(--text); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform .15s ease, border-color .15s ease;
+}
+.sfx-toggle-btn:hover{ transform:scale(1.08); border-color:var(--text-muted); }
+@media (max-width:768px){ .sfx-toggle-btn{ top:auto; bottom:16px; right:16px; } }
+
+/* ===== AI PERSONA — "TRENER PANTA" ===== */
+.ai-persona-head{ display:flex; align-items:center; gap:12px; margin-bottom:2px; }
+.ai-persona-avatar{
+  width:52px; height:52px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#7C3AED,#4F46E5); display:flex; align-items:center; justify-content:center;
+  font-size:26px; box-shadow:0 4px 18px rgba(124,58,237,0.5); border:2px solid rgba(255,255,255,0.15);
+  animation:aiAvatarPop .45s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes aiAvatarPop{ 0%{ transform:scale(0); opacity:0; } 100%{ transform:scale(1); opacity:1; } }
+.ai-persona-info .ai-persona-name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:19px; color:#fff; line-height:1.2; }
+.ai-persona-info .ai-persona-title{ font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; }
+.ai-typewriter::after{
+  content:'▌'; display:inline-block; margin-left:2px; color:#7C3AED;
+  animation:aiCaretBlink .85s step-end infinite;
+}
+.ai-typewriter.ai-typing-done::after{ display:none; }
+@keyframes aiCaretBlink{ 50%{ opacity:0; } }
+
+/* ===== LOOT BOX ===== */
+.lootbox-overlay{
+  position:fixed; inset:0; z-index:9500; display:none; align-items:center; justify-content:center;
+  background:rgba(3,5,10,0.86); backdrop-filter:blur(3px);
+}
+.lootbox-overlay.open{ display:flex; }
+.lootbox-close-btn{
+  position:absolute; top:18px; right:18px; background:none; border:1px solid var(--border);
+  color:var(--text-muted); width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px;
+}
+.lootbox-close-btn:hover{ color:var(--text); }
+.lootbox-queue-hint{
+  position:absolute; top:20px; left:20px; font-size:11px; color:var(--text-muted);
+  text-transform:uppercase; letter-spacing:0.05em;
+}
+.lootbox-stage{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:20px; min-height:360px; }
+
+.lootbox-crate{
+  display:flex; flex-direction:column; align-items:center; gap:14px; cursor:pointer;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.lootbox-crate.crate-hidden{ opacity:0; transform:scale(.6); pointer-events:none; position:absolute; }
+.lootbox-crate-inner{ position:relative; width:150px; height:150px; display:flex; align-items:center; justify-content:center; }
+.lootbox-crate-glow{
+  position:absolute; inset:-30px; border-radius:50%; filter:blur(18px); opacity:.55;
+  background:radial-gradient(circle, var(--crate-color,#FBBF24), transparent 70%);
+  animation:crateGlowPulse 1.8s ease-in-out infinite;
+}
+@keyframes crateGlowPulse{ 0%,100%{ transform:scale(1); opacity:.45; } 50%{ transform:scale(1.12); opacity:.7; } }
+.lootbox-crate-emoji{ position:relative; font-size:88px; filter:drop-shadow(0 10px 24px rgba(0,0,0,.6)); }
+.lootbox-crate.shaking .lootbox-crate-emoji{ animation:crateShake .5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes crateShake{
+  10%,90%{ transform:translateX(-2px) rotate(-3deg); }
+  20%,80%{ transform:translateX(3px) rotate(3deg); }
+  30%,50%,70%{ transform:translateX(-6px) rotate(-6deg); }
+  40%,60%{ transform:translateX(6px) rotate(6deg); }
+}
+.lootbox-crate.bursting .lootbox-crate-emoji{ animation:crateBurst .4s ease forwards; }
+@keyframes crateBurst{ to{ transform:scale(1.7); opacity:0; } }
+.lootbox-crate-label{ font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; animation:crateHintPulse 1.6s ease-in-out infinite; }
+@keyframes crateHintPulse{ 0%,100%{ opacity:.6; } 50%{ opacity:1; } }
+
+.lootbox-burst-ring{
+  position:absolute; width:20px; height:20px; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, #fff, var(--crate-color,#FBBF24) 40%, transparent 72%);
+  opacity:0;
+}
+.lootbox-burst-ring.go{ animation:burstRingGo .6s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes burstRingGo{ 0%{ opacity:1; transform:scale(0); } 100%{ opacity:0; transform:scale(22); } }
+
+.lootbox-confetti-piece{
+  position:absolute; top:50%; left:50%; width:8px; height:8px; border-radius:2px; pointer-events:none;
+  animation:confettiFly 1.1s cubic-bezier(.2,.6,.3,1) forwards;
+}
+@keyframes confettiFly{
+  0%{ transform:translate(-50%,-50%) rotate(0) scale(1); opacity:1; }
+  100%{ transform:translate(var(--cx,0),var(--cy,0)) rotate(var(--cr,180deg)) scale(.4); opacity:0; }
+}
+
+.lootbox-reveal{
+  display:none; flex-direction:column; align-items:center; text-align:center; gap:6px; max-width:340px;
+}
+.lootbox-reveal.show{ display:flex; animation:lootRevealIn .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes lootRevealIn{ 0%{ opacity:0; transform:translateY(14px) scale(.9); } 100%{ opacity:1; transform:translateY(0) scale(1); } }
+.lootbox-rarity{
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; padding:3px 12px;
+  border-radius:999px; margin-bottom:4px;
+}
+.lootbox-rarity.tier-common{ color:#D9A566; background:rgba(217,165,102,0.15); }
+.lootbox-rarity.tier-rare{ color:#8EC9FF; background:rgba(142,201,255,0.15); }
+.lootbox-rarity.tier-epic{ color:#C084FC; background:rgba(192,132,252,0.18); }
+.lootbox-rarity.tier-legendary{
+  color:#FBBF24; background:rgba(251,191,36,0.16);
+  animation:legendaryShimmer 1.4s ease-in-out infinite;
+}
+@keyframes legendaryShimmer{ 0%,100%{ box-shadow:0 0 0px rgba(251,191,36,0); } 50%{ box-shadow:0 0 18px rgba(251,191,36,0.55); } }
+.lootbox-badge-emoji{ font-size:64px; filter:drop-shadow(0 8px 20px rgba(0,0,0,.5)); }
+.lootbox-badge-name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:26px; color:#fff; }
+.lootbox-badge-desc{ font-size:13px; color:var(--text-muted); }
+.lootbox-badge-player{ font-size:12px; color:var(--text-muted); margin-top:4px; }
+.lootbox-badge-player b{ color:var(--text); }
+.lootbox-next-btn{
+  margin-top:14px; background:linear-gradient(135deg,#7C3AED,#4F46E5); color:#fff; border:none;
+  padding:9px 26px; border-radius:999px; font-weight:700; font-size:13px; cursor:pointer;
+  box-shadow:0 4px 16px rgba(124,58,237,0.4); transition:transform .15s ease;
+}
+.lootbox-next-btn:hover{ transform:translateY(-2px); }
 </style>
 </head>
 <body>
@@ -970,6 +1087,8 @@ body.intro-active{ overflow:hidden; }
       done = true;
       overlay.classList.add('intro-hidden');
       document.body.classList.remove('intro-active');
+      window.__introDone = true;
+      document.dispatchEvent(new CustomEvent('rlIntroDone'));
     }
 
     function showLogo(){
@@ -996,7 +1115,236 @@ body.intro-active{ overflow:hidden; }
     });
   })();
   </script>
+  <button class="sfx-toggle-btn" id="sfxToggleBtn" title="Zvuk">🔊</button>
+
+  <div class="lootbox-overlay" id="lootboxOverlay">
+    <button class="lootbox-close-btn" id="lootboxCloseBtn">&times;</button>
+    <div class="lootbox-queue-hint" id="lootboxQueueHint"></div>
+    <div class="lootbox-stage">
+      <div class="lootbox-crate" id="lootboxCrate">
+        <div class="lootbox-crate-inner">
+          <div class="lootbox-crate-glow" id="lootboxGlow"></div>
+          <div class="lootbox-crate-emoji" id="lootboxCrateEmoji">🎁</div>
+        </div>
+        <div class="lootbox-crate-label">Tapni da otvoriš</div>
+      </div>
+      <div class="lootbox-reveal" id="lootboxReveal">
+        <div class="lootbox-rarity" id="lootboxRarity"></div>
+        <div class="lootbox-badge-emoji" id="lootboxBadgeEmoji"></div>
+        <div class="lootbox-badge-name" id="lootboxBadgeName"></div>
+        <div class="lootbox-badge-desc" id="lootboxBadgeDesc"></div>
+        <div class="lootbox-badge-player" id="lootboxBadgePlayer"></div>
+        <button class="lootbox-next-btn" id="lootboxNextBtn">Dalje →</button>
+      </div>
+    </div>
+  </div>
+
   <canvas id="particles-canvas"></canvas>
+  <script>
+  // ================================================================
+  //  🔊 SFX ENGINE — sintetisani zvuci preko Web Audio API-ja (bez
+  //  eksternih fajlova, radi odmah i offline)
+  // ================================================================
+  window.SFX = (function(){
+    let ctx = null;
+    let muted = (function(){ try{ return localStorage.getItem('rl_sfx_muted') === '1'; }catch(e){ return false; } })();
+
+    function ensureCtx(){
+      if(!ctx){
+        try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
+      }
+      if(ctx.state === 'suspended') ctx.resume().catch(()=>{});
+      return ctx;
+    }
+
+    function tone(freq, dur, type, vol, delay){
+      if(muted) return;
+      const c = ensureCtx(); if(!c) return;
+      const t0 = c.currentTime + (delay || 0);
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(vol != null ? vol : 0.16, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t0); osc.stop(t0 + dur + 0.03);
+    }
+
+    function sweep(f0, f1, dur, vol){
+      if(muted) return;
+      const c = ensureCtx(); if(!c) return;
+      const t0 = c.currentTime;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(f0, t0);
+      osc.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(vol || 0.14, t0 + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur + 0.05);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t0); osc.stop(t0 + dur + 0.08);
+    }
+
+    return {
+      setMuted(v){ muted = !!v; try{ localStorage.setItem('rl_sfx_muted', muted ? '1' : '0'); }catch(e){} },
+      isMuted(){ return muted; },
+      unlockCtx(){ ensureCtx(); },
+      click(){ tone(600, 0.06, 'square', 0.10); },
+      whoosh(){ sweep(180, 900, 0.35, 0.13); },
+      shake(){ tone(90, 0.07, 'square', 0.09); },
+      unlock(){ tone(523.25, 0.12, 'triangle', 0.16); tone(659.25, 0.12, 'triangle', 0.15, 0.09); tone(783.99, 0.22, 'triangle', 0.17, 0.18); },
+      fanfare(){ tone(523.25, 0.14, 'triangle', 0.18, 0); tone(659.25, 0.14, 'triangle', 0.18, 0.12); tone(783.99, 0.14, 'triangle', 0.18, 0.24); tone(1046.5, 0.34, 'triangle', 0.2, 0.36); },
+    };
+  })();
+
+  (function(){
+    const btn = document.getElementById('sfxToggleBtn');
+    if(!btn) return;
+    function paint(){ btn.textContent = SFX.isMuted() ? '🔇' : '🔊'; }
+    paint();
+    btn.addEventListener('click', () => {
+      SFX.setMuted(!SFX.isMuted());
+      if(!SFX.isMuted()){ SFX.unlockCtx(); SFX.click(); }
+      paint();
+    });
+  })();
+
+  // ================================================================
+  //  🎁 LOOT BOX — sistem za dramatično otključavanje dostignuća
+  // ================================================================
+  window.LootBox = (function(){
+    const TIER_LABELS = { common:'Obično', rare:'Retko', epic:'Epsko', legendary:'Legendarno' };
+    const TIER_COLORS = { common:'#D9A566', rare:'#8EC9FF', epic:'#C084FC', legendary:'#FBBF24' };
+
+    const overlay = document.getElementById('lootboxOverlay');
+    const crate = document.getElementById('lootboxCrate');
+    const crateEmoji = document.getElementById('lootboxCrateEmoji');
+    const glow = document.getElementById('lootboxGlow');
+    const reveal = document.getElementById('lootboxReveal');
+    const rarityEl = document.getElementById('lootboxRarity');
+    const badgeEmoji = document.getElementById('lootboxBadgeEmoji');
+    const badgeName = document.getElementById('lootboxBadgeName');
+    const badgeDesc = document.getElementById('lootboxBadgeDesc');
+    const badgePlayer = document.getElementById('lootboxBadgePlayer');
+    const nextBtn = document.getElementById('lootboxNextBtn');
+    const closeBtn = document.getElementById('lootboxCloseBtn');
+    const queueHint = document.getElementById('lootboxQueueHint');
+
+    let queue = [];
+    let idx = 0;
+    let opened = false;
+
+    function spawnConfetti(){
+      if(!crate) return;
+      const colors = ['#3DA9FC','#FF6B35','#4ADE80','#FBBF24','#C084FC'];
+      const host = crate.querySelector('.lootbox-crate-inner');
+      if(!host) return;
+      const ring = document.createElement('div');
+      ring.className = 'lootbox-burst-ring go';
+      host.appendChild(ring);
+      setTimeout(() => ring.remove(), 700);
+      for(let i = 0; i < 22; i++){
+        const p = document.createElement('div');
+        p.className = 'lootbox-confetti-piece';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 90 + Math.random() * 110;
+        p.style.setProperty('--cx', (Math.cos(angle) * dist) + 'px');
+        p.style.setProperty('--cy', (Math.sin(angle) * dist) + 'px');
+        p.style.setProperty('--cr', (Math.random() * 360) + 'deg');
+        p.style.background = colors[i % colors.length];
+        p.style.animationDelay = (Math.random() * 0.08) + 's';
+        host.appendChild(p);
+        setTimeout(() => p.remove(), 1300);
+      }
+    }
+
+    function paintQueueHint(){
+      if(!queueHint) return;
+      queueHint.textContent = queue.length > 1 ? `${idx + 1} / ${queue.length}` : '';
+    }
+
+    function showCrateState(item){
+      reveal.classList.remove('show');
+      crate.classList.remove('crate-hidden', 'shaking', 'bursting');
+      crateEmoji.textContent = '🎁';
+      glow.style.setProperty('--crate-color', TIER_COLORS[item.tier] || '#FBBF24');
+      opened = false;
+      paintQueueHint();
+    }
+
+    function openCurrent(){
+      if(opened) return;
+      opened = true;
+      SFX.shake();
+      crate.classList.add('shaking');
+      setTimeout(() => {
+        crate.classList.remove('shaking');
+        crate.classList.add('bursting');
+        SFX.unlock();
+        spawnConfetti();
+        setTimeout(() => {
+          crate.classList.add('crate-hidden');
+          revealItem(queue[idx]);
+          SFX.fanfare();
+        }, 260);
+      }, 500);
+    }
+
+    function revealItem(item){
+      rarityEl.textContent = TIER_LABELS[item.tier] || 'Dostignuće';
+      rarityEl.className = 'lootbox-rarity tier-' + (item.tier || 'common');
+      badgeEmoji.textContent = item.emoji || '🏆';
+      badgeName.textContent = item.name || '';
+      badgeDesc.textContent = item.desc || '';
+      badgePlayer.innerHTML = item.player ? `Otključao/la: <b style="color:${item.color||'#fff'}">${item.player}</b>` : '';
+      nextBtn.textContent = (idx < queue.length - 1) ? 'Dalje →' : 'Super!';
+      reveal.classList.add('show');
+    }
+
+    function next(){
+      SFX.click();
+      idx++;
+      if(idx >= queue.length){ close(); return; }
+      showCrateState(queue[idx]);
+    }
+
+    function open(items){
+      if(!items || !items.length) return;
+      queue = items; idx = 0;
+      overlay.classList.add('open');
+      showCrateState(queue[0]);
+    }
+
+    function close(){
+      overlay.classList.remove('open');
+      queue = []; idx = 0;
+    }
+
+    if(crate) crate.addEventListener('click', () => { if(!opened) openCurrent(); });
+    if(nextBtn) nextBtn.addEventListener('click', next);
+    if(closeBtn) closeBtn.addEventListener('click', close);
+
+    let pendingAuto = null;
+    function tryPlayAuto(){
+      if(pendingAuto && pendingAuto.length) open(pendingAuto);
+      pendingAuto = null;
+    }
+
+    return {
+      // pokreće se automatski, ali čeka da intro-animacija završi da se ne preklapaju
+      enqueueAuto(items){
+        if(!items || !items.length) return;
+        pendingAuto = items;
+        if(window.__introDone) tryPlayAuto();
+        else document.addEventListener('rlIntroDone', tryPlayAuto, { once:true });
+      },
+      openManual(items){ if(items && items.length) open(items); },
+    };
+  })();
+  </script>
 <div class="wrap">
 
   <header class="hero">
@@ -1026,7 +1374,7 @@ body.intro-active{ overflow:hidden; }
     </div>
     <div class="group" id="playerChips"></div>
     <button class="ai-btn" id="aiAnalyzeBtn">
-      <span style="font-size:18px;">🧠</span> RTS Analiza
+      <span style="font-size:18px;">🧔</span> Pitaj Trenera Pantu
     </button>
     <button class="reset-btn" id="resetBtn">Resetuj filtere</button>
   </div>
@@ -1213,7 +1561,10 @@ body.intro-active{ overflow:hidden; }
       <div class="card">
         <h2>
           <span>🏆 Dostignuća <small>pragovi otključani u trenutno izabranom periodu i režimu (Sve/Offline/Online)</small></span>
-          <button class="chip" id="highlightsViewToggle" style="background:var(--surface-2); white-space:nowrap;">🏛️ Vitrina</button>
+          <span style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="chip" id="lootboxManualBtn" style="background:var(--surface-2); white-space:nowrap;">🎁 Loot Box</button>
+            <button class="chip" id="highlightsViewToggle" style="background:var(--surface-2); white-space:nowrap;">🏛️ Vitrina</button>
+          </span>
         </h2>
         <div id="milestoneGrid"></div>
       </div>
@@ -1973,6 +2324,8 @@ async function load(){
     }
   });
 
+  checkForNewAchievements();
+
   refreshVisiblePlayers();
   buildDateInputs();
   buildTrendMetricSelect();
@@ -2029,6 +2382,7 @@ async function load(){
     $('#highlightsViewToggle').textContent = highlightsViewMode === 'shelf' ? '🏛️ Vitrina' : '▦ Mreža';
     renderMilestones(getFiltered());
   });
+  $('#lootboxManualBtn').addEventListener('click', openManualLootBox);
 
   $('#wrappedGoBtn').addEventListener('click', openWrapped);
   $('#wrappedCloseBtn').addEventListener('click', closeWrapped);
@@ -3247,42 +3601,93 @@ function getPlayerAchievements(rows, player){
     else curStreak = 0;
   });
 
-  if(matches >= 10) achievements.push({ emoji:'🎯', name:'Veteran', desc:`${matches} odigranih mečeva` });
-  if(matches >= 50) achievements.push({ emoji:'🏅', name:'Iskusni veteran', desc:'50+ mečeva' });
-  if(matches >= 100) achievements.push({ emoji:'💎', name:'Legenda', desc:'100+ mečeva' });
+  if(matches >= 10) achievements.push({ emoji:'🎯', name:'Veteran', desc:`${matches} odigranih mečeva`, tier:'common' });
+  if(matches >= 50) achievements.push({ emoji:'🏅', name:'Iskusni veteran', desc:'50+ mečeva', tier:'rare' });
+  if(matches >= 100) achievements.push({ emoji:'💎', name:'Legenda', desc:'100+ mečeva', tier:'legendary' });
 
-  if(wins >= 10) achievements.push({ emoji:'🏆', name:'Pobednik', desc:`${wins} pobeda` });
-  if(wins >= 25) achievements.push({ emoji:'👑', name:'Kralj pobeda', desc:'25+ pobeda' });
-  if(wins >= 50) achievements.push({ emoji:'⚜️', name:'Imperator', desc:'50+ pobeda' });
+  if(wins >= 10) achievements.push({ emoji:'🏆', name:'Pobednik', desc:`${wins} pobeda`, tier:'common' });
+  if(wins >= 25) achievements.push({ emoji:'👑', name:'Kralj pobeda', desc:'25+ pobeda', tier:'rare' });
+  if(wins >= 50) achievements.push({ emoji:'⚜️', name:'Imperator', desc:'50+ pobeda', tier:'legendary' });
 
-  if(totalGoals >= 50) achievements.push({ emoji:'⚽', name:'Strelac', desc:`${totalGoals} golova` });
-  if(totalGoals >= 100) achievements.push({ emoji:'🔥', name:'Mašina za golove', desc:'100+ golova' });
+  if(totalGoals >= 50) achievements.push({ emoji:'⚽', name:'Strelac', desc:`${totalGoals} golova`, tier:'common' });
+  if(totalGoals >= 100) achievements.push({ emoji:'🔥', name:'Mašina za golove', desc:'100+ golova', tier:'epic' });
 
-  if(totalAssists >= 25) achievements.push({ emoji:'🎯', name:'Asistent', desc:`${totalAssists} asistencija` });
-  if(totalAssists >= 50) achievements.push({ emoji:'🎪', name:'Playmaker', desc:'50+ asistencija' });
+  if(totalAssists >= 25) achievements.push({ emoji:'🎯', name:'Asistent', desc:`${totalAssists} asistencija`, tier:'common' });
+  if(totalAssists >= 50) achievements.push({ emoji:'🎪', name:'Playmaker', desc:'50+ asistencija', tier:'rare' });
 
-  if(totalSaves >= 50) achievements.push({ emoji:'🧤', name:'Zid', desc:`${totalSaves} odbrana` });
-  if(totalSaves >= 100) achievements.push({ emoji:'🛡️', name:'Tvrđava', desc:'100+ odbrana' });
+  if(totalSaves >= 50) achievements.push({ emoji:'🧤', name:'Zid', desc:`${totalSaves} odbrana`, tier:'common' });
+  if(totalSaves >= 100) achievements.push({ emoji:'🛡️', name:'Tvrđava', desc:'100+ odbrana', tier:'epic' });
 
-  if(totalDemos >= 20) achievements.push({ emoji:'💥', name:'Demo majstor', desc:`${totalDemos} demolicija` });
-  if(totalDemos >= 50) achievements.push({ emoji:'💀', name:'Demo kralj', desc:'50+ demolicija' });
+  if(totalDemos >= 20) achievements.push({ emoji:'💥', name:'Demo majstor', desc:`${totalDemos} demolicija`, tier:'common' });
+  if(totalDemos >= 50) achievements.push({ emoji:'💀', name:'Demo kralj', desc:'50+ demolicija', tier:'epic' });
 
-  if(mvps >= 5) achievements.push({ emoji:'⭐', name:'MVP', desc:`${mvps} MVP nagrada` });
-  if(mvps >= 10) achievements.push({ emoji:'🌟', name:'Super MVP', desc:'10+ MVP nagrada' });
+  if(mvps >= 5) achievements.push({ emoji:'⭐', name:'MVP', desc:`${mvps} MVP nagrada`, tier:'common' });
+  if(mvps >= 10) achievements.push({ emoji:'🌟', name:'Super MVP', desc:'10+ MVP nagrada', tier:'rare' });
 
-  if(hatTricks >= 3) achievements.push({ emoji:'🎩', name:'Hat-trick heroj', desc:`${hatTricks} hat-trickova` });
-  if(hatTricks >= 5) achievements.push({ emoji:'🎩', name:'Hat-trick mašina', desc:'5+ hat-trickova' });
+  if(hatTricks >= 3) achievements.push({ emoji:'🎩', name:'Hat-trick heroj', desc:`${hatTricks} hat-trickova`, tier:'rare' });
+  if(hatTricks >= 5) achievements.push({ emoji:'🎩', name:'Hat-trick mašina', desc:'5+ hat-trickova', tier:'epic' });
 
-  if(cleanSheets >= 3) achievements.push({ emoji:'🧹', name:'Čista mreža', desc:`${cleanSheets} mečeva bez primljenog gola` });
-  if(cleanSheets >= 10) achievements.push({ emoji:'🔒', name:'Neprobojni', desc:'10+ čistih mreža' });
+  if(cleanSheets >= 3) achievements.push({ emoji:'🧹', name:'Čista mreža', desc:`${cleanSheets} mečeva bez primljenog gola`, tier:'common' });
+  if(cleanSheets >= 10) achievements.push({ emoji:'🔒', name:'Neprobojni', desc:'10+ čistih mreža', tier:'epic' });
 
-  if(bestStreak >= 5) achievements.push({ emoji:'🔥', name:'Niz pobeda', desc:`${bestStreak} pobeda zaredom` });
-  if(bestStreak >= 10) achievements.push({ emoji:'⚡', name:'Nezaustavljivi', desc:'10+ pobeda zaredom' });
+  if(bestStreak >= 5) achievements.push({ emoji:'🔥', name:'Niz pobeda', desc:`${bestStreak} pobeda zaredom`, tier:'rare' });
+  if(bestStreak >= 10) achievements.push({ emoji:'⚡', name:'Nezaustavljivi', desc:'10+ pobeda zaredom', tier:'legendary' });
 
-  if(accuracy >= 70) achievements.push({ emoji:'🎯', name:'Sniper', desc:`${Math.round(accuracy)}% šut preciznost` });
-  if(accuracy >= 80) achievements.push({ emoji:'🎯', name:'Oštri strelac', desc:`${Math.round(accuracy)}% šut preciznost` });
+  if(accuracy >= 70) achievements.push({ emoji:'🎯', name:'Sniper', desc:`${Math.round(accuracy)}% šut preciznost`, tier:'rare' });
+  if(accuracy >= 80) achievements.push({ emoji:'🎯', name:'Oštri strelac', desc:`${Math.round(accuracy)}% šut preciznost`, tier:'legendary' });
 
   return achievements;
+}
+
+// ===== LOOT BOX — detekcija novih dostignuća (karijera, sva vremena/režimi) =====
+function seenAchievementsStore(){
+  try{ return JSON.parse(localStorage.getItem('rl_seen_achievements') || '{}'); }
+  catch(e){ return {}; }
+}
+function saveSeenAchievements(store){
+  try{ localStorage.setItem('rl_seen_achievements', JSON.stringify(store)); }catch(e){}
+}
+
+function checkForNewAchievements(){
+  if(!allPlayers.length) return;
+  const seen = seenAchievementsStore();
+  const newItems = [];
+
+  allPlayers.forEach(p => {
+    const achievements = getPlayerAchievements(RAW, p);
+    const seenNames = new Set(seen[p] || []);
+    const currentNames = achievements.map(a => a.name);
+
+    achievements.forEach(a => {
+      if(!seenNames.has(a.name)){
+        newItems.push({ ...a, player: p, color: playerColor[p] });
+      }
+    });
+
+    seen[p] = currentNames; // upamti sve trenutno otključano, da se ne ponavlja
+  });
+
+  saveSeenAchievements(seen);
+
+  if(newItems.length && window.LootBox){
+    window.LootBox.enqueueAuto(newItems);
+  }
+}
+
+function openManualLootBox(){
+  const ps = allPlayers.length ? allPlayers : [...activePlayers];
+  const items = [];
+  ps.forEach(p => {
+    const achievements = getPlayerAchievements(RAW, p);
+    achievements.forEach(a => items.push({ ...a, player: p, color: playerColor[p] }));
+  });
+  if(!items.length){ alert('Još uvek nema otključanih dostignuća.'); return; }
+  // promešaj malo da ne bude uvek isti redosled — zabavnije za "replay"
+  for(let i = items.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  window.LootBox.openManual(items);
 }
 
 // ===== TROFEJNA VITRINA — rotirajuća 3D polica (čist CSS transform + rAF, bez 3D biblioteka) =====
@@ -4414,74 +4819,74 @@ function buildWrappedSlides(d){
   const slides = [];
   const period = (d.dateFrom && d.dateTo) ? `${fmtDate(d.dateFrom)} – ${fmtDate(d.dateTo)}` : '';
 
-  slides.push(`
+  slides.push({ type:'intro', html: `
     <div class="kicker">Season Wrapped</div>
     <div class="icon-big">🚀</div>
     <div class="headline">Ovo je bila vaša sezona</div>
     <div class="sub">${period}</div>
     <div class="chip-row"><div class="wchip">${d.matchCount} mečeva</div><div class="wchip">${d.ps.length} igrača</div></div>
-  `);
+  `});
 
-  slides.push(`
+  slides.push({ type:'stat', html: `
     <div class="kicker">Ukupno golova</div>
     <div class="megahero">${d.totalGoals}</div>
     <div class="sub">Ekipa je zajedno zatresla mrežu ${d.totalGoals} puta, uz ${d.totalAssists} asistencija i ${d.totalSaves} odbrana.</div>
-  `);
+  `});
 
   if(d.topScorer && d.topScorer.v > 0){
-    slides.push(`
+    slides.push({ type:'winner', html: `
       <div class="kicker">Strelac sezone</div>
       <div class="icon-big">🎯</div>
       <div class="winner-name" style="color:${playerColor[d.topScorer.p]||'#fff'}">${d.topScorer.p}</div>
       <div class="sub">${d.topScorer.v} golova — niko drugi nije bio ni blizu.</div>
-    `);
+    `});
   }
 
   if(d.streakKing && d.streakKing.v > 0){
-    slides.push(`
+    slides.push({ type:'winner', html: `
       <div class="kicker">Nezaustavljiv</div>
       <div class="megahero">${d.streakKing.v}</div>
       <div class="sub">Najduži niz pobeda zaredom, i to od strane <b style="color:${playerColor[d.streakKing.p]||'#fff'}">${d.streakKing.p}</b>.</div>
-    `);
+    `});
   }
 
   if(d.mvpKing && d.mvpKing.v > 0){
-    slides.push(`
+    slides.push({ type:'winner', html: `
       <div class="kicker">MVP kralj</div>
       <div class="icon-big">⭐</div>
       <div class="winner-name" style="color:${playerColor[d.mvpKing.p]||'#fff'}">${d.mvpKing.p}</div>
       <div class="sub">Pokupio MVP nagradu ${d.mvpKing.v} puta ove sezone.</div>
-    `);
+    `});
   }
 
   if(d.bestDuo){
-    slides.push(`
+    slides.push({ type:'winner', html: `
       <div class="kicker">Chemistry par sezone</div>
       <div class="icon-big">🤝</div>
       <div class="winner-name" style="font-size:32px;">${d.bestDuo.comb}</div>
       <div class="sub">${d.bestDuo.wins}/${d.bestDuo.total} pobeda zajedno u 2v2 — ${Math.round(d.bestDuo.pct*100)}% win rate.</div>
-    `);
+    `});
   }
 
   if(d.bestMatch){
-    slides.push(`
+    slides.push({ type:'winner', html: `
       <div class="kicker">Partija sezone</div>
       <div class="icon-big">💯</div>
       <div class="winner-name" style="color:${playerColor[d.bestMatch.player]||'#fff'}">${d.bestMatch.player}</div>
       <div class="sub">${d.bestMatch.score} poena, ${d.bestMatch.goals} golova na mapi ${d.bestMatch.map} (${fmtDate(d.bestMatch.date)}) — ${d.bestMatch.win ? 'pobeda' : 'poraz'}.</div>
-    `);
+    `});
   }
 
   if(d.boostKing){
-    slides.push(`
+    slides.push({ type:'stat', html: `
       <div class="kicker">Boost menadžment</div>
       <div class="icon-big">⚡</div>
       <div class="winner-name" style="color:${playerColor[d.boostKing.p]||'#fff'}">${d.boostKing.p}</div>
       <div class="sub">Samo ${d.boostKing.v.toFixed(1)}% vremena na praznom rezervoaru — najbolja disciplina u ekipi.</div>
-    `);
+    `});
   }
 
-  slides.push(`
+  slides.push({ type:'final', html: `
     <div class="kicker">Rezime sezone</div>
     <div class="headline">To je bilo to 🏁</div>
     <div class="recap-grid">
@@ -4491,9 +4896,31 @@ function buildWrappedSlides(d){
       <div class="recap-item"><div class="num">${d.totalDemos}</div><div class="lbl">Demolicija</div></div>
     </div>
     <button class="wrapped-final-btn" id="wrappedReplayBtn">↺ Pusti ponovo</button>
-  `);
+  `});
 
   return slides;
+}
+
+function wrappedConfettiBurst(){
+  const stage = $('#wrappedStage');
+  if(!stage) return;
+  const colors = ['#3DA9FC','#FF6B35','#4ADE80','#FBBF24','#C084FC','#fff'];
+  for(let i = 0; i < 34; i++){
+    const p = document.createElement('div');
+    p.className = 'lootbox-confetti-piece';
+    p.style.left = (40 + Math.random() * 20) + '%';
+    p.style.top = '35%';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 140 + Math.random() * 220;
+    p.style.setProperty('--cx', (Math.cos(angle) * dist) + 'px');
+    p.style.setProperty('--cy', (Math.sin(angle) * dist - 60) + 'px');
+    p.style.setProperty('--cr', (Math.random() * 480) + 'deg');
+    p.style.background = colors[i % colors.length];
+    p.style.zIndex = 20;
+    p.style.animationDuration = (1 + Math.random() * 0.6) + 's';
+    stage.appendChild(p);
+    setTimeout(() => p.remove(), 1700);
+  }
 }
 
 function openWrapped(){
@@ -4504,11 +4931,12 @@ function openWrapped(){
 
   const stage = $('#wrappedStage');
   stage.querySelectorAll('.wrapped-slide').forEach(el => el.remove());
-  wrappedSlides.forEach((html, i) => {
+  wrappedSlides.forEach((slide, i) => {
     const el = document.createElement('div');
     el.className = 'wrapped-slide';
     el.id = 'wslide-' + i;
-    el.innerHTML = html;
+    el.dataset.type = slide.type;
+    el.innerHTML = slide.html;
     stage.appendChild(el);
   });
 
@@ -4517,6 +4945,7 @@ function openWrapped(){
 
   $('#wrappedOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  if(window.SFX) SFX.whoosh();
   showWrappedSlide(0);
 }
 
@@ -5086,11 +5515,11 @@ function prepareDetailedData(rows){
 async function callGroqAPI(data, prevData){
   const hasComparison = prevData && Object.keys(prevData.players || {}).length > 0;
 
-  const systemPrompt = `Ti si iskusan, direktan Rocket League trener - analitičar sa stavom, ne suvoparan
+  const systemPrompt = `Zoveš se Trener Panta - iskusan, direktan Rocket League trener-analitičar sa stavom, ne suvoparan
 izveštaj. Pišeš na srpskom jeziku, konkretno i sa ličnošću: pohvališ ono što zaslužuje pohvalu bez
 ustručavanja, ali isto tako otvoreno kažeš kad nešto ne valja, sa malo duha i direktnosti (kao pravi
 trener u svlačionici), možeš ponekad koristiti stil koji koristi u analizi Rade Bogdanović sa TV RTS sa primesama rečnika Zorice Marković kada se iznervira ali u šaljivom fazonu. Svaka tvrdnja MORA biti
-potkrepljena konkretnom brojkom iz podataka koje dobiješ.
+potkrepljena konkretnom brojkom iz podataka koje dobiješ. Ne moraš svaki put da se predstavljaš imenom, ali piši kao da ti (Trener Panta) lično gledaš ove brojke i komentarišeš ih.
 ${hasComparison ? 'Dobićeš podatke za TRENUTNI period i za PRETHODNI period iste dužine - obavezno prokomentariši trend (da li je ekipa/igrač napredovala ili nazadovala, sa konkretnim brojkama razlike).' : ''}
 Odgovaraš ISKLJUČIVO validnim JSON objektom, bez markdown code fence-ova (bez \`\`\`), bez ijedne
 reči teksta pre ili posle JSON-a. Struktura mora biti tačno:
@@ -5565,6 +5994,35 @@ function renderTiltDetector(rows) {
     html += `</div>`;
     container.innerHTML = html;
 }
+function trenerPantaMood(data){
+  const tm = data?.teamStats;
+  if(!tm || !tm.total_matches) return { emoji:'🧐', label:'Proučava' };
+  const wr = tm.total_wins / tm.total_matches;
+  if(wr >= 0.6) return { emoji:'😎', label:'Zadovoljan' };
+  if(wr >= 0.4) return { emoji:'🧐', label:'Skeptičan' };
+  return { emoji:'😤', label:'Nervozan' };
+}
+
+function typewriterInto(el, text, speed){
+  if(!el) return;
+  el.classList.add('ai-typewriter');
+  el.classList.remove('ai-typing-done');
+  el.textContent = '';
+  let i = 0;
+  const step = Math.max(1, Math.round(text.length / 90)); // brže za duži tekst, da ne traje večno
+  const tick = () => {
+    i += step;
+    el.textContent = text.slice(0, i);
+    if(i < text.length){
+      setTimeout(tick, speed || 12);
+    } else {
+      el.textContent = text;
+      el.classList.add('ai-typing-done');
+    }
+  };
+  tick();
+}
+
 function showAIAnalysisModal(analysis, data, usedFallback){
   const modal = $('#aiModalContent');
   // odbrana od slučaja da model vrati npr. string umesto niza za strengths/tips/itd -
@@ -5576,17 +6034,24 @@ function showAIAnalysisModal(analysis, data, usedFallback){
   const training = asArray(analysis?.training);
   const summary = analysis?.summary ? String(analysis.summary) : '';
   const playersText = analysis?.players ? String(analysis.players) : '';
+  const mood = trenerPantaMood(data);
 
   try{
     modal.innerHTML = `
       <button class="modal-close" id="aiModalClose">&times;</button>
-      <h3 style="color:#7C3AED;">🧠 RTS Analiza</h3>
+      <div class="ai-persona-head">
+        <div class="ai-persona-avatar">${mood.emoji}</div>
+        <div class="ai-persona-info">
+          <div class="ai-persona-name">Trener Panta</div>
+          <div class="ai-persona-title">Analitičar terena &middot; ${mood.label}</div>
+        </div>
+      </div>
       <div class="sub">${data?.teamStats?.total_matches || 0} mečeva &middot; ${new Date().toLocaleString('sr-RS')}</div>
-      ${usedFallback ? `<div class="fallback-badge">⚠️ Bez AI (automatska analiza po pravilima — Worker trenutno nedostupan)</div>` : ''}
+      ${usedFallback ? `<div class="fallback-badge">⚠️ Trener Panta je bez mreže — improvizuje po pravilima (AI trenutno nedostupan)</div>` : ''}
 
       <div class="analysis-section" style="border-left:3px solid #7C3AED; margin-top:16px;">
         <h4 style="color:#7C3AED;">📊 Sažetak</h4>
-        <p style="margin:0; font-size:13px; line-height:1.7; color:var(--text);">${summary}</p>
+        <p id="aiSummaryText" style="margin:0; font-size:13px; line-height:1.7; color:var(--text); min-height:1.4em;"></p>
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
@@ -5617,15 +6082,17 @@ function showAIAnalysisModal(analysis, data, usedFallback){
         <ul>${training.map(s => `<li>${s}</li>`).join('')}</ul>
       </div>` : ''}
     `;
+    typewriterInto($('#aiSummaryText'), summary, 12);
   }catch(e){
     console.error('[AI] Renderovanje modala nije uspelo:', e);
     modal.innerHTML = `
       <button class="modal-close" id="aiModalClose">&times;</button>
-      <h3>🧠 RTS Analiza</h3>
+      <h3>🧔 Trener Panta</h3>
       <p style="color:var(--text-muted); font-size:13px;">Došlo je do greške pri prikazu analize. Detalji su u konzoli (F12 → Console).</p>
     `;
   }
 
+  if(window.SFX) SFX.whoosh();
   $('#aiModalClose').addEventListener('click', () => $('#aiModalBackdrop').classList.remove('open'));
   $('#aiModalBackdrop').classList.add('open');
 }
@@ -5646,7 +6113,7 @@ function resetStuckAIButton(source, err){
   console.error('[AI] Uhvaćena neočekivana greška (' + source + '):', err);
   const btn = $('#aiAnalyzeBtn');
   if(btn && btn.disabled){
-    btn.innerHTML = `<span style="font-size:18px;">🧠</span> RTS Analiza`;
+    btn.innerHTML = `<span style="font-size:18px;">🧔</span> Pitaj Trenera Pantu`;
     btn.disabled = false;
   }
 }
