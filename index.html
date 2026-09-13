@@ -998,8 +998,8 @@ body.intro-active{ overflow:hidden; }
 }
 .vsintro-left{ left:-32vw; }
 .vsintro-right{ right:-32vw; }
-.vsintro-left.fly-in{ animation:vsIntroFlyLeft .55s cubic-bezier(.2,.85,.35,1) forwards; }
-.vsintro-right.fly-in{ animation:vsIntroFlyRight .55s cubic-bezier(.2,.85,.35,1) forwards; }
+.vsintro-left.fly-in{ animation:vsIntroFlyLeft 1.05s cubic-bezier(.2,.85,.35,1) forwards; }
+.vsintro-right.fly-in{ animation:vsIntroFlyRight 1.05s cubic-bezier(.2,.85,.35,1) forwards; }
 @keyframes vsIntroFlyLeft{ 0%{ left:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ left:calc(50% - 190px); opacity:1; } }
 @keyframes vsIntroFlyRight{ 0%{ right:-32vw; opacity:0; } 65%{ opacity:1; } 100%{ right:calc(50% - 190px); opacity:1; } }
 
@@ -1019,7 +1019,7 @@ body.intro-active{ overflow:hidden; }
   font-family:'Rajdhani', sans-serif; font-weight:900; font-size:70px; color:#fff;
   text-shadow:0 0 30px rgba(255,255,255,0.6); opacity:0;
 }
-.vsintro-vs-text.pop{ animation:vsIntroVsPop .35s cubic-bezier(.3,1.6,.4,1) forwards; }
+.vsintro-vs-text.pop{ animation:vsIntroVsPop .5s cubic-bezier(.3,1.6,.4,1) forwards; }
 @keyframes vsIntroVsPop{
   0%{ transform:translate(-50%,-50%) scale(0); opacity:0; }
   60%{ transform:translate(-50%,-50%) scale(1.35); opacity:1; }
@@ -1031,13 +1031,13 @@ body.intro-active{ overflow:hidden; }
   background:linear-gradient(90deg, var(--blue), var(--orange));
   -webkit-background-clip:text; background-clip:text; color:transparent; opacity:0;
 }
-.vsintro-ready-text.explode{ animation:vsIntroReadyExplode .5s cubic-bezier(.2,.9,.3,1) forwards; }
+.vsintro-ready-text.explode{ animation:vsIntroReadyExplode .7s cubic-bezier(.2,.9,.3,1) forwards; }
 @keyframes vsIntroReadyExplode{
   0%{ transform:translate(-50%,-50%) scale(2.4); opacity:0; }
   35%{ opacity:1; }
   100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
 }
-.vsintro-ready-text.fade-out{ animation:vsIntroFadeOut .3s ease forwards; }
+.vsintro-ready-text.fade-out{ animation:vsIntroFadeOut .45s ease forwards; }
 @keyframes vsIntroFadeOut{ to{ opacity:0; transform:translate(-50%,-50%) scale(0.85); } }
 
 body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
@@ -2576,6 +2576,7 @@ async function load(){
       btn.classList.add('active');
       modeFilter = btn.dataset.mode;
       refreshVisiblePlayers();
+      renderFormMarquee();
       render();
     });
   });
@@ -2600,6 +2601,7 @@ async function load(){
     document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
     $('.mode-chip[data-mode="offline"]').classList.add('active');
     refreshVisiblePlayers();
+    renderFormMarquee();
     render();
   });
   document.querySelectorAll('#matchTable th[data-key]').forEach(th => {
@@ -3933,11 +3935,13 @@ function openTeamComboModal(combKey){
 // ================================================================
 function computeFormMarqueeItems(){
   const items = [];
-  if(!allPlayers.length) return items;
+  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
+  const modePlayers = [...new Set(modeRows.map(r => r.player))].sort();
+  if(!modePlayers.length) return items;
 
-  const byPlayer = p => RAW.filter(r => r.player === p);
+  const byPlayer = p => modeRows.filter(r => r.player === p);
 
-  allPlayers.forEach(p => {
+  modePlayers.forEach(p => {
     const v = byPlayer(p).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
     if(v.length < 3) return;
 
@@ -3957,7 +3961,7 @@ function computeFormMarqueeItems(){
 
   // ko se priblizava rekordu golova
   const totalGoals = p => sum(byPlayer(p).map(r => getPath(r,'core.goals') || 0));
-  const goalTotals = allPlayers.map(p => ({ p, g: totalGoals(p) })).sort((a,b) => b.g - a.g);
+  const goalTotals = modePlayers.map(p => ({ p, g: totalGoals(p) })).sort((a,b) => b.g - a.g);
   if(goalTotals.length >= 2 && goalTotals[0].g > 0){
     const leader = goalTotals[0], chaser = goalTotals[1];
     const gap = leader.g - chaser.g;
@@ -3968,7 +3972,7 @@ function computeFormMarqueeItems(){
 
   // poslednji odigran mec — MVP i rezultat
   const byReplay = {};
-  RAW.forEach(r => { if(r.replay_id && r.date) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
+  modeRows.forEach(r => { if(r.replay_id && r.date) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
   const replays = Object.values(byReplay).sort((a,b) => (b[0].date||'').localeCompare(a[0].date||''));
   if(replays.length){
     const last = replays[0];
@@ -4550,33 +4554,33 @@ function playVsFightIntro(a, b){
     portraitB.classList.add('fly-in');
   });
 
-  // sudar na sredini
+  // sudar na sredini (kad se portreti stignu do centra)
   setTimeout(() => {
     document.body.classList.add('screen-shake');
     flash.classList.add('flash-hit');
     vsText.classList.add('pop');
     if(window.SFX) SFX.impact();
     setTimeout(() => document.body.classList.remove('screen-shake'), 360);
-  }, 520);
+  }, 1000);
 
   // "SPREMNI?" eksplodira
   setTimeout(() => {
     readyText.classList.add('explode');
     if(window.SFX) SFX.fanfare();
-  }, 820);
+  }, 1550);
 
-  // nestani i zatvori (ukupno ~1.5s)
+  // nestani i zatvori (ukupno ~3s)
   setTimeout(() => {
     readyText.classList.add('fade-out');
-    overlay.style.transition = 'opacity .3s ease';
+    overlay.style.transition = 'opacity .45s ease';
     overlay.style.opacity = '0';
-  }, 1300);
+  }, 2550);
 
   setTimeout(() => {
     overlay.classList.remove('open');
     overlay.style.opacity = '';
     overlay.style.transition = '';
-  }, 1620);
+  }, 3000);
 }
 
 function maybePlayVsIntro(force){
