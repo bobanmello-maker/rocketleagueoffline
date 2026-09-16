@@ -206,7 +206,10 @@
   .tabpanel.active{ display:block; }
 
   .grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
+  .grid.grid-summary{ align-items:stretch; }
   .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
+  .power-rank-card, .week-summary-card{ display:flex; flex-direction:column; }
+  .week-summary-card #weekSummaryBody{ display:flex; flex-direction:column; flex:1; min-height:0; }
   .card{
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
     padding:22px 24px;
@@ -476,7 +479,7 @@
   .week-summary-pre{
     background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
     padding:14px; font-size:13px; line-height:1.7; white-space:pre-wrap; color:var(--text);
-    font-family:'Inter',sans-serif; margin-bottom:12px; max-height:320px; overflow-y:auto;
+    font-family:'Inter',sans-serif; margin-bottom:12px; flex:1; min-height:80px; max-height:520px; overflow-y:auto;
   }
   .week-summary-copy-btn{
     background:linear-gradient(90deg, var(--blue), var(--orange)); border:none; color:#fff;
@@ -1692,7 +1695,7 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
       </div>
 
       <div class="ov-subpanel active" id="ovsub-summary">
-        <div class="grid">
+        <div class="grid grid-summary">
           <div class="card power-rank-card">
             <h2>🏅 Power Rankings <small>kombinovan rang — forma, uticaj i niz pobeda</small></h2>
             <div id="powerRankBody"></div>
@@ -3202,12 +3205,50 @@ function renderWeekSummary(){
   });
 }
 
+function syncSummaryCardHeights(){
+  const grid = document.querySelector('.grid-summary');
+  const powerCard = document.querySelector('.power-rank-card');
+  const weekCard = document.querySelector('.week-summary-card');
+  const pre = document.getElementById('weekSummaryPre');
+  if(!grid || !powerCard || !weekCard || !pre) return;
+
+  // na uskim ekranima kartice se ionako slažu jedna ispod druge — ne teraj visinu
+  if(window.innerWidth <= 900){
+    weekCard.style.height = '';
+    pre.style.maxHeight = '';
+    return;
+  }
+
+  weekCard.style.height = '';
+  pre.style.maxHeight = '';
+
+  requestAnimationFrame(() => {
+    const targetHeight = powerCard.offsetHeight;
+    weekCard.style.height = targetHeight + 'px';
+
+    const h2 = weekCard.querySelector('h2');
+    const btn = document.getElementById('weekSummaryCopyBtn');
+    const cardStyles = getComputedStyle(weekCard);
+    const paddingV = parseFloat(cardStyles.paddingTop) + parseFloat(cardStyles.paddingBottom);
+    const usedHeight = (h2 ? h2.offsetHeight : 0) + (btn ? btn.offsetHeight + 12 : 0) + paddingV;
+    const preHeight = Math.max(80, targetHeight - usedHeight);
+    pre.style.maxHeight = preHeight + 'px';
+  });
+}
+
+let _summaryResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_summaryResizeTimer);
+  _summaryResizeTimer = setTimeout(syncSummaryCardHeights, 150);
+});
+
 function render(){
   const rows = getFiltered();
   renderScoreline(rows);
   renderPowerRankings(rows);
   renderOnThisDay();
   renderWeekSummary();
+  syncSummaryCardHeights();
   renderPatternHunter(rows);
   renderWhatIf(rows);
   renderPlayerRecords(rows);
