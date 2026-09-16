@@ -215,7 +215,8 @@
   .power-rank-card, .week-summary-card{ display:flex; flex-direction:column; }
   .week-summary-card #weekSummaryBody{ display:flex; flex-direction:column; flex:1; min-height:0; }
 
-  .hud-card{ position:relative; overflow:hidden; }
+  .hud-card{ position:relative; overflow:hidden; padding-top:18px; padding-bottom:16px; }
+  .hud-card h2{ margin-bottom:10px; }
   .hud-card::before{
     content:''; position:absolute; inset:0; pointer-events:none;
     background:radial-gradient(ellipse 70% 100% at 50% 45%, rgba(61,169,252,0.07), transparent 70%);
@@ -286,14 +287,17 @@
   .table-wrap{ overflow-x:auto; }
 
   /* ===== PRAVI RL HUD — kružni merači kao u igri (čist SVG/CSS) ===== */
-  .hud-row{ display:flex; flex-wrap:wrap; gap:22px; justify-content:center; padding:14px 0 8px; }
+  .hud-row{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:18px;
+  }
   .hud-gauge-card{
-    display:flex; flex-direction:column; align-items:center; gap:9px;
+    display:flex; flex-direction:column; align-items:center; gap:7px;
     background:var(--surface-2); border:1px solid var(--border); border-radius:14px;
-    padding:18px 18px 16px; min-width:150px; transition:transform .2s ease, border-color .2s ease;
+    padding:14px 18px 12px; min-width:150px; transition:transform .2s ease, border-color .2s ease;
   }
   .hud-gauge-card:hover{ transform:translateY(-3px); border-color:var(--text-muted); }
-  .hud-ring-wrap{ position:relative; width:124px; height:124px; }
+  .hud-ring-wrap{ position:relative; width:108px; height:108px; }
   .hud-ring-wrap svg{ width:100%; height:100%; transform:rotate(0deg); }
   .hud-ring-track{ fill:none; stroke:var(--boost-track); stroke-width:10; }
   .hud-ring-fill{
@@ -1804,18 +1808,18 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
     </div>
 
     <div class="tabpanel" id="tab-boost">
-      <div class="card">
+      <div class="card hud-card">
         <h2>🎮 Boost HUD <small>prosečan boost po igraču — kao merač u samoj igri</small></h2>
         <div class="hud-row" id="boostHud"></div>
       </div>
-      <div class="grid">
+      <div class="grid chart-pair-grid">
         <div class="card">
           <h2>BPM (potrošnja boosta / min) <small>manje ne znači loše — zavisi od stila</small></h2>
-          <canvas id="bpmChart" height="160"></canvas>
+          <div class="chart-box"><canvas id="bpmChart"></canvas></div>
         </div>
         <div class="card">
           <h2>Distribucija boost nivoa <small>% vremena provedeno u svakom rangu</small></h2>
-          <canvas id="boostDistChart" height="160"></canvas>
+          <div class="chart-box"><canvas id="boostDistChart"></canvas></div>
         </div>
       </div>
       <div class="card">
@@ -1865,7 +1869,7 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
           <div class="chart-box"><canvas id="posChart"></canvas></div>
         </div>
         <div class="card">
-          <h2>Rotacije <small>% vremena iza lopte kroz vreme, prosek po meču</small></h2>
+          <h2>Rotacije <small>% vremena iza lopte — klizni prosek poslednjih 5 mečeva, radi čitljivosti</small></h2>
           <div class="chart-box"><canvas id="rotationTrendChart"></canvas></div>
         </div>
       </div>
@@ -3357,21 +3361,34 @@ function groupByMatchAndPlayer(rows, metricKey){
   return Object.values(byReplay).sort((a,b) => (a.date||'').localeCompare(b.date||''));
 }
 
+function movingAvg(data, window){
+  if(!window || window <= 1) return data;
+  const out = [];
+  for(let i=0;i<data.length;i++){
+    const slice = data.slice(Math.max(0, i-window+1), i+1).filter(v => v!=null && !isNaN(v));
+    out.push(slice.length ? slice.reduce((a,b)=>a+b,0)/slice.length : null);
+  }
+  return out;
+}
+
 function lineChartFor(canvasId, chartKey, ordered, opts){
   opts = opts || {};
   const labels = ordered.map(m => fmtDate(m.date));
-  const datasets = [...activePlayers].sort().map(p => ({
-    label: p,
-    data: ordered.map(m => m.players[p] ?? null),
-    borderColor: playerColor[p],
-    backgroundColor: playerColor[p],
-    tension: opts.tension ?? 0.3,
-    spanGaps: true,
-    fill: opts.fill ?? false,
-    borderWidth: opts.borderWidth ?? 2,
-    pointRadius: opts.pointRadius ?? 3,
-    pointHoverRadius: opts.pointHoverRadius ?? 5,
-  }));
+  const datasets = [...activePlayers].sort().map(p => {
+    const raw = ordered.map(m => m.players[p] ?? null);
+    return {
+      label: p,
+      data: opts.smooth ? movingAvg(raw, opts.smooth) : raw,
+      borderColor: playerColor[p],
+      backgroundColor: playerColor[p],
+      tension: opts.tension ?? 0.3,
+      spanGaps: true,
+      fill: opts.fill ?? false,
+      borderWidth: opts.borderWidth ?? 2,
+      pointRadius: opts.pointRadius ?? 3,
+      pointHoverRadius: opts.pointHoverRadius ?? 5,
+    };
+  });
   destroyChart(chartKey);
   charts[chartKey] = new Chart($(canvasId), {
     type: 'line',
@@ -4437,7 +4454,7 @@ function renderPositioningChart(rows){
 
 function renderRotationTrend(rows){
   const ordered = groupByMatchAndPlayer(rows, 'positioning.percent_behind_ball');
-  lineChartFor('#rotationTrendChart', 'rotationTrend', ordered, { maintainAspectRatio:false, pointRadius:0, pointHoverRadius:5, tension:0.35, fill:false });
+  lineChartFor('#rotationTrendChart', 'rotationTrend', ordered, { maintainAspectRatio:false, pointRadius:0, pointHoverRadius:5, tension:0.35, fill:false, smooth:5, borderWidth:2.5 });
 }
 
 function renderPosTable(rows){
