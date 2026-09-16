@@ -81,6 +81,24 @@
   .chip[data-idx="3"].active{ background:var(--amber); }
   .chip.mode-chip.active{ background:var(--orange); color:#0B0E14; border-color:transparent; }
 
+  /* ===== SUB-NAVIGACIJA UNUTAR "PREGLED" TABA ===== */
+  .overview-subnav{
+    display:flex; gap:8px; margin:4px 0 18px; flex-wrap:wrap;
+    border-bottom:1px solid var(--border); padding-bottom:14px;
+  }
+  .ov-subtab-btn{
+    padding:8px 16px; border-radius:999px; border:1px solid var(--border);
+    background:var(--surface-2); cursor:pointer; font-size:13.5px; font-weight:600;
+    color:var(--text-muted); transition:all .15s ease; user-select:none;
+  }
+  .ov-subtab-btn:hover{ color:var(--text); }
+  .ov-subtab-btn.active{
+    color:#0B0E14; border-color:transparent;
+    background:linear-gradient(90deg, var(--blue), var(--orange));
+  }
+  .ov-subpanel{ display:none; }
+  .ov-subpanel.active{ display:block; }
+
   .reset-btn{
     margin-left:auto; background:none; border:1px solid var(--border); color:var(--text-muted);
     padding:6px 14px; border-radius:8px; cursor:pointer; font-size:12px;
@@ -1641,27 +1659,24 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
         <h2>📅 Na ovaj dan <small>uspomena iz istorije ekipe</small></h2>
         <div class="on-this-day-body" id="onThisDayBody"></div>
       </div>
-      <div class="grid">
-        <div class="card power-rank-card">
-          <h2>🏅 Power Rankings <small>kombinovan rang — forma, uticaj i niz pobeda</small></h2>
-          <div id="powerRankBody"></div>
-        </div>
-        <div class="card week-summary-card">
-          <h2>📋 Rezime nedelje <small>spremno za lepljenje u grupni chat</small></h2>
-          <div id="weekSummaryBody"></div>
-        </div>
+
+      <div class="overview-subnav" id="overviewSubnav">
+        <button class="ov-subtab-btn active" data-ovsub="summary">📊 Sažetak</button>
+        <button class="ov-subtab-btn" data-ovsub="profile">🧬 Profil igrača</button>
+        <button class="ov-subtab-btn" data-ovsub="insights">🔍 Uvidi</button>
       </div>
-      <div class="grid">
-        <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
-          <h2>Lovac na obrasce <small>Automatski otkriveni šabloni iz istorije mečeva</small></h2>
-          <div id="patternHunterBody"></div>
+
+      <div class="ov-subpanel active" id="ovsub-summary">
+        <div class="grid">
+          <div class="card power-rank-card">
+            <h2>🏅 Power Rankings <small>kombinovan rang — forma, uticaj i niz pobeda</small></h2>
+            <div id="powerRankBody"></div>
+          </div>
+          <div class="card week-summary-card">
+            <h2>📋 Rezime nedelje <small>spremno za lepljenje u grupni chat</small></h2>
+            <div id="weekSummaryBody"></div>
+          </div>
         </div>
-        <div class="card whatif-card" id="whatIfCard" style="display:none;">
-          <h2>🌀 Šta bi bilo da... <small>kontrafaktualni scenariji iz stvarnih podataka</small></h2>
-          <div id="whatIfBody"></div>
-        </div>
-      </div>
-      <div class="grid">
         <div class="card">
           <h2>
             <span>Trend kroz vreme</span>
@@ -1671,27 +1686,37 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
           <div class="metric-summary" id="metricSummary"></div>
         </div>
         <div class="card">
-          <h2>Prosečan boost <small>% od maksimalnog boost-a</small></h2>
-          <div id="boostMeters"></div>
-          <div class="boost-extra" id="boostEfficiency"></div>
-          <div class="boost-facts" id="boostFacts"></div>
-          <div class="boost-extra">
-            <div class="subhead">Forma <span style="text-transform:none; font-weight:400;">— poslednjih do 10 mečeva, sleva (najstariji) nadesno (najnoviji)</span></div>
-            <div id="formaList"></div>
+          <h2>Forma <small>poslednjih do 10 mečeva, sleva (najstariji) nadesno (najnoviji)</small></h2>
+          <div id="formaList"></div>
+        </div>
+      </div>
+
+      <div class="ov-subpanel" id="ovsub-profile">
+        <div class="card">
+          <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
+          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+        </div>
+        <div id="overviewProfileExtra"></div>
+      </div>
+
+      <div class="ov-subpanel" id="ovsub-insights">
+        <div class="grid">
+          <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
+            <h2>Lovac na obrasce <small>Automatski otkriveni šabloni iz istorije mečeva</small></h2>
+            <div id="patternHunterBody"></div>
+          </div>
+          <div class="card whatif-card" id="whatIfCard" style="display:none;">
+            <h2>🌀 Šta bi bilo da... <small>kontrafaktualni scenariji iz stvarnih podataka</small></h2>
+            <div id="whatIfBody"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px;">
+          <h2>😤 Tilt Detector <small>analiza performansi unutar sesije</small></h2>
+          <div id="tiltDetectorContent">
+            <div class="empty">Učitavanje...</div>
           </div>
         </div>
       </div>
-      <div class="card">
-        <h2>Profil igrača <small>normalizovano 0–100, prosek po meču</small></h2>
-        <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-      </div>
-      <!-- ===== TILT DETEKTOR - SAMO U PREGLEDU ===== -->
-  <div class="card" style="margin-top:20px;">
-    <h2>😤 Tilt Detector <small>analiza performansi unutar sesije</small></h2>
-    <div id="tiltDetectorContent">
-      <div class="empty">Učitavanje...</div>
-    </div>
-  </div>
     </div>
 
     <div class="tabpanel" id="tab-race">
@@ -1743,6 +1768,11 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
         <div class="table-wrap">
           <table id="boostTable"><thead></thead><tbody></tbody></table>
         </div>
+      </div>
+      <div class="card">
+        <h2>Boost efikasnost <small>gol+asistencija na svakih 100 sakupljenog boosta, plus zanimljivosti</small></h2>
+        <div class="boost-extra" id="boostEfficiency"></div>
+        <div class="boost-facts" id="boostFacts"></div>
       </div>
     </div>
 
@@ -2493,7 +2523,7 @@ function renderClutchAnalysis(rows) {
   const ps = [...activePlayers].sort();
   if (!ps.length) return;
 
-  const overviewTab = $('#tab-overview');
+  const overviewTab = $('#overviewProfileExtra');
   if (!overviewTab) return;
 
   const oldCard = document.getElementById('clutchCard');
@@ -2590,7 +2620,7 @@ function renderPlayerImpact(rows) {
   const ps = [...activePlayers].sort();
   if (!ps.length) return;
 
-  const overviewTab = $('#tab-overview');
+  const overviewTab = $('#overviewProfileExtra');
   if (!overviewTab) return;
 
   const oldCard = document.getElementById('pisCard');
@@ -2782,6 +2812,15 @@ function buildTabs(){
       if(btn.dataset.tab === 'matches') startStarMapLoop(); else stopStarMapLoop();
       if(btn.dataset.tab === 'race') startRaceLoop(); else stopRaceLoop();
       if(btn.dataset.tab === 'h2h') maybePlayVsIntro(true);
+    });
+  });
+
+  document.querySelectorAll('.ov-subtab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ov-subtab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.ov-subpanel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      $('#ovsub-' + btn.dataset.ovsub).classList.add('active');
     });
   });
 }
@@ -3255,22 +3294,8 @@ function renderMetricSummary(rows, metricKey){
 }
 
 function renderBoostMeters(rows){
-  const wrap = $('#boostMeters');
-  wrap.innerHTML = '';
-  [...activePlayers].sort().forEach(p => {
-    const vals = rows.filter(r => r.player === p).map(r => getPath(r,'boost.avg_amount') || 0);
-    const value = avg(vals);
-    const row = document.createElement('div');
-    row.className = 'meter-row';
-    row.innerHTML = `
-      <div class="meter-name">${p}</div>
-      <div class="meter-track"><div class="meter-fill" style="--boost-width:${Math.min(value,100)}%"></div></div>
-      <div class="meter-val mono">${value.toFixed(0)}</div>
-    `;
-    wrap.appendChild(row);
-  });
-  if(!activePlayers.size){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; }
-
+  // Linearni "meter" prikaz je uklonjen odavde — Boost HUD u tabu Boost
+  // već pokriva isti prosečan boost po igraču, samo lepše (gauge stil).
   renderBoostExtras(rows);
 }
 
