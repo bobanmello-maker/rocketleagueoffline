@@ -222,6 +222,46 @@
     background:radial-gradient(ellipse 70% 100% at 50% 45%, rgba(61,169,252,0.07), transparent 70%);
   }
   .hud-card .hud-row{ position:relative; z-index:1; }
+
+  /* ===== ROTACIJA — rangirana lista umesto šumovite linije ===== */
+  .rotation-rank-box{ height:auto; position:static; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+  .rotation-card{ display:flex; flex-direction:column; }
+  .rotation-card .rotation-rank-box{ flex:1; }
+  .rotation-rank-row{ display:flex; align-items:center; gap:12px; }
+  .rotation-rank-medal{ width:22px; text-align:center; font-size:14px; flex-shrink:0; }
+  .rotation-rank-name{ width:76px; flex-shrink:0; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rotation-rank-track{ flex:1; height:16px; background:var(--surface-2); border-radius:8px; position:relative; overflow:hidden; }
+  .rotation-rank-fill{ height:100%; border-radius:8px; width:0; transition:width 1s cubic-bezier(0.16,1,0.3,1); box-shadow:0 0 10px currentColor; }
+  .rotation-rank-avgline{ position:absolute; top:-4px; bottom:-4px; width:2px; background:rgba(255,255,255,0.4); z-index:2; }
+  .rotation-rank-val{ width:46px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text); flex-shrink:0; }
+  .rotation-rank-legend{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); margin-top:4px; }
+  .rotation-rank-legend i{ display:inline-block; width:10px; height:2px; background:rgba(255,255,255,0.4); }
+
+  /* ===== DEMO DUEL HUD ===== */
+  .demo-duel-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+  .demo-duel-card{
+    background:var(--surface-2); border:1px solid var(--border); border-radius:14px;
+    padding:14px 16px 12px; transition:transform .2s ease, border-color .2s ease; position:relative; overflow:hidden;
+  }
+  .demo-duel-card:hover{ transform:translateY(-3px); border-color:var(--text-muted); }
+  .demo-duel-top{ display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:10px; }
+  .demo-duel-name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:15px; text-align:center; }
+  .demo-duel-track{ display:flex; align-items:center; height:22px; }
+  .demo-duel-half{ flex:1; display:flex; align-items:center; height:10px; min-width:0; }
+  .demo-duel-half.taken{ justify-content:flex-end; }
+  .demo-duel-half.given{ justify-content:flex-start; }
+  .demo-duel-bar{ height:100%; border-radius:5px; width:0; transition:width 1s cubic-bezier(0.16,1,0.3,1); }
+  .demo-duel-half.taken .demo-duel-bar{ background:linear-gradient(90deg, rgba(248,113,113,0.15), #F87171); }
+  .demo-duel-half.given .demo-duel-bar{ background:linear-gradient(90deg, #4ADE80, rgba(74,222,128,0.15)); }
+  .demo-duel-center{ width:2px; height:20px; background:var(--border); flex-shrink:0; margin:0 2px; }
+  .demo-duel-labels{ display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:12px; margin-top:6px; }
+  .demo-duel-labels .taken-val{ color:#F87171; }
+  .demo-duel-labels .given-val{ color:#4ADE80; }
+  .demo-duel-net{ text-align:center; margin-top:10px; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; padding:4px 8px; border-radius:8px; }
+  .demo-duel-net.pos{ color:#4ADE80; background:rgba(74,222,128,0.1); }
+  .demo-duel-net.neg{ color:#F87171; background:rgba(248,113,113,0.1); }
+  .demo-duel-net.zero{ color:var(--text-muted); background:rgba(255,255,255,0.04); }
+  .demo-duel-crown{ position:absolute; top:8px; right:10px; font-size:14px; }
   .card{
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
     padding:22px 24px;
@@ -1868,9 +1908,9 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
           <h2>Pozicioniranje po trećinama <small>% vremena po zonama terena</small></h2>
           <div class="chart-box"><canvas id="posChart"></canvas></div>
         </div>
-        <div class="card">
-          <h2>Rotacije <small>% vremena iza lopte — klizni prosek poslednjih 5 mečeva, radi čitljivosti</small></h2>
-          <div class="chart-box"><canvas id="rotationTrendChart"></canvas></div>
+        <div class="card rotation-card">
+          <h2>🛡️ Disciplina rotacije <small>% vremena iza lopte — prosek za period, rangirano</small></h2>
+          <div class="chart-box rotation-rank-box" id="rotationRank"></div>
         </div>
       </div>
       <div class="card">
@@ -1882,14 +1922,18 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
     </div>
 
     <div class="tabpanel" id="tab-demos">
-      <div class="grid">
+      <div class="card hud-card">
+        <h2>💥 Demolition Duel <small>zadati (👉) vs primljeni (👈) demo-i, po igraču</small></h2>
+        <div class="demo-duel-row" id="demoDuelHud"></div>
+      </div>
+      <div class="grid chart-pair-grid">
         <div class="card">
-          <h2>Demo bilans <small>zadati vs primljeni</small></h2>
-          <canvas id="demoChart" height="180"></canvas>
+          <h2>Demo bilans <small>ukupno zadati vs primljeni</small></h2>
+          <div class="chart-box"><canvas id="demoChart"></canvas></div>
         </div>
         <div class="card">
-          <h2>Demo razlika kroz vreme</h2>
-          <canvas id="demoTrendChart" height="180"></canvas>
+          <h2>Demo momentum <small>kumulativna razlika kroz sezonu — rastuća linija = dominacija</small></h2>
+          <div class="chart-box"><canvas id="demoTrendChart"></canvas></div>
         </div>
       </div>
     </div>
@@ -3290,10 +3334,11 @@ function render(){
   renderSpeedHud(rows);
 
   renderPositioningChart(rows);
-  renderRotationTrend(rows);
+  renderRotationRank(rows);
   renderPosTable(rows);
   renderPositionHud(rows);
 
+  renderDemoDuelHud(rows);
   renderDemoChart(rows);
   renderDemoTrend(rows);
 
@@ -3380,7 +3425,7 @@ function lineChartFor(canvasId, chartKey, ordered, opts){
       label: p,
       data: opts.smooth ? movingAvg(raw, opts.smooth) : raw,
       borderColor: playerColor[p],
-      backgroundColor: playerColor[p],
+      backgroundColor: opts.fill ? hexToRgba(playerColor[p], 0.12) : playerColor[p],
       tension: opts.tension ?? 0.3,
       spanGaps: true,
       fill: opts.fill ?? false,
@@ -4452,9 +4497,45 @@ function renderPositioningChart(rows){
   });
 }
 
-function renderRotationTrend(rows){
-  const ordered = groupByMatchAndPlayer(rows, 'positioning.percent_behind_ball');
-  lineChartFor('#rotationTrendChart', 'rotationTrend', ordered, { maintainAspectRatio:false, pointRadius:0, pointHoverRadius:5, tension:0.35, fill:false, smooth:5, borderWidth:2.5 });
+function renderRotationRank(rows){
+  const wrap = $('#rotationRank');
+  if(!wrap) return;
+  const ps = [...activePlayers];
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  const entries = ps.map(p => {
+    const prows = rows.filter(r=>r.player===p);
+    const val = avg(prows.map(r=>getPath(r,'positioning.percent_behind_ball')||0));
+    return { p, val };
+  }).sort((a,b) => b.val - a.val);
+
+  const teamAvg = avg(entries.map(e=>e.val));
+  const maxVal = Math.max(100, ...entries.map(e=>e.val));
+  const medals = ['🥇','🥈','🥉'];
+
+  wrap.innerHTML = `
+    ${entries.map((e,i) => {
+      const color = playerColor[e.p] || '#3DA9FC';
+      const pct = (e.val / maxVal) * 100;
+      const avgPct = (teamAvg / maxVal) * 100;
+      return `
+        <div class="rotation-rank-row">
+          <div class="rotation-rank-medal">${medals[i] || (i+1)}</div>
+          <div class="rotation-rank-name" style="color:${color}">${e.p}</div>
+          <div class="rotation-rank-track">
+            <div class="rotation-rank-avgline" style="left:${avgPct}%" title="Prosek ekipe: ${teamAvg.toFixed(0)}%"></div>
+            <div class="rotation-rank-fill" data-w="${pct}" style="background:${color}; color:${color};"></div>
+          </div>
+          <div class="rotation-rank-val mono">${e.val.toFixed(0)}%</div>
+        </div>
+      `;
+    }).join('')}
+    <div class="rotation-rank-legend"><i></i> prosek ekipe (${teamAvg.toFixed(0)}%)</div>
+  `;
+
+  requestAnimationFrame(() => {
+    wrap.querySelectorAll('.rotation-rank-fill').forEach(el => { el.style.width = el.dataset.w + '%'; });
+  });
 }
 
 function renderPosTable(rows){
@@ -4469,6 +4550,51 @@ function renderPosTable(rows){
   ]);
 }
 
+function renderDemoDuelHud(rows){
+  const wrap = $('#demoDuelHud');
+  if(!wrap) return;
+  const ps = [...activePlayers].sort();
+  if(!ps.length){ wrap.innerHTML = '<div class="empty">Nema izabranih igrača</div>'; return; }
+
+  const entries = ps.map(p => {
+    const prows = rows.filter(r=>r.player===p);
+    const inflicted = sum(prows.map(r=>getPath(r,'demo.inflicted')||0));
+    const taken = sum(prows.map(r=>getPath(r,'demo.taken')||0));
+    return { p, inflicted, taken, net: inflicted - taken };
+  });
+  const maxVal = Math.max(1, ...entries.flatMap(e => [e.inflicted, e.taken]));
+  const topNet = Math.max(...entries.map(e=>e.net));
+
+  wrap.innerHTML = entries.map(e => {
+    const color = playerColor[e.p] || '#3DA9FC';
+    const takenPct = (e.taken / maxVal) * 100;
+    const givenPct = (e.inflicted / maxVal) * 100;
+    const netClass = e.net > 0 ? 'pos' : (e.net < 0 ? 'neg' : 'zero');
+    const netLabel = e.net > 0 ? `+${e.net}` : e.net;
+    const crown = (e.net === topNet && topNet > 0) ? '<div class="demo-duel-crown">👑</div>' : '';
+    return `
+      <div class="demo-duel-card">
+        ${crown}
+        <div class="demo-duel-top"><div class="demo-duel-name" style="color:${color}">${e.p}</div></div>
+        <div class="demo-duel-track">
+          <div class="demo-duel-half taken"><div class="demo-duel-bar" data-w="${takenPct}"></div></div>
+          <div class="demo-duel-center"></div>
+          <div class="demo-duel-half given"><div class="demo-duel-bar" data-w="${givenPct}"></div></div>
+        </div>
+        <div class="demo-duel-labels">
+          <span class="taken-val">👈 ${e.taken}</span>
+          <span class="given-val">${e.inflicted} 👉</span>
+        </div>
+        <div class="demo-duel-net ${netClass}">${netLabel} neto</div>
+      </div>
+    `;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    wrap.querySelectorAll('.demo-duel-bar').forEach(el => { el.style.width = el.dataset.w + '%'; });
+  });
+}
+
 function renderDemoChart(rows){
   const ps = [...activePlayers].sort();
   const inflicted = ps.map(p => sum(rows.filter(r=>r.player===p).map(r=>getPath(r,'demo.inflicted')||0)));
@@ -4477,11 +4603,11 @@ function renderDemoChart(rows){
   charts.demo = new Chart($('#demoChart'), {
     type:'bar',
     data:{ labels:ps, datasets:[
-      {label:'Zadati', data:inflicted, backgroundColor:'#4ADE80'},
-      {label:'Primljeni', data:taken, backgroundColor:'#F87171'},
+      {label:'Zadati', data:inflicted, backgroundColor:'#4ADE80', borderRadius:6, maxBarThickness:42},
+      {label:'Primljeni', data:taken, backgroundColor:'#F87171', borderRadius:6, maxBarThickness:42},
     ]},
-    options:{ responsive:true, plugins:{legend:{labels:{color:'#8A93A3'}}},
-      scales:{ x:{ticks:{color:'#8A93A3'},grid:{display:false}}, y:{ticks:{color:'#8A93A3'},grid:{color:'rgba(255,255,255,0.05)'}} } }
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#8A93A3'}}},
+      scales:{ x:{ticks:{color:'#8A93A3'},grid:{display:false}}, y:{ticks:{color:'#8A93A3'},grid:{color:'rgba(255,255,255,0.05)'},beginAtZero:true} } }
   });
 }
 
@@ -4492,7 +4618,20 @@ function renderDemoTrend(rows){
     byReplay[r.replay_id].players[r.player] = (getPath(r,'demo.inflicted')||0) - (getPath(r,'demo.taken')||0);
   });
   const ordered = Object.values(byReplay).sort((a,b) => (a.date||'').localeCompare(b.date||''));
-  lineChartFor('#demoTrendChart', 'demoTrend', ordered);
+
+  // kumulativna razlika kroz sezonu — glatka priča o dominaciji, umesto šuma po meču
+  const running = {};
+  const cumulative = ordered.map(m => {
+    const players = {};
+    [...activePlayers].forEach(p => {
+      const diff = m.players[p];
+      if(diff != null){ running[p] = (running[p] || 0) + diff; }
+      players[p] = running[p] ?? null;
+    });
+    return { date: m.date, players };
+  });
+
+  lineChartFor('#demoTrendChart', 'demoTrend', cumulative, { maintainAspectRatio:false, pointRadius:0, pointHoverRadius:5, tension:0.3, fill:true, borderWidth:2.5 });
 }
 
 // ================================================================
