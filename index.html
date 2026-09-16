@@ -3012,7 +3012,8 @@ function computeWeekSummaryText(){
   const now = new Date();
   const weekAgo = new Date(); weekAgo.setDate(now.getDate() - 7);
   const fromStr = weekAgo.toISOString().slice(0,10);
-  const wRows = RAW.filter(r => r.date && r.date.slice(0,10) >= fromStr);
+  const modeRows = modeFilter === 'all' ? RAW : RAW.filter(r => r.mode === modeFilter);
+  const wRows = modeRows.filter(r => r.date && r.date.slice(0,10) >= fromStr);
 
   if(!wRows.length) return '⚽ Nema odigranih mečeva u poslednjih 7 dana.';
 
