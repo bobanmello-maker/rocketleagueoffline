@@ -448,7 +448,7 @@
   .week-summary-pre{
     background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
     padding:14px; font-size:13px; line-height:1.7; white-space:pre-wrap; color:var(--text);
-    font-family:'Inter',sans-serif; margin-bottom:12px; max-height:220px; overflow-y:auto;
+    font-family:'Inter',sans-serif; margin-bottom:12px; max-height:320px; overflow-y:auto;
   }
   .week-summary-copy-btn{
     background:linear-gradient(90deg, var(--blue), var(--orange)); border:none; color:#fff;
@@ -3058,33 +3058,96 @@ function computeWeekSummaryText(){
 
   const byReplay = {};
   wRows.forEach(r => { if(r.replay_id) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
-  const matchCount = Object.keys(byReplay).length;
+  const matches = Object.values(byReplay);
+  const matchCount = matches.length;
 
-  const ps = [...new Set(wRows.map(r => r.player))];
-  const mvpCounts = {};
-  ps.forEach(p => { mvpCounts[p] = wRows.filter(r => r.player === p && getPath(r,'core.mvp')).length; });
-  const topMvp = Object.entries(mvpCounts).sort((a,b) => b[1]-a[1])[0];
+  const ps = [...new Set(wRows.map(r => r.player))].sort();
 
-  const winCounts = {};
+  // ===== zbirno za ekipu =====
+  const teamWins = matches.filter(rs => rs[0].win).length;
+  const teamWinPct = matchCount ? Math.round((teamWins/matchCount)*100) : 0;
+  const totalGoalsFor = sum(matches.map(rs => rs[0].team_goals||0));
+  const goalsPerMatch = matchCount ? (totalGoalsFor/matchCount).toFixed(1) : '0';
+
+  // ===== po igracu =====
+  const perPlayer = {};
   ps.forEach(p => {
     const prows = wRows.filter(r => r.player === p);
-    winCounts[p] = { wins: prows.filter(r=>r.win).length, total: prows.length };
+    perPlayer[p] = {
+      matches: prows.length,
+      wins: prows.filter(r=>r.win).length,
+      goals: sum(prows.map(r=>getPath(r,'core.goals')||0)),
+      assists: sum(prows.map(r=>getPath(r,'core.assists')||0)),
+      saves: sum(prows.map(r=>getPath(r,'core.saves')||0)),
+      demos: sum(prows.map(r=>getPath(r,'demo.inflicted')||0)),
+      mvp: prows.filter(r=>getPath(r,'core.mvp')).length,
+      zeroBoostPct: avg(prows.map(r=>getPath(r,'boost.percent_zero_boost')||0)),
+    };
   });
-  const bestRecord = Object.entries(winCounts)
-    .filter(([,v]) => v.total >= 2)
-    .sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total))[0];
 
+  const topMvpEntry = Object.entries(perPlayer).filter(([,v])=>v.mvp>0).sort((a,b)=>b[1].mvp-a[1].mvp)[0];
+  const topScorerEntry = Object.entries(perPlayer).filter(([,v])=>v.goals>0).sort((a,b)=>b[1].goals-a[1].goals)[0];
+
+  const bestRecord = Object.entries(perPlayer)
+    .filter(([,v]) => v.matches >= 2)
+    .sort((a,b) => (b[1].wins/b[1].matches) - (a[1].wins/a[1].matches))[0];
+
+  const demoKing = Object.entries(perPlayer).filter(([,v])=>v.demos>0).sort((a,b)=>b[1].demos-a[1].demos)[0];
+
+  const boostManager = Object.entries(perPlayer)
+    .filter(([,v]) => v.matches >= 2)
+    .sort((a,b) => a[1].zeroBoostPct - b[1].zeroBoostPct)[0];
+
+  // ===== mecevi - najtesnji, najubedljiviji, najbolniji poraz =====
   let closestMatch = null, closestDiff = Infinity;
-  Object.values(byReplay).forEach(matchRows => {
-    const rep = matchRows[0];
+  let biggestWin = null, biggestWinMargin = -1;
+  let worstLoss = null, worstLossMargin = -1;
+  matches.forEach(rs => {
+    const rep = rs[0];
     const diff = Math.abs((rep.team_goals||0) - (rep.opponent_goals||0));
     if(diff < closestDiff){ closestDiff = diff; closestMatch = rep; }
+    if(rep.win && diff > biggestWinMargin){ biggestWinMargin = diff; biggestWin = rep; }
+    if(!rep.win && diff > worstLossMargin){ worstLossMargin = diff; worstLoss = rep; }
   });
 
-  let text = `⚽ Nedelja iza nas: ${matchCount} odigranih mečeva.\n`;
-  if(topMvp && topMvp[1] > 0) text += `⭐ MVP nedelje: ${topMvp[0]} (${topMvp[1]}x)\n`;
-  if(bestRecord) text += `🔥 Najbolja forma: ${bestRecord[0]} (${bestRecord[1].wins}/${bestRecord[1].total} pobeda)\n`;
+  // ===== comeback nedelje =====
+  let bestComeback = null, bestComebackVal = 0;
+  wRows.forEach(r => {
+    if(r.win && (r.max_deficit_overcome||0) > bestComebackVal){ bestComebackVal = r.max_deficit_overcome; bestComeback = r; }
+  });
+
+  // ===== najigranija mapa =====
+  const mapCounts = {};
+  matches.forEach(rs => { const mp = rs[0].map; if(mp) mapCounts[mp] = (mapCounts[mp]||0)+1; });
+  const topMap = Object.entries(mapCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  const fromLabel = fmtDate(fromStr);
+  const toLabel = fmtDate(now.toISOString().slice(0,10));
+
+  let text = `⚽ NEDELJNI REZIME (${fromLabel} – ${toLabel})\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `📊 ${matchCount} odigranih mečeva · ${teamWins}P–${matchCount-teamWins}I (${teamWinPct}% win rate)\n`;
+  text += `⚽ ${totalGoalsFor} golova ukupno (${goalsPerMatch}/meč)\n\n`;
+
+  text += `👤 PO IGRAČU:\n`;
+  ps.forEach(p => {
+    const v = perPlayer[p];
+    if(!v.matches) return;
+    text += `   ${p}: ${v.wins}P–${v.matches-v.wins}I · ${v.goals}⚽ ${v.assists}🅰 ${v.saves}🧤${v.mvp ? ` · ${v.mvp}x MVP` : ''}\n`;
+  });
+  text += `\n`;
+
+  if(topMvpEntry) text += `⭐ MVP nedelje: ${topMvpEntry[0]} (${topMvpEntry[1].mvp}x)\n`;
+  if(topScorerEntry) text += `🎯 Topskorer: ${topScorerEntry[0]} (${topScorerEntry[1].goals} golova)\n`;
+  if(bestRecord) text += `🔥 Najbolja forma: ${bestRecord[0]} (${bestRecord[1].wins}/${bestRecord[1].matches} pobeda)\n`;
+  if(demoKing) text += `💣 Demo kralj: ${demoKing[0]} (${demoKing[1].demos} demolicija)\n`;
+  if(boostManager) text += `🔋 Boost menadžer: ${boostManager[0]} (najmanje vremena na praznom baku)\n`;
+  if(bestComeback) text += `🔄 Comeback nedelje: ${bestComeback.player} (okrenuo zaostatak od ${bestComeback.max_deficit_overcome} gola)\n`;
+  if(biggestWin) text += `💥 Najubedljivija pobeda: ${biggestWin.team_goals}–${biggestWin.opponent_goals} na ${mapDisplay ? mapDisplay(biggestWin.map) : (biggestWin.map||'')}\n`;
+  if(worstLoss) text += `😬 Najbolniji poraz: ${worstLoss.team_goals}–${worstLoss.opponent_goals} na ${mapDisplay ? mapDisplay(worstLoss.map) : (worstLoss.map||'')}\n`;
   if(closestMatch) text += `🎯 Najtešnji meč: ${closestMatch.team_goals}–${closestMatch.opponent_goals} na ${mapDisplay ? mapDisplay(closestMatch.map) : (closestMatch.map||'')}\n`;
+  if(topMap) text += `🗺️ Najigranija mapa: ${mapDisplay ? mapDisplay(topMap[0]) : topMap[0]} (${topMap[1]}x)\n`;
+
   text += `\n— Trener Panta 🧔`;
   return text;
 }
