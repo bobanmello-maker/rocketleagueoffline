@@ -392,6 +392,64 @@
   .award-card .winner{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; }
   .award-card .detail{ font-size:12px; color:var(--text-muted); margin-top:2px; }
 
+  /* ===== POWER RANKINGS ===== */
+  .power-rank-row{
+    display:flex; align-items:center; gap:12px; padding:12px 10px;
+    border-bottom:1px solid var(--border);
+  }
+  .power-rank-row:last-child{ border-bottom:none; }
+  .power-rank-pos{
+    width:34px; text-align:center; font-family:'Rajdhani',sans-serif; font-weight:800; font-size:20px;
+    color:var(--text-muted); flex-shrink:0;
+  }
+  .power-rank-info{ flex:1; min-width:0; }
+  .power-rank-name{ font-family:'Rajdhani',sans-serif; font-weight:700; font-size:17px; }
+  .power-rank-comment{ font-size:12px; color:var(--text-muted); margin-top:2px; line-height:1.4; }
+  .power-rank-score{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); flex-shrink:0; }
+  .power-rank-delta{
+    flex-shrink:0; min-width:42px; text-align:center; font-size:12px; font-weight:700;
+    padding:3px 7px; border-radius:8px;
+  }
+  .power-rank-delta.up{ color:var(--green); background:rgba(74,222,128,0.12); }
+  .power-rank-delta.down{ color:var(--loss); background:rgba(248,113,113,0.12); }
+  .power-rank-delta.same{ color:var(--text-muted); background:rgba(255,255,255,0.06); }
+  .power-rank-delta.new{ color:var(--blue); background:rgba(61,169,252,0.12); }
+  .power-rank-note{ font-size:11.5px; color:var(--text-muted); margin-top:8px; }
+
+  /* ===== NA OVAJ DAN ===== */
+  .on-this-day-card{
+    background:linear-gradient(120deg, rgba(255,183,3,0.08), var(--surface) 55%);
+    border-color:rgba(255,183,3,0.25); margin-bottom:20px;
+  }
+  .on-this-day-body{ display:flex; align-items:center; gap:14px; }
+  .on-this-day-emoji{ font-size:34px; flex-shrink:0; }
+  .on-this-day-text{ font-size:14.5px; line-height:1.5; }
+  .on-this-day-text b{ color:#fff; }
+
+  /* ===== REZIME NEDELJE ===== */
+  .week-summary-pre{
+    background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
+    padding:14px; font-size:13px; line-height:1.7; white-space:pre-wrap; color:var(--text);
+    font-family:'Inter',sans-serif; margin-bottom:12px; max-height:220px; overflow-y:auto;
+  }
+  .week-summary-copy-btn{
+    background:linear-gradient(90deg, var(--blue), var(--orange)); border:none; color:#fff;
+    font-weight:700; padding:10px 18px; border-radius:9px; cursor:pointer; font-size:13.5px;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .week-summary-copy-btn:hover{ transform:translateY(-1px); opacity:0.92; }
+  .week-summary-copy-btn:active{ transform:translateY(0); }
+
+  /* ===== TOAST ===== */
+  .rl-toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:#141A24; border:1px solid var(--border); color:#fff; padding:12px 20px;
+    border-radius:10px; font-size:13.5px; font-weight:600; z-index:9600;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4); opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .rl-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
   .achievement-block{
     margin-bottom:20px; padding-bottom:18px; border-bottom:1px solid var(--border);
   }
@@ -1299,6 +1357,8 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
     </div>
   </div>
 
+  <div class="rl-toast" id="rlToast"></div>
+
   <div class="vsintro-overlay" id="vsIntroOverlay">
     <div class="vsintro-flash" id="vsIntroFlash"></div>
     <div class="vsintro-portrait vsintro-left" id="vsIntroPortraitA">
@@ -1577,6 +1637,20 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
   <div id="content">
 
     <div class="tabpanel active" id="tab-overview">
+      <div class="card on-this-day-card" id="onThisDayCard" style="display:none;">
+        <h2>📅 Na ovaj dan <small>uspomena iz istorije ekipe</small></h2>
+        <div class="on-this-day-body" id="onThisDayBody"></div>
+      </div>
+      <div class="grid">
+        <div class="card power-rank-card">
+          <h2>🏅 Power Rankings <small>kombinovan rang — forma, uticaj i niz pobeda</small></h2>
+          <div id="powerRankBody"></div>
+        </div>
+        <div class="card week-summary-card">
+          <h2>📋 Rezime nedelje <small>spremno za lepljenje u grupni chat</small></h2>
+          <div id="weekSummaryBody"></div>
+        </div>
+      </div>
       <div class="grid">
         <div class="card pattern-hunter-card" id="patternHunterCard" style="display:none;">
           <h2>Lovac na obrasce <small>Automatski otkriveni šabloni iz istorije mečeva</small></h2>
@@ -2765,9 +2839,242 @@ function getFiltered(){
 
 function destroyChart(key){ if(charts[key]){ charts[key].destroy(); delete charts[key]; } }
 
+// ================================================================
+//  🍞 TOAST — kratka povratna poruka (npr. "Kopirano!")
+// ================================================================
+function showToast(msg, duration){
+  const el = $('#rlToast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(() => el.classList.remove('show'), duration || 2200);
+}
+
+// ================================================================
+//  🏅 POWER RANKINGS — kombinovan nedeljni rang (forma + uticaj +
+//  niz pobeda), sa strelicama pomeranja u odnosu na prošlu nedelju
+//  (snapshot čuvan lokalno po ISO nedelji).
+// ================================================================
+function getISOWeekKey(d){
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = (date.getUTCDay() + 6) % 7;
+  date.setUTCDate(date.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+  const week = 1 + Math.round(((date - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+  return `${date.getUTCFullYear()}-W${String(week).padStart(2,'0')}`;
+}
+
+function computePowerScore(rows, player){
+  const pis = computePIS(rows, player);
+  if(pis === null) return null;
+  const prows = rows.filter(r => r.player === player).slice().sort((a,b) => (a.date||'').localeCompare(b.date||''));
+  const matches = prows.length;
+  const recentN = prows.slice(-10);
+  const recentWinPct = recentN.length ? (recentN.filter(r=>r.win).length / recentN.length) * 100 : 0;
+
+  let streak = 0, streakWin = null;
+  for(let i = prows.length - 1; i >= 0; i--){
+    const w = !!prows[i].win;
+    if(streakWin === null){ streakWin = w; streak = 1; }
+    else if(w === streakWin){ streak++; }
+    else break;
+  }
+  const streakBonus = (streakWin ? 1 : -1) * Math.min(streak, 6) * 1.5;
+  const formBonus = (recentWinPct - 50) / 10;
+
+  return {
+    score: Math.round((pis + formBonus + streakBonus) * 10) / 10,
+    matches, recentWinPct, streak, streakWin,
+  };
+}
+
+function powerRankReason(entry){
+  if(entry.streak >= 2){
+    return entry.streakWin
+      ? `${entry.streak} pobeda zaredom ga drži gore.`
+      : `${entry.streak} poraza zaredom su ga koštala mesta.`;
+  }
+  if(entry.recentWinPct >= 65) return `Odlična skorašnja forma (${Math.round(entry.recentWinPct)}% u poslednjih ${Math.min(entry.matches,10)}).`;
+  if(entry.recentWinPct <= 35) return `Slaba skorašnja forma (${Math.round(entry.recentWinPct)}% u poslednjih ${Math.min(entry.matches,10)}).`;
+  return 'Stabilan učinak.';
+}
+
+function renderPowerRankings(rows){
+  const body = $('#powerRankBody');
+  if(!body) return;
+  const ps = [...activePlayers];
+  if(ps.length < 2){ body.innerHTML = '<div class="empty">Treba bar 2 izabrana igrača</div>'; return; }
+
+  const entries = ps.map(p => {
+    const stat = computePowerScore(rows, p);
+    return stat ? { p, ...stat } : null;
+  }).filter(Boolean);
+
+  if(!entries.length){ body.innerHTML = '<div class="empty">Nema dovoljno podataka</div>'; return; }
+
+  entries.sort((a,b) => b.score - a.score);
+  entries.forEach((e,i) => e.rank = i+1);
+
+  let store = {};
+  try{ store = JSON.parse(localStorage.getItem('rl_power_rankings_v1') || '{}'); }catch(e){ store = {}; }
+
+  const thisWeekKey = getISOWeekKey(new Date());
+  const prevDate = new Date(); prevDate.setDate(prevDate.getDate() - 7);
+  const prevWeekKey = getISOWeekKey(prevDate);
+  const prevRanks = (store[prevWeekKey] && store[prevWeekKey].ranks) || null;
+
+  store[thisWeekKey] = { savedAt: new Date().toISOString(), ranks: Object.fromEntries(entries.map(e => [e.p, e.rank])) };
+  const keys = Object.keys(store).sort();
+  if(keys.length > 12) keys.slice(0, keys.length - 12).forEach(k => delete store[k]);
+  try{ localStorage.setItem('rl_power_rankings_v1', JSON.stringify(store)); }catch(e){}
+
+  const medals = ['🥇','🥈','🥉'];
+  body.innerHTML = entries.map(e => {
+    const prevRank = prevRanks ? prevRanks[e.p] : null;
+    const delta = (prevRanks && prevRank != null) ? prevRank - e.rank : null;
+    let deltaHtml;
+    if(delta === null) deltaHtml = `<div class="power-rank-delta new">NOVO</div>`;
+    else if(delta > 0) deltaHtml = `<div class="power-rank-delta up">↑${delta}</div>`;
+    else if(delta < 0) deltaHtml = `<div class="power-rank-delta down">↓${Math.abs(delta)}</div>`;
+    else deltaHtml = `<div class="power-rank-delta same">=</div>`;
+
+    return `
+      <div class="power-rank-row">
+        <div class="power-rank-pos">${medals[e.rank-1] || '#'+e.rank}</div>
+        <div class="power-rank-info">
+          <div class="power-rank-name" style="color:${playerColor[e.p]}">${e.p}</div>
+          <div class="power-rank-comment">${powerRankReason(e)}</div>
+        </div>
+        <div class="power-rank-score">${e.score}</div>
+        ${deltaHtml}
+      </div>`;
+  }).join('');
+}
+
+// ================================================================
+//  📅 NA OVAJ DAN — uspomena iz prošlih sezona (ista kalendarska
+//  nedelja/dan, iz cele istorije, nezavisno od aktivnih filtera).
+// ================================================================
+function computeOnThisDay(){
+  const today = new Date();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  const curYear = String(today.getFullYear());
+
+  const matches = RAW.filter(r => {
+    if(!r.date) return false;
+    const d = r.date.slice(0,10);
+    return d.slice(5,7) === mm && d.slice(8,10) === dd && d.slice(0,4) !== curYear;
+  });
+  if(!matches.length) return null;
+
+  const byReplay = {};
+  matches.forEach(r => { if(r.replay_id) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
+  const replayIds = Object.keys(byReplay);
+  if(!replayIds.length) return null;
+  const chosenId = replayIds[Math.floor(Math.random() * replayIds.length)];
+  const matchRows = byReplay[chosenId];
+
+  const standout = matchRows.reduce((best, r) => (getPath(r,'core.goals')||0) > (getPath(best,'core.goals')||0) ? r : best, matchRows[0]);
+  const yearsAgo = today.getFullYear() - Number(matchRows[0].date.slice(0,4));
+  const rep = matchRows[0];
+
+  return { yearsAgo, rep, standout, standoutGoals: getPath(standout,'core.goals') || 0 };
+}
+
+function renderOnThisDay(){
+  const card = $('#onThisDayCard'), body = $('#onThisDayBody');
+  if(!card || !body) return;
+  const info = computeOnThisDay();
+  if(!info){ card.style.display = 'none'; return; }
+  card.style.display = '';
+
+  const { yearsAgo, rep, standout, standoutGoals } = info;
+  const yearsLabel = yearsAgo === 1 ? 'pre godinu dana' : `pre ${yearsAgo} godine`;
+  let extra = '';
+  if(standoutGoals >= 2){
+    extra = ` <b style="color:${playerColor[standout.player]}">${standout.player}</b> je te večeri ubacio ${standoutGoals} gola.`;
+  }
+
+  body.innerHTML = `
+    <div class="on-this-day-emoji">🕰️</div>
+    <div class="on-this-day-text">
+      Na ovaj dan <b>${yearsLabel}</b>: rezultat <b>${rep.team_goals}–${rep.opponent_goals}</b> na ${mapDisplay ? mapDisplay(rep.map) : (rep.map||'nepoznatoj mapi')}.${extra}
+    </div>`;
+}
+
+// ================================================================
+//  📋 REZIME NEDELJE — automatski generisan tekst spreman za
+//  lepljenje u grupni chat (Viber/WhatsApp), iz poslednjih 7 dana.
+// ================================================================
+function computeWeekSummaryText(){
+  const now = new Date();
+  const weekAgo = new Date(); weekAgo.setDate(now.getDate() - 7);
+  const fromStr = weekAgo.toISOString().slice(0,10);
+  const wRows = RAW.filter(r => r.date && r.date.slice(0,10) >= fromStr);
+
+  if(!wRows.length) return '⚽ Nema odigranih mečeva u poslednjih 7 dana.';
+
+  const byReplay = {};
+  wRows.forEach(r => { if(r.replay_id) (byReplay[r.replay_id] = byReplay[r.replay_id] || []).push(r); });
+  const matchCount = Object.keys(byReplay).length;
+
+  const ps = [...new Set(wRows.map(r => r.player))];
+  const mvpCounts = {};
+  ps.forEach(p => { mvpCounts[p] = wRows.filter(r => r.player === p && getPath(r,'core.mvp')).length; });
+  const topMvp = Object.entries(mvpCounts).sort((a,b) => b[1]-a[1])[0];
+
+  const winCounts = {};
+  ps.forEach(p => {
+    const prows = wRows.filter(r => r.player === p);
+    winCounts[p] = { wins: prows.filter(r=>r.win).length, total: prows.length };
+  });
+  const bestRecord = Object.entries(winCounts)
+    .filter(([,v]) => v.total >= 2)
+    .sort((a,b) => (b[1].wins/b[1].total) - (a[1].wins/a[1].total))[0];
+
+  let closestMatch = null, closestDiff = Infinity;
+  Object.values(byReplay).forEach(matchRows => {
+    const rep = matchRows[0];
+    const diff = Math.abs((rep.team_goals||0) - (rep.opponent_goals||0));
+    if(diff < closestDiff){ closestDiff = diff; closestMatch = rep; }
+  });
+
+  let text = `⚽ Nedelja iza nas: ${matchCount} odigranih mečeva.\n`;
+  if(topMvp && topMvp[1] > 0) text += `⭐ MVP nedelje: ${topMvp[0]} (${topMvp[1]}x)\n`;
+  if(bestRecord) text += `🔥 Najbolja forma: ${bestRecord[0]} (${bestRecord[1].wins}/${bestRecord[1].total} pobeda)\n`;
+  if(closestMatch) text += `🎯 Najtešnji meč: ${closestMatch.team_goals}–${closestMatch.opponent_goals} na ${mapDisplay ? mapDisplay(closestMatch.map) : (closestMatch.map||'')}\n`;
+  text += `\n— Trener Panta 🧔`;
+  return text;
+}
+
+function renderWeekSummary(){
+  const body = $('#weekSummaryBody');
+  if(!body) return;
+  const text = computeWeekSummaryText();
+  body.innerHTML = `
+    <div class="week-summary-pre" id="weekSummaryPre"></div>
+    <button class="week-summary-copy-btn" id="weekSummaryCopyBtn">📋 Kopiraj rezime</button>`;
+  $('#weekSummaryPre').textContent = text;
+
+  const btn = $('#weekSummaryCopyBtn');
+  btn.addEventListener('click', async () => {
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast('Kopirano! Nalepi u chat 📋');
+    }catch(e){
+      showToast('Ne mogu da kopiram — markiraj tekst ručno.');
+    }
+  });
+}
+
 function render(){
   const rows = getFiltered();
   renderScoreline(rows);
+  renderPowerRankings(rows);
+  renderOnThisDay();
+  renderWeekSummary();
   renderPatternHunter(rows);
   renderWhatIf(rows);
   renderPlayerRecords(rows);
