@@ -206,7 +206,7 @@
   .tabpanel.active{ display:block; }
 
   .grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
-  .grid.grid-summary{ align-items:stretch; }
+  .grid.grid-summary{ align-items:start; }
   .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
   .power-rank-card, .week-summary-card{ display:flex; flex-direction:column; }
   .week-summary-card #weekSummaryBody{ display:flex; flex-direction:column; flex:1; min-height:0; }
@@ -3209,30 +3209,18 @@ function syncSummaryCardHeights(){
   const grid = document.querySelector('.grid-summary');
   const powerCard = document.querySelector('.power-rank-card');
   const weekCard = document.querySelector('.week-summary-card');
-  const pre = document.getElementById('weekSummaryPre');
-  if(!grid || !powerCard || !weekCard || !pre) return;
+  if(!grid || !powerCard || !weekCard) return;
 
   // na uskim ekranima kartice se ionako slažu jedna ispod druge — ne teraj visinu
   if(window.innerWidth <= 900){
     weekCard.style.height = '';
-    pre.style.maxHeight = '';
     return;
   }
 
   weekCard.style.height = '';
-  pre.style.maxHeight = '';
 
   requestAnimationFrame(() => {
-    const targetHeight = powerCard.offsetHeight;
-    weekCard.style.height = targetHeight + 'px';
-
-    const h2 = weekCard.querySelector('h2');
-    const btn = document.getElementById('weekSummaryCopyBtn');
-    const cardStyles = getComputedStyle(weekCard);
-    const paddingV = parseFloat(cardStyles.paddingTop) + parseFloat(cardStyles.paddingBottom);
-    const usedHeight = (h2 ? h2.offsetHeight : 0) + (btn ? btn.offsetHeight + 12 : 0) + paddingV;
-    const preHeight = Math.max(80, targetHeight - usedHeight);
-    pre.style.maxHeight = preHeight + 'px';
+    weekCard.style.height = powerCard.offsetHeight + 'px';
   });
 }
 
