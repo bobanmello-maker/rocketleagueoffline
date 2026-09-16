@@ -208,8 +208,19 @@
   .grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
   .grid.grid-summary{ align-items:start; }
   .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-bottom:22px; align-items:start; }
+  .grid.chart-pair-grid{ grid-template-columns:1fr 1fr; align-items:stretch; }
+  .chart-box{ position:relative; height:280px; margin-top:4px; }
+  .chart-box canvas{ position:absolute; inset:0; width:100% !important; height:100% !important; }
+  @media (max-width:900px){ .chart-box{ height:240px; } }
   .power-rank-card, .week-summary-card{ display:flex; flex-direction:column; }
   .week-summary-card #weekSummaryBody{ display:flex; flex-direction:column; flex:1; min-height:0; }
+
+  .hud-card{ position:relative; overflow:hidden; }
+  .hud-card::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 70% 100% at 50% 45%, rgba(61,169,252,0.07), transparent 70%);
+  }
+  .hud-card .hud-row{ position:relative; z-index:1; }
   .card{
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
     padding:22px 24px;
@@ -275,14 +286,14 @@
   .table-wrap{ overflow-x:auto; }
 
   /* ===== PRAVI RL HUD — kružni merači kao u igri (čist SVG/CSS) ===== */
-  .hud-row{ display:flex; flex-wrap:wrap; gap:18px; justify-content:center; padding:8px 0 4px; }
+  .hud-row{ display:flex; flex-wrap:wrap; gap:22px; justify-content:center; padding:14px 0 8px; }
   .hud-gauge-card{
-    display:flex; flex-direction:column; align-items:center; gap:8px;
+    display:flex; flex-direction:column; align-items:center; gap:9px;
     background:var(--surface-2); border:1px solid var(--border); border-radius:14px;
-    padding:16px 14px 14px; min-width:132px; transition:transform .2s ease, border-color .2s ease;
+    padding:18px 18px 16px; min-width:150px; transition:transform .2s ease, border-color .2s ease;
   }
   .hud-gauge-card:hover{ transform:translateY(-3px); border-color:var(--text-muted); }
-  .hud-ring-wrap{ position:relative; width:112px; height:112px; }
+  .hud-ring-wrap{ position:relative; width:124px; height:124px; }
   .hud-ring-wrap svg{ width:100%; height:100%; transform:rotate(0deg); }
   .hud-ring-track{ fill:none; stroke:var(--boost-track); stroke-width:10; }
   .hud-ring-fill{
@@ -1821,18 +1832,18 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
     </div>
 
     <div class="tabpanel" id="tab-movement">
-      <div class="card">
+      <div class="card hud-card">
         <h2>🎮 Brzinomer <small>prosečna brzina po igraču, u odnosu na maksimum (supersonic ~2300 uu/s)</small></h2>
         <div class="hud-row" id="speedHud"></div>
       </div>
-      <div class="grid">
+      <div class="grid chart-pair-grid">
         <div class="card">
           <h2>Vreme u vazduhu / na zemlji <small>% od trajanja meča</small></h2>
-          <canvas id="airChart" height="160"></canvas>
+          <div class="chart-box"><canvas id="airChart"></canvas></div>
         </div>
         <div class="card">
           <h2>Brzina <small>prosečna brzina i % vremena na supersonic-u</small></h2>
-          <canvas id="speedChart" height="160"></canvas>
+          <div class="chart-box"><canvas id="speedChart"></canvas></div>
         </div>
       </div>
       <div class="card">
@@ -1844,18 +1855,18 @@ body.screen-shake{ animation:screenShakeKf .35s cubic-bezier(.36,.07,.19,.97); }
     </div>
 
     <div class="tabpanel" id="tab-positioning">
-      <div class="card">
+      <div class="card hud-card">
         <h2>🎮 Pozicioni kompas <small>raspodela vremena po trećinama terena — odbrana / sredina / napad</small></h2>
         <div class="hud-row" id="posHud"></div>
       </div>
-      <div class="grid">
+      <div class="grid chart-pair-grid">
         <div class="card">
           <h2>Pozicioniranje po trećinama <small>% vremena po zonama terena</small></h2>
-          <canvas id="posChart" height="200"></canvas>
+          <div class="chart-box"><canvas id="posChart"></canvas></div>
         </div>
         <div class="card">
-          <h2>Rotacije <small>% vremena iza lopte kroz vreme</small></h2>
-          <canvas id="rotationTrendChart" height="200"></canvas>
+          <h2>Rotacije <small>% vremena iza lopte kroz vreme, prosek po meču</small></h2>
+          <div class="chart-box"><canvas id="rotationTrendChart"></canvas></div>
         </div>
       </div>
       <div class="card">
@@ -3346,16 +3357,20 @@ function groupByMatchAndPlayer(rows, metricKey){
   return Object.values(byReplay).sort((a,b) => (a.date||'').localeCompare(b.date||''));
 }
 
-function lineChartFor(canvasId, chartKey, ordered, labelFn){
+function lineChartFor(canvasId, chartKey, ordered, opts){
+  opts = opts || {};
   const labels = ordered.map(m => fmtDate(m.date));
   const datasets = [...activePlayers].sort().map(p => ({
     label: p,
     data: ordered.map(m => m.players[p] ?? null),
     borderColor: playerColor[p],
     backgroundColor: playerColor[p],
-    tension: 0.3,
+    tension: opts.tension ?? 0.3,
     spanGaps: true,
-    pointRadius: 3,
+    fill: opts.fill ?? false,
+    borderWidth: opts.borderWidth ?? 2,
+    pointRadius: opts.pointRadius ?? 3,
+    pointHoverRadius: opts.pointHoverRadius ?? 5,
   }));
   destroyChart(chartKey);
   charts[chartKey] = new Chart($(canvasId), {
@@ -3363,6 +3378,8 @@ function lineChartFor(canvasId, chartKey, ordered, labelFn){
     data: { labels, datasets },
     options: {
       responsive:true,
+      maintainAspectRatio: opts.maintainAspectRatio ?? true,
+      interaction:{ mode:'index', intersect:false },
       plugins:{ legend:{ labels:{ color:'#8A93A3' } } },
       scales:{
         x:{ ticks:{ color:'#8A93A3', maxRotation:0, autoSkip:true }, grid:{ color:'rgba(255,255,255,0.05)' } },
@@ -4365,7 +4382,7 @@ function renderAirChart(rows){
       {label:'Nizak vazduh', data:low, backgroundColor:'#FBBF24'},
       {label:'Visok vazduh', data:high, backgroundColor:'#3DA9FC'},
     ]},
-    options:{ responsive:true, plugins:{legend:{labels:{color:'#8A93A3'}}},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#8A93A3'}}},
       scales:{ x:{stacked:true,ticks:{color:'#8A93A3'},grid:{display:false}}, y:{stacked:true,max:100,ticks:{color:'#8A93A3',callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.05)'}} } }
   });
 }
@@ -4380,7 +4397,7 @@ function renderSpeedChart(rows){
       {type:'bar', label:'Prosečna brzina', data:speed, backgroundColor:'#3DA9FC', yAxisID:'y'},
       {type:'line', label:'% supersonic', data:supersonic, borderColor:'#FF6B35', backgroundColor:'#FF6B35', yAxisID:'y1'},
     ]},
-    options:{ responsive:true, plugins:{legend:{labels:{color:'#8A93A3'}}},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#8A93A3'}}},
       scales:{
         x:{ticks:{color:'#8A93A3'},grid:{display:false}},
         y:{position:'left',ticks:{color:'#8A93A3'},grid:{color:'rgba(255,255,255,0.05)'}},
@@ -4413,14 +4430,14 @@ function renderPositioningChart(rows){
       {label:'Neutralna zona', data:neu, backgroundColor:'#8A93A3'},
       {label:'Napad', data:off, backgroundColor:'#FF6B35'},
     ]},
-    options:{ responsive:true, plugins:{legend:{labels:{color:'#8A93A3'}}},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{color:'#8A93A3'}}},
       scales:{ x:{stacked:true,ticks:{color:'#8A93A3'},grid:{display:false}}, y:{stacked:true,max:100,ticks:{color:'#8A93A3',callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.05)'}} } }
   });
 }
 
 function renderRotationTrend(rows){
   const ordered = groupByMatchAndPlayer(rows, 'positioning.percent_behind_ball');
-  lineChartFor('#rotationTrendChart', 'rotationTrend', ordered);
+  lineChartFor('#rotationTrendChart', 'rotationTrend', ordered, { maintainAspectRatio:false, pointRadius:0, pointHoverRadius:5, tension:0.35, fill:false });
 }
 
 function renderPosTable(rows){
